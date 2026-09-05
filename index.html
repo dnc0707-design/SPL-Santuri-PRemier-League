@@ -394,7 +394,20 @@
         <!-- Sponsors -->
         <section id="sponsors" class="py-16 bg-spl-blueLight border-t border-gray-800 scroll-mt-20">
             <div class="container mx-auto px-4 text-center">
-                <h2 class="font-oswald text-5xl font-bold uppercase tracking-wide mb-12">Our Proud Sponsors</h2>
+                
+                <!-- Title Sponsor -->
+                <div class="mb-16">
+                    <h2 class="font-oswald text-4xl md:text-5xl font-bold uppercase tracking-wide mb-8 text-spl-gold">Title Sponsor</h2>
+                    <div class="flex justify-center">
+                        <div class="bg-white p-6 rounded-xl shadow-[0_0_20px_rgba(244,176,54,0.3)] border border-spl-gold/50 hover:scale-105 transition-transform duration-300 inline-block">
+                            <img src="https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/NEtaji%20eye%20hospital%20logo.png?raw=true" alt="Netaji Eye Hospital, Ramchandrapur" class="h-24 md:h-32 object-contain mx-auto mb-4" onerror="this.onerror=null; this.src='https://placehold.co/300x120/ffffff/152238?text=Title+Sponsor';">
+                            <h3 class="font-oswald font-bold text-2xl tracking-widest text-spl-blue uppercase leading-tight">Netaji Eye Hospital<br><span class="text-sm text-gray-600">Ramchandrapur</span></h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Official Sponsors -->
+                <h2 class="font-oswald text-3xl md:text-4xl font-bold uppercase tracking-wide mb-8 text-white">Official Sponsors</h2>
                 <div class="flex flex-wrap justify-center gap-8 md:gap-12 items-center">
                     <img src="https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/Elegant.jpg?raw=true" alt="Sakambari Ispat & Power Limited" class="h-20 md:h-28 object-contain hover:scale-105 transition-transform duration-300 rounded-lg shadow-lg border border-gray-700">
                     <img src="https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/a6771841eeab75a6b1705730a8a92cff1553f100/Ghadi%20detegent.jpg" alt="Ghadi Detergent" class="h-20 md:h-28 object-contain hover:scale-105 transition-transform duration-300 rounded-lg shadow-lg border border-gray-700">
@@ -408,7 +421,7 @@
     <!-- Footer -->
     <footer class="bg-gray-950 border-t-4 border-spl-gold pt-12 pb-6 mt-auto">
         <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
                 <div class="col-span-1 md:col-span-2">
                     <div class="flex items-center gap-4 mb-4">
                         <div class="w-14 h-14 relative flex-shrink-0 flex items-center justify-center rounded-full bg-white p-1 shadow-[0_0_10px_rgba(244,176,54,0.3)] overflow-hidden">
@@ -445,14 +458,6 @@
                         <li><a href="#" class="hover:text-white transition">Anti-Corruption Policy</a></li>
                         <li><a href="#" class="hover:text-white transition">Contact Us</a></li>
                     </ul>
-                </div>
-                
-                <div>
-                    <h3 class="font-oswald text-2xl font-bold uppercase mb-4 text-spl-gold">Title Sponsor</h3>
-                    <div class="bg-white/5 p-4 rounded-lg flex flex-col items-center justify-center border border-white/10 hover:border-spl-gold/50 transition cursor-pointer">
-                        <img src="https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/NEtaji%20eye%20hospital%20logo.png?raw=true" alt="Netaji Eye Hospital, Ramchandrapur" class="h-20 w-auto object-contain mb-3" onerror="this.onerror=null; this.src='https://placehold.co/200x80/152238/F4B036?text=Sponsor';">
-                        <span class="font-oswald font-bold text-lg tracking-widest text-white/80 uppercase text-center leading-tight">Netaji Eye Hospital<br><span class="text-xs text-spl-gold">Ramchandrapur</span></span>
-                    </div>
                 </div>
             </div>
             
@@ -493,27 +498,28 @@
         import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc, updateDoc, setDoc, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         let db, auth, app;
+        const myAppId = 'spl-santuri-premier-league'; // Fix: Re-added missing app ID variable
         let latestPollData = null;
-        let hasVoted = localStorage.getItem('spl_voted_s6') === 'true';
-
         // Default Data Arrays
         const defaultSeasons = [
-            { season: 5, year: "2025", title: "A Historic Milestone", desc: "The most watched season to date. Valley Vipers completely dominated the points table, breaking multiple league records on their way to the cup.", image: "" },
-            { season: 4, year: "2024", title: "New Challengers Emerge", desc: "An underdog story for the ages as the Mavericks stunned the reigning champions in the semi-finals to win their maiden title.", image: "" },
-            { season: 3, year: "2023", title: "The Thrilling Finale", desc: "Remembered for the final over drama where Santuri Strikers defended just 6 runs to secure back-to-back SPL championships.", image: "" },
-            { season: 2, year: "2022", title: "Rise of the Strikers", desc: "Santuri Strikers found their rhythm this season with a devastating batting lineup that chased every target set before them.", image: "" },
-            { season: 1, year: "2021", title: "The Inauguration", desc: "The season that started it all in Santuri Block, Purulia. Over 200 players registered for the auction, forming 8 franchises with 104 local gram players to battle for the first-ever SPL trophy.", image: "" }
+            { season: 5, year: "2025", title: "A Historic Milestone", desc: "The most watched season to date. JMK sixers won the title and runner up AMAN XI Bheti.", image: "" },
+            { season: 4, year: "2024", title: "New Challengers Emerge", desc: "An underdog story for the ages. Krishnapur United won the title and Shri Ram XI Ramchandrapur Runner up.", image: "" },
+            { season: 3, year: "2023", title: "The Thrilling Finale", desc: "Remembered for the final over drama where Radha Binod Muradi Champions and Krishnapur United Runner up.", image: "" },
+            { season: 2, year: "2022", title: "Rise of the Strikers", desc: "SOVA HARDWARE MURADI winner of that season.", image: "" },
+            { season: 1, year: "2021", title: "The Inauguration", desc: "The season that started it all in Santuri Block, Purulia. Over 200 players registered for the auction, forming 8 franchises with 104 local gram players to battle for the first-ever SPL trophy. Winner KINANDI KNIGHT RIDERS and Runner up - SOVA HARDWARE.", image: "" }
         ];
 
         const defaultTeams = [
-            { id: 'SS', name: 'Strikers', color: 'from-red-600 to-red-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/WhatsApp%20Image%202026-09-05%20at%2010.47.22%20PM.jpeg?raw=true' },
-            { id: 'CC', name: 'Chargers', color: 'from-blue-500 to-blue-800', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/WhatsApp%20Image%202026-09-05%20at%2010.44.43%20PM%20(2).jpeg?raw=true' },
-            { id: 'HH', name: 'Heroes', color: 'from-green-600 to-green-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/WhatsApp%20Image%202026-09-05%20at%2010.44.43%20PM.jpeg?raw=true' },
-            { id: 'VV', name: 'Vipers', color: 'from-purple-600 to-purple-900' },
-            { id: 'DD', name: 'Dynamos', color: 'from-orange-500 to-amber-700' },
-            { id: 'MM', name: 'Mavericks', color: 'from-teal-500 to-teal-800' },
-            { id: 'LL', name: 'Lions', color: 'from-yellow-500 to-yellow-800' },
-            { id: 'PP', name: 'Panthers', color: 'from-gray-600 to-gray-900' }
+            { id: 'AXI', name: 'Aman XI Bheti', color: 'from-blue-500 to-blue-800', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/aman%20XI%20bheti.png?raw=true' },
+            { id: 'KU', name: 'Krishnapur United', color: 'from-teal-500 to-teal-800', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/KRISHANPUR%20UNITED.jpg?raw=true' },
+            { id: 'SRX', name: 'Shri Ram XI', color: 'from-orange-500 to-amber-700', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/Shri%20Ram.jpg?raw=true' },
+            { id: 'RBM', name: 'Radha Binod Muradi', color: 'from-green-600 to-green-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/RADHA%20BINOD%20MURADI.jpg?raw=true' },
+            { id: 'JMK', name: 'JMK Sixers', color: 'from-purple-600 to-purple-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/JMK%20SIXER.jpg?raw=true' },
+            { id: 'NDC', name: 'NDC Foundation', color: 'from-yellow-500 to-yellow-800', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/NDC%20FOUNDATION%20.jpg?raw=true' },
+            { id: 'JAS', name: 'Jashpur BPC', color: 'from-gray-600 to-gray-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/jashpur.jpg?raw=true' },
+            { id: 'TW', name: 'Tao Warriors', color: 'from-red-600 to-red-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/WhatsApp%20Image%202026-09-05%20at%2010.47.22%20PM.jpeg?raw=true' },
+            { id: 'KN', name: 'Kotaldi Netaji Sangha', color: 'from-blue-500 to-blue-800', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/WhatsApp%20Image%202026-09-05%20at%2010.44.43%20PM%20(2).jpeg?raw=true' },
+            { id: 'KK', name: 'KKR', color: 'from-green-600 to-green-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/WhatsApp%20Image%202026-09-05%20at%2010.44.43%20PM.jpeg?raw=true' }
         ];
 
         const defaultPlayers = [
@@ -655,16 +661,24 @@
             if(!grid) return;
             if(local) { renderPosts(defaultSeasons); return; }
 
-            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'seasons'), (snap) => {
-                let fetched = [];
-                snap.forEach(d => fetched.push({ id: d.id, ...d.data() }));
-                let all = fetched.sort((a,b) => b.season - a.season).filter(p => p.season <= 5);
-                if(all.length === 0 && fetched.length === 0) {
-                    defaultSeasons.forEach(s => addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'seasons'), s));
-                    return;
-                }
-                renderPosts(all);
-            }, () => renderPosts(defaultSeasons));
+            try {
+                onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'seasons'), (snap) => {
+                    let fetched = [];
+                    snap.forEach(d => fetched.push({ id: d.id, ...d.data() }));
+                    let all = fetched.sort((a,b) => b.season - a.season).filter(p => p.season <= 5);
+                    if(all.length === 0 && fetched.length === 0) {
+                        defaultSeasons.forEach(s => addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'seasons'), s));
+                        return;
+                    }
+                    renderPosts(all);
+                }, (error) => {
+                    console.error("Firebase fetch error:", error);
+                    renderPosts(defaultSeasons); // Fallback if database permissions fail
+                });
+            } catch (err) {
+                console.error("Critical error in loadPosts:", err);
+                renderPosts(defaultSeasons); // Ultimate fallback
+            }
         }
 
         function renderPosts(posts) {
