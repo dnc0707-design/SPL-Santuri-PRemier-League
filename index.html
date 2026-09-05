@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Santuri Premier League (SPL) | Official Website</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Upgraded to Premium Sports Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Teko:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'oswald': ['Teko', 'sans-serif'], 
+                        'inter': ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        spl: {
+                            blue: '#0B1221',
+                            blueLight: '#152238',
+                            gold: '#F4B036',
+                            goldHover: '#d49626',
+                            red: '#E12D39'
+                        }
+                    },
+                    keyframes: {
+                        'glow-blink': {
+                            '0%, 100%': { opacity: '1', textShadow: '0 0 20px rgba(244,176,54,0.8), 0 0 40px rgba(225,45,57,0.6)' },
+                            '50%': { opacity: '0.15', textShadow: 'none' },
+                        },
+                        'scroll-ltr': {
+                            '0%': { transform: 'translateX(-50%)' },
+                            '100%': { transform: 'translateX(0)' },
+                        }
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'glow-blink': 'glow-blink 1.2s ease-in-out infinite',
+                        'scroll-ltr': 'scroll-ltr 40s linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B1221;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #F4B036;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d49626;
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #F4B036;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .team-card {
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+        }
+    </style>
+</head>
+<body class="font-inter bg-slate-900 text-white min-h-screen flex flex-col">
+
+    <!-- Header / Navbar -->
+    <header class="bg-spl-blue sticky top-0 z-50 border-b border-gray-800 shadow-xl">
+        <div class="container mx-auto px-4 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo & Branding -->
+                <div class="flex items-center gap-3">
+                    
+                    <!-- Uploaded Image Logo -->
+                    <div class="w-16 h-16 relative flex-shrink-0 flex items-center justify-center rounded-full bg-black shadow-[0_0_15px_rgba(244,176,54,0.3)] overflow-hidden">
+                        <img src="1000428231.png" alt="SPL Logo" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://placehold.co/150/0B1221/F4B036?text=SPL';">
+                    </div>
+                    
+                    <div class="hidden md:block">
+                        <h1 class="font-oswald text-lg lg:text-xl font-bold uppercase tracking-wide leading-tight whitespace-nowrap">Santuri <span class="text-spl-gold">Premier League</span></h1>
+                        <div class="flex flex-col mt-0.5">
+                            <span class="text-[9px] text-white bg-slate-800 px-1.5 py-0.5 border border-spl-gold/50 rounded inline-block w-max font-bold uppercase tracking-widest mb-0.5">Where Cricket Roars</span>
+                            <span class="text-[9px] text-gray-400 uppercase tracking-widest font-bold">Org. by Lalgarh Village Club</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden lg:flex items-center gap-8 font-oswald text-xl tracking-wide uppercase">
+                    <a href="#" class="nav-link active text-spl-gold">Home</a>
+                    <a href="#about" class="nav-link hover:text-spl-gold transition-colors">About Us</a>
+                    <a href="#seasons" class="nav-link hover:text-spl-gold transition-colors">Seasons</a>
+                    <a href="#teams" class="nav-link hover:text-spl-gold transition-colors">Teams</a>
+                    <a href="#players" class="nav-link hover:text-spl-gold transition-colors">Players</a>
+                    <a href="#fanzone" class="nav-link hover:text-spl-gold transition-colors">Fan Zone</a>
+                    <a href="#sponsors" class="nav-link hover:text-spl-gold transition-colors">Sponsors</a>
+                </nav>
+
+                <!-- Right Actions -->
+                <div class="hidden lg:flex items-center gap-4">
+                    <button class="text-white hover:text-spl-gold transition"><i class="fa-solid fa-magnifying-glass text-xl"></i></button>
+                    <button onclick="toggleAdminModal()" class="bg-spl-gold text-spl-blue font-oswald font-bold px-6 py-2 text-lg uppercase tracking-wide rounded hover:bg-spl-goldHover transition-colors">Admin Login</button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="lg:hidden text-2xl text-white hover:text-spl-gold transition">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Nav (Hidden by default) -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-spl-blueLight border-t border-gray-800">
+            <nav class="flex flex-col px-4 py-4 font-oswald text-lg uppercase tracking-wide">
+                <a href="#" class="py-3 border-b border-gray-700 text-spl-gold">Home</a>
+                <a href="#about" class="py-3 border-b border-gray-700 hover:text-spl-gold">About Us</a>
+                <a href="#seasons" class="py-3 border-b border-gray-700 hover:text-spl-gold">Seasons</a>
+                <a href="#teams" class="py-3 border-b border-gray-700 hover:text-spl-gold">Teams</a>
+                <a href="#players" class="py-3 border-b border-gray-700 hover:text-spl-gold">Players</a>
+                <a href="#fanzone" class="py-3 border-b border-gray-700 hover:text-spl-gold">Fan Zone</a>
+                <a href="#sponsors" class="py-3 hover:text-spl-gold">Sponsors</a>
+                <button onclick="toggleAdminModal()" class="mt-4 bg-spl-gold text-spl-blue font-bold px-4 py-2 uppercase rounded text-center w-full">Admin Login</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content (Blog & History) -->
+    <main class="flex-grow">
+        <!-- Hero Section -->
+        <section class="relative bg-spl-blueLight pt-16 pb-24 overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0 opacity-20">
+                <div class="absolute -top-24 -left-24 w-96 h-96 bg-spl-gold rounded-full blur-3xl"></div>
+                <div class="absolute top-1/2 -right-24 w-[30rem] h-[30rem] bg-spl-blue rounded-full blur-3xl"></div>
+            </div>
+            <div class="container mx-auto px-4 relative z-10 text-center">
+                
+                <!-- Season 6 Coming Soon Banner -->
+                <div class="inline-block bg-gradient-to-r from-orange-600 via-spl-gold to-yellow-500 p-[3px] rounded-lg mb-8 shadow-[0_0_40px_rgba(244,176,54,0.5)] transform hover:scale-105 transition duration-300">
+                    <div class="bg-slate-900 px-6 py-4 md:px-10 md:py-6 rounded-md border border-slate-800">
+                        <h2 class="font-oswald text-3xl md:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-500 uppercase tracking-wide flex items-center justify-center gap-4 animate-glow-blink">
+                            <i class="fa-solid fa-bolt text-yellow-400 drop-shadow-none"></i> 
+                            SPL - Season 6 is Coming Soon this December 2026 
+                            <i class="fa-solid fa-bolt text-yellow-400 drop-shadow-none"></i>
+                        </h2>
+                        <p class="text-center text-white/90 font-oswald text-xl md:text-2xl mt-3 tracking-widest uppercase"><i class="fa-solid fa-location-dot text-spl-red mr-2"></i> Venue: Rangadanga High School Ground</p>
+                    </div>
+                </div>
+                
+                <br>
+                <a href="#seasons" class="inline-block bg-spl-red hover:bg-red-700 text-white font-oswald font-bold px-8 py-3 uppercase tracking-wider rounded transition-colors text-xl">Read Season History</a>
+            </div>
+        </section>
+
+        <!-- Auto-Scrolling Image Gallery -->
+        <section class="bg-slate-950 border-t-2 border-b-2 border-spl-gold py-4 overflow-hidden relative">
+            <div class="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-slate-950 to-transparent z-20 pointer-events-none"></div>
+            <div class="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-slate-950 to-transparent z-20 pointer-events-none"></div>
+            
+            <div class="w-[200%] md:w-[200%] lg:w-[200%] flex items-center gap-4 animate-scroll-ltr hover:[animation-play-state:paused]" id="gallery-track">
+                <!-- Gallery items injected via JS -->
+            </div>
+        </section>
+
+        <!-- About Us -->
+        <section id="about" class="py-16 bg-slate-900 border-t border-gray-800 scroll-mt-20">
+            <div class="container mx-auto px-4 max-w-4xl text-center">
+                <h2 class="font-oswald text-4xl font-bold uppercase tracking-wide mb-6"><i class="fa-solid fa-circle-info text-spl-gold mr-2"></i> About SPL & Organizers</h2>
+                <p class="text-gray-400 text-lg leading-relaxed mb-4">
+                    The Santuri Premier League (SPL) is proudly organized by the historic <strong class="text-white">Lalgarh Village Club</strong>. Established in <strong class="text-white">1961</strong>, the club has a decades-long legacy of promoting sports, culture, and community spirit in the region. 
+                </p>
+                <p class="text-gray-400 text-lg leading-relaxed mb-4">
+                    The inaugural season kicked off in <strong class="text-white">2021</strong> with <strong class="text-white">8 franchises</strong>. Deeply rooted in the local community, the league featured <strong class="text-white">104 gram (village) players</strong> selected from across <strong class="text-white">six panchayats in the Santuri block, Purulia</strong>. The excitement was palpable from the start, with over <strong class="text-white">200 players registering for the very first mega auction!</strong> All the thrilling matches are hosted at our official venue, the <strong class="text-white">Rangadanga High School Ground</strong>.
+                </p>
+                <p class="text-gray-400 text-lg leading-relaxed">
+                    This blog serves as the definitive archive of our journey, meticulously maintained by our admin team, documenting every boundary, every shattered stump, and every lifted trophy across all seasons of the SPL.
+                </p>
+            </div>
+        </section>
+
+        <!-- Master Admin Dashboard (Hidden by default) -->
+        <section id="admin-dashboard" class="py-12 bg-slate-800 border-t-4 border-spl-gold hidden scroll-mt-20">
+            <div class="container mx-auto px-4">
+                <div class="bg-slate-900 rounded-xl p-6 md:p-8 border border-gray-700 shadow-2xl mb-8">
+                    <div class="flex justify-between items-center mb-6 border-b border-gray-800 pb-4">
+                        <h2 class="font-oswald text-3xl font-bold text-spl-gold uppercase tracking-wide"><i class="fa-solid fa-gauge-high mr-2"></i> Master Admin Dashboard</h2>
+                        <button onclick="logoutAdmin()" class="bg-spl-red hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-sm transition">Logout</button>
+                    </div>
+                    
+                    <!-- Tab Navigation for Admin -->
+                    <div class="flex flex-wrap gap-2 mb-8 border-b border-gray-800 pb-4">
+                        <button onclick="switchAdminTab('seasons')" id="tab-btn-seasons" class="px-4 py-2 bg-spl-gold text-spl-blue font-bold rounded uppercase text-sm">Manage Seasons</button>
+                        <button onclick="switchAdminTab('teams')" id="tab-btn-teams" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Franchises</button>
+                        <button onclick="switchAdminTab('players')" id="tab-btn-players" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Players</button>
+                        <button onclick="switchAdminTab('gallery')" id="tab-btn-gallery" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Gallery</button>
+                        <button onclick="switchAdminTab('fanzone')" id="tab-btn-fanzone" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Fan Zone</button>
+                    </div>
+
+                    <!-- TAB 1: SEASONS -->
+                    <div id="admin-tab-seasons" class="admin-tab-content">
+                        <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Add / Edit Season History</h3>
+                        <form id="add-post-form" onsubmit="handlePostSubmit(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <div>
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Season Number</label>
+                                <input type="number" id="post-season" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="e.g. 5" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Year</label>
+                                <input type="text" id="post-year" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="e.g. 2025" required>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Title</label>
+                                <input type="text" id="post-title" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="Enter title..." required>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Archive Picture URL</label>
+                                <input type="url" id="post-image" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="https://example.com/image.jpg">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Description</label>
+                                <textarea id="post-desc" rows="3" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="Season summary..." required></textarea>
+                            </div>
+                            <div class="md:col-span-2">
+                                <button type="submit" class="bg-spl-gold text-spl-blue font-oswald font-bold text-xl uppercase tracking-wide py-3 px-8 rounded hover:bg-spl-goldHover transition-colors"><i class="fa-solid fa-cloud-arrow-up mr-2"></i> Save Season Archive</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- TAB 2: TEAMS -->
+                    <div id="admin-tab-teams" class="admin-tab-content hidden">
+                        <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Add / Manage Franchises</h3>
+                        <form id="add-team-form" onsubmit="handleTeamSubmit(event)" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <div>
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Team Code / Abbr</label>
+                                <input type="text" id="team-id" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white uppercase focus:outline-none focus:border-spl-gold" placeholder="e.g. SS" maxlength="3" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Team Full Name</label>
+                                <input type="text" id="team-name" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="e.g. Santuri Strikers" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Theme Color</label>
+                                <select id="team-color" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold">
+                                    <option value="from-red-600 to-red-900">Red</option>
+                                    <option value="from-blue-500 to-blue-800">Blue</option>
+                                    <option value="from-green-600 to-green-900">Green</option>
+                                    <option value="from-purple-600 to-purple-900">Purple</option>
+                                    <option value="from-orange-500 to-amber-700">Orange</option>
+                                    <option value="from-teal-500 to-teal-800">Teal</option>
+                                    <option value="from-yellow-500 to-yellow-800">Yellow</option>
+                                    <option value="from-gray-600 to-gray-900">Dark Gray</option>
+                                </select>
+                            </div>
+                            <div class="md:col-span-3">
+                                <button type="submit" class="bg-spl-gold text-spl-blue font-oswald font-bold text-xl uppercase tracking-wide py-3 px-8 rounded hover:bg-spl-goldHover transition-colors"><i class="fa-solid fa-shield mr-2"></i> Add / Update Franchise</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- TAB 3: PLAYERS -->
+                    <div id="admin-tab-players" class="admin-tab-content hidden">
+                        <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Add / Manage Legendary Players</h3>
+                        <form id="add-player-form" onsubmit="handlePlayerSubmit(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <div>
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Player Name</label>
+                                <input type="text" id="player-name" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="e.g. Virat Sharma" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Team / Franchise</label>
+                                <input type="text" id="player-team" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="e.g. Santuri Strikers" required>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Achievement / Bio</label>
+                                <input type="text" id="player-achievement" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="e.g. Top Run Scorer • S5" required>
+                            </div>
+                            <div class="md:col-span-2">
+                                <button type="submit" class="bg-spl-gold text-spl-blue font-oswald font-bold text-xl uppercase tracking-wide py-3 px-8 rounded hover:bg-spl-goldHover transition-colors"><i class="fa-solid fa-user-plus mr-2"></i> Save Player Profile</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- TAB 4: GALLERY -->
+                    <div id="admin-tab-gallery" class="admin-tab-content hidden">
+                        <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Auto-Scrolling Gallery</h3>
+                        <form id="add-gallery-form" onsubmit="handleGallerySubmit(event)" class="mb-6 flex gap-4">
+                            <input type="url" id="gallery-image-url" class="flex-grow bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="https://example.com/pic.jpg" required>
+                            <button type="submit" class="bg-spl-gold text-spl-blue font-bold px-6 py-2 rounded hover:bg-spl-goldHover transition whitespace-nowrap"><i class="fa-solid fa-plus mr-1"></i> Add Image</button>
+                        </form>
+                        <h4 class="font-bold text-gray-300 mb-3 text-sm uppercase">Current Banner Images:</h4>
+                        <div id="admin-gallery-grid" class="flex gap-4 overflow-x-auto pb-4 custom-scrollbar"></div>
+                    </div>
+
+                    <!-- TAB 5: FAN ZONE -->
+                    <div id="admin-tab-fanzone" class="admin-tab-content hidden">
+                        <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Fan Zone Management</h3>
+                        <form id="update-poll-form" onsubmit="updatePollQuestion(event)" class="mb-6 flex flex-col md:flex-row gap-4">
+                            <input type="text" id="admin-poll-question" class="flex-grow bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="Enter new poll question..." required>
+                            <button type="submit" class="bg-spl-gold text-spl-blue font-bold px-6 py-2 rounded hover:bg-spl-goldHover transition whitespace-nowrap"><i class="fa-solid fa-pen mr-1"></i> Update Question</button>
+                        </form>
+                        <div>
+                            <button onclick="resetPollVotes()" class="bg-red-600/20 text-red-500 border border-red-600/50 font-bold px-6 py-2 rounded hover:bg-red-600 hover:text-white transition"><i class="fa-solid fa-rotate-left mr-1"></i> Reset All Votes</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Seasons History (Blog) -->
+        <section id="seasons" class="py-16 bg-slate-800 border-t border-gray-800 relative scroll-mt-20">
+            <div class="container mx-auto px-4">
+                <div class="flex justify-between items-center mb-12">
+                    <h2 class="font-oswald text-5xl font-bold uppercase tracking-wide">Season <span class="text-spl-gold">Histories</span></h2>
+                </div>
+
+                <div id="seasons-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="col-span-3 text-center py-12">
+                        <i class="fa-solid fa-spinner fa-spin text-4xl text-spl-gold mb-4"></i>
+                        <p class="text-gray-400 font-bold tracking-widest uppercase">Loading Archives...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Teams Showcase -->
+        <section id="teams" class="bg-spl-blue border-t border-gray-800 py-16 scroll-mt-20">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="font-oswald text-5xl md:text-6xl font-bold uppercase tracking-wide mb-4">The Franchises</h2>
+                    <div class="w-24 h-1 bg-spl-gold mx-auto rounded"></div>
+                </div>
+
+                <div id="teams-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
+                    <!-- Teams injected dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Players Spotlight -->
+        <section id="players" class="py-16 bg-slate-900 border-t border-gray-800 scroll-mt-20">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="font-oswald text-5xl font-bold uppercase tracking-wide mb-4">Legendary Players</h2>
+                    <p class="text-gray-400 font-medium">The heroes who shaped the seasons of SPL.</p>
+                </div>
+                
+                <div id="players-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Players injected dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Fan Zone (Interactive Polls & Engagement) -->
+        <section id="fanzone" class="py-16 bg-spl-blue border-t-2 border-spl-gold scroll-mt-20 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-[40rem] h-[40rem] bg-spl-red/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
+            
+            <div class="container mx-auto px-4 max-w-4xl relative z-10">
+                <div class="text-center mb-12">
+                    <h2 class="font-oswald text-5xl font-bold uppercase tracking-wide mb-4 text-white">Fan <span class="text-spl-gold">Zone</span></h2>
+                    <p class="text-gray-400 font-medium">Make your voice heard! Join the community and vote for your favorites.</p>
+                </div>
+                
+                <div class="bg-slate-900 rounded-2xl p-6 md:p-10 border border-gray-700 shadow-2xl relative">
+                    <div class="absolute -top-4 -left-4 w-12 h-12 bg-spl-gold rounded-full flex items-center justify-center shadow-lg border-4 border-slate-900">
+                        <i class="fa-solid fa-bolt text-spl-blue text-xl"></i>
+                    </div>
+
+                    <h3 id="poll-question-display" class="font-oswald text-3xl md:text-4xl font-bold text-white uppercase tracking-wide mb-2 text-center">Who will win SPL Season 6?</h3>
+                    <p class="text-center text-sm text-gray-400 mb-8 font-medium">Cast your prediction now. The results are live!</p>
+
+                    <div id="poll-voting" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+
+                    <div id="poll-results" class="hidden">
+                        <div id="poll-bars-container" class="space-y-4"></div>
+                        <div class="mt-8 text-center">
+                            <span class="inline-block bg-green-500/20 text-green-400 border border-green-500/50 px-4 py-2 rounded font-bold text-sm tracking-wider uppercase"><i class="fa-solid fa-check-circle mr-1"></i> Your Vote is Counted!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sponsors -->
+        <section id="sponsors" class="py-16 bg-spl-blueLight border-t border-gray-800 scroll-mt-20">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="font-oswald text-5xl font-bold uppercase tracking-wide mb-12">Our Proud Sponsors</h2>
+                <div class="flex flex-wrap justify-center gap-8 md:gap-16 items-center opacity-70">
+                    <div class="text-3xl md:text-4xl font-oswald font-bold text-gray-500 uppercase tracking-widest hover:text-white transition cursor-pointer"><i class="fa-brands fa-aws mr-2"></i> CloudNet</div>
+                    <div class="text-3xl md:text-4xl font-oswald font-bold text-gray-500 uppercase tracking-widest hover:text-white transition cursor-pointer"><i class="fa-brands fa-cc-visa mr-2"></i> PayMax</div>
+                    <div class="text-3xl md:text-4xl font-oswald font-bold text-gray-500 uppercase tracking-widest hover:text-white transition cursor-pointer"><i class="fa-solid fa-car mr-2"></i> Velocity Auto</div>
+                    <div class="text-3xl md:text-4xl font-oswald font-bold text-gray-500 uppercase tracking-widest hover:text-white transition cursor-pointer"><i class="fa-solid fa-bottle-water mr-2"></i> HydroPlus</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 border-t-4 border-spl-gold pt-12 pb-6 mt-auto">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-14 h-14 relative flex-shrink-0 flex items-center justify-center rounded-full bg-black shadow-[0_0_10px_rgba(244,176,54,0.3)] overflow-hidden">
+                            <img src="1000428231.png" alt="SPL Logo" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://placehold.co/150/0B1221/F4B036?text=SPL';">
+                        </div>
+                        <h2 class="font-oswald text-3xl font-bold uppercase tracking-wide">Santuri Premier League</h2>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4 max-w-md font-medium leading-relaxed">Organized by <strong class="text-white">Lalgarh Village Club (Estd. 1961)</strong>. The ultimate cricket entertainment league. Bringing together the best talent for explosive T20 action.</p>
+                    
+                    <div class="bg-slate-900 p-4 rounded-lg border border-gray-800 mb-6 max-w-md">
+                        <h4 class="text-spl-gold font-bold text-sm uppercase mb-2">Club & Venue Details:</h4>
+                        <p class="text-gray-400 text-xs leading-relaxed font-medium">
+                            <span class="text-white">Venue:</span> Rangadanga High School Ground<br>
+                            <span class="text-white">Reg. No.-</span> S0024655 OF 2021-22<br>
+                            Vill - Lalgarh, P.O.- Muradi, P.S.- Santuri<br>
+                            Dist.- Purulia, (W.B.), Pin - 723156
+                        </p>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-spl-blueLight transition"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="#" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-pink-600 transition"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-red-600 transition"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="font-oswald text-2xl font-bold uppercase mb-4 text-spl-gold">Quick Links</h3>
+                    <ul class="space-y-2 text-sm text-gray-400 font-medium">
+                        <li><a href="#" class="hover:text-white transition">About SPL</a></li>
+                        <li><a href="#" class="hover:text-white transition">Rules & Regulations</a></li>
+                        <li><a href="#" class="hover:text-white transition">Anti-Corruption Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-oswald text-2xl font-bold uppercase mb-4 text-spl-gold">Title Sponsor</h3>
+                    <div class="bg-white/5 p-4 rounded-lg flex items-center justify-center border border-white/10 hover:border-spl-gold/50 transition cursor-pointer">
+                        <span class="font-oswald font-bold text-2xl tracking-widest text-white/50 uppercase">Sponsor Brand</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-6 text-center text-xs text-gray-500 flex flex-col md:flex-row justify-between items-center gap-4 font-medium">
+                <p>&copy; 2026 Santuri Premier League. All Rights Reserved.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="hover:text-white transition">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Admin Login Modal -->
+    <div id="admin-modal" class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center px-4">
+        <div class="bg-slate-900 border border-spl-gold rounded-xl p-8 max-w-md w-full shadow-2xl relative">
+            <button onclick="toggleAdminModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h3 class="font-oswald text-4xl font-bold uppercase text-center mb-2 text-spl-gold"><i class="fa-solid fa-lock mr-2"></i> Admin Login</h3>
+            <p class="text-sm text-gray-400 text-center mb-6 font-medium">Username: <b>admin</b> | Password: <b>1234</b></p>
+            <form onsubmit="handleAdminLogin(event)">
+                <div class="mb-4">
+                    <label class="block text-gray-400 text-sm font-bold mb-2">Admin Username</label>
+                    <input type="text" id="admin-user" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white font-medium focus:outline-none focus:border-spl-gold" placeholder="admin" required>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-400 text-sm font-bold mb-2">Password</label>
+                    <input type="password" id="admin-pass" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white font-medium focus:outline-none focus:border-spl-gold" required>
+                </div>
+                <button type="submit" id="login-btn" class="w-full bg-spl-gold text-spl-blue font-oswald font-bold text-2xl uppercase tracking-wide py-2 rounded hover:bg-spl-goldHover transition-colors">Secure Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Master Interactive Scripts & Backend Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc, updateDoc, setDoc, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        let db, auth, app;
+        window.isAdmin = false;
+        const myAppId = 'spl-santuri-premier-league';
+        
+        let latestPollData = null;
+        let hasVoted = localStorage.getItem('spl_voted_s6') === 'true';
+
+        // Default Data Arrays
+        const defaultSeasons = [
+            { season: 5, year: "2025", title: "A Historic Milestone", desc: "The most watched season to date. Valley Vipers completely dominated the points table, breaking multiple league records on their way to the cup.", image: "" },
+            { season: 4, year: "2024", title: "New Challengers Emerge", desc: "An underdog story for the ages as the Mavericks stunned the reigning champions in the semi-finals to win their maiden title.", image: "" },
+            { season: 3, year: "2023", title: "The Thrilling Finale", desc: "Remembered for the final over drama where Santuri Strikers defended just 6 runs to secure back-to-back SPL championships.", image: "" },
+            { season: 2, year: "2022", title: "Rise of the Strikers", desc: "Santuri Strikers found their rhythm this season with a devastating batting lineup that chased every target set before them.", image: "" },
+            { season: 1, year: "2021", title: "The Inauguration", desc: "The season that started it all in Santuri Block, Purulia. Over 200 players registered for the auction, forming 8 franchises with 104 local gram players to battle for the first-ever SPL trophy.", image: "" }
+        ];
+
+        const defaultTeams = [
+            { id: 'SS', name: 'Strikers', color: 'from-red-600 to-red-900' },
+            { id: 'CC', name: 'Chargers', color: 'from-blue-500 to-blue-800' },
+            { id: 'HH', name: 'Heroes', color: 'from-green-600 to-green-900' },
+            { id: 'VV', name: 'Vipers', color: 'from-purple-600 to-purple-900' },
+            { id: 'DD', name: 'Dynamos', color: 'from-orange-500 to-amber-700' },
+            { id: 'MM', name: 'Mavericks', color: 'from-teal-500 to-teal-800' },
+            { id: 'LL', name: 'Lions', color: 'from-yellow-500 to-yellow-800' },
+            { id: 'PP', name: 'Panthers', color: 'from-gray-600 to-gray-900' }
+        ];
+
+        const defaultPlayers = [
+            { name: 'Virat Sharma', team: 'Santuri Strikers', achievement: 'Top Run Scorer • S5' },
+            { name: 'Rashid Khan', team: 'Valley Vipers', achievement: 'Most Wickets • S5' },
+            { name: 'David Warner', team: 'Coastal Chargers', achievement: 'MVP • S1 Finale' },
+            { name: 'MS Dhoni', team: 'Heroes', achievement: 'Best Captain • All Seasons' }
+        ];
+
+        const defaultGalleryPics = [
+            { url: "1000428224.jpg" },
+            { url: "https://placehold.co/600x400/152238/F4B036?text=SPL+Action+1" },
+            { url: "https://placehold.co/600x400/0B1221/E12D39?text=SPL+Action+2" }
+        ];
+
+        // UI toggles
+        window.toggleAdminModal = function() {
+            document.getElementById('admin-modal').classList.toggle('hidden');
+        };
+
+        window.logoutAdmin = function() {
+            window.isAdmin = false;
+            document.getElementById('admin-dashboard').classList.add('hidden');
+            loadPosts(); loadTeams(); loadPlayers(); loadGallery();
+            alert('Logged out of Admin Dashboard.');
+        };
+
+        window.handleAdminLogin = function(e) {
+            e.preventDefault();
+            const user = document.getElementById('admin-user').value;
+            const pass = document.getElementById('admin-pass').value;
+            
+            if (user === 'admin' && pass === '1234') {
+                window.isAdmin = true;
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+                window.toggleAdminModal();
+                document.getElementById('admin-user').value = '';
+                document.getElementById('admin-pass').value = '';
+                
+                loadPosts(); loadTeams(); loadPlayers(); loadGallery();
+                alert('Access Granted! Welcome to the Master Admin Dashboard.');
+                document.getElementById('admin-dashboard').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                alert('Invalid Username or Password (use admin / 1234)');
+            }
+        };
+
+        window.switchAdminTab = function(tabName) {
+            ['seasons', 'teams', 'players', 'gallery', 'fanzone'].forEach(t => {
+                document.getElementById(`admin-tab-${t}`).classList.add('hidden');
+                document.getElementById(`tab-btn-${t}`).className = 'px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm';
+            });
+            document.getElementById(`admin-tab-${tabName}`).classList.remove('hidden');
+            document.getElementById(`tab-btn-${tabName}`).className = 'px-4 py-2 bg-spl-gold text-spl-blue font-bold rounded uppercase text-sm';
+        };
+
+        // Initialize Firebase
+        async function initFirebase() {
+            try {
+                const firebaseConfig = {
+                  apiKey: "AIzaSyDub6J70tx5i9plbWrHWLuO1LVFkyxXMls",
+                  authDomain: "spl-santuri-premier-league.firebaseapp.com",
+                  projectId: "spl-santuri-premier-league",
+                  storageBucket: "spl-santuri-premier-league.firebasestorage.app",
+                  messagingSenderId: "82581808443",
+                  appId: "1:82581808443:web:82eca1ec7bf17577e1831e"
+                };
+
+                app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+                
+                onAuthStateChanged(auth, (user) => {
+                    if(!user) signInAnonymously(auth).catch(e => console.warn(e));
+                    loadPosts(); loadTeams(); loadPlayers(); loadGallery(); initPoll();
+                });
+            } catch(e) {
+                console.warn("Offline mode", e);
+                loadPosts(true); loadTeams(true); loadPlayers(true); loadGallery(true); initPoll(true);
+            }
+        }
+
+        // --- SEASONS LOGIC ---
+        window.handlePostSubmit = async function(e) {
+            e.preventDefault();
+            if(!window.isAdmin) return;
+            const post = {
+                season: parseInt(document.getElementById('post-season').value),
+                year: document.getElementById('post-year').value,
+                title: document.getElementById('post-title').value,
+                image: document.getElementById('post-image').value || '',
+                desc: document.getElementById('post-desc').value,
+                createdAt: Date.now()
+            };
+            try {
+                await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'seasons'), post);
+                document.getElementById('add-post-form').reset();
+                alert('Season archive saved successfully!');
+            } catch(err) { alert('Error saving post'); }
+        };
+
+        window.deletePost = async function(id) {
+            if(!confirm('Delete this season archive?')) return;
+            try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'seasons', id)); } catch(e) {}
+        };
+
+        function loadPosts(local = false) {
+            const grid = document.getElementById('seasons-grid');
+            if(!grid) return;
+            if(local) { renderPosts(defaultSeasons); return; }
+
+            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'seasons'), (snap) => {
+                let fetched = [];
+                snap.forEach(d => fetched.push({ id: d.id, ...d.data() }));
+                let all = fetched.sort((a,b) => b.season - a.season).filter(p => p.season <= 5);
+                if(all.length === 0 && fetched.length === 0) {
+                    defaultSeasons.forEach(s => addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'seasons'), s));
+                    return;
+                }
+                renderPosts(all);
+            }, () => renderPosts(defaultSeasons));
+        }
+
+        function renderPosts(posts) {
+            const grid = document.getElementById('seasons-grid');
+            grid.innerHTML = '';
+            posts.forEach(p => {
+                const bg = p.image ? `style="background-image: url('${p.image}')"` : '';
+                const cls = p.image ? '' : 'bg-gradient-to-tr from-slate-700 to-slate-900';
+                const del = window.isAdmin && p.id ? `<button onclick="deletePost('${p.id}')" class="absolute top-4 right-4 bg-red-600 text-white w-8 h-8 rounded-full z-20 flex items-center justify-center hover:bg-red-700 shadow-lg"><i class="fa-solid fa-trash"></i></button>` : '';
+                
+                grid.innerHTML += `
+                    <article class="bg-slate-900 rounded-xl overflow-hidden border border-gray-700 hover:border-spl-gold transition group flex flex-col shadow-lg relative">
+                        ${del}
+                        <div class="h-48 relative flex items-center justify-center bg-cover bg-center ${cls}" ${bg}>
+                            <div class="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition z-0"></div>
+                            <div class="absolute top-4 left-4 bg-black/80 px-3 py-1 rounded text-xs font-bold text-spl-gold uppercase border border-spl-gold/30 z-10">Season ${p.season}</div>
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col z-10 relative">
+                            <h3 class="font-oswald text-3xl font-bold mb-2 group-hover:text-spl-gold transition">${p.title} (${p.year})</h3>
+                            <p class="text-sm text-gray-400 mb-4 flex-grow font-medium leading-relaxed">${p.desc}</p>
+                            <div class="flex justify-between items-center border-t border-gray-800 pt-4 mt-auto">
+                                <span class="text-xs text-gray-500 font-bold"><i class="fa-solid fa-user-pen mr-1"></i> Admin</span>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            });
+        }
+
+        // --- TEAMS LOGIC ---
+        window.handleTeamSubmit = async function(e) {
+            e.preventDefault();
+            if(!window.isAdmin) return;
+            const team = {
+                id: document.getElementById('team-id').value.toUpperCase(),
+                name: document.getElementById('team-name').value,
+                color: document.getElementById('team-color').value
+            };
+            try {
+                await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', team.id), team);
+                document.getElementById('add-team-form').reset();
+                alert('Franchise saved successfully!');
+            } catch(e) { alert('Error saving team'); }
+        };
+
+        window.deleteTeam = async function(id) {
+            if(!confirm(`Delete franchise ${id}?`)) return;
+            try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', id)); } catch(e) {}
+        };
+
+        function loadTeams(local = false) {
+            const grid = document.getElementById('teams-grid');
+            if(!grid) return;
+            if(local) { renderTeams(defaultTeams); return; }
+
+            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'teams'), (snap) => {
+                let teams = [];
+                snap.forEach(d => teams.push(d.data()));
+                if(teams.length === 0) {
+                    defaultTeams.forEach(t => setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', t.id), t));
+                    return;
+                }
+                renderTeams(teams);
+            }, () => renderTeams(defaultTeams));
+        }
+
+        function renderTeams(teams) {
+            const grid = document.getElementById('teams-grid');
+            grid.innerHTML = '';
+            teams.forEach(t => {
+                const del = window.isAdmin ? `<button onclick="deleteTeam('${t.id}')" class="absolute top-2 right-2 bg-red-600 text-white w-6 h-6 rounded-full z-20 flex items-center justify-center hover:bg-red-700 text-xs shadow"><i class="fa-solid fa-trash"></i></button>` : '';
+                grid.innerHTML += `
+                    <div class="group relative cursor-pointer">
+                        ${del}
+                        <div class="aspect-square bg-gradient-to-br ${t.color} rounded-2xl flex flex-col items-center justify-center p-4 border border-gray-700 shadow-lg group-hover:scale-105 group-hover:border-spl-gold transition-all duration-300 relative overflow-hidden">
+                            <h3 class="font-oswald text-5xl font-bold mb-2 relative z-10">${t.id}</h3>
+                            <p class="text-sm font-bold uppercase tracking-wider text-center relative z-10">${t.name}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // --- PLAYERS LOGIC ---
+        window.handlePlayerSubmit = async function(e) {
+            e.preventDefault();
+            if(!window.isAdmin) return;
+            const player = {
+                name: document.getElementById('player-name').value,
+                team: document.getElementById('player-team').value,
+                achievement: document.getElementById('player-achievement').value,
+                createdAt: Date.now()
+            };
+            try {
+                await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), player);
+                document.getElementById('add-player-form').reset();
+                alert('Player profile saved!');
+            } catch(e) { alert('Error saving player'); }
+        };
+
+        window.deletePlayer = async function(id) {
+            if(!confirm('Delete player profile?')) return;
+            try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'players', id)); } catch(e) {}
+        };
+
+        function loadPlayers(local = false) {
+            const grid = document.getElementById('players-grid');
+            if(!grid) return;
+            if(local) { renderPlayers(defaultPlayers); return; }
+
+            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), (snap) => {
+                let players = [];
+                snap.forEach(d => players.push({ id: d.id, ...d.data() }));
+                if(players.length === 0) {
+                    defaultPlayers.forEach(p => addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), p));
+                    return;
+                }
+                renderPlayers(players);
+            }, () => renderPlayers(defaultPlayers));
+        }
+
+        function renderPlayers(players) {
+            const grid = document.getElementById('players-grid');
+            grid.innerHTML = '';
+            players.forEach(p => {
+                const del = window.isAdmin && p.id ? `<button onclick="deletePlayer('${p.id}')" class="absolute top-2 right-2 bg-red-600 text-white w-6 h-6 rounded-full z-20 flex items-center justify-center hover:bg-red-700 text-xs shadow"><i class="fa-solid fa-trash"></i></button>` : '';
+                grid.innerHTML += `
+                    <div class="bg-slate-800 border border-gray-700 rounded-xl p-6 text-center hover:border-spl-gold transition group shadow-lg relative">
+                        ${del}
+                        <div class="w-24 h-24 bg-gradient-to-b from-gray-600 to-gray-800 rounded-full mx-auto mb-4 border-2 border-spl-gold flex items-center justify-center overflow-hidden">
+                             <i class="fa-solid fa-user-ninja text-3xl text-gray-400 group-hover:text-spl-gold transition"></i>
+                        </div>
+                        <h3 class="font-oswald text-3xl font-bold text-white mb-1">${p.name}</h3>
+                        <p class="text-xs text-spl-gold font-bold uppercase tracking-wider mb-2">${p.team}</p>
+                        <p class="text-sm text-gray-400 font-medium">${p.achievement}</p>
+                    </div>
+                `;
+            });
+        }
+
+        // --- GALLERY LOGIC ---
+        window.handleGallerySubmit = async function(e) {
+            e.preventDefault();
+            if(!window.isAdmin) return;
+            const url = document.getElementById('gallery-image-url').value;
+            try {
+                await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'gallery'), { url, createdAt: Date.now() });
+                document.getElementById('gallery-image-url').value = '';
+            } catch(e) { alert('Error adding gallery image'); }
+        };
+
+        window.deleteGalleryImage = async function(id) {
+            if(!confirm('Delete gallery image?')) return;
+            try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'gallery', id)); } catch(e) {}
+        };
+
+        function loadGallery(local = false) {
+            const track = document.getElementById('gallery-track');
+            if(!track) return;
+            if(local) { renderGallery(defaultGalleryPics); return; }
+
+            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'gallery'), (snap) => {
+                let imgs = [];
+                snap.forEach(d => imgs.push({ id: d.id, ...d.data() }));
+                imgs.sort((a,b) => (a.createdAt||0) - (b.createdAt||0));
+                if(imgs.length === 0) {
+                    defaultGalleryPics.forEach(p => addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'gallery'), { url: p.url, createdAt: Date.now() }));
+                    return;
+                }
+                renderGallery(imgs);
+            }, () => renderGallery(defaultGalleryPics));
+        }
+
+        function renderGallery(images) {
+            const track = document.getElementById('gallery-track');
+            const adminGrid = document.getElementById('admin-gallery-grid');
+            
+            if(adminGrid && window.isAdmin) {
+                adminGrid.innerHTML = '';
+                images.forEach(img => {
+                    adminGrid.innerHTML += `
+                        <div class="relative flex-shrink-0 w-32 h-24 border border-gray-700 rounded overflow-hidden group">
+                            <img src="${img.url}" class="w-full h-full object-cover">
+                            <button onclick="deleteGalleryImage('${img.id}')" class="absolute inset-0 bg-red-600/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><i class="fa-solid fa-trash text-white"></i></button>
+                        </div>
+                    `;
+                });
+            }
+
+            track.innerHTML = '';
+            const repeated = [...images, ...images, ...images, ...images, ...images, ...images];
+            repeated.forEach(img => {
+                track.innerHTML += `
+                    <div class="h-40 md:h-56 lg:h-64 flex-shrink-0 rounded-lg overflow-hidden border-2 border-slate-700 hover:border-spl-gold transition shadow-lg">
+                        <img src="${img.url}" alt="SPL Action" class="h-full w-auto object-cover max-w-xs md:max-w-md bg-slate-800" onerror="this.src='https://placehold.co/600x400/152238/F4B036?text=Image+Not+Found';">
+                    </div>
+                `;
+            });
+        }
+
+        // --- FAN ZONE POLL LOGIC ---
+        window.updatePollQuestion = async function(e) {
+            e.preventDefault();
+            if(!window.isAdmin) return;
+            const newQ = document.getElementById('admin-poll-question').value;
+            try {
+                await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'fanzone', 'active_poll'), { question: newQ }, { merge: true });
+                alert('Poll question updated!');
+            } catch(e) { alert('Error updating question'); }
+        };
+
+        window.resetPollVotes = async function() {
+            if(!window.isAdmin || !confirm('Reset all poll votes to 0?')) return;
+            try {
+                const ref = doc(db, 'artifacts', myAppId, 'public', 'data', 'fanzone', 'active_poll');
+                const reset = { total: 0, version: increment(1) };
+                defaultTeams.forEach(t => reset[t.id] = 0);
+                await setDoc(ref, reset, { merge: true });
+                alert('Poll votes reset!');
+            } catch(e) { alert('Error resetting votes'); }
+        };
+
+        function initPoll(local = false) {
+            const votingDiv = document.getElementById('poll-voting');
+            if(!votingDiv) return;
+
+            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'teams'), (snap) => {
+                let teams = [];
+                snap.forEach(d => teams.push(d.data()));
+                if(teams.length === 0) teams = defaultTeams;
+
+                votingDiv.innerHTML = teams.map(t => `
+                    <button onclick="castVote('${t.id}')" class="flex flex-col items-center justify-center p-4 border border-gray-700 bg-slate-800 rounded-xl hover:border-spl-gold transition transform hover:-translate-y-1 group">
+                        <span class="font-oswald text-4xl font-bold text-white group-hover:text-spl-gold">${t.id}</span>
+                        <span class="text-sm font-bold uppercase tracking-wider text-gray-400 mt-2">${t.name}</span>
+                    </button>
+                `).join('');
+
+                if(hasVoted) {
+                    document.getElementById('poll-voting').classList.add('hidden');
+                    document.getElementById('poll-results').classList.remove('hidden');
+                }
+
+                if(!local) {
+                    onSnapshot(doc(db, 'artifacts', myAppId, 'public', 'data', 'fanzone', 'active_poll'), (docSnap) => {
+                        if(docSnap.exists()) {
+                            latestPollData = docSnap.data();
+                            const qInput = document.getElementById('admin-poll-question');
+                            if(qInput && latestPollData.question && !qInput.value) qInput.value = latestPollData.question;
+                            
+                            const qDisplay = document.getElementById('poll-question-display');
+                            if(qDisplay) qDisplay.innerText = latestPollData.question || "Who will win SPL Season 6?";
+
+                            const localVer = localStorage.getItem('spl_poll_version');
+                            const serverVer = latestPollData.version || 1;
+                            if(localVer && parseInt(localVer) !== serverVer) {
+                                hasVoted = false;
+                                localStorage.setItem('spl_voted_s6', 'false');
+                                localStorage.setItem('spl_poll_version', serverVer);
+                                document.getElementById('poll-voting').classList.remove('hidden');
+                                document.getElementById('poll-results').classList.add('hidden');
+                            }
+                            if(hasVoted) renderPollResults(latestPollData, teams);
+                        } else if(window.isAdmin) {
+                            setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'fanzone', 'active_poll'), { question: "Who will win SPL Season 6?", version: 1, total: 0 });
+                        }
+                    });
+                }
+            });
+        }
+
+        window.castVote = async function(teamId) {
+            if(hasVoted) return;
+            hasVoted = true;
+            localStorage.setItem('spl_voted_s6', 'true');
+            localStorage.setItem('spl_poll_version', latestPollData?.version || 1);
+            
+            document.getElementById('poll-voting').classList.add('hidden');
+            document.getElementById('poll-results').classList.remove('hidden');
+
+            try {
+                const ref = doc(db, 'artifacts', myAppId, 'public', 'data', 'fanzone', 'active_poll');
+                await updateDoc(ref, { [teamId]: increment(1), total: increment(1) });
+            } catch(e) {
+                const initData = { total: 1, version: 1, question: latestPollData?.question || "Who will win SPL Season 6?" };
+                await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'fanzone', 'active_poll'), initData, { merge: true });
+            }
+        };
+
+        function renderPollResults(data, teams) {
+            const container = document.getElementById('poll-bars-container');
+            if(!container) return;
+            const total = data.total || 1;
+            
+            container.innerHTML = teams.map(t => {
+                const votes = data[t.id] || 0;
+                const pct = Math.round((votes / total) * 100);
+                return `
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm font-bold text-white mb-1">
+                            <span>${t.name} (${t.id})</span>
+                            <span class="text-spl-gold">${pct}%</span>
+                        </div>
+                        <div class="w-full bg-slate-800 rounded-full h-4 overflow-hidden border border-gray-700">
+                            <div class="bg-gradient-to-r ${t.color} h-4 rounded-full transition-all duration-1000 flex items-center justify-end px-2" style="width: ${pct}%">
+                                ${pct > 5 ? `<span class="text-[10px] text-white font-bold">${votes} votes</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('') + `<p class="text-center text-xs text-gray-500 mt-6 font-bold uppercase tracking-widest">Total Community Votes: ${total}</p>`;
+        }
+
+        // General Navigation & Scroll
+        document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('mobile-menu')?.classList.add('hidden');
+                const target = document.querySelector(this.getAttribute('href'));
+                if(target) {
+                    window.scrollTo({ top: target.getBoundingClientRect().top + window.pageYOffset - 80, behavior: "smooth" });
+                }
+            });
+        });
+
+        initFirebase();
+    </script>
+</body>
+</html>
