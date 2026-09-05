@@ -432,7 +432,7 @@
                     <p class="text-gray-400 text-sm mb-4 max-w-md font-medium leading-relaxed">Organized by <strong class="text-white">Lalgarh Village Club (Estd. 1961)</strong>. The ultimate cricket entertainment league. Bringing together the best talent for explosive T20 action.</p>
                     
                     <div class="bg-slate-900 p-4 rounded-lg border border-gray-800 mb-6 max-w-md">
-                        <h4 class="text-spl-gold font-bold text-sm uppercase mb-2">Club & Venue Details:</h4>
+                        <h4 class="text-spl-gold font-bold text-sm uppercase mb-2">Club, Venue & Contact Details:</h4>
                         <p class="text-gray-400 text-xs leading-relaxed font-medium">
                             <span class="text-white">Organized by:</span> Lalgarh Village Club (Estd. 1961)<br>
                             <span class="text-white">Venue:</span> Rangadanga High School Ground<br>
@@ -440,6 +440,10 @@
                             Vill - Lalgarh, P.O.- Muradi, P.S.- Santuri<br>
                             Dist.- Purulia, (W.B.), Pin - 723156
                         </p>
+                        <div class="mt-3 pt-3 border-t border-gray-800 text-xs text-gray-400 font-medium space-y-1.5">
+                            <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-spl-gold"></i> <a href="tel:+917980230656" class="hover:text-white transition">7980230656</a></p>
+                            <p class="flex items-center gap-2"><i class="fa-solid fa-envelope text-spl-gold"></i> <a href="mailto:lalgarhvillageclub@gmail.com" class="hover:text-white transition">lalgarhvillageclub@gmail.com</a></p>
+                        </div>
                     </div>
 
                     <div class="flex gap-4">
@@ -755,15 +759,13 @@
                 let content = t.logo 
                     ? `<img src="${t.logo}" alt="${t.name}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                        <div class="absolute inset-0 bg-black/50 group-hover:bg-black/20 transition-colors duration-300"></div>
-                       <h3 class="font-oswald text-3xl font-bold mb-1 relative z-10 text-white drop-shadow-md mt-auto">${t.id}</h3>
-                       <p class="text-xs font-bold uppercase tracking-wider text-center relative z-10 text-spl-gold drop-shadow-md mb-2">${t.name}</p>`
-                    : `<h3 class="font-oswald text-5xl font-bold mb-2 relative z-10">${t.id}</h3>
-                       <p class="text-sm font-bold uppercase tracking-wider text-center relative z-10">${t.name}</p>`;
+                       <p class="text-sm font-bold uppercase tracking-wider text-center relative z-10 text-spl-gold drop-shadow-md mb-2 mt-auto bg-black/60 w-full py-2">${t.name}</p>`
+                    : `<p class="text-xl font-bold uppercase tracking-wider text-center relative z-10">${t.name}</p>`;
 
                 grid.innerHTML += `
                     <div class="group relative cursor-pointer rounded-2xl overflow-hidden aspect-square shadow-lg border border-gray-700 hover:border-spl-gold transition-all duration-300">
                         ${del}
-                        <div class="w-full h-full bg-gradient-to-br ${t.color || 'from-slate-700 to-slate-900'} flex flex-col items-center justify-center p-4 relative">
+                        <div class="w-full h-full bg-gradient-to-br ${t.color || 'from-slate-700 to-slate-900'} flex flex-col items-center justify-center relative">
                             ${content}
                         </div>
                     </div>
