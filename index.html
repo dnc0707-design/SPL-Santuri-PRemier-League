@@ -248,7 +248,7 @@
                     <!-- TAB 2: TEAMS -->
                     <div id="admin-tab-teams" class="admin-tab-content hidden">
                         <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Add / Manage Franchises</h3>
-                        <form id="add-team-form" onsubmit="handleTeamSubmit(event)" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <form id="add-team-form" onsubmit="handleTeamSubmit(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                             <div>
                                 <label class="block text-gray-400 text-sm font-bold mb-2">Team Code / Abbr</label>
                                 <input type="text" id="team-id" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white uppercase focus:outline-none focus:border-spl-gold" placeholder="e.g. SS" maxlength="3" required>
@@ -270,7 +270,11 @@
                                     <option value="from-gray-600 to-gray-900">Dark Gray</option>
                                 </select>
                             </div>
-                            <div class="md:col-span-3">
+                            <div>
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Logo URL (Optional)</label>
+                                <input type="url" id="team-logo" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="https://example.com/logo.jpg">
+                            </div>
+                            <div class="md:col-span-2">
                                 <button type="submit" class="bg-spl-gold text-spl-blue font-oswald font-bold text-xl uppercase tracking-wide py-3 px-8 rounded hover:bg-spl-goldHover transition-colors"><i class="fa-solid fa-shield mr-2"></i> Add / Update Franchise</button>
                             </div>
                         </form>
@@ -391,11 +395,11 @@
         <section id="sponsors" class="py-16 bg-spl-blueLight border-t border-gray-800 scroll-mt-20">
             <div class="container mx-auto px-4 text-center">
                 <h2 class="font-oswald text-5xl font-bold uppercase tracking-wide mb-12">Our Proud Sponsors</h2>
-                <div class="flex flex-wrap justify-center gap-8 md:gap-16 items-center opacity-70">
-                    <div class="text-3xl md:text-4xl font-oswald font-bold text-gray-500 uppercase tracking-widest hover:text-white transition cursor-pointer"><i class="fa-brands fa-aws mr-2"></i> CloudNet</div>
-                    <div class="text-3xl md:text-4xl font-oswald font-bold text-gray-500 uppercase tracking-widest hover:text-white transition cursor-pointer"><i class="fa-brands fa-cc-visa mr-2"></i> PayMax</div>
-                    <div class="text-3xl md:text-4xl font-oswald font-bold text-gray-500 uppercase tracking-widest hover:text-white transition cursor-pointer"><i class="fa-solid fa-car mr-2"></i> Velocity Auto</div>
-                    <div class="text-3xl md:text-4xl font-oswald font-bold text-gray-500 uppercase tracking-widest hover:text-white transition cursor-pointer"><i class="fa-solid fa-bottle-water mr-2"></i> HydroPlus</div>
+                <div class="flex flex-wrap justify-center gap-8 md:gap-12 items-center">
+                    <img src="https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/Elegant.jpg?raw=true" alt="Sakambari Ispat & Power Limited" class="h-20 md:h-28 object-contain hover:scale-105 transition-transform duration-300 rounded-lg shadow-lg border border-gray-700">
+                    <img src="https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/a6771841eeab75a6b1705730a8a92cff1553f100/Ghadi%20detegent.jpg" alt="Ghadi Detergent" class="h-20 md:h-28 object-contain hover:scale-105 transition-transform duration-300 rounded-lg shadow-lg border border-gray-700">
+                    <img src="https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/TAo.jpg?raw=true" alt="TAO" class="h-20 md:h-28 object-contain hover:scale-105 transition-transform duration-300 rounded-lg shadow-lg border border-gray-700">
+                    <img src="https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/65f383e531d02a80903c7ec5700c4b1df5504824/Big%20telecom.jpg" alt="Big Telecom" class="h-20 md:h-28 object-contain hover:scale-105 transition-transform duration-300 rounded-lg shadow-lg border border-gray-700">
                 </div>
             </div>
         </section>
@@ -445,8 +449,9 @@
                 
                 <div>
                     <h3 class="font-oswald text-2xl font-bold uppercase mb-4 text-spl-gold">Title Sponsor</h3>
-                    <div class="bg-white/5 p-4 rounded-lg flex items-center justify-center border border-white/10 hover:border-spl-gold/50 transition cursor-pointer">
-                        <span class="font-oswald font-bold text-2xl tracking-widest text-white/50 uppercase">Sponsor Brand</span>
+                    <div class="bg-white/5 p-4 rounded-lg flex flex-col items-center justify-center border border-white/10 hover:border-spl-gold/50 transition cursor-pointer">
+                        <img src="https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/NEtaji%20eye%20hospital%20logo.png?raw=true" alt="Netaji Eye Hospital, Ramchandrapur" class="h-20 w-auto object-contain mb-3" onerror="this.onerror=null; this.src='https://placehold.co/200x80/152238/F4B036?text=Sponsor';">
+                        <span class="font-oswald font-bold text-lg tracking-widest text-white/80 uppercase text-center leading-tight">Netaji Eye Hospital<br><span class="text-xs text-spl-gold">Ramchandrapur</span></span>
                     </div>
                 </div>
             </div>
@@ -488,22 +493,22 @@
         import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc, updateDoc, setDoc, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         let db, auth, app;
-        window.isAdmin = false;
-        const myAppId = 'spl-santuri-premier-league';
+        let latestPollData = null;
+        let hasVoted = localStorage.getItem('spl_voted_s6') === 'true';
 
-        // Updated Default Data Arrays with Real Winners
+        // Default Data Arrays
         const defaultSeasons = [
-            { season: 5, year: "2025", title: "A Historic Milestone", desc: "The most watched season to date. Valley Vipers completely dominated the points table, breaking multiple league records on their way to the cup. JMK Sixers won the title and runner up was AMAN XI Bheti.", image: "" },
-            { season: 4, year: "2024", title: "New Challengers Emerge", desc: "An underdog story for the ages as the Mavericks stunned the reigning champions in the semi-finals to win their maiden title. Krishnapur United won the title and Shri Ram XI Ramchandrapur were runner up.", image: "" },
-            { season: 3, year: "2023", title: "The Thrilling Finale", desc: "Remembered for the final over drama where Radha Binod Muradi were Champions and Krishnapur United were runner up.", image: "" },
-            { season: 2, year: "2022", title: "Rise of the Strikers", desc: "Santuri Strikers found their rhythm this season with a devastating batting lineup that chased every target set before them. SOVA HARDWARE MURADI was the winner of that season.", image: "" },
-            { season: 1, year: "2021", title: "The Inauguration", desc: "The season that started it all in Santuri Block, Purulia. Over 200 players registered for the auction, forming 8 franchises with 104 local gram players to battle for the first-ever SPL trophy. Winner KINANDI KNIGHT RIDERS and runner up SOVA HARDWARE.", image: "" }
+            { season: 5, year: "2025", title: "A Historic Milestone", desc: "The most watched season to date. Valley Vipers completely dominated the points table, breaking multiple league records on their way to the cup.", image: "" },
+            { season: 4, year: "2024", title: "New Challengers Emerge", desc: "An underdog story for the ages as the Mavericks stunned the reigning champions in the semi-finals to win their maiden title.", image: "" },
+            { season: 3, year: "2023", title: "The Thrilling Finale", desc: "Remembered for the final over drama where Santuri Strikers defended just 6 runs to secure back-to-back SPL championships.", image: "" },
+            { season: 2, year: "2022", title: "Rise of the Strikers", desc: "Santuri Strikers found their rhythm this season with a devastating batting lineup that chased every target set before them.", image: "" },
+            { season: 1, year: "2021", title: "The Inauguration", desc: "The season that started it all in Santuri Block, Purulia. Over 200 players registered for the auction, forming 8 franchises with 104 local gram players to battle for the first-ever SPL trophy.", image: "" }
         ];
 
         const defaultTeams = [
-            { id: 'SS', name: 'Strikers', color: 'from-red-600 to-red-900' },
-            { id: 'CC', name: 'Chargers', color: 'from-blue-500 to-blue-800' },
-            { id: 'HH', name: 'Heroes', color: 'from-green-600 to-green-900' },
+            { id: 'SS', name: 'Strikers', color: 'from-red-600 to-red-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/WhatsApp%20Image%202026-09-05%20at%2010.47.22%20PM.jpeg?raw=true' },
+            { id: 'CC', name: 'Chargers', color: 'from-blue-500 to-blue-800', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/WhatsApp%20Image%202026-09-05%20at%2010.44.43%20PM%20(2).jpeg?raw=true' },
+            { id: 'HH', name: 'Heroes', color: 'from-green-600 to-green-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/WhatsApp%20Image%202026-09-05%20at%2010.44.43%20PM.jpeg?raw=true' },
             { id: 'VV', name: 'Vipers', color: 'from-purple-600 to-purple-900' },
             { id: 'DD', name: 'Dynamos', color: 'from-orange-500 to-amber-700' },
             { id: 'MM', name: 'Mavericks', color: 'from-teal-500 to-teal-800' },
@@ -519,9 +524,9 @@
         ];
 
         const defaultGalleryPics = [
-            { url: "1000428224.jpg" },
-            { url: "https://placehold.co/600x400/152238/F4B036?text=SPL+Action+1" },
-            { url: "https://placehold.co/600x400/0B1221/E12D39?text=SPL+Action+2" }
+            { url: "https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/WhatsApp%20Image%202026-09-05%20at%2010.44.36%20PM%20(1).jpeg?raw=true" },
+            { url: "https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/WhatsApp%20Image%202026-09-05%20at%2010.44.39%20PM%20(1).jpeg?raw=true" },
+            { url: "https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/WhatsApp%20Image%202026-09-05%20at%2010.44.44%20PM.jpeg?raw=true" }
         ];
 
         const defaultAboutText = {
@@ -696,7 +701,8 @@
             const team = {
                 id: document.getElementById('team-id').value.toUpperCase(),
                 name: document.getElementById('team-name').value,
-                color: document.getElementById('team-color').value
+                color: document.getElementById('team-color').value,
+                logo: document.getElementById('team-logo').value || ''
             };
             try {
                 await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', team.id), team);
@@ -731,12 +737,20 @@
             grid.innerHTML = '';
             teams.forEach(t => {
                 const del = window.isAdmin ? `<button onclick="deleteTeam('${t.id}')" class="absolute top-2 right-2 bg-red-600 text-white w-6 h-6 rounded-full z-20 flex items-center justify-center hover:bg-red-700 text-xs shadow"><i class="fa-solid fa-trash"></i></button>` : '';
+                
+                let content = t.logo 
+                    ? `<img src="${t.logo}" alt="${t.name}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                       <div class="absolute inset-0 bg-black/50 group-hover:bg-black/20 transition-colors duration-300"></div>
+                       <h3 class="font-oswald text-3xl font-bold mb-1 relative z-10 text-white drop-shadow-md mt-auto">${t.id}</h3>
+                       <p class="text-xs font-bold uppercase tracking-wider text-center relative z-10 text-spl-gold drop-shadow-md mb-2">${t.name}</p>`
+                    : `<h3 class="font-oswald text-5xl font-bold mb-2 relative z-10">${t.id}</h3>
+                       <p class="text-sm font-bold uppercase tracking-wider text-center relative z-10">${t.name}</p>`;
+
                 grid.innerHTML += `
-                    <div class="group relative cursor-pointer">
+                    <div class="group relative cursor-pointer rounded-2xl overflow-hidden aspect-square shadow-lg border border-gray-700 hover:border-spl-gold transition-all duration-300">
                         ${del}
-                        <div class="aspect-square bg-gradient-to-br ${t.color} rounded-2xl flex flex-col items-center justify-center p-4 border border-gray-700 shadow-lg group-hover:scale-105 group-hover:border-spl-gold transition-all duration-300 relative overflow-hidden">
-                            <h3 class="font-oswald text-5xl font-bold mb-2 relative z-10">${t.id}</h3>
-                            <p class="text-sm font-bold uppercase tracking-wider text-center relative z-10">${t.name}</p>
+                        <div class="w-full h-full bg-gradient-to-br ${t.color || 'from-slate-700 to-slate-900'} flex flex-col items-center justify-center p-4 relative">
+                            ${content}
                         </div>
                     </div>
                 `;
