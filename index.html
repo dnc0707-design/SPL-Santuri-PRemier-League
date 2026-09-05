@@ -191,15 +191,9 @@
         <section id="about" class="py-16 bg-slate-900 border-t border-gray-800 scroll-mt-20">
             <div class="container mx-auto px-4 max-w-4xl text-center">
                 <h2 class="font-oswald text-4xl font-bold uppercase tracking-wide mb-6"><i class="fa-solid fa-circle-info text-spl-gold mr-2"></i> About SPL & Organizers</h2>
-                <p class="text-gray-400 text-lg leading-relaxed mb-4">
-                    The Santuri Premier League (SPL) is proudly organized by the historic <strong class="text-white">Lalgarh Village Club</strong>. Established in <strong class="text-white">1961</strong>, the club has a decades-long legacy of promoting sports, culture, and community spirit in the region. 
-                </p>
-                <p class="text-gray-400 text-lg leading-relaxed mb-4">
-                    The inaugural season kicked off in <strong class="text-white">2021</strong> with <strong class="text-white">8 franchises</strong>. Deeply rooted in the local community, the league featured <strong class="text-white">104 gram (village) players</strong> selected from across <strong class="text-white">six panchayats in the Santuri block, Purulia</strong>. The excitement was palpable from the start, with over <strong class="text-white">200 players registering for the very first mega auction!</strong> All the thrilling matches are hosted at our official venue, the <strong class="text-white">Rangadanga High School Ground</strong>.
-                </p>
-                <p class="text-gray-400 text-lg leading-relaxed">
-                    This blog serves as the definitive archive of our journey, meticulously maintained by our admin team, documenting every boundary, every shattered stump, and every lifted trophy across all seasons of the SPL.
-                </p>
+                <div id="about-content-display" class="space-y-4 text-gray-400 text-lg leading-relaxed">
+                    <!-- Dynamic text display -->
+                </div>
             </div>
         </section>
 
@@ -218,7 +212,7 @@
                         <button onclick="switchAdminTab('teams')" id="tab-btn-teams" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Franchises</button>
                         <button onclick="switchAdminTab('players')" id="tab-btn-players" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Players</button>
                         <button onclick="switchAdminTab('gallery')" id="tab-btn-gallery" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Gallery</button>
-                        <button onclick="switchAdminTab('fanzone')" id="tab-btn-fanzone" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Fan Zone</button>
+                        <button onclick="switchAdminTab('texts')" id="tab-btn-texts" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Edit Writings</button>
                     </div>
 
                     <!-- TAB 1: SEASONS -->
@@ -238,8 +232,8 @@
                                 <input type="text" id="post-title" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="Enter title..." required>
                             </div>
                             <div class="md:col-span-2">
-                                <label class="block text-gray-400 text-sm font-bold mb-2">Archive Picture URL</label>
-                                <input type="url" id="post-image" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="https://example.com/image.jpg">
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Upload Archive Picture (Local Storage)</label>
+                                <input type="file" id="post-image-file" accept="image/*" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-spl-gold file:text-spl-blue hover:file:bg-spl-goldHover">
                             </div>
                             <div class="md:col-span-2">
                                 <label class="block text-gray-400 text-sm font-bold mb-2">Description</label>
@@ -306,25 +300,31 @@
 
                     <!-- TAB 4: GALLERY -->
                     <div id="admin-tab-gallery" class="admin-tab-content hidden">
-                        <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Auto-Scrolling Gallery</h3>
+                        <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Auto-Scrolling Gallery (Local Photo Upload)</h3>
                         <form id="add-gallery-form" onsubmit="handleGallerySubmit(event)" class="mb-6 flex gap-4">
-                            <input type="url" id="gallery-image-url" class="flex-grow bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="https://example.com/pic.jpg" required>
-                            <button type="submit" class="bg-spl-gold text-spl-blue font-bold px-6 py-2 rounded hover:bg-spl-goldHover transition whitespace-nowrap"><i class="fa-solid fa-plus mr-1"></i> Add Image</button>
+                            <input type="file" id="gallery-image-file" accept="image/*" class="flex-grow bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold file:mr-4 file:py-1 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-spl-gold file:text-spl-blue hover:file:bg-spl-goldHover" required>
+                            <button type="submit" class="bg-spl-gold text-spl-blue font-bold px-6 py-2 rounded hover:bg-spl-goldHover transition whitespace-nowrap"><i class="fa-solid fa-upload mr-1"></i> Upload Image</button>
                         </form>
                         <h4 class="font-bold text-gray-300 mb-3 text-sm uppercase">Current Banner Images:</h4>
                         <div id="admin-gallery-grid" class="flex gap-4 overflow-x-auto pb-4 custom-scrollbar"></div>
                     </div>
 
-                    <!-- TAB 5: FAN ZONE -->
-                    <div id="admin-tab-fanzone" class="admin-tab-content hidden">
-                        <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Fan Zone Management</h3>
-                        <form id="update-poll-form" onsubmit="updatePollQuestion(event)" class="mb-6 flex flex-col md:flex-row gap-4">
-                            <input type="text" id="admin-poll-question" class="flex-grow bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="Enter new poll question..." required>
-                            <button type="submit" class="bg-spl-gold text-spl-blue font-bold px-6 py-2 rounded hover:bg-spl-goldHover transition whitespace-nowrap"><i class="fa-solid fa-pen mr-1"></i> Update Question</button>
+                    <!-- TAB 5: EDIT WRITINGS -->
+                    <div id="admin-tab-texts" class="admin-tab-content hidden">
+                        <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Edit Website Writings & Content</h3>
+                        <form id="update-text-form" onsubmit="handleTextSubmit(event)" class="space-y-6">
+                            <div>
+                                <label class="block text-gray-400 text-sm font-bold mb-2">About Us Paragraph 1</label>
+                                <textarea id="text-about-1" rows="3" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" required></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 text-sm font-bold mb-2">About Us Paragraph 2</label>
+                                <textarea id="text-about-2" rows="3" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" required></textarea>
+                            </div>
+                            <div>
+                                <button type="submit" class="bg-spl-gold text-spl-blue font-oswald font-bold text-xl uppercase tracking-wide py-3 px-8 rounded hover:bg-spl-goldHover transition-colors"><i class="fa-solid fa-pen-to-square mr-2"></i> Save Writings</button>
+                            </div>
                         </form>
-                        <div>
-                            <button onclick="resetPollVotes()" class="bg-red-600/20 text-red-500 border border-red-600/50 font-bold px-6 py-2 rounded hover:bg-red-600 hover:text-white transition"><i class="fa-solid fa-rotate-left mr-1"></i> Reset All Votes</button>
-                        </div>
                     </div>
 
                 </div>
@@ -379,28 +379,10 @@
         <section id="fanzone" class="py-16 bg-spl-blue border-t-2 border-spl-gold scroll-mt-20 relative overflow-hidden">
             <div class="absolute top-0 right-0 w-[40rem] h-[40rem] bg-spl-red/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
             
-            <div class="container mx-auto px-4 max-w-4xl relative z-10">
-                <div class="text-center mb-12">
+            <div class="container mx-auto px-4 max-w-4xl relative z-10 text-center">
+                <div class="mb-8">
                     <h2 class="font-oswald text-5xl font-bold uppercase tracking-wide mb-4 text-white">Fan <span class="text-spl-gold">Zone</span></h2>
-                    <p class="text-gray-400 font-medium">Make your voice heard! Join the community and vote for your favorites.</p>
-                </div>
-                
-                <div class="bg-slate-900 rounded-2xl p-6 md:p-10 border border-gray-700 shadow-2xl relative">
-                    <div class="absolute -top-4 -left-4 w-12 h-12 bg-spl-gold rounded-full flex items-center justify-center shadow-lg border-4 border-slate-900">
-                        <i class="fa-solid fa-bolt text-spl-blue text-xl"></i>
-                    </div>
-
-                    <h3 id="poll-question-display" class="font-oswald text-3xl md:text-4xl font-bold text-white uppercase tracking-wide mb-2 text-center">Who will win SPL Season 6?</h3>
-                    <p class="text-center text-sm text-gray-400 mb-8 font-medium">Cast your prediction now. The results are live!</p>
-
-                    <div id="poll-voting" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
-
-                    <div id="poll-results" class="hidden">
-                        <div id="poll-bars-container" class="space-y-4"></div>
-                        <div class="mt-8 text-center">
-                            <span class="inline-block bg-green-500/20 text-green-400 border border-green-500/50 px-4 py-2 rounded font-bold text-sm tracking-wider uppercase"><i class="fa-solid fa-check-circle mr-1"></i> Your Vote is Counted!</span>
-                        </div>
-                    </div>
+                    <p class="text-gray-400 font-medium">Stay tuned for upcoming community polls, quizzes, and fan engagement events!</p>
                 </div>
             </div>
         </section>
@@ -508,17 +490,14 @@
         let db, auth, app;
         window.isAdmin = false;
         const myAppId = 'spl-santuri-premier-league';
-        
-        let latestPollData = null;
-        let hasVoted = localStorage.getItem('spl_voted_s6') === 'true';
 
-        // Default Data Arrays
+        // Updated Default Data Arrays with Real Winners
         const defaultSeasons = [
-            { season: 5, year: "2025", title: "A Historic Milestone", desc: "The most watched season to date. Valley Vipers completely dominated the points table, breaking multiple league records on their way to the cup.", image: "" },
-            { season: 4, year: "2024", title: "New Challengers Emerge", desc: "An underdog story for the ages as the Mavericks stunned the reigning champions in the semi-finals to win their maiden title.", image: "" },
-            { season: 3, year: "2023", title: "The Thrilling Finale", desc: "Remembered for the final over drama where Santuri Strikers defended just 6 runs to secure back-to-back SPL championships.", image: "" },
-            { season: 2, year: "2022", title: "Rise of the Strikers", desc: "Santuri Strikers found their rhythm this season with a devastating batting lineup that chased every target set before them.", image: "" },
-            { season: 1, year: "2021", title: "The Inauguration", desc: "The season that started it all in Santuri Block, Purulia. Over 200 players registered for the auction, forming 8 franchises with 104 local gram players to battle for the first-ever SPL trophy.", image: "" }
+            { season: 5, year: "2025", title: "A Historic Milestone", desc: "The most watched season to date. Valley Vipers completely dominated the points table, breaking multiple league records on their way to the cup. JMK Sixers won the title and runner up was AMAN XI Bheti.", image: "" },
+            { season: 4, year: "2024", title: "New Challengers Emerge", desc: "An underdog story for the ages as the Mavericks stunned the reigning champions in the semi-finals to win their maiden title. Krishnapur United won the title and Shri Ram XI Ramchandrapur were runner up.", image: "" },
+            { season: 3, year: "2023", title: "The Thrilling Finale", desc: "Remembered for the final over drama where Radha Binod Muradi were Champions and Krishnapur United were runner up.", image: "" },
+            { season: 2, year: "2022", title: "Rise of the Strikers", desc: "Santuri Strikers found their rhythm this season with a devastating batting lineup that chased every target set before them. SOVA HARDWARE MURADI was the winner of that season.", image: "" },
+            { season: 1, year: "2021", title: "The Inauguration", desc: "The season that started it all in Santuri Block, Purulia. Over 200 players registered for the auction, forming 8 franchises with 104 local gram players to battle for the first-ever SPL trophy. Winner KINANDI KNIGHT RIDERS and runner up SOVA HARDWARE.", image: "" }
         ];
 
         const defaultTeams = [
@@ -545,6 +524,11 @@
             { url: "https://placehold.co/600x400/0B1221/E12D39?text=SPL+Action+2" }
         ];
 
+        const defaultAboutText = {
+            p1: "The Santuri Premier League (SPL) is proudly organized by the historic Lalgarh Village Club. Established in 1961, the club has a decades-long legacy of promoting sports, culture, and community spirit in the region.",
+            p2: "The inaugural season kicked off in 2021 with 8 franchises. Deeply rooted in the local community, the league featured 104 gram (village) players selected from across six panchayats in the Santuri block, Purulia. The excitement was palpable from the start, with over 200 players registering for the very first mega auction! All the thrilling matches are hosted at our official venue, the Rangadanga High School Ground."
+        };
+
         // UI toggles
         window.toggleAdminModal = function() {
             document.getElementById('admin-modal').classList.toggle('hidden');
@@ -553,7 +537,7 @@
         window.logoutAdmin = function() {
             window.isAdmin = false;
             document.getElementById('admin-dashboard').classList.add('hidden');
-            loadPosts(); loadTeams(); loadPlayers(); loadGallery();
+            loadPosts(); loadTeams(); loadPlayers(); loadGallery(); loadAboutText();
             alert('Logged out of Admin Dashboard.');
         };
 
@@ -569,7 +553,7 @@
                 document.getElementById('admin-user').value = '';
                 document.getElementById('admin-pass').value = '';
                 
-                loadPosts(); loadTeams(); loadPlayers(); loadGallery();
+                loadPosts(); loadTeams(); loadPlayers(); loadGallery(); loadAboutText();
                 alert('Access Granted! Welcome to the Master Admin Dashboard.');
                 document.getElementById('admin-dashboard').scrollIntoView({ behavior: 'smooth' });
             } else {
@@ -578,12 +562,20 @@
         };
 
         window.switchAdminTab = function(tabName) {
-            ['seasons', 'teams', 'players', 'gallery', 'fanzone'].forEach(t => {
-                document.getElementById(`admin-tab-${t}`).classList.add('hidden');
-                document.getElementById(`tab-btn-${t}`).className = 'px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm';
+            ['seasons', 'teams', 'players', 'gallery', 'texts'].forEach(t => {
+                const tab = document.getElementById(`admin-tab-${t}`);
+                const btn = document.getElementById(`tab-btn-${t}`);
+                if (tab && btn) {
+                    tab.classList.add('hidden');
+                    btn.className = 'px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm';
+                }
             });
-            document.getElementById(`admin-tab-${tabName}`).classList.remove('hidden');
-            document.getElementById(`tab-btn-${tabName}`).className = 'px-4 py-2 bg-spl-gold text-spl-blue font-bold rounded uppercase text-sm';
+            const activeTab = document.getElementById(`admin-tab-${tabName}`);
+            const activeBtn = document.getElementById(`tab-btn-${tabName}`);
+            if (activeTab && activeBtn) {
+                activeTab.classList.remove('hidden');
+                activeBtn.className = 'px-4 py-2 bg-spl-gold text-spl-blue font-bold rounded uppercase text-sm';
+            }
         };
 
         // Initialize Firebase
@@ -604,11 +596,11 @@
                 
                 onAuthStateChanged(auth, (user) => {
                     if(!user) signInAnonymously(auth).catch(e => console.warn(e));
-                    loadPosts(); loadTeams(); loadPlayers(); loadGallery(); initPoll();
+                    loadPosts(); loadTeams(); loadPlayers(); loadGallery(); loadAboutText();
                 });
             } catch(e) {
                 console.warn("Offline mode", e);
-                loadPosts(true); loadTeams(true); loadPlayers(true); loadGallery(true); initPoll(true);
+                loadPosts(true); loadTeams(true); loadPlayers(true); loadGallery(true); loadAboutText(true);
             }
         }
 
@@ -616,11 +608,28 @@
         window.handlePostSubmit = async function(e) {
             e.preventDefault();
             if(!window.isAdmin) return;
+            
+            const fileInput = document.getElementById('post-image-file');
+            let imageUrl = '';
+            
+            if(fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = async function(uploadEvent) {
+                    imageUrl = uploadEvent.target.result;
+                    await saveSeasonPost(imageUrl);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                await saveSeasonPost('');
+            }
+        };
+
+        async function saveSeasonPost(imgUrl) {
             const post = {
                 season: parseInt(document.getElementById('post-season').value),
                 year: document.getElementById('post-year').value,
                 title: document.getElementById('post-title').value,
-                image: document.getElementById('post-image').value || '',
+                image: imgUrl,
                 desc: document.getElementById('post-desc').value,
                 createdAt: Date.now()
             };
@@ -629,7 +638,7 @@
                 document.getElementById('add-post-form').reset();
                 alert('Season archive saved successfully!');
             } catch(err) { alert('Error saving post'); }
-        };
+        }
 
         window.deletePost = async function(id) {
             if(!confirm('Delete this season archive?')) return;
@@ -791,15 +800,24 @@
             });
         }
 
-        // --- GALLERY LOGIC ---
+        // --- GALLERY LOGIC (Local Storage File Upload) ---
         window.handleGallerySubmit = async function(e) {
             e.preventDefault();
             if(!window.isAdmin) return;
-            const url = document.getElementById('gallery-image-url').value;
-            try {
-                await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'gallery'), { url, createdAt: Date.now() });
-                document.getElementById('gallery-image-url').value = '';
-            } catch(e) { alert('Error adding gallery image'); }
+            
+            const fileInput = document.getElementById('gallery-image-file');
+            if(fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = async function(uploadEvent) {
+                    const base64Url = uploadEvent.target.result;
+                    try {
+                        await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'gallery'), { url: base64Url, createdAt: Date.now() });
+                        document.getElementById('add-gallery-form').reset();
+                        alert('Image uploaded successfully!');
+                    } catch(e) { alert('Error uploading image'); }
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            }
         };
 
         window.deleteGalleryImage = async function(id) {
@@ -851,117 +869,51 @@
             });
         }
 
-        // --- FAN ZONE POLL LOGIC ---
-        window.updatePollQuestion = async function(e) {
+        // --- EDIT TEXT / WRITINGS LOGIC ---
+        window.handleTextSubmit = async function(e) {
             e.preventDefault();
             if(!window.isAdmin) return;
-            const newQ = document.getElementById('admin-poll-question').value;
+            const p1 = document.getElementById('text-about-1').value;
+            const p2 = document.getElementById('text-about-2').value;
             try {
-                await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'fanzone', 'active_poll'), { question: newQ }, { merge: true });
-                alert('Poll question updated!');
-            } catch(e) { alert('Error updating question'); }
+                const textRef = doc(db, 'artifacts', myAppId, 'public', 'data', 'settings', 'about_text');
+                await setDoc(textRef, { p1, p2 }, { merge: true });
+                alert('Writings updated successfully!');
+            } catch(e) { alert('Error updating writings'); }
         };
 
-        window.resetPollVotes = async function() {
-            if(!window.isAdmin || !confirm('Reset all poll votes to 0?')) return;
-            try {
-                const ref = doc(db, 'artifacts', myAppId, 'public', 'data', 'fanzone', 'active_poll');
-                const reset = { total: 0, version: increment(1) };
-                defaultTeams.forEach(t => reset[t.id] = 0);
-                await setDoc(ref, reset, { merge: true });
-                alert('Poll votes reset!');
-            } catch(e) { alert('Error resetting votes'); }
-        };
+        function loadAboutText(local = false) {
+            const container = document.getElementById('about-content-display');
+            if(!container) return;
 
-        function initPoll(local = false) {
-            const votingDiv = document.getElementById('poll-voting');
-            if(!votingDiv) return;
+            if(local) {
+                renderAboutText(defaultAboutText);
+                return;
+            }
 
-            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'teams'), (snap) => {
-                let teams = [];
-                snap.forEach(d => teams.push(d.data()));
-                if(teams.length === 0) teams = defaultTeams;
-
-                votingDiv.innerHTML = teams.map(t => `
-                    <button onclick="castVote('${t.id}')" class="flex flex-col items-center justify-center p-4 border border-gray-700 bg-slate-800 rounded-xl hover:border-spl-gold transition transform hover:-translate-y-1 group">
-                        <span class="font-oswald text-4xl font-bold text-white group-hover:text-spl-gold">${t.id}</span>
-                        <span class="text-sm font-bold uppercase tracking-wider text-gray-400 mt-2">${t.name}</span>
-                    </button>
-                `).join('');
-
-                if(hasVoted) {
-                    document.getElementById('poll-voting').classList.add('hidden');
-                    document.getElementById('poll-results').classList.remove('hidden');
+            const textRef = doc(db, 'artifacts', myAppId, 'public', 'data', 'settings', 'about_text');
+            onSnapshot(textRef, (docSnap) => {
+                if(docSnap.exists()) {
+                    const data = docSnap.data();
+                    renderAboutText(data);
+                    
+                    const t1 = document.getElementById('text-about-1');
+                    const t2 = document.getElementById('text-about-2');
+                    if(t1 && data.p1 && !t1.value) t1.value = data.p1;
+                    if(t2 && data.p2 && !t2.value) t2.value = data.p2;
+                } else if(window.isAdmin) {
+                    setDoc(textRef, defaultAboutText);
                 }
-
-                if(!local) {
-                    onSnapshot(doc(db, 'artifacts', myAppId, 'public', 'data', 'fanzone', 'active_poll'), (docSnap) => {
-                        if(docSnap.exists()) {
-                            latestPollData = docSnap.data();
-                            const qInput = document.getElementById('admin-poll-question');
-                            if(qInput && latestPollData.question && !qInput.value) qInput.value = latestPollData.question;
-                            
-                            const qDisplay = document.getElementById('poll-question-display');
-                            if(qDisplay) qDisplay.innerText = latestPollData.question || "Who will win SPL Season 6?";
-
-                            const localVer = localStorage.getItem('spl_poll_version');
-                            const serverVer = latestPollData.version || 1;
-                            if(localVer && parseInt(localVer) !== serverVer) {
-                                hasVoted = false;
-                                localStorage.setItem('spl_voted_s6', 'false');
-                                localStorage.setItem('spl_poll_version', serverVer);
-                                document.getElementById('poll-voting').classList.remove('hidden');
-                                document.getElementById('poll-results').classList.add('hidden');
-                            }
-                            if(hasVoted) renderPollResults(latestPollData, teams);
-                        } else if(window.isAdmin) {
-                            setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'fanzone', 'active_poll'), { question: "Who will win SPL Season 6?", version: 1, total: 0 });
-                        }
-                    });
-                }
-            });
+            }, () => renderAboutText(defaultAboutText));
         }
 
-        window.castVote = async function(teamId) {
-            if(hasVoted) return;
-            hasVoted = true;
-            localStorage.setItem('spl_voted_s6', 'true');
-            localStorage.setItem('spl_poll_version', latestPollData?.version || 1);
-            
-            document.getElementById('poll-voting').classList.add('hidden');
-            document.getElementById('poll-results').classList.remove('hidden');
-
-            try {
-                const ref = doc(db, 'artifacts', myAppId, 'public', 'data', 'fanzone', 'active_poll');
-                await updateDoc(ref, { [teamId]: increment(1), total: increment(1) });
-            } catch(e) {
-                const initData = { total: 1, version: 1, question: latestPollData?.question || "Who will win SPL Season 6?" };
-                await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'fanzone', 'active_poll'), initData, { merge: true });
-            }
-        };
-
-        function renderPollResults(data, teams) {
-            const container = document.getElementById('poll-bars-container');
+        function renderAboutText(data) {
+            const container = document.getElementById('about-content-display');
             if(!container) return;
-            const total = data.total || 1;
-            
-            container.innerHTML = teams.map(t => {
-                const votes = data[t.id] || 0;
-                const pct = Math.round((votes / total) * 100);
-                return `
-                    <div class="mb-4">
-                        <div class="flex justify-between text-sm font-bold text-white mb-1">
-                            <span>${t.name} (${t.id})</span>
-                            <span class="text-spl-gold">${pct}%</span>
-                        </div>
-                        <div class="w-full bg-slate-800 rounded-full h-4 overflow-hidden border border-gray-700">
-                            <div class="bg-gradient-to-r ${t.color} h-4 rounded-full transition-all duration-1000 flex items-center justify-end px-2" style="width: ${pct}%">
-                                ${pct > 5 ? `<span class="text-[10px] text-white font-bold">${votes} votes</span>` : ''}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('') + `<p class="text-center text-xs text-gray-500 mt-6 font-bold uppercase tracking-widest">Total Community Votes: ${total}</p>`;
+            container.innerHTML = `
+                <p>${data.p1 || defaultAboutText.p1}</p>
+                <p>${data.p2 || defaultAboutText.p2}</p>
+            `;
         }
 
         // General Navigation & Scroll
