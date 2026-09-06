@@ -157,7 +157,7 @@
                     <i class="fa-brands fa-youtube text-spl-red mr-2"></i> SPL <span class="text-spl-red">Featured Action</span>
                 </h2>
                 <div class="aspect-video w-full rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(225,45,57,0.2)] border border-gray-800 bg-black">
-                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/k9alqPSW5BY" title="SPL YouTube Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe id="featured-video-iframe" class="w-full h-full" src="https://www.youtube.com/embed/k9alqPSW5BY" title="SPL YouTube Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
         </section>
@@ -210,6 +210,7 @@
                         <button onclick="switchAdminTab('teams')" id="tab-btn-teams" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Franchises</button>
                         <button onclick="switchAdminTab('players')" id="tab-btn-players" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Players</button>
                         <button onclick="switchAdminTab('gallery')" id="tab-btn-gallery" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Gallery</button>
+                        <button onclick="switchAdminTab('video')" id="tab-btn-video" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Video</button>
                         <button onclick="switchAdminTab('texts')" id="tab-btn-texts" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Edit Writings</button>
                         <button onclick="switchAdminTab('sponsors')" id="tab-btn-sponsors" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Sponsors</button>
                         <button onclick="switchAdminTab('partners')" id="tab-btn-partners" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Partners</button>
@@ -324,6 +325,19 @@
                         </form>
                         <h4 class="font-bold text-gray-300 mb-3 text-sm uppercase">Current Gallery Images:</h4>
                         <div id="admin-gallery-grid" class="flex gap-4 overflow-x-auto pb-4 custom-scrollbar"></div>
+                    </div>
+
+                    <!-- TAB: VIDEO -->
+                    <div id="admin-tab-video" class="admin-tab-content hidden">
+                        <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Update Featured Video</h3>
+                        <form id="update-video-form" onsubmit="handleVideoSubmit(event)" class="bg-slate-800/50 p-6 rounded border border-gray-700 mb-8">
+                            <div class="mb-4">
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Paste YouTube Video Link</label>
+                                <input type="text" id="video-url-input" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-3 text-white focus:outline-none focus:border-spl-gold" placeholder="e.g., https://youtu.be/k9alqPSW5BY" required>
+                                <p class="text-xs text-gray-500 mt-2"><i class="fa-solid fa-circle-info mr-1"></i> Paste any standard YouTube link, it will be automatically converted to embed format.</p>
+                            </div>
+                            <button type="submit" class="bg-spl-gold text-spl-blue font-oswald font-bold text-lg uppercase tracking-wide py-2 px-8 rounded hover:bg-spl-goldHover transition-colors shadow-lg"><i class="fa-brands fa-youtube mr-2"></i> Save Video</button>
+                        </form>
                     </div>
 
                     <!-- TAB 5: EDIT WRITINGS -->
@@ -782,7 +796,7 @@
         window.logoutAdmin = function() {
             window.isAdmin = false;
             document.getElementById('admin-dashboard').classList.add('hidden');
-            loadPosts(); loadTeams(); loadPlayers(); loadGallery(); loadAboutText(); loadSponsors(); loadPartners();
+            loadPosts(); loadTeams(); loadPlayers(); loadGallery(); loadAboutText(); loadSponsors(); loadPartners(); loadVideo();
             alert('Logged out of Admin Dashboard.');
         };
 
@@ -798,7 +812,7 @@
                 document.getElementById('admin-user').value = '';
                 document.getElementById('admin-pass').value = '';
                 
-                loadPosts(); loadTeams(); loadPlayers(); loadGallery(); loadAboutText(); loadSponsors(); loadPartners();
+                loadPosts(); loadTeams(); loadPlayers(); loadGallery(); loadAboutText(); loadSponsors(); loadPartners(); loadVideo();
                 alert('Access Granted! Welcome to the Master Admin Dashboard.');
                 document.getElementById('admin-dashboard').scrollIntoView({ behavior: 'smooth' });
             } else {
@@ -807,7 +821,7 @@
         };
 
         window.switchAdminTab = function(tabName) {
-            ['seasons', 'teams', 'players', 'gallery', 'texts', 'sponsors', 'partners'].forEach(t => {
+            ['seasons', 'teams', 'players', 'gallery', 'video', 'texts', 'sponsors', 'partners'].forEach(t => {
                 document.getElementById(`admin-tab-${t}`)?.classList.add('hidden');
                 const btn = document.getElementById(`tab-btn-${t}`);
                 if(btn) btn.className = 'px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm';
@@ -835,12 +849,67 @@
                 
                 onAuthStateChanged(auth, (user) => {
                     if(!user) signInAnonymously(auth).catch(e => console.warn(e));
-                    loadPosts(); loadTeams(); loadPlayers(); loadGallery(); loadAboutText(); loadSponsors(); loadPartners();
+                    loadPosts(); loadTeams(); loadPlayers(); loadGallery(); loadAboutText(); loadSponsors(); loadPartners(); loadVideo();
                 });
             } catch(e) {
                 console.warn("Offline mode", e);
-                loadPosts(true); loadTeams(true); loadPlayers(true); loadGallery(true); loadAboutText(true); loadSponsors(true); loadPartners(true);
+                loadPosts(true); loadTeams(true); loadPlayers(true); loadGallery(true); loadAboutText(true); loadSponsors(true); loadPartners(true); loadVideo(true);
             }
+        }
+
+        // --- FEATURED VIDEO LOGIC ---
+        window.handleVideoSubmit = async function(e) {
+            e.preventDefault();
+            if(!window.isAdmin) return;
+            
+            const rawUrl = document.getElementById('video-url-input').value;
+            let videoId = '';
+            
+            try {
+                if (rawUrl.includes('youtu.be/')) {
+                    videoId = rawUrl.split('youtu.be/')[1].split('?')[0];
+                } else if (rawUrl.includes('youtube.com/watch')) {
+                    const url = new URL(rawUrl);
+                    videoId = url.searchParams.get('v');
+                } else if (rawUrl.includes('youtube.com/embed/')) {
+                    videoId = rawUrl.split('embed/')[1].split('?')[0];
+                }
+            } catch (error) { console.error("URL Parse error", error); }
+
+            if(!videoId) {
+                alert("Invalid YouTube URL. Please paste a valid link.");
+                return;
+            }
+
+            const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+            try {
+                await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'settings', 'featured_video'), { url: embedUrl });
+                alert('Featured video updated successfully!');
+            } catch(err) { alert('Error updating video'); }
+        };
+
+        function loadVideo(local = false) {
+            const iframe = document.getElementById('featured-video-iframe');
+            const input = document.getElementById('video-url-input');
+            if(!iframe) return;
+
+            const defaultVideo = "https://www.youtube.com/embed/k9alqPSW5BY";
+
+            if(local) { 
+                iframe.src = defaultVideo; 
+                return; 
+            }
+
+            onSnapshot(doc(db, 'artifacts', myAppId, 'public', 'data', 'settings', 'featured_video'), (docSnap) => {
+                let embedUrl = defaultVideo;
+                if(docSnap.exists() && docSnap.data().url) {
+                    embedUrl = docSnap.data().url;
+                }
+                iframe.src = embedUrl;
+                if(input && !input.value) input.value = embedUrl;
+            }, () => {
+                iframe.src = defaultVideo;
+            });
         }
 
         // --- GLOBAL RESIZE LISTENER FOR ALL SLIDERS ---
