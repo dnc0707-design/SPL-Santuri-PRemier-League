@@ -281,13 +281,20 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-gray-400 text-sm font-bold mb-2">Logo URL</label>
-                                <input type="url" id="team-logo" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="https://raw.githubusercontent.com/.../logo.jpg">
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Upload Logo (Local Storage)</label>
+                                <input type="file" id="team-logo-file" accept="image/*" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-spl-gold file:text-spl-blue hover:file:bg-spl-goldHover">
+                                <input type="hidden" id="team-existing-logo" value="">
                             </div>
                             <div class="md:col-span-2">
                                 <button type="submit" class="bg-spl-gold text-spl-blue font-oswald font-bold text-xl uppercase tracking-wide py-3 px-8 rounded hover:bg-spl-goldHover transition-colors"><i class="fa-solid fa-shield mr-2"></i> Add / Update Franchise</button>
                             </div>
                         </form>
+                        
+                        <!-- NEW: Admin Grid for Existing Teams (Edit & Delete) -->
+                        <div class="border-t border-gray-700 pt-6 mt-4">
+                            <h4 class="font-bold text-gray-300 mb-4 text-sm uppercase"><i class="fa-solid fa-pen-to-square mr-2"></i> Current Franchises (Edit / Delete Logos):</h4>
+                            <div id="admin-teams-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+                        </div>
                     </div>
 
                     <!-- TAB 3: PLAYERS -->
@@ -731,22 +738,52 @@
         window.handleTeamSubmit = async function(e) {
             e.preventDefault();
             if(!window.isAdmin) return;
-            const team = {
-                id: document.getElementById('team-id').value.toUpperCase(),
-                name: document.getElementById('team-name').value,
-                color: document.getElementById('team-color').value,
-                logo: document.getElementById('team-logo').value || ''
+            
+            const teamId = document.getElementById('team-id').value.toUpperCase();
+            const teamName = document.getElementById('team-name').value;
+            const teamColor = document.getElementById('team-color').value;
+            const existingLogo = document.getElementById('team-existing-logo').value;
+            const fileInput = document.getElementById('team-logo-file');
+            
+            const saveTeam = async (logoData) => {
+                const team = {
+                    id: teamId,
+                    name: teamName,
+                    color: teamColor,
+                    logo: logoData
+                };
+                try {
+                    await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', team.id), team);
+                    document.getElementById('add-team-form').reset();
+                    document.getElementById('team-existing-logo').value = '';
+                    alert('Franchise saved successfully!');
+                } catch(e) { alert('Error saving team'); }
             };
-            try {
-                await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', team.id), team);
-                document.getElementById('add-team-form').reset();
-                alert('Franchise saved successfully!');
-            } catch(e) { alert('Error saving team'); }
+
+            if(fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = async function(uploadEvent) {
+                    await saveTeam(uploadEvent.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                await saveTeam(existingLogo);
+            }
         };
 
         window.deleteTeam = async function(id) {
             if(!confirm(`Delete franchise ${id}?`)) return;
             try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', id)); } catch(e) {}
+        };
+
+        // NEW: Populate form for quick editing
+        window.editTeam = function(id, name, color, logo) {
+            document.getElementById('team-id').value = id;
+            document.getElementById('team-name').value = name;
+            document.getElementById('team-color').value = color;
+            document.getElementById('team-existing-logo').value = logo || '';
+            document.getElementById('team-logo-file').value = '';
+            document.getElementById('admin-dashboard').scrollIntoView({ behavior: 'smooth' });
         };
 
         function loadTeams(local = false) {
@@ -767,17 +804,34 @@
 
         function renderTeams(teams) {
             const grid = document.getElementById('teams-grid');
+            const adminGrid = document.getElementById('admin-teams-grid');
+            
+            if(adminGrid && window.isAdmin) {
+                adminGrid.innerHTML = '';
+                teams.forEach(t => {
+                    adminGrid.innerHTML += `
+                        <div class="bg-slate-800 border border-gray-700 rounded p-4 flex flex-col items-center text-center relative shadow-lg">
+                            ${t.logo 
+                                ? `<img src="${t.logo}" class="w-16 h-16 object-cover mb-2 rounded bg-white p-1 border border-gray-600">` 
+                                : `<div class="w-16 h-16 bg-gray-700 rounded mb-2 flex items-center justify-center font-bold font-oswald text-xl">${t.id}</div>`}
+                            <span class="font-bold text-white text-sm leading-tight mb-3">${t.name}</span>
+                            <div class="flex gap-2 w-full mt-auto">
+                                <button onclick="editTeam('${t.id}', '${t.name.replace(/'/g, "\\'")}', '${t.color}', '${t.logo || ''}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-1.5 rounded transition"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="deleteTeam('${t.id}')" class="flex-1 bg-red-600 hover:bg-red-700 text-white text-xs py-1.5 rounded transition"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
             grid.innerHTML = '';
             teams.forEach(t => {
-                const del = window.isAdmin ? `<button onclick="deleteTeam('${t.id}')" class="absolute top-2 right-2 bg-red-600 text-white w-8 h-8 rounded-full z-20 flex items-center justify-center hover:bg-red-700 text-sm shadow-lg"><i class="fa-solid fa-trash"></i></button>` : '';
-                
                 let content = t.logo 
                     ? `<img src="${t.logo}" alt="${t.name}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">`
                     : `<h3 class="font-oswald text-4xl font-bold relative z-10">${t.id}</h3>`;
 
                 grid.innerHTML += `
                     <div class="group relative cursor-pointer rounded-2xl overflow-hidden aspect-square shadow-xl border-2 border-gray-800 hover:border-spl-gold transition-all duration-300 bg-slate-900">
-                        ${del}
                         <div class="w-full h-full flex flex-col items-center justify-center relative">
                             ${content}
                             <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-300 z-0"></div>
