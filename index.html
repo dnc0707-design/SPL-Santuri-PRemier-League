@@ -6,8 +6,8 @@
     <title>Santuri Premier League (SPL) | Official Website</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts Upgraded to Premium Sports Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Teko:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts Upgraded to Premium Sports Fonts (Oswald & Montserrat) -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -16,7 +16,7 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        'oswald': ['Teko', 'sans-serif'], 
+                        'oswald': ['Oswald', 'sans-serif'], 
                         'inter': ['Montserrat', 'sans-serif'],
                     },
                     colors: {
@@ -64,6 +64,15 @@
             background: #d49626;
         }
         
+        /* Hide scrollbar for slider but keep functionality */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
         .nav-link {
             position: relative;
         }
@@ -96,14 +105,13 @@
             <div class="flex justify-between items-center h-20">
                 <!-- Logo & Branding -->
                 <div class="flex items-center gap-3">
-                    
                     <!-- GitHub Hosted Logo with Solid White Background Container -->
                     <div class="w-16 h-16 relative flex-shrink-0 flex items-center justify-center rounded-full bg-white p-1 shadow-[0_0_15px_rgba(244,176,54,0.3)] overflow-hidden">
                         <img src="https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/main/ChatGPT%20Image%20Sep%205%2C%202026%2C%2003_22_40%20PM.png" alt="SPL Logo" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://placehold.co/150/ffffff/0B1221?text=SPL';">
                     </div>
                     
                     <div class="hidden md:block">
-                        <h1 class="font-oswald text-lg lg:text-xl font-bold uppercase tracking-wide leading-tight whitespace-nowrap">Santuri <span class="text-spl-gold">Premier League</span></h1>
+                        <h1 class="font-oswald text-xl lg:text-2xl font-bold uppercase tracking-wide leading-tight whitespace-nowrap">Santuri <span class="text-spl-gold">Premier League</span></h1>
                         <div class="flex flex-col mt-0.5">
                             <span class="text-[9px] text-white bg-slate-800 px-1.5 py-0.5 border border-spl-gold/50 rounded inline-block w-max font-bold uppercase tracking-widest mb-0.5">Where Cricket Roars</span>
                             <span class="text-[9px] text-gray-400 uppercase tracking-widest font-bold">Org. by Lalgarh Village Club</span>
@@ -112,20 +120,19 @@
                 </div>
 
                 <!-- Desktop Nav -->
-                <nav class="hidden lg:flex items-center gap-8 font-oswald text-xl tracking-wide uppercase">
+                <nav class="hidden lg:flex items-center gap-6 lg:gap-8 font-oswald text-lg lg:text-xl tracking-wide uppercase">
                     <a href="#" class="nav-link active text-spl-gold">Home</a>
                     <a href="#about" class="nav-link hover:text-spl-gold transition-colors">About Us</a>
                     <a href="#seasons" class="nav-link hover:text-spl-gold transition-colors">Seasons</a>
                     <a href="#teams" class="nav-link hover:text-spl-gold transition-colors">Teams</a>
                     <a href="#players" class="nav-link hover:text-spl-gold transition-colors">Players</a>
-                    <a href="#fanzone" class="nav-link hover:text-spl-gold transition-colors">Fan Zone</a>
                     <a href="#sponsors" class="nav-link hover:text-spl-gold transition-colors">Sponsors</a>
                 </nav>
 
                 <!-- Right Actions -->
                 <div class="hidden lg:flex items-center gap-4">
-                    <button class="text-white hover:text-spl-gold transition"><i class="fa-solid fa-magnifying-glass text-xl"></i></button>
-                    <button onclick="toggleAdminModal()" class="bg-spl-gold text-spl-blue font-oswald font-bold px-6 py-2 text-lg uppercase tracking-wide rounded hover:bg-spl-goldHover transition-colors">Admin Login</button>
+                    <button class="text-white hover:text-spl-gold transition"><i class="fa-solid fa-magnifying-glass text-lg"></i></button>
+                    <button onclick="toggleAdminModal()" class="bg-spl-gold text-spl-blue font-oswald font-bold px-5 py-2 text-base uppercase tracking-wide rounded hover:bg-spl-goldHover transition-colors">Admin Login</button>
                 </div>
 
                 <!-- Mobile Menu Button -->
@@ -143,7 +150,6 @@
                 <a href="#seasons" class="py-3 border-b border-gray-700 hover:text-spl-gold">Seasons</a>
                 <a href="#teams" class="py-3 border-b border-gray-700 hover:text-spl-gold">Teams</a>
                 <a href="#players" class="py-3 border-b border-gray-700 hover:text-spl-gold">Players</a>
-                <a href="#fanzone" class="py-3 border-b border-gray-700 hover:text-spl-gold">Fan Zone</a>
                 <a href="#sponsors" class="py-3 hover:text-spl-gold">Sponsors</a>
                 <button onclick="toggleAdminModal()" class="mt-4 bg-spl-gold text-spl-blue font-bold px-4 py-2 uppercase rounded text-center w-full">Admin Login</button>
             </nav>
@@ -161,19 +167,20 @@
             <div class="container mx-auto px-4 relative z-10 text-center">
                 
                 <!-- Season 6 Coming Soon Banner -->
-                <div class="inline-block bg-gradient-to-r from-orange-600 via-spl-gold to-yellow-500 p-[3px] rounded-lg mb-8 shadow-[0_0_40px_rgba(244,176,54,0.5)] transform hover:scale-105 transition duration-300">
-                    <div class="bg-slate-900 px-6 py-4 md:px-10 md:py-6 rounded-md border border-slate-800">
-                        <h2 class="font-oswald text-3xl md:text-5xl lg:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-500 uppercase tracking-wide flex items-center justify-center gap-4 animate-glow-blink">
-                            <i class="fa-solid fa-bolt text-yellow-400 drop-shadow-none"></i> 
+                <div class="inline-block bg-gradient-to-r from-orange-600 via-spl-gold to-yellow-500 p-[2px] rounded-lg mb-8 shadow-[0_0_40px_rgba(244,176,54,0.5)] transform hover:scale-[1.02] transition duration-300">
+                    <div class="bg-slate-900 px-6 py-6 md:px-12 md:py-8 rounded-md border border-slate-800">
+                        <h2 class="font-oswald text-2xl md:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-500 uppercase tracking-wide flex items-center justify-center gap-3 animate-glow-blink leading-tight">
+                            <i class="fa-solid fa-bolt text-yellow-400 drop-shadow-none text-3xl"></i> 
                             SPL - Season 6 is Coming Soon this December 2026 
-                            <i class="fa-solid fa-bolt text-yellow-400 drop-shadow-none"></i>
+                            <i class="fa-solid fa-bolt text-yellow-400 drop-shadow-none text-3xl"></i>
                         </h2>
-                        <p class="text-center text-white/90 font-oswald text-xl md:text-2xl mt-3 tracking-widest uppercase"><i class="fa-solid fa-location-dot text-spl-red mr-2"></i> Venue: Rangadanga High School Ground</p>
+                        <p class="text-center text-white/90 font-oswald text-lg md:text-xl mt-4 tracking-widest uppercase"><i class="fa-solid fa-location-dot text-spl-red mr-2"></i> Venue: Rangadanga High School Ground</p>
                     </div>
                 </div>
                 
-                <br>
-                <a href="#seasons" class="inline-block bg-spl-red hover:bg-red-700 text-white font-oswald font-bold px-8 py-3 uppercase tracking-wider rounded transition-colors text-xl">Read Season History</a>
+                <div class="mt-4">
+                    <a href="#seasons" class="inline-block bg-spl-red hover:bg-red-700 text-white font-oswald font-bold px-8 py-3 uppercase tracking-wider rounded transition-colors text-lg shadow-lg">Read Season History</a>
+                </div>
             </div>
         </section>
 
@@ -188,10 +195,13 @@
         </section>
 
         <!-- About Us -->
-        <section id="about" class="py-16 bg-slate-900 border-t border-gray-800 scroll-mt-20">
+        <section id="about" class="py-20 bg-slate-900 border-t border-gray-800 scroll-mt-20">
             <div class="container mx-auto px-4 max-w-4xl text-center">
-                <h2 class="font-oswald text-4xl font-bold uppercase tracking-wide mb-6"><i class="fa-solid fa-circle-info text-spl-gold mr-2"></i> About SPL & Organizers</h2>
-                <div id="about-content-display" class="space-y-4 text-gray-400 text-lg leading-relaxed">
+                <div class="flex flex-col items-center justify-center mb-8">
+                    <h2 class="font-oswald text-4xl font-bold uppercase tracking-wide"><i class="fa-solid fa-circle-info text-spl-gold mr-2"></i> About SPL & Organizers</h2>
+                    <div class="w-24 h-1 bg-spl-gold mt-4 rounded"></div>
+                </div>
+                <div id="about-content-display" class="space-y-6 text-gray-400 text-lg leading-relaxed text-left md:text-center font-medium">
                     <!-- Dynamic text display -->
                 </div>
             </div>
@@ -271,8 +281,8 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-gray-400 text-sm font-bold mb-2">Logo URL (Optional)</label>
-                                <input type="url" id="team-logo" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="https://example.com/logo.jpg">
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Logo URL</label>
+                                <input type="url" id="team-logo" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="https://raw.githubusercontent.com/.../logo.jpg">
                             </div>
                             <div class="md:col-span-2">
                                 <button type="submit" class="bg-spl-gold text-spl-blue font-oswald font-bold text-xl uppercase tracking-wide py-3 px-8 rounded hover:bg-spl-goldHover transition-colors"><i class="fa-solid fa-shield mr-2"></i> Add / Update Franchise</button>
@@ -335,42 +345,54 @@
             </div>
         </section>
 
-        <!-- Seasons History (Blog) -->
-        <section id="seasons" class="py-16 bg-slate-800 border-t border-gray-800 relative scroll-mt-20">
-            <div class="container mx-auto px-4">
-                <div class="flex justify-between items-center mb-12">
-                    <h2 class="font-oswald text-5xl font-bold uppercase tracking-wide">Season <span class="text-spl-gold">Histories</span></h2>
+        <!-- Seasons History (Horizontal Slider) -->
+        <section id="seasons" class="py-20 bg-slate-800 border-t border-gray-800 relative scroll-mt-20">
+            <div class="container mx-auto px-4 lg:px-8">
+                <div class="flex justify-between items-end mb-10">
+                    <div>
+                        <h2 class="font-oswald text-4xl lg:text-5xl font-bold uppercase tracking-wide">Season <span class="text-spl-gold">Histories</span></h2>
+                        <div class="w-24 h-1 bg-spl-gold mt-4 rounded"></div>
+                    </div>
+                    <!-- Slider Navigation Buttons -->
+                    <div class="hidden md:flex gap-3">
+                        <button onclick="slideSeasons(-1)" class="w-12 h-12 rounded-full bg-slate-900 border border-gray-700 flex items-center justify-center text-gray-400 hover:text-spl-gold hover:border-spl-gold transition shadow-lg"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button onclick="slideSeasons(1)" class="w-12 h-12 rounded-full bg-slate-900 border border-gray-700 flex items-center justify-center text-gray-400 hover:text-spl-gold hover:border-spl-gold transition shadow-lg"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
                 </div>
 
-                <div id="seasons-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="col-span-3 text-center py-12">
-                        <i class="fa-solid fa-spinner fa-spin text-4xl text-spl-gold mb-4"></i>
-                        <p class="text-gray-400 font-bold tracking-widest uppercase">Loading Archives...</p>
+                <!-- Slider Container -->
+                <div class="relative">
+                    <div id="seasons-slider" class="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-6 hide-scrollbar scroll-smooth w-full">
+                        <div class="w-full text-center py-12 flex-shrink-0">
+                            <i class="fa-solid fa-spinner fa-spin text-4xl text-spl-gold mb-4"></i>
+                            <p class="text-gray-400 font-bold tracking-widest uppercase">Loading Archives...</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Teams Showcase -->
-        <section id="teams" class="bg-spl-blue border-t border-gray-800 py-16 scroll-mt-20">
-            <div class="container mx-auto px-4">
-                <div class="text-center mb-12">
-                    <h2 class="font-oswald text-5xl md:text-6xl font-bold uppercase tracking-wide mb-4">The Franchises</h2>
-                    <div class="w-24 h-1 bg-spl-gold mx-auto rounded"></div>
+        <section id="teams" class="bg-spl-blue border-t border-gray-800 py-20 scroll-mt-20">
+            <div class="container mx-auto px-4 lg:px-8">
+                <div class="flex flex-col items-center justify-center mb-12">
+                    <h2 class="font-oswald text-4xl lg:text-5xl font-bold uppercase tracking-wide text-center">The Franchises</h2>
+                    <div class="w-24 h-1 bg-spl-gold mt-4 rounded"></div>
                 </div>
 
-                <div id="teams-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
+                <div id="teams-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
                     <!-- Teams injected dynamically -->
                 </div>
             </div>
         </section>
 
         <!-- Players Spotlight -->
-        <section id="players" class="py-16 bg-slate-900 border-t border-gray-800 scroll-mt-20">
-            <div class="container mx-auto px-4">
-                <div class="text-center mb-12">
-                    <h2 class="font-oswald text-5xl font-bold uppercase tracking-wide mb-4">Legendary Players</h2>
-                    <p class="text-gray-400 font-medium">The heroes who shaped the seasons of SPL.</p>
+        <section id="players" class="py-20 bg-slate-900 border-t border-gray-800 scroll-mt-20">
+            <div class="container mx-auto px-4 lg:px-8">
+                <div class="flex flex-col items-center justify-center mb-12">
+                    <h2 class="font-oswald text-4xl lg:text-5xl font-bold uppercase tracking-wide text-center">Legendary Players</h2>
+                    <div class="w-24 h-1 bg-spl-gold mt-4 mb-4 rounded"></div>
+                    <p class="text-gray-400 font-medium text-center">The heroes who shaped the seasons of SPL.</p>
                 </div>
                 
                 <div id="players-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -379,95 +401,96 @@
             </div>
         </section>
 
-        <!-- Fan Zone (Interactive Polls & Engagement) -->
-        <section id="fanzone" class="py-16 bg-spl-blue border-t-2 border-spl-gold scroll-mt-20 relative overflow-hidden">
-            <div class="absolute top-0 right-0 w-[40rem] h-[40rem] bg-spl-red/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
-            
-            <div class="container mx-auto px-4 max-w-4xl relative z-10 text-center">
-                <div class="mb-8">
-                    <h2 class="font-oswald text-5xl font-bold uppercase tracking-wide mb-4 text-white">Fan <span class="text-spl-gold">Zone</span></h2>
-                    <p class="text-gray-400 font-medium">Stay tuned for upcoming community polls, quizzes, and fan engagement events!</p>
-                </div>
-            </div>
-        </section>
-
         <!-- Sponsors -->
-        <section id="sponsors" class="py-16 bg-spl-blueLight border-t border-gray-800 scroll-mt-20">
-            <div class="container mx-auto px-4 text-center">
+        <section id="sponsors" class="py-20 bg-spl-blueLight border-t border-gray-800 scroll-mt-20">
+            <div class="container mx-auto px-4 lg:px-8 text-center">
                 
-                <!-- Title Sponsor -->
+                <!-- Title Sponsor Elevated -->
                 <div class="mb-16">
-                    <h2 class="font-oswald text-4xl md:text-5xl font-bold uppercase tracking-wide mb-8 text-spl-gold">Title Sponsor</h2>
+                    <h2 class="font-oswald text-2xl md:text-3xl font-bold uppercase tracking-wide mb-8 text-spl-gold relative inline-block">
+                        <span class="bg-spl-blueLight px-4 relative z-10">Title Sponsor</span>
+                        <div class="absolute inset-0 flex items-center z-0"><div class="w-full border-t border-gray-700/50"></div></div>
+                    </h2>
                     <div class="flex justify-center">
-                        <div class="bg-white p-6 rounded-xl shadow-[0_0_20px_rgba(244,176,54,0.3)] border border-spl-gold/50 hover:scale-105 transition-transform duration-300 inline-block">
-                            <img src="https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/NEtaji%20eye%20hospital%20logo.png?raw=true" alt="Netaji Eye Hospital, Ramchandrapur" class="h-24 md:h-32 object-contain mx-auto mb-4" onerror="this.onerror=null; this.src='https://placehold.co/300x120/ffffff/152238?text=Title+Sponsor';">
-                            <h3 class="font-oswald font-bold text-2xl tracking-widest text-spl-blue uppercase leading-tight">Netaji Eye Hospital<br><span class="text-sm text-gray-600">Ramchandrapur</span></h3>
+                        <div class="bg-white p-6 rounded-xl shadow-[0_0_30px_rgba(244,176,54,0.2)] border border-spl-gold/50 hover:scale-105 transition-transform duration-300 inline-block">
+                            <img src="https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/NEtaji%20eye%20hospital%20logo.png?raw=true" alt="Netaji Eye Hospital, Ramchandrapur" class="h-24 md:h-32 object-contain mx-auto" onerror="this.onerror=null; this.src='https://placehold.co/300x120/ffffff/152238?text=Title+Sponsor';">
                         </div>
                     </div>
                 </div>
 
                 <!-- Official Sponsors -->
-                <h2 class="font-oswald text-3xl md:text-4xl font-bold uppercase tracking-wide mb-8 text-white">Official Sponsors</h2>
-                <div class="flex flex-wrap justify-center gap-8 md:gap-12 items-center">
-                    <img src="https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/Elegant.jpg?raw=true" alt="Sakambari Ispat & Power Limited" class="h-20 md:h-28 object-contain hover:scale-105 transition-transform duration-300 rounded-lg shadow-lg border border-gray-700">
-                    <img src="https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/a6771841eeab75a6b1705730a8a92cff1553f100/Ghadi%20detegent.jpg" alt="Ghadi Detergent" class="h-20 md:h-28 object-contain hover:scale-105 transition-transform duration-300 rounded-lg shadow-lg border border-gray-700">
-                    <img src="https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/TAo.jpg?raw=true" alt="TAO" class="h-20 md:h-28 object-contain hover:scale-105 transition-transform duration-300 rounded-lg shadow-lg border border-gray-700">
-                    <img src="https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/65f383e531d02a80903c7ec5700c4b1df5504824/Big%20telecom.jpg" alt="Big Telecom" class="h-20 md:h-28 object-contain hover:scale-105 transition-transform duration-300 rounded-lg shadow-lg border border-gray-700">
+                <h2 class="font-oswald text-2xl md:text-3xl font-bold uppercase tracking-wide mb-8 text-white relative inline-block">
+                    <span class="bg-spl-blueLight px-4 relative z-10">Official Sponsors</span>
+                    <div class="absolute inset-0 flex items-center z-0"><div class="w-full border-t border-gray-700/50"></div></div>
+                </h2>
+                <div class="flex flex-wrap justify-center gap-6 md:gap-10 items-center">
+                    <div class="bg-white p-4 rounded-lg shadow-lg border border-gray-700 hover:scale-105 transition-transform duration-300">
+                        <img src="https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/Elegant.jpg?raw=true" alt="Sakambari Ispat & Power Limited" class="h-16 md:h-24 object-contain">
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-lg border border-gray-700 hover:scale-105 transition-transform duration-300">
+                        <img src="https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/a6771841eeab75a6b1705730a8a92cff1553f100/Ghadi%20detegent.jpg" alt="Ghadi Detergent" class="h-16 md:h-24 object-contain">
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-lg border border-gray-700 hover:scale-105 transition-transform duration-300">
+                        <img src="https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/TAo.jpg?raw=true" alt="TAO" class="h-16 md:h-24 object-contain">
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-lg border border-gray-700 hover:scale-105 transition-transform duration-300">
+                        <img src="https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/65f383e531d02a80903c7ec5700c4b1df5504824/Big%20telecom.jpg" alt="Big Telecom" class="h-16 md:h-24 object-contain">
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-950 border-t-4 border-spl-gold pt-12 pb-6 mt-auto">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+    <footer class="bg-gray-950 border-t-4 border-spl-gold pt-16 pb-8 mt-auto">
+        <div class="container mx-auto px-4 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
                 <div class="col-span-1 md:col-span-2">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-14 h-14 relative flex-shrink-0 flex items-center justify-center rounded-full bg-white p-1 shadow-[0_0_10px_rgba(244,176,54,0.3)] overflow-hidden">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-16 h-16 relative flex-shrink-0 flex items-center justify-center rounded-full bg-white p-1 shadow-[0_0_10px_rgba(244,176,54,0.3)] overflow-hidden">
                             <img src="https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/main/ChatGPT%20Image%20Sep%205%2C%202026%2C%2003_22_40%20PM.png" alt="SPL Logo" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://placehold.co/150/ffffff/0B1221?text=SPL';">
                         </div>
                         <h2 class="font-oswald text-3xl font-bold uppercase tracking-wide">Santuri Premier League</h2>
                     </div>
-                    <p class="text-gray-400 text-sm mb-4 max-w-md font-medium leading-relaxed">Organized by <strong class="text-white">Lalgarh Village Club (Estd. 1961)</strong>. The ultimate cricket entertainment league. Bringing together the best talent for explosive T20 action.</p>
+                    <p class="text-gray-400 text-sm mb-6 max-w-lg font-medium leading-relaxed">Organized by <strong class="text-white">Lalgarh Village Club (Estd. 1961)</strong>. The ultimate cricket entertainment league. Bringing together the best talent for explosive T20 action.</p>
                     
-                    <div class="bg-slate-900 p-4 rounded-lg border border-gray-800 mb-6 max-w-md">
-                        <h4 class="text-spl-gold font-bold text-sm uppercase mb-2">Club, Venue & Contact Details:</h4>
-                        <p class="text-gray-400 text-xs leading-relaxed font-medium">
+                    <div class="bg-slate-900 p-5 rounded-lg border border-gray-800 mb-6 max-w-lg shadow-md">
+                        <h4 class="text-spl-gold font-bold text-sm uppercase mb-3"><i class="fa-solid fa-map-location-dot mr-1"></i> Club & Venue Details:</h4>
+                        <p class="text-gray-400 text-sm leading-relaxed font-medium">
                             <span class="text-white">Organized by:</span> Lalgarh Village Club (Estd. 1961)<br>
                             <span class="text-white">Venue:</span> Rangadanga High School Ground<br>
                             <span class="text-white">Reg. No.-</span> S0024655 OF 2021-22<br>
                             Vill - Lalgarh, P.O.- Muradi, P.S.- Santuri<br>
                             Dist.- Purulia, (W.B.), Pin - 723156
                         </p>
-                        <div class="mt-3 pt-3 border-t border-gray-800 text-xs text-gray-400 font-medium space-y-1.5">
-                            <p class="flex items-center gap-2"><i class="fa-solid fa-phone text-spl-gold"></i> <a href="tel:+917980230656" class="hover:text-white transition">7980230656</a></p>
-                            <p class="flex items-center gap-2"><i class="fa-solid fa-envelope text-spl-gold"></i> <a href="mailto:lalgarhvillageclub@gmail.com" class="hover:text-white transition">lalgarhvillageclub@gmail.com</a></p>
+                        <div class="mt-4 pt-4 border-t border-gray-800 text-sm text-gray-300 font-medium space-y-2">
+                            <p class="flex items-center gap-3"><i class="fa-solid fa-phone text-spl-gold w-4"></i> <a href="tel:+917980230656" class="hover:text-white transition">7980230656</a></p>
+                            <p class="flex items-center gap-3"><i class="fa-solid fa-envelope text-spl-gold w-4"></i> <a href="mailto:lalgarhvillageclub@gmail.com" class="hover:text-white transition">lalgarhvillageclub@gmail.com</a></p>
                         </div>
                     </div>
 
                     <div class="flex gap-4">
-                        <a href="#" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-spl-blueLight transition"><i class="fa-brands fa-x-twitter"></i></a>
-                        <a href="#" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="#" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-pink-600 transition"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-red-600 transition"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-spl-blueLight transition shadow"><i class="fa-brands fa-x-twitter text-lg"></i></a>
+                        <a href="#" class="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-blue-600 transition shadow"><i class="fa-brands fa-facebook-f text-lg"></i></a>
+                        <a href="#" class="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-pink-600 transition shadow"><i class="fa-brands fa-instagram text-lg"></i></a>
+                        <a href="#" class="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-red-600 transition shadow"><i class="fa-brands fa-youtube text-lg"></i></a>
                     </div>
                 </div>
                 
                 <div>
-                    <h3 class="font-oswald text-2xl font-bold uppercase mb-4 text-spl-gold">Quick Links</h3>
-                    <ul class="space-y-2 text-sm text-gray-400 font-medium">
-                        <li><a href="#" class="hover:text-white transition">About SPL</a></li>
-                        <li><a href="#" class="hover:text-white transition">Rules & Regulations</a></li>
-                        <li><a href="#" class="hover:text-white transition">Anti-Corruption Policy</a></li>
-                        <li><a href="#" class="hover:text-white transition">Contact Us</a></li>
+                    <h3 class="font-oswald text-2xl font-bold uppercase mb-6 text-spl-gold">Quick Links</h3>
+                    <ul class="space-y-3 text-base text-gray-400 font-medium">
+                        <li><a href="#" class="hover:text-white transition"><i class="fa-solid fa-angle-right mr-2 text-spl-gold text-xs"></i> About SPL</a></li>
+                        <li><a href="#" class="hover:text-white transition"><i class="fa-solid fa-angle-right mr-2 text-spl-gold text-xs"></i> Rules & Regulations</a></li>
+                        <li><a href="#" class="hover:text-white transition"><i class="fa-solid fa-angle-right mr-2 text-spl-gold text-xs"></i> Anti-Corruption Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition"><i class="fa-solid fa-angle-right mr-2 text-spl-gold text-xs"></i> Contact Us</a></li>
                     </ul>
                 </div>
             </div>
             
-            <div class="border-t border-gray-800 pt-6 text-center text-xs text-gray-500 flex flex-col md:flex-row justify-between items-center gap-4 font-medium">
+            <div class="border-t border-gray-800 pt-8 text-center text-sm text-gray-500 flex flex-col md:flex-row justify-between items-center gap-4 font-medium">
                 <p>&copy; 2026 Santuri Premier League. All Rights Reserved.</p>
-                <div class="flex gap-4">
+                <div class="flex gap-6">
                     <a href="#" class="hover:text-white transition">Privacy Policy</a>
                     <a href="#" class="hover:text-white transition">Terms of Service</a>
                 </div>
@@ -478,19 +501,19 @@
     <!-- Admin Login Modal -->
     <div id="admin-modal" class="hidden fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center px-4">
         <div class="bg-slate-900 border border-spl-gold rounded-xl p-8 max-w-md w-full shadow-2xl relative">
-            <button onclick="toggleAdminModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <button onclick="toggleAdminModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-2xl"></i></button>
             <h3 class="font-oswald text-4xl font-bold uppercase text-center mb-2 text-spl-gold"><i class="fa-solid fa-lock mr-2"></i> Admin Login</h3>
             <p class="text-sm text-gray-400 text-center mb-6 font-medium">Username: <b>admin</b> | Password: <b>1234</b></p>
             <form onsubmit="handleAdminLogin(event)">
                 <div class="mb-4">
                     <label class="block text-gray-400 text-sm font-bold mb-2">Admin Username</label>
-                    <input type="text" id="admin-user" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white font-medium focus:outline-none focus:border-spl-gold" placeholder="admin" required>
+                    <input type="text" id="admin-user" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-3 text-white font-medium focus:outline-none focus:border-spl-gold" placeholder="admin" required>
                 </div>
                 <div class="mb-6">
                     <label class="block text-gray-400 text-sm font-bold mb-2">Password</label>
-                    <input type="password" id="admin-pass" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white font-medium focus:outline-none focus:border-spl-gold" required>
+                    <input type="password" id="admin-pass" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-3 text-white font-medium focus:outline-none focus:border-spl-gold" required>
                 </div>
-                <button type="submit" id="login-btn" class="w-full bg-spl-gold text-spl-blue font-oswald font-bold text-2xl uppercase tracking-wide py-2 rounded hover:bg-spl-goldHover transition-colors">Secure Login</button>
+                <button type="submit" id="login-btn" class="w-full bg-spl-gold text-spl-blue font-oswald font-bold text-2xl uppercase tracking-wide py-3 rounded hover:bg-spl-goldHover transition-colors">Secure Login</button>
             </form>
         </div>
     </div>
@@ -502,28 +525,27 @@
         import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc, updateDoc, setDoc, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         let db, auth, app;
-        const myAppId = 'spl-santuri-premier-league'; // Fix: Re-added missing app ID variable
-        let latestPollData = null;
-        // Default Data Arrays
+        window.isAdmin = false;
+        const myAppId = 'spl-santuri-premier-league';
+
+        // Default Historical Data
         const defaultSeasons = [
-            { season: 5, year: "2025", title: "A Historic Milestone", desc: "The most watched season to date. JMK sixers won the title and runner up AMAN XI Bheti.", image: "" },
-            { season: 4, year: "2024", title: "New Challengers Emerge", desc: "An underdog story for the ages. Krishnapur United won the title and Shri Ram XI Ramchandrapur Runner up.", image: "" },
+            { season: 5, year: "2025", title: "A Historic Milestone", desc: "The most watched season to date. JMK Sixers won the title and runner up AMAN XI Bheti.", image: "" },
+            { season: 4, year: "2024", title: "New Challengers Emerge", desc: "Krishnapur United won the title and Shri Ram XI Ramchandrapur Runner up.", image: "" },
             { season: 3, year: "2023", title: "The Thrilling Finale", desc: "Remembered for the final over drama where Radha Binod Muradi Champions and Krishnapur United Runner up.", image: "" },
             { season: 2, year: "2022", title: "Rise of the Strikers", desc: "SOVA HARDWARE MURADI winner of that season.", image: "" },
             { season: 1, year: "2021", title: "The Inauguration", desc: "The season that started it all in Santuri Block, Purulia. Over 200 players registered for the auction, forming 8 franchises with 104 local gram players to battle for the first-ever SPL trophy. Winner KINANDI KNIGHT RIDERS and Runner up - SOVA HARDWARE.", image: "" }
         ];
 
         const defaultTeams = [
+            { id: 'JMK', name: 'JMK Sixers', color: 'from-purple-600 to-purple-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/JMK%20SIXER.jpg?raw=true' },
             { id: 'AXI', name: 'Aman XI Bheti', color: 'from-blue-500 to-blue-800', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/aman%20XI%20bheti.png?raw=true' },
             { id: 'KU', name: 'Krishnapur United', color: 'from-teal-500 to-teal-800', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/KRISHANPUR%20UNITED.jpg?raw=true' },
             { id: 'SRX', name: 'Shri Ram XI', color: 'from-orange-500 to-amber-700', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/Shri%20Ram.jpg?raw=true' },
             { id: 'RBM', name: 'Radha Binod Muradi', color: 'from-green-600 to-green-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/RADHA%20BINOD%20MURADI.jpg?raw=true' },
-            { id: 'JMK', name: 'JMK Sixers', color: 'from-purple-600 to-purple-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/JMK%20SIXER.jpg?raw=true' },
             { id: 'NDC', name: 'NDC Foundation', color: 'from-yellow-500 to-yellow-800', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/NDC%20FOUNDATION%20.jpg?raw=true' },
             { id: 'JAS', name: 'Jashpur BPC', color: 'from-gray-600 to-gray-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/jashpur.jpg?raw=true' },
-            { id: 'TW', name: 'Tao Warriors', color: 'from-red-600 to-red-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/WhatsApp%20Image%202026-09-05%20at%2010.47.22%20PM.jpeg?raw=true' },
-            { id: 'KN', name: 'Kotaldi Netaji Sangha', color: 'from-blue-500 to-blue-800', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/WhatsApp%20Image%202026-09-05%20at%2010.44.43%20PM%20(2).jpeg?raw=true' },
-            { id: 'KK', name: 'KKR', color: 'from-green-600 to-green-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/WhatsApp%20Image%202026-09-05%20at%2010.44.43%20PM.jpeg?raw=true' }
+            { id: 'TW', name: 'Tao Warriors', color: 'from-red-600 to-red-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/WhatsApp%20Image%202026-09-05%20at%2010.47.22%20PM.jpeg?raw=true' }
         ];
 
         const defaultPlayers = [
@@ -543,6 +565,13 @@
             p1: "The Santuri Premier League (SPL) is proudly organized by the historic Lalgarh Village Club. Established in 1961, the club has a decades-long legacy of promoting sports, culture, and community spirit in the region.",
             p2: "The inaugural season kicked off in 2021 with 8 franchises. Deeply rooted in the local community, the league featured 104 gram (village) players selected from across six panchayats in the Santuri block, Purulia. The excitement was palpable from the start, with over 200 players registering for the very first mega auction! All the thrilling matches are hosted at our official venue, the Rangadanga High School Ground."
         };
+
+        // Slider Functionality for Seasons
+        window.slideSeasons = function(dir) {
+            const slider = document.getElementById('seasons-slider');
+            const scrollAmount = window.innerWidth > 768 ? 420 : 320;
+            slider.scrollBy({ left: dir * scrollAmount, behavior: 'smooth' });
+        }
 
         // UI toggles
         window.toggleAdminModal = function() {
@@ -578,19 +607,13 @@
 
         window.switchAdminTab = function(tabName) {
             ['seasons', 'teams', 'players', 'gallery', 'texts'].forEach(t => {
-                const tab = document.getElementById(`admin-tab-${t}`);
+                document.getElementById(`admin-tab-${t}`)?.classList.add('hidden');
                 const btn = document.getElementById(`tab-btn-${t}`);
-                if (tab && btn) {
-                    tab.classList.add('hidden');
-                    btn.className = 'px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm';
-                }
+                if(btn) btn.className = 'px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm';
             });
-            const activeTab = document.getElementById(`admin-tab-${tabName}`);
+            document.getElementById(`admin-tab-${tabName}`)?.classList.remove('hidden');
             const activeBtn = document.getElementById(`tab-btn-${tabName}`);
-            if (activeTab && activeBtn) {
-                activeTab.classList.remove('hidden');
-                activeBtn.className = 'px-4 py-2 bg-spl-gold text-spl-blue font-bold rounded uppercase text-sm';
-            }
+            if(activeBtn) activeBtn.className = 'px-4 py-2 bg-spl-gold text-spl-blue font-bold rounded uppercase text-sm';
         };
 
         // Initialize Firebase
@@ -661,50 +684,42 @@
         };
 
         function loadPosts(local = false) {
-            const grid = document.getElementById('seasons-grid');
-            if(!grid) return;
+            const slider = document.getElementById('seasons-slider');
+            if(!slider) return;
             if(local) { renderPosts(defaultSeasons); return; }
 
-            try {
-                onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'seasons'), (snap) => {
-                    let fetched = [];
-                    snap.forEach(d => fetched.push({ id: d.id, ...d.data() }));
-                    let all = fetched.sort((a,b) => b.season - a.season).filter(p => p.season <= 5);
-                    if(all.length === 0 && fetched.length === 0) {
-                        defaultSeasons.forEach(s => addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'seasons'), s));
-                        return;
-                    }
-                    renderPosts(all);
-                }, (error) => {
-                    console.error("Firebase fetch error:", error);
-                    renderPosts(defaultSeasons); // Fallback if database permissions fail
-                });
-            } catch (err) {
-                console.error("Critical error in loadPosts:", err);
-                renderPosts(defaultSeasons); // Ultimate fallback
-            }
+            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'seasons'), (snap) => {
+                let fetched = [];
+                snap.forEach(d => fetched.push({ id: d.id, ...d.data() }));
+                let all = fetched.sort((a,b) => b.season - a.season);
+                if(all.length === 0) {
+                    defaultSeasons.forEach(s => addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'seasons'), s));
+                    return;
+                }
+                renderPosts(all);
+            }, () => renderPosts(defaultSeasons));
         }
 
         function renderPosts(posts) {
-            const grid = document.getElementById('seasons-grid');
-            grid.innerHTML = '';
+            const slider = document.getElementById('seasons-slider');
+            slider.innerHTML = '';
             posts.forEach(p => {
                 const bg = p.image ? `style="background-image: url('${p.image}')"` : '';
                 const cls = p.image ? '' : 'bg-gradient-to-tr from-slate-700 to-slate-900';
                 const del = window.isAdmin && p.id ? `<button onclick="deletePost('${p.id}')" class="absolute top-4 right-4 bg-red-600 text-white w-8 h-8 rounded-full z-20 flex items-center justify-center hover:bg-red-700 shadow-lg"><i class="fa-solid fa-trash"></i></button>` : '';
                 
-                grid.innerHTML += `
-                    <article class="bg-slate-900 rounded-xl overflow-hidden border border-gray-700 hover:border-spl-gold transition group flex flex-col shadow-lg relative">
+                slider.innerHTML += `
+                    <article class="w-80 md:w-[400px] flex-shrink-0 snap-start bg-slate-900 rounded-xl overflow-hidden border border-gray-700 hover:border-spl-gold transition group flex flex-col shadow-lg relative h-[450px]">
                         ${del}
-                        <div class="h-48 relative flex items-center justify-center bg-cover bg-center ${cls}" ${bg}>
-                            <div class="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition z-0"></div>
-                            <div class="absolute top-4 left-4 bg-black/80 px-3 py-1 rounded text-xs font-bold text-spl-gold uppercase border border-spl-gold/30 z-10">Season ${p.season}</div>
+                        <div class="h-52 relative flex items-center justify-center bg-cover bg-center ${cls}" ${bg}>
+                            <div class="absolute inset-0 bg-black/50 group-hover:bg-black/30 transition z-0"></div>
+                            <div class="absolute top-4 left-4 bg-black/80 px-3 py-1 rounded text-xs font-bold text-spl-gold uppercase border border-spl-gold/30 z-10 shadow">Season ${p.season}</div>
                         </div>
                         <div class="p-6 flex-grow flex flex-col z-10 relative">
-                            <h3 class="font-oswald text-3xl font-bold mb-2 group-hover:text-spl-gold transition">${p.title} (${p.year})</h3>
+                            <h3 class="font-oswald text-2xl lg:text-3xl font-bold mb-3 group-hover:text-spl-gold transition">${p.title} <span class="text-gray-500 text-xl">(${p.year})</span></h3>
                             <p class="text-sm text-gray-400 mb-4 flex-grow font-medium leading-relaxed">${p.desc}</p>
                             <div class="flex justify-between items-center border-t border-gray-800 pt-4 mt-auto">
-                                <span class="text-xs text-gray-500 font-bold"><i class="fa-solid fa-user-pen mr-1"></i> Admin</span>
+                                <span class="text-xs text-gray-500 font-bold uppercase tracking-wider"><i class="fa-solid fa-clock-rotate-left mr-1"></i> Official Archive</span>
                             </div>
                         </div>
                     </article>
@@ -754,19 +769,18 @@
             const grid = document.getElementById('teams-grid');
             grid.innerHTML = '';
             teams.forEach(t => {
-                const del = window.isAdmin ? `<button onclick="deleteTeam('${t.id}')" class="absolute top-2 right-2 bg-red-600 text-white w-6 h-6 rounded-full z-20 flex items-center justify-center hover:bg-red-700 text-xs shadow"><i class="fa-solid fa-trash"></i></button>` : '';
+                const del = window.isAdmin ? `<button onclick="deleteTeam('${t.id}')" class="absolute top-2 right-2 bg-red-600 text-white w-8 h-8 rounded-full z-20 flex items-center justify-center hover:bg-red-700 text-sm shadow-lg"><i class="fa-solid fa-trash"></i></button>` : '';
                 
                 let content = t.logo 
-                    ? `<img src="${t.logo}" alt="${t.name}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                       <div class="absolute inset-0 bg-black/50 group-hover:bg-black/20 transition-colors duration-300"></div>
-                       <p class="text-sm font-bold uppercase tracking-wider text-center relative z-10 text-spl-gold drop-shadow-md mb-2 mt-auto bg-black/60 w-full py-2">${t.name}</p>`
-                    : `<p class="text-xl font-bold uppercase tracking-wider text-center relative z-10">${t.name}</p>`;
+                    ? `<img src="${t.logo}" alt="${t.name}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">`
+                    : `<h3 class="font-oswald text-4xl font-bold relative z-10">${t.id}</h3>`;
 
                 grid.innerHTML += `
-                    <div class="group relative cursor-pointer rounded-2xl overflow-hidden aspect-square shadow-lg border border-gray-700 hover:border-spl-gold transition-all duration-300">
+                    <div class="group relative cursor-pointer rounded-2xl overflow-hidden aspect-square shadow-xl border-2 border-gray-800 hover:border-spl-gold transition-all duration-300 bg-slate-900">
                         ${del}
-                        <div class="w-full h-full bg-gradient-to-br ${t.color || 'from-slate-700 to-slate-900'} flex flex-col items-center justify-center relative">
+                        <div class="w-full h-full flex flex-col items-center justify-center relative">
                             ${content}
+                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-300 z-0"></div>
                         </div>
                     </div>
                 `;
@@ -817,20 +831,20 @@
             players.forEach(p => {
                 const del = window.isAdmin && p.id ? `<button onclick="deletePlayer('${p.id}')" class="absolute top-2 right-2 bg-red-600 text-white w-6 h-6 rounded-full z-20 flex items-center justify-center hover:bg-red-700 text-xs shadow"><i class="fa-solid fa-trash"></i></button>` : '';
                 grid.innerHTML += `
-                    <div class="bg-slate-800 border border-gray-700 rounded-xl p-6 text-center hover:border-spl-gold transition group shadow-lg relative">
+                    <div class="bg-slate-800 border border-gray-700 rounded-xl p-8 text-center hover:border-spl-gold transition group shadow-lg relative">
                         ${del}
-                        <div class="w-24 h-24 bg-gradient-to-b from-gray-600 to-gray-800 rounded-full mx-auto mb-4 border-2 border-spl-gold flex items-center justify-center overflow-hidden">
-                             <i class="fa-solid fa-user-ninja text-3xl text-gray-400 group-hover:text-spl-gold transition"></i>
+                        <div class="w-24 h-24 bg-gradient-to-b from-gray-600 to-gray-800 rounded-full mx-auto mb-6 border-2 border-spl-gold flex items-center justify-center overflow-hidden shadow-inner">
+                             <i class="fa-solid fa-user-ninja text-4xl text-gray-400 group-hover:text-spl-gold transition"></i>
                         </div>
-                        <h3 class="font-oswald text-3xl font-bold text-white mb-1">${p.name}</h3>
-                        <p class="text-xs text-spl-gold font-bold uppercase tracking-wider mb-2">${p.team}</p>
+                        <h3 class="font-oswald text-3xl font-bold text-white mb-2">${p.name}</h3>
+                        <p class="text-xs text-spl-gold font-bold uppercase tracking-widest mb-3">${p.team}</p>
                         <p class="text-sm text-gray-400 font-medium">${p.achievement}</p>
                     </div>
                 `;
             });
         }
 
-        // --- GALLERY LOGIC (Local Storage File Upload) ---
+        // --- GALLERY LOGIC ---
         window.handleGallerySubmit = async function(e) {
             e.preventDefault();
             if(!window.isAdmin) return;
