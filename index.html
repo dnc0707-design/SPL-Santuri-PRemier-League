@@ -516,6 +516,7 @@
         // Slider State Logic
         let currSeasonIndex = 0;
         let totalSeasons = 0;
+        let seasonAutoScrollInterval; // Auto scroll variable for seasons
         
         let currGalleryIndex = 0;
         let totalGalleryImages = 0;
@@ -721,25 +722,12 @@
                     </article>
                 `;
             });
+            
+            currSeasonIndex = 0;
             updateSeasonSlider();
+            clearInterval(seasonAutoScrollInterval);
+            startSeasonAutoScroll();
         }
-
-        window.nextSeason = function() {
-            const isDesktop = window.innerWidth >= 1024;
-            const isTablet = window.innerWidth >= 768;
-            const itemsPerPage = isDesktop ? 3 : (isTablet ? 2 : 1);
-            if (currSeasonIndex < totalSeasons - itemsPerPage) {
-                currSeasonIndex++;
-                updateSeasonSlider();
-            }
-        };
-
-        window.prevSeason = function() {
-            if (currSeasonIndex > 0) {
-                currSeasonIndex--;
-                updateSeasonSlider();
-            }
-        };
 
         function updateSeasonSlider() {
             const slider = document.getElementById('seasons-slider');
@@ -748,7 +736,6 @@
             const isTablet = window.innerWidth >= 768;
             
             let cardWidthPct = 100;
-            let gapRem = 1.5; // 24px gap in tailwind (gap-6)
             
             if(isDesktop) cardWidthPct = 33.333;
             else if(isTablet) cardWidthPct = 50;
@@ -758,6 +745,56 @@
             const pxOffset = currSeasonIndex * 24; 
             
             slider.style.transform = `translateX(calc(${translatePct}% - ${pxOffset}px))`;
+        }
+
+        window.nextSeason = function() {
+            const isDesktop = window.innerWidth >= 1024;
+            const isTablet = window.innerWidth >= 768;
+            const itemsPerPage = isDesktop ? 3 : (isTablet ? 2 : 1);
+            
+            if (currSeasonIndex < totalSeasons - itemsPerPage) {
+                currSeasonIndex++;
+            } else {
+                currSeasonIndex = 0; // loop to beginning
+            }
+            updateSeasonSlider();
+            resetSeasonAutoScroll();
+        };
+
+        window.prevSeason = function() {
+            const isDesktop = window.innerWidth >= 1024;
+            const isTablet = window.innerWidth >= 768;
+            const itemsPerPage = isDesktop ? 3 : (isTablet ? 2 : 1);
+            
+            if (currSeasonIndex > 0) {
+                currSeasonIndex--;
+            } else {
+                currSeasonIndex = Math.max(0, totalSeasons - itemsPerPage); // loop to end
+            }
+            updateSeasonSlider();
+            resetSeasonAutoScroll();
+        };
+
+        function startSeasonAutoScroll() {
+            seasonAutoScrollInterval = setInterval(() => {
+                const isDesktop = window.innerWidth >= 1024;
+                const isTablet = window.innerWidth >= 768;
+                const itemsPerPage = isDesktop ? 3 : (isTablet ? 2 : 1);
+                
+                if (totalSeasons > itemsPerPage) {
+                    if (currSeasonIndex < totalSeasons - itemsPerPage) {
+                        currSeasonIndex++;
+                    } else {
+                        currSeasonIndex = 0;
+                    }
+                    updateSeasonSlider();
+                }
+            }, 5000); // 5 seconds per slide to allow reading time
+        }
+
+        function resetSeasonAutoScroll() {
+            clearInterval(seasonAutoScrollInterval);
+            startSeasonAutoScroll();
         }
         
         window.addEventListener('resize', updateSeasonSlider);
