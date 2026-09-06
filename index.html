@@ -91,6 +91,7 @@
                     <a href="#players" class="nav-link hover:text-spl-gold transition-colors">Players</a>
                     <a href="#gallery" class="nav-link hover:text-spl-gold transition-colors">Photo Gallery</a>
                     <a href="#sponsors" class="nav-link hover:text-spl-gold transition-colors">Sponsors</a>
+                    <a href="#partners" class="nav-link hover:text-spl-gold transition-colors">Partners</a>
                 </nav>
 
                 <!-- Right Actions -->
@@ -114,7 +115,8 @@
                 <a href="#teams" class="py-3 border-b border-gray-700 hover:text-spl-gold">Teams</a>
                 <a href="#players" class="py-3 border-b border-gray-700 hover:text-spl-gold">Players</a>
                 <a href="#gallery" class="py-3 border-b border-gray-700 hover:text-spl-gold">Photo Gallery</a>
-                <a href="#sponsors" class="py-3 hover:text-spl-gold">Sponsors</a>
+                <a href="#sponsors" class="py-3 border-b border-gray-700 hover:text-spl-gold">Sponsors</a>
+                <a href="#partners" class="py-3 hover:text-spl-gold">Partners</a>
                 <button onclick="toggleAdminModal()" class="mt-4 bg-spl-gold text-spl-blue font-bold px-4 py-2 uppercase rounded text-center w-full shadow-lg">Admin Login</button>
             </nav>
         </div>
@@ -147,25 +149,38 @@
             </div>
         </section>
 
+        <!-- Featured Video Section -->
+        <section id="video" class="py-16 bg-slate-950 border-t-2 border-b-2 border-spl-red relative scroll-mt-20">
+            <div class="absolute inset-0 bg-spl-red/5 blur-3xl z-0"></div>
+            <div class="container mx-auto px-4 max-w-5xl text-center relative z-10">
+                <h2 class="font-oswald text-4xl font-bold uppercase tracking-wide mb-8 text-white">
+                    <i class="fa-brands fa-youtube text-spl-red mr-2"></i> SPL <span class="text-spl-red">Featured Action</span>
+                </h2>
+                <div class="aspect-video w-full rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(225,45,57,0.2)] border border-gray-800 bg-black">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/k9alqPSW5BY" title="SPL YouTube Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+            </div>
+        </section>
+
         <!-- Interactive Image Gallery Slider -->
         <section id="gallery" class="bg-slate-950 border-t-2 border-b-2 border-spl-gold py-8 relative scroll-mt-20">
             <div class="container mx-auto px-4">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="font-oswald text-3xl font-bold uppercase tracking-wide text-white border-l-4 border-spl-gold pl-3">Photo <span class="text-spl-gold">Gallery</span></h2>
                     <div class="flex gap-2">
-                    <button onclick="prevGallerySlide()" class="w-10 h-10 bg-slate-800 hover:bg-spl-gold text-white hover:text-spl-blue transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-chevron-left"></i></button>
-                    <button onclick="nextGallerySlide()" class="w-10 h-10 bg-slate-800 hover:bg-spl-gold text-white hover:text-spl-blue transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-chevron-right"></i></button>
+                        <button onclick="prevGallerySlide()" class="w-10 h-10 bg-slate-800 hover:bg-spl-gold text-white hover:text-spl-blue transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button onclick="nextGallerySlide()" class="w-10 h-10 bg-slate-800 hover:bg-spl-gold text-white hover:text-spl-blue transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                
+                <div class="overflow-hidden rounded-xl relative shadow-2xl bg-black" id="gallery-container">
+                    <div id="gallery-track" class="flex transition-transform duration-500 ease-in-out gap-4">
+                        <!-- Gallery images injected here -->
+                        <div class="w-full flex-shrink-0 text-center py-20 text-gray-500"><i class="fa-solid fa-spinner fa-spin text-3xl text-spl-gold mb-2"></i><br>Loading Gallery...</div>
+                    </div>
                 </div>
             </div>
-            
-            <div class="overflow-hidden rounded-xl relative" id="gallery-container">
-                <div id="gallery-track" class="flex transition-transform duration-500 ease-in-out gap-4">
-                    <!-- Gallery images injected here -->
-                    <div class="w-full flex-shrink-0 text-center py-20 text-gray-500"><i class="fa-solid fa-spinner fa-spin text-3xl text-spl-gold mb-2"></i><br>Loading Gallery...</div>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
 
         <!-- About Us -->
         <section id="about" class="py-16 bg-slate-900 border-t border-gray-800 scroll-mt-20">
@@ -197,6 +212,7 @@
                         <button onclick="switchAdminTab('gallery')" id="tab-btn-gallery" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Gallery</button>
                         <button onclick="switchAdminTab('texts')" id="tab-btn-texts" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Edit Writings</button>
                         <button onclick="switchAdminTab('sponsors')" id="tab-btn-sponsors" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Sponsors</button>
+                        <button onclick="switchAdminTab('partners')" id="tab-btn-partners" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Partners</button>
                     </div>
 
                     <!-- TAB 1: SEASONS -->
@@ -362,6 +378,44 @@
                         </div>
                     </div>
 
+                    <!-- TAB 7: PARTNERS -->
+                    <div id="admin-tab-partners" class="admin-tab-content hidden">
+                        <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Add / Manage Official Partners</h3>
+                        <form id="add-partner-form" onsubmit="handlePartnerSubmit(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 bg-slate-800/50 p-6 rounded-lg border border-gray-700">
+                            <input type="hidden" id="partner-id" value="">
+                            <div>
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Partner Name (e.g. DJ Sound)</label>
+                                <input type="text" id="partner-name" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Partnership Category</label>
+                                <select id="partner-category" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold">
+                                    <option value="Media Partner">Media Partner</option>
+                                    <option value="Sound Partner">Sound Partner</option>
+                                    <option value="Tent Partner">Tent Partner</option>
+                                    <option value="Food Partner">Food Partner</option>
+                                    <option value="Online Scoring Partner">Online Scoring Partner</option>
+                                    <option value="Travel Partner">Travel Partner</option>
+                                </select>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Upload Logo (Local Storage)</label>
+                                <input type="file" id="partner-logo-file" accept="image/*" onchange="openCropper(event, 'partner', NaN)" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-spl-gold file:text-spl-blue hover:file:bg-spl-goldHover">
+                                <img id="preview-partner" class="hidden mt-4 h-24 object-contain rounded border border-gray-600 shadow-lg">
+                                <input type="hidden" id="partner-existing-logo" value="">
+                            </div>
+                            <div class="md:col-span-2 flex gap-4">
+                                <button type="submit" class="bg-spl-gold text-spl-blue font-oswald font-bold text-xl uppercase tracking-wide py-3 px-8 rounded hover:bg-spl-goldHover transition-colors shadow-lg"><i class="fa-solid fa-handshake-angle mr-2"></i> Save Partner</button>
+                                <button type="button" onclick="resetPartnerForm()" class="bg-slate-700 text-white font-bold py-3 px-6 rounded hover:bg-slate-600 transition hidden shadow-lg" id="partner-cancel-btn">Cancel</button>
+                            </div>
+                        </form>
+                        
+                        <div class="border-t border-gray-700 pt-6 mt-4">
+                            <h4 class="font-bold text-gray-300 mb-4 text-sm uppercase"><i class="fa-solid fa-list mr-2"></i> Current Partners:</h4>
+                            <div id="admin-partners-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>
@@ -369,11 +423,14 @@
         <!-- Seasons History Slider (Blog) -->
         <section id="seasons" class="py-16 bg-slate-800 border-t border-gray-800 relative scroll-mt-20">
             <div class="container mx-auto px-4">
-                <div class="flex flex-col md:flex-row md:justify-between items-start md:items-center mb-10 gap-4">
-                    <h2 class="font-oswald text-4xl md:text-5xl font-bold uppercase tracking-wide relative inline-block border-l-4 border-spl-gold pl-3 text-white">Season <span class="text-spl-gold">Histories</span></h2>
+                <div class="flex flex-col md:flex-row md:justify-between items-start md:items-center mb-10 gap-4 text-center md:text-left">
+                    <h2 class="font-oswald text-4xl md:text-5xl font-bold uppercase tracking-wide relative inline-block text-white">
+                        Season <span class="text-spl-gold">Histories</span>
+                        <div class="w-3/4 h-1 bg-spl-gold mt-2 rounded md:mx-0 mx-auto"></div>
+                    </h2>
                     
                     <!-- Slider Navigation Arrows -->
-                    <div class="flex gap-3 self-end md:self-auto">
+                    <div class="flex gap-3 self-center md:self-auto">
                         <button onclick="prevSeason()" class="w-12 h-12 bg-slate-900 hover:bg-spl-gold text-white hover:text-spl-blue border border-gray-700 hover:border-transparent transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-arrow-left text-xl"></i></button>
                         <button onclick="nextSeason()" class="w-12 h-12 bg-slate-900 hover:bg-spl-gold text-white hover:text-spl-blue border border-gray-700 hover:border-transparent transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-arrow-right text-xl"></i></button>
                     </div>
@@ -391,18 +448,26 @@
             </div>
         </section>
 
-        <!-- Teams Showcase (Logos Only) -->
+        <!-- Teams Showcase Slider -->
         <section id="teams" class="bg-spl-blue border-t border-gray-800 py-20 scroll-mt-20">
             <div class="container mx-auto px-4">
-                <div class="text-center mb-12">
-                    <h2 class="font-oswald text-4xl md:text-5xl font-bold uppercase tracking-wide mb-4 relative inline-block">
-                        The Franchises
-                        <div class="w-3/4 h-1 bg-spl-gold mx-auto mt-2 rounded"></div>
+                <div class="flex flex-col md:flex-row md:justify-between items-start md:items-center mb-12 gap-4 text-center md:text-left">
+                    <h2 class="font-oswald text-4xl md:text-5xl font-bold uppercase tracking-wide relative inline-block text-white">
+                        The <span class="text-spl-gold">Franchises</span>
+                        <div class="w-3/4 h-1 bg-spl-gold mt-2 rounded md:mx-0 mx-auto"></div>
                     </h2>
+                    
+                    <!-- Slider Navigation Arrows -->
+                    <div class="flex gap-3 self-center md:self-auto">
+                        <button onclick="prevTeam()" class="w-12 h-12 bg-slate-900 hover:bg-spl-gold text-white hover:text-spl-blue border border-gray-700 hover:border-transparent transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-arrow-left text-xl"></i></button>
+                        <button onclick="nextTeam()" class="w-12 h-12 bg-slate-900 hover:bg-spl-gold text-white hover:text-spl-blue border border-gray-700 hover:border-transparent transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-arrow-right text-xl"></i></button>
+                    </div>
                 </div>
 
-                <div id="teams-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8 max-w-6xl mx-auto">
-                    <!-- Teams injected dynamically -->
+                <div class="overflow-hidden px-1 py-4" id="teams-slider-container">
+                    <div id="teams-track" class="flex transition-transform duration-500 ease-out gap-6 items-stretch">
+                        <!-- Teams injected dynamically -->
+                    </div>
                 </div>
             </div>
         </section>
@@ -433,6 +498,26 @@
                 </div>
             </div>
         </section>
+
+        <!-- Official Partners Section -->
+        <section id="partners" class="py-16 bg-slate-900 border-t border-gray-800 scroll-mt-20">
+            <div class="container mx-auto px-4 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="font-oswald text-4xl font-bold uppercase tracking-wide mb-4 relative inline-block text-white">
+                        Official <span class="text-spl-gold">Partners</span>
+                        <div class="w-3/4 h-1 bg-spl-gold mx-auto mt-2 rounded"></div>
+                    </h2>
+                </div>
+                <div id="partners-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 max-w-6xl mx-auto">
+                    <!-- Partners injected here -->
+                    <div class="w-full text-center py-8 col-span-full">
+                        <i class="fa-solid fa-spinner fa-spin text-3xl text-spl-gold mb-4"></i>
+                        <p class="text-gray-400 font-bold tracking-widest uppercase text-sm">Loading Partners...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <!-- Footer -->
@@ -541,7 +626,7 @@
         const myAppId = 'spl-santuri-premier-league';
 
         // --- CROPPER STATE & LOGIC ---
-        window.croppedImages = { season: null, team: null, gallery: null, sponsor: null };
+        window.croppedImages = { season: null, team: null, gallery: null, sponsor: null, partner: null };
         let cropperInstance = null;
         let currentCropType = '';
 
@@ -576,6 +661,7 @@
             if(currentCropType === 'team') fileInput = document.getElementById('team-logo-file');
             if(currentCropType === 'gallery') fileInput = document.getElementById('gallery-image-file');
             if(currentCropType === 'sponsor') fileInput = document.getElementById('sponsor-logo-file');
+            if(currentCropType === 'partner') fileInput = document.getElementById('partner-logo-file');
             if(fileInput && !window.croppedImages[currentCropType]) fileInput.value = '';
         };
 
@@ -588,12 +674,12 @@
                 maxHeight: 1000,
                 imageSmoothingEnabled: true,
                 imageSmoothingQuality: 'high',
-                fillColor: 'transparent', // Ensure transparency is preserved if possible
+                fillColor: 'transparent',
             });
             
             // Use PNG for logos to preserve transparency, JPEG for heavy gallery/season images
             let base64Url;
-            if (currentCropType === 'team' || currentCropType === 'sponsor') {
+            if (currentCropType === 'team' || currentCropType === 'sponsor' || currentCropType === 'partner') {
                 base64Url = canvas.toDataURL('image/png');
             } else {
                 base64Url = canvas.toDataURL('image/jpeg', 0.85); 
@@ -621,16 +707,29 @@
             }
         };
 
-        // Slider State Logic
+        // --- SLIDER STATE VARIABLES ---
         let currSeasonIndex = 0;
         let totalSeasons = 0;
-        let seasonAutoScrollInterval; // Auto scroll variable for seasons
+        let seasonAutoScrollInterval;
         
         let currGalleryIndex = 0;
         let totalGalleryImages = 0;
         let galleryAutoScrollInterval;
 
-        // Default Data Arrays (With Real Champion Info & Real Teams)
+        let currTeamIndex = 0;
+        let totalTeams = 0;
+        let teamAutoScrollInterval;
+
+        let currSponsorIndex = 0;
+        let totalOfficialSponsors = 0;
+        let sponsorAutoScrollInterval;
+
+        const defaultPartners = [
+            { id: 'P1', name: 'SPL Media', category: 'Media Partner', logo: 'https://placehold.co/400x200/152238/ffffff?text=Media+Partner' },
+            { id: 'P2', name: 'DJ Sound', category: 'Sound Partner', logo: 'https://placehold.co/400x200/152238/ffffff?text=Sound+Partner' }
+        ];
+
+        // --- DEFAULT DATA ARRAYS ---
         const defaultSeasons = [
             { season: 5, year: "2025", title: "🏆 JMK Sixers Champions", desc: "The most watched season to date. JMK Sixers won the title and runner up AMAN XI Bheti in a spectacular showdown.", image: "" },
             { season: 4, year: "2024", title: "🏆 Krishnapur United Champions", desc: "An underdog story for the ages as Krishnapur United stunned the reigning champions in the semi-finals to win their maiden title, with Shri Ram Xi Ramchandrapur finishing as Runner Up.", image: "" },
@@ -675,7 +774,7 @@
             p2: "The inaugural season kicked off in 2021 with 8 franchises. Deeply rooted in the local community, the league featured 104 gram (village) players selected from across six panchayats in the Santuri block, Purulia. The excitement was palpable from the start, with over 200 players registering for the very first mega auction! All the thrilling matches are hosted at our official venue, the Rangadanga High School Ground."
         };
 
-        // UI toggles
+        // --- UI TOGGLES ---
         window.toggleAdminModal = function() {
             document.getElementById('admin-modal').classList.toggle('hidden');
         };
@@ -683,7 +782,7 @@
         window.logoutAdmin = function() {
             window.isAdmin = false;
             document.getElementById('admin-dashboard').classList.add('hidden');
-            loadPosts(); loadTeams(); loadPlayers(); loadGallery(); loadAboutText(); loadSponsors();
+            loadPosts(); loadTeams(); loadPlayers(); loadGallery(); loadAboutText(); loadSponsors(); loadPartners();
             alert('Logged out of Admin Dashboard.');
         };
 
@@ -699,7 +798,7 @@
                 document.getElementById('admin-user').value = '';
                 document.getElementById('admin-pass').value = '';
                 
-                loadPosts(); loadTeams(); loadPlayers(); loadGallery(); loadAboutText(); loadSponsors();
+                loadPosts(); loadTeams(); loadPlayers(); loadGallery(); loadAboutText(); loadSponsors(); loadPartners();
                 alert('Access Granted! Welcome to the Master Admin Dashboard.');
                 document.getElementById('admin-dashboard').scrollIntoView({ behavior: 'smooth' });
             } else {
@@ -708,7 +807,7 @@
         };
 
         window.switchAdminTab = function(tabName) {
-            ['seasons', 'teams', 'players', 'gallery', 'texts', 'sponsors'].forEach(t => {
+            ['seasons', 'teams', 'players', 'gallery', 'texts', 'sponsors', 'partners'].forEach(t => {
                 document.getElementById(`admin-tab-${t}`)?.classList.add('hidden');
                 const btn = document.getElementById(`tab-btn-${t}`);
                 if(btn) btn.className = 'px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm';
@@ -718,7 +817,7 @@
             if(targetBtn) targetBtn.className = 'px-4 py-2 bg-spl-gold text-spl-blue font-bold rounded uppercase text-sm shadow-lg';
         };
 
-        // Initialize Firebase
+        // --- INITIALIZE FIREBASE ---
         async function initFirebase() {
             try {
                 const firebaseConfig = {
@@ -736,13 +835,22 @@
                 
                 onAuthStateChanged(auth, (user) => {
                     if(!user) signInAnonymously(auth).catch(e => console.warn(e));
-                    loadPosts(); loadTeams(); loadPlayers(); loadGallery(); loadAboutText(); loadSponsors();
+                    loadPosts(); loadTeams(); loadPlayers(); loadGallery(); loadAboutText(); loadSponsors(); loadPartners();
                 });
             } catch(e) {
                 console.warn("Offline mode", e);
-                loadPosts(true); loadTeams(true); loadPlayers(true); loadGallery(true); loadAboutText(true); loadSponsors(true);
+                loadPosts(true); loadTeams(true); loadPlayers(true); loadGallery(true); loadAboutText(true); loadSponsors(true); loadPartners(true);
             }
         }
+
+        // --- GLOBAL RESIZE LISTENER FOR ALL SLIDERS ---
+        window.addEventListener('resize', () => {
+            updateSeasonSlider();
+            updateGallerySlider();
+            updateTeamSlider();
+            updateSponsorSlider();
+        });
+
 
         // --- SEASONS LOGIC (Slider Mode) ---
         window.handlePostSubmit = async function(e) {
@@ -801,7 +909,6 @@
                 const cls = p.image ? '' : 'bg-gradient-to-tr from-slate-700 to-slate-900';
                 const del = window.isAdmin && p.id ? `<button onclick="deletePost('${p.id}')" class="absolute top-4 right-4 bg-red-600 text-white w-8 h-8 rounded-full z-20 flex items-center justify-center hover:bg-red-700 shadow-lg"><i class="fa-solid fa-trash"></i></button>` : '';
                 
-                // Set fixed width for slide items depending on screen size
                 slider.innerHTML += `
                     <article class="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] flex-shrink-0 bg-slate-900 rounded-xl overflow-hidden border border-gray-700 hover:border-spl-gold transition duration-300 group flex flex-col shadow-xl relative h-full min-h-[400px]">
                         ${del}
@@ -822,33 +929,20 @@
             
             currSeasonIndex = 0;
             updateSeasonSlider();
-            clearInterval(seasonAutoScrollInterval);
-            startSeasonAutoScroll();
+            resetSeasonAutoScroll();
         }
 
         function updateSeasonSlider() {
             const slider = document.getElementById('seasons-slider');
-            if(!slider) return;
-            const isDesktop = window.innerWidth >= 1024;
-            const isTablet = window.innerWidth >= 768;
-            
-            let cardWidthPct = 100;
-            
-            if(isDesktop) cardWidthPct = 33.333;
-            else if(isTablet) cardWidthPct = 50;
-
-            const translatePct = -(currSeasonIndex * cardWidthPct);
-            // Rough calc for gaps. In a real flex gap, translate needs to account for gap pixels
-            const pxOffset = currSeasonIndex * 24; 
-            
-            slider.style.transform = `translateX(calc(${translatePct}% - ${pxOffset}px))`;
+            if(!slider || slider.children.length === 0) return;
+            const itemWidth = slider.children[0].getBoundingClientRect().width;
+            const gap = 24; // 1.5rem (gap-6)
+            slider.style.transform = `translateX(-${currSeasonIndex * (itemWidth + gap)}px)`;
         }
 
         window.nextSeason = function() {
-            const isDesktop = window.innerWidth >= 1024;
-            const isTablet = window.innerWidth >= 768;
-            const itemsPerPage = isDesktop ? 3 : (isTablet ? 2 : 1);
-            
+            if(totalSeasons === 0) return;
+            const itemsPerPage = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
             if (currSeasonIndex < totalSeasons - itemsPerPage) {
                 currSeasonIndex++;
             } else {
@@ -859,10 +953,8 @@
         };
 
         window.prevSeason = function() {
-            const isDesktop = window.innerWidth >= 1024;
-            const isTablet = window.innerWidth >= 768;
-            const itemsPerPage = isDesktop ? 3 : (isTablet ? 2 : 1);
-            
+            if(totalSeasons === 0) return;
+            const itemsPerPage = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
             if (currSeasonIndex > 0) {
                 currSeasonIndex--;
             } else {
@@ -874,19 +966,13 @@
 
         function startSeasonAutoScroll() {
             seasonAutoScrollInterval = setInterval(() => {
-                const isDesktop = window.innerWidth >= 1024;
-                const isTablet = window.innerWidth >= 768;
-                const itemsPerPage = isDesktop ? 3 : (isTablet ? 2 : 1);
-                
+                const itemsPerPage = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
                 if (totalSeasons > itemsPerPage) {
-                    if (currSeasonIndex < totalSeasons - itemsPerPage) {
-                        currSeasonIndex++;
-                    } else {
-                        currSeasonIndex = 0;
-                    }
+                    if (currSeasonIndex < totalSeasons - itemsPerPage) currSeasonIndex++;
+                    else currSeasonIndex = 0;
                     updateSeasonSlider();
                 }
-            }, 5000); // 5 seconds per slide to allow reading time
+            }, 4000); 
         }
 
         function resetSeasonAutoScroll() {
@@ -894,8 +980,6 @@
             startSeasonAutoScroll();
         }
         
-        window.addEventListener('resize', updateSeasonSlider);
-
 
         // --- TEAMS LOGIC (File Upload & Logo Only View) ---
         window.resetTeamForm = function() {
@@ -946,8 +1030,8 @@
         };
 
         function loadTeams(local = false) {
-            const grid = document.getElementById('teams-grid');
-            if(!grid) return;
+            const track = document.getElementById('teams-track');
+            if(!track) return;
             if(local) { renderTeams(defaultTeams); return; }
 
             onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'teams'), (snap) => {
@@ -962,7 +1046,7 @@
         }
 
         function renderTeams(teams) {
-            const displayGrid = document.getElementById('teams-grid');
+            const track = document.getElementById('teams-track');
             const adminGrid = document.getElementById('admin-teams-grid');
             
             // Admin Edit Grid Generation
@@ -985,22 +1069,76 @@
                 });
             }
 
-            // Public Display Grid Generation (Logos Only, No text overlap)
-            displayGrid.innerHTML = '';
-            teams.forEach(t => {
-                const fallbackLogo = `<div class="font-oswald text-4xl font-bold text-white mb-2 drop-shadow-md">${t.id}</div><p class="text-sm font-bold uppercase tracking-wider text-center text-white drop-shadow-md">${t.name}</p>`;
-                const logoContent = t.logo ? `<img src="${t.logo}" alt="${t.name}" class="w-full h-full object-contain drop-shadow-2xl z-10 p-3">` : fallbackLogo;
-                
-                displayGrid.innerHTML += `
-                    <div class="group relative cursor-pointer mx-auto w-full max-w-[240px]">
-                        <div class="aspect-square bg-gradient-to-br ${t.color} rounded-2xl flex flex-col items-center justify-center border-2 border-gray-700 shadow-[0_0_15px_rgba(0,0,0,0.5)] group-hover:scale-105 group-hover:border-spl-gold transition-all duration-300 relative overflow-hidden">
-                            <!-- Background pattern/glow -->
-                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-0"></div>
-                            ${logoContent}
+            // Public Display Slider Generation
+            if(track) {
+                track.innerHTML = '';
+                totalTeams = teams.length;
+                teams.forEach(t => {
+                    const fallbackLogo = `<div class="font-oswald text-4xl font-bold text-white mb-2 drop-shadow-md">${t.id}</div><p class="text-sm font-bold uppercase tracking-wider text-center text-white drop-shadow-md bg-black/60 px-2 py-1 rounded w-full line-clamp-1">${t.name}</p>`;
+                    const logoContent = t.logo ? `<img src="${t.logo}" alt="${t.name}" class="w-full h-full object-contain drop-shadow-2xl z-10 p-4">` : fallbackLogo;
+                    
+                    track.innerHTML += `
+                        <div class="w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] flex-shrink-0 group relative cursor-pointer mx-auto">
+                            <div class="aspect-square bg-gradient-to-br ${t.color} rounded-2xl flex flex-col items-center justify-center border-2 border-gray-700 shadow-[0_0_15px_rgba(0,0,0,0.5)] group-hover:scale-105 group-hover:border-spl-gold transition-all duration-300 relative overflow-hidden">
+                                <!-- Background pattern/glow -->
+                                <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-0"></div>
+                                ${logoContent}
+                            </div>
                         </div>
-                    </div>
-                `;
-            });
+                    `;
+                });
+
+                currTeamIndex = 0;
+                updateTeamSlider();
+                resetTeamAutoScroll();
+            }
+        }
+
+        function updateTeamSlider() {
+            const track = document.getElementById('teams-track');
+            if(!track || track.children.length === 0) return;
+            const itemWidth = track.children[0].getBoundingClientRect().width;
+            const gap = 24; // gap-6
+            track.style.transform = `translateX(-${currTeamIndex * (itemWidth + gap)}px)`;
+        }
+
+        window.nextTeam = function() {
+            if(totalTeams === 0) return;
+            const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 3 : 2);
+            if (currTeamIndex < totalTeams - visibleItems) {
+                currTeamIndex++;
+            } else {
+                currTeamIndex = 0;
+            }
+            updateTeamSlider();
+            resetTeamAutoScroll();
+        };
+
+        window.prevTeam = function() {
+            if(totalTeams === 0) return;
+            const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 3 : 2);
+            if (currTeamIndex > 0) {
+                currTeamIndex--;
+            } else {
+                currTeamIndex = Math.max(0, totalTeams - visibleItems);
+            }
+            updateTeamSlider();
+            resetTeamAutoScroll();
+        };
+
+        function startTeamAutoScroll() {
+            teamAutoScrollInterval = setInterval(() => {
+                const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 3 : 2);
+                if (totalTeams > visibleItems) {
+                    if (currTeamIndex < totalTeams - visibleItems) currTeamIndex++;
+                    else currTeamIndex = 0;
+                    updateTeamSlider();
+                }
+            }, 4000);
+        }
+        function resetTeamAutoScroll() {
+            clearInterval(teamAutoScrollInterval);
+            startTeamAutoScroll();
         }
 
 
@@ -1121,7 +1259,7 @@
                 });
             }
 
-            track.className = "flex transition-transform duration-500 ease-in-out gap-4";
+            track.className = "flex transition-transform duration-500 ease-out gap-4 items-stretch";
             track.innerHTML = '';
             
             images.forEach(img => {
@@ -1137,31 +1275,20 @@
 
             currGalleryIndex = 0;
             updateGallerySlider();
-            startGalleryAutoScroll();
+            resetGalleryAutoScroll();
         }
 
         function updateGallerySlider() {
             const track = document.getElementById('gallery-track');
-            if(!track || totalGalleryImages === 0) return;
-            
-            const isDesktop = window.innerWidth >= 1024;
-            const isTablet = window.innerWidth >= 768;
-            
-            let cardWidthPct = 100;
-            if(isDesktop) cardWidthPct = 33.333;
-            else if(isTablet) cardWidthPct = 50;
-
-            const translatePct = -(currGalleryIndex * cardWidthPct);
-            const pxOffset = currGalleryIndex * 16; // 16px for gap-4
-            
-            track.style.transform = `translateX(calc(${translatePct}% - ${pxOffset}px))`;
+            if(!track || track.children.length === 0) return;
+            const itemWidth = track.children[0].getBoundingClientRect().width;
+            const gap = 16; // gap-4
+            track.style.transform = `translateX(-${currGalleryIndex * (itemWidth + gap)}px)`;
         }
 
         window.nextGallerySlide = function() {
             if (totalGalleryImages === 0) return;
-            const isDesktop = window.innerWidth >= 1024;
-            const isTablet = window.innerWidth >= 768;
-            const itemsPerPage = isDesktop ? 3 : (isTablet ? 2 : 1);
+            const itemsPerPage = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
 
             if (currGalleryIndex < totalGalleryImages - itemsPerPage) {
                 currGalleryIndex++;
@@ -1174,9 +1301,7 @@
 
         window.prevGallerySlide = function() {
             if (totalGalleryImages === 0) return;
-            const isDesktop = window.innerWidth >= 1024;
-            const isTablet = window.innerWidth >= 768;
-            const itemsPerPage = isDesktop ? 3 : (isTablet ? 2 : 1);
+            const itemsPerPage = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
 
             if (currGalleryIndex > 0) {
                 currGalleryIndex--;
@@ -1189,19 +1314,13 @@
 
         function startGalleryAutoScroll() {
             galleryAutoScrollInterval = setInterval(() => {
-                const isDesktop = window.innerWidth >= 1024;
-                const isTablet = window.innerWidth >= 768;
-                const itemsPerPage = isDesktop ? 3 : (isTablet ? 2 : 1);
-
+                const itemsPerPage = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
                 if (totalGalleryImages > itemsPerPage) {
-                    if (currGalleryIndex < totalGalleryImages - itemsPerPage) {
-                        currGalleryIndex++;
-                    } else {
-                        currGalleryIndex = 0;
-                    }
+                    if (currGalleryIndex < totalGalleryImages - itemsPerPage) currGalleryIndex++;
+                    else currGalleryIndex = 0;
                     updateGallerySlider();
                 }
-            }, 3000); // Auto slide every 3 seconds
+            }, 3000);
         }
 
         function resetGalleryAutoScroll() {
@@ -1351,6 +1470,7 @@
 
             let titleSponsorsHTML = '';
             let officialSponsorsHTML = '';
+            let officialCount = 0;
 
             sponsors.forEach(s => {
                 if(s.type === 'title') {
@@ -1362,35 +1482,204 @@
                                     <div class="absolute inset-0 flex items-center z-0"><div class="w-full border-t border-gray-700/50"></div></div>
                                 </h2>
                                 <br>
-                                <div class="bg-white p-6 rounded-2xl shadow-[0_0_40px_rgba(244,176,54,0.3)] border-2 border-spl-gold/80 hover:scale-105 transition-transform duration-300 inline-flex items-center justify-center mx-auto w-64 h-32 md:w-80 md:h-40">
-                                    <img src="${s.logo}" alt="${s.name}" class="max-w-full max-h-full object-contain">
+                                <div class="bg-white p-8 rounded-2xl shadow-[0_0_40px_rgba(244,176,54,0.3)] border-2 border-spl-gold/80 hover:scale-105 transition-transform duration-300 inline-block mx-auto">
+                                    <img src="${s.logo}" alt="${s.name}" class="h-32 md:h-40 object-contain mx-auto">
                                 </div>
                             </div>
                         </div>
                     `;
                 } else {
+                    officialCount++;
                     officialSponsorsHTML += `
-                        <div class="bg-white p-4 rounded-xl shadow-xl border border-gray-700 hover:scale-105 hover:border-spl-gold transition-all duration-300 flex items-center justify-center w-40 h-28 md:w-56 md:h-36">
+                        <div class="w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] flex-shrink-0 bg-white p-4 rounded-xl shadow-xl border border-gray-700 hover:scale-105 hover:border-spl-gold transition-all duration-300 flex items-center justify-center h-28 md:h-36">
                             <img src="${s.logo}" alt="${s.name}" class="max-w-full max-h-full object-contain">
                         </div>
                     `;
                 }
             });
             
+            totalOfficialSponsors = officialCount;
             let finalHTML = titleSponsorsHTML;
+
             if(officialSponsorsHTML !== '') {
                 finalHTML += `
-                    <h2 class="font-oswald text-3xl md:text-4xl font-bold uppercase tracking-wide mb-8 text-white relative inline-block">
-                        <span class="bg-spl-blueLight px-4 relative z-10">Official Sponsors</span>
-                        <div class="absolute inset-0 flex items-center z-0"><div class="w-full border-t border-gray-700/50"></div></div>
-                    </h2>
-                    <div class="flex flex-wrap justify-center gap-6 md:gap-10 items-center">
-                        ${officialSponsorsHTML}
+                    <div class="flex flex-col md:flex-row md:justify-between items-start md:items-center mb-8 gap-4 text-left">
+                        <h2 class="font-oswald text-3xl md:text-4xl font-bold uppercase tracking-wide text-white relative inline-block">
+                            <span class="bg-spl-blueLight px-4 relative z-10">Official Sponsors</span>
+                            <div class="absolute inset-0 flex items-center z-0"><div class="w-full border-t border-gray-700/50"></div></div>
+                        </h2>
+                        <div class="flex gap-2 self-center md:self-auto relative z-10 bg-spl-blueLight px-2">
+                            <button onclick="prevSponsor()" class="w-10 h-10 bg-slate-800 hover:bg-spl-gold text-white hover:text-spl-blue transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-chevron-left"></i></button>
+                            <button onclick="nextSponsor()" class="w-10 h-10 bg-slate-800 hover:bg-spl-gold text-white hover:text-spl-blue transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="overflow-hidden py-4 px-1" id="sponsors-slider-wrapper">
+                        <div id="sponsors-track" class="flex transition-transform duration-500 ease-out gap-6 items-stretch">
+                            ${officialSponsorsHTML}
+                        </div>
                     </div>
                 `;
             }
 
             displayContainer.innerHTML = finalHTML;
+            currSponsorIndex = 0;
+            updateSponsorSlider();
+            resetSponsorAutoScroll();
+        }
+
+        function updateSponsorSlider() {
+            const track = document.getElementById('sponsors-track');
+            if(!track || track.children.length === 0) return;
+            const itemWidth = track.children[0].getBoundingClientRect().width;
+            const gap = 24; // gap-6
+            track.style.transform = `translateX(-${currSponsorIndex * (itemWidth + gap)}px)`;
+        }
+
+        window.nextSponsor = function() {
+            if(totalOfficialSponsors === 0) return;
+            const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 3 : 2);
+            if (currSponsorIndex < totalOfficialSponsors - visibleItems) {
+                currSponsorIndex++;
+            } else {
+                currSponsorIndex = 0;
+            }
+            updateSponsorSlider();
+            resetSponsorAutoScroll();
+        };
+
+        window.prevSponsor = function() {
+            if(totalOfficialSponsors === 0) return;
+            const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 3 : 2);
+            if (currSponsorIndex > 0) {
+                currSponsorIndex--;
+            } else {
+                currSponsorIndex = Math.max(0, totalOfficialSponsors - visibleItems);
+            }
+            updateSponsorSlider();
+            resetSponsorAutoScroll();
+        };
+
+        function startSponsorAutoScroll() {
+            sponsorAutoScrollInterval = setInterval(() => {
+                const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 3 : 2);
+                if (totalOfficialSponsors > visibleItems) {
+                    if (currSponsorIndex < totalOfficialSponsors - visibleItems) currSponsorIndex++;
+                    else currSponsorIndex = 0;
+                    updateSponsorSlider();
+                }
+            }, 4000);
+        }
+
+        function resetSponsorAutoScroll() {
+            clearInterval(sponsorAutoScrollInterval);
+            startSponsorAutoScroll();
+        }
+
+        // --- PARTNERS LOGIC ---
+        window.resetPartnerForm = function() {
+            document.getElementById('add-partner-form').reset();
+            document.getElementById('partner-id').value = '';
+            document.getElementById('partner-existing-logo').value = '';
+            document.getElementById('partner-cancel-btn').classList.add('hidden');
+            window.clearCropPreview('partner');
+        };
+
+        window.handlePartnerSubmit = async function(e) {
+            e.preventDefault();
+            if(!window.isAdmin) return;
+            
+            let partnerId = document.getElementById('partner-id').value;
+            if(!partnerId) partnerId = 'PRT_' + Date.now(); 
+            
+            const partnerName = document.getElementById('partner-name').value;
+            const partnerCategory = document.getElementById('partner-category').value;
+            const existingLogo = document.getElementById('partner-existing-logo').value;
+            
+            const newLogo = window.croppedImages['partner'];
+            const logoData = newLogo ? newLogo : (existingLogo ? existingLogo : '');
+            
+            if(!logoData) {
+                alert("Please select and crop a logo for the partner.");
+                return;
+            }
+
+            const partner = { id: partnerId, name: partnerName, category: partnerCategory, logo: logoData, createdAt: Date.now() };
+            try {
+                await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'partners', partnerId), partner);
+                resetPartnerForm();
+                alert('Partner saved successfully!');
+            } catch(err) { alert('Error saving partner'); }
+        };
+
+        window.deletePartner = async function(id) {
+            if(!confirm(`Delete this partner?`)) return;
+            try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'partners', id)); } catch(e) {}
+        };
+
+        window.editPartner = function(id, name, category, logo) {
+            document.getElementById('partner-id').value = id;
+            document.getElementById('partner-name').value = name;
+            document.getElementById('partner-category').value = category;
+            document.getElementById('partner-existing-logo').value = logo || '';
+            document.getElementById('partner-logo-file').value = '';
+            document.getElementById('partner-cancel-btn').classList.remove('hidden');
+            window.clearCropPreview('partner');
+            document.getElementById('admin-dashboard').scrollIntoView({ behavior: 'smooth' });
+        };
+
+        function loadPartners(local = false) {
+            const container = document.getElementById('partners-grid');
+            if(!container) return;
+            if(local) { renderPartners(defaultPartners); return; }
+
+            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'partners'), (snap) => {
+                let partners = [];
+                snap.forEach(d => partners.push(d.data()));
+                
+                if(partners.length === 0) {
+                    defaultPartners.forEach(p => setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'partners', p.id), p));
+                    return;
+                }
+                partners.sort((a,b) => (a.createdAt||0) - (b.createdAt||0));
+                renderPartners(partners);
+            }, () => renderPartners(defaultPartners));
+        }
+
+        function renderPartners(partners) {
+            const displayGrid = document.getElementById('partners-grid');
+            const adminGrid = document.getElementById('admin-partners-grid');
+            
+            if(adminGrid && window.isAdmin) {
+                adminGrid.innerHTML = '';
+                partners.forEach(p => {
+                    adminGrid.innerHTML += `
+                        <div class="bg-slate-800 border border-gray-700 rounded p-4 flex flex-col items-center text-center relative shadow-lg">
+                            <span class="absolute top-0 right-0 bg-spl-blueLight text-[9px] text-spl-gold px-2 py-1 rounded-bl uppercase font-bold border-l border-b border-gray-700">${p.category}</span>
+                            <div class="w-16 h-16 bg-white p-2 rounded-full border-2 border-gray-600 mb-2 flex items-center justify-center shadow-inner overflow-hidden mt-3">
+                                <img src="${p.logo}" class="max-w-full max-h-full object-contain">
+                            </div>
+                            <span class="font-bold text-white text-sm leading-tight mb-3 mt-1">${p.name}</span>
+                            <div class="flex gap-2 w-full mt-auto">
+                                <button onclick="editPartner('${p.id}', '${p.name.replace(/'/g, "\\'")}', '${p.category}', '${p.logo}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="deletePartner('${p.id}')" class="flex-1 bg-red-600 hover:bg-red-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            displayGrid.innerHTML = '';
+            partners.forEach(p => {
+                displayGrid.innerHTML += `
+                    <div class="bg-slate-800 rounded-xl p-4 shadow-xl border border-gray-700 hover:border-spl-gold transition-colors duration-300 flex flex-col items-center group">
+                        <div class="w-20 h-20 bg-white rounded-full p-2 mb-4 shadow-inner flex items-center justify-center overflow-hidden border-2 border-transparent group-hover:border-spl-gold transition-colors">
+                            <img src="${p.logo}" alt="${p.name}" class="max-w-full max-h-full object-contain">
+                        </div>
+                        <h4 class="font-bold text-white text-center leading-tight mb-1">${p.name}</h4>
+                        <span class="text-[10px] uppercase tracking-widest font-bold text-spl-gold bg-slate-900 px-2 py-1 rounded border border-gray-700">${p.category}</span>
+                    </div>
+                `;
+            });
         }
 
         // General Navigation & Scroll
