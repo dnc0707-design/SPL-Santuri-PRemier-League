@@ -1767,6 +1767,39 @@
             });
         });
 
+        // --- TOUCH SWIPE SUPPORT FOR ALL SLIDERS ---
+        function setupSwipe(containerId, nextCallback, prevCallback) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            let startX = 0;
+            let endX = 0;
+            
+            container.addEventListener('touchstart', e => {
+                startX = e.changedTouches[0].screenX;
+            }, { passive: true });
+            
+            container.addEventListener('touchend', e => {
+                endX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, { passive: true });
+            
+            function handleSwipe() {
+                const threshold = 50; // Minimum swipe distance in pixels
+                if (startX - endX > threshold) {
+                    nextCallback(); // Swiped left -> Go to Next
+                } else if (endX - startX > threshold) {
+                    prevCallback(); // Swiped right -> Go to Prev
+                }
+            }
+        }
+
+        // Attach swipe listeners to the static container wrappers
+        setupSwipe('seasons-slider-container', window.nextSeason, window.prevSeason);
+        setupSwipe('teams-slider-container', window.nextTeam, window.prevTeam);
+        setupSwipe('gallery-container', window.nextGallerySlide, window.prevGallerySlide);
+        setupSwipe('sponsors-display-container', window.nextSponsor, window.prevSponsor);
+
         initFirebase();
     </script>
 </body>
