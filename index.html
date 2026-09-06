@@ -126,6 +126,7 @@
                     <a href="#seasons" class="nav-link hover:text-spl-gold transition-colors">Seasons</a>
                     <a href="#teams" class="nav-link hover:text-spl-gold transition-colors">Teams</a>
                     <a href="#players" class="nav-link hover:text-spl-gold transition-colors">Players</a>
+                    <a href="#gallery" class="nav-link hover:text-spl-gold transition-colors">Gallery</a>
                     <a href="#sponsors" class="nav-link hover:text-spl-gold transition-colors">Sponsors</a>
                 </nav>
 
@@ -150,6 +151,7 @@
                 <a href="#seasons" class="py-3 border-b border-gray-700 hover:text-spl-gold">Seasons</a>
                 <a href="#teams" class="py-3 border-b border-gray-700 hover:text-spl-gold">Teams</a>
                 <a href="#players" class="py-3 border-b border-gray-700 hover:text-spl-gold">Players</a>
+                <a href="#gallery" class="py-3 border-b border-gray-700 hover:text-spl-gold">Gallery</a>
                 <a href="#sponsors" class="py-3 hover:text-spl-gold">Sponsors</a>
                 <button onclick="toggleAdminModal()" class="mt-4 bg-spl-gold text-spl-blue font-bold px-4 py-2 uppercase rounded text-center w-full">Admin Login</button>
             </nav>
@@ -184,13 +186,25 @@
             </div>
         </section>
 
-        <!-- Auto-Scrolling Image Gallery -->
-        <section class="bg-slate-950 border-t-2 border-b-2 border-spl-gold py-4 overflow-hidden relative">
-            <div class="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-slate-950 to-transparent z-20 pointer-events-none"></div>
-            <div class="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-slate-950 to-transparent z-20 pointer-events-none"></div>
-            
-            <div class="w-[200%] md:w-[200%] lg:w-[200%] flex items-center gap-4 animate-scroll-ltr hover:[animation-play-state:paused]" id="gallery-track">
-                <!-- Gallery items injected via JS -->
+        <!-- Auto-Scrolling Interactive Image Gallery -->
+        <section id="gallery" class="py-12 bg-slate-950 border-t-2 border-b-2 border-spl-gold relative scroll-mt-20">
+            <div class="container mx-auto px-4 lg:px-8">
+                <div class="flex justify-between items-end mb-6">
+                    <div>
+                        <h2 class="font-oswald text-3xl md:text-4xl font-bold uppercase tracking-wide text-white"><i class="fa-solid fa-camera-retro text-spl-gold mr-2"></i> Action Gallery</h2>
+                    </div>
+                    <!-- Gallery Navigation Buttons -->
+                    <div class="flex gap-2">
+                        <button onclick="slideGallery(-1); resetGalleryTimer();" class="w-10 h-10 rounded bg-slate-900 border border-gray-700 flex items-center justify-center text-gray-400 hover:text-spl-gold hover:border-spl-gold transition shadow-lg"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button onclick="slideGallery(1); resetGalleryTimer();" class="w-10 h-10 rounded bg-slate-900 border border-gray-700 flex items-center justify-center text-gray-400 hover:text-spl-gold hover:border-spl-gold transition shadow-lg"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                
+                <div class="relative group">
+                    <div id="gallery-track" class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 hide-scrollbar scroll-smooth w-full items-stretch">
+                        <!-- Gallery items injected via JS -->
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -580,6 +594,33 @@
             slider.scrollBy({ left: dir * scrollAmount, behavior: 'smooth' });
         }
 
+        // Gallery Slider & Auto-Scroll Functionality
+        window.slideGallery = function(dir) {
+            const track = document.getElementById('gallery-track');
+            if(!track) return;
+            const scrollAmount = window.innerWidth > 768 ? 450 : 320;
+            track.scrollBy({ left: dir * scrollAmount, behavior: 'smooth' });
+        };
+
+        let galleryTimer;
+        window.startGalleryAutoScroll = function() {
+            clearInterval(galleryTimer);
+            galleryTimer = setInterval(() => {
+                const track = document.getElementById('gallery-track');
+                if(!track) return;
+                // Loop back to start if we reached the end
+                if(track.scrollLeft + track.clientWidth >= track.scrollWidth - 10) {
+                    track.scrollTo({ left: 0, behavior: 'smooth' });
+                } else {
+                    window.slideGallery(1);
+                }
+            }, 3000); // Auto-scroll every 3 seconds
+        };
+        
+        window.resetGalleryTimer = function() {
+            window.startGalleryAutoScroll(); // Restart timer on manual click
+        };
+
         // UI toggles
         window.toggleAdminModal = function() {
             document.getElementById('admin-modal').classList.toggle('hidden');
@@ -957,14 +998,19 @@
             }
 
             track.innerHTML = '';
-            const repeated = [...images, ...images, ...images, ...images, ...images, ...images];
-            repeated.forEach(img => {
+            // Repeat array if there are only a few images to ensure smooth slider feel
+            const displayImages = images.length < 5 ? [...images, ...images, ...images] : images;
+            
+            displayImages.forEach(img => {
                 track.innerHTML += `
-                    <div class="h-40 md:h-56 lg:h-64 flex-shrink-0 rounded-lg overflow-hidden border-2 border-slate-700 hover:border-spl-gold transition shadow-lg">
-                        <img src="${img.url}" alt="SPL Action" class="h-full w-auto object-cover max-w-xs md:max-w-md bg-slate-800" onerror="this.src='https://placehold.co/600x400/152238/F4B036?text=Image+Not+Found';">
+                    <div class="h-48 md:h-64 lg:h-72 flex-shrink-0 snap-start rounded-xl overflow-hidden border-2 border-slate-700 hover:border-spl-gold transition shadow-lg relative group">
+                        <img src="${img.url}" alt="SPL Action" class="h-full w-auto object-cover max-w-xs md:max-w-md lg:max-w-lg bg-slate-800" onerror="this.src='https://placehold.co/600x400/152238/F4B036?text=Image+Not+Found';">
                     </div>
                 `;
             });
+
+            // Start auto scroll logic after rendering
+            window.startGalleryAutoScroll();
         }
 
         // --- EDIT TEXT / WRITINGS LOGIC ---
