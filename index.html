@@ -150,19 +150,19 @@
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="font-oswald text-3xl font-bold uppercase tracking-wide text-white border-l-4 border-spl-gold pl-3">Photo <span class="text-spl-gold">Gallery</span></h2>
                     <div class="flex gap-2">
-                        <button onclick="prevGallerySlide()" class="w-10 h-10 bg-slate-800 hover:bg-spl-gold text-white hover:text-spl-blue transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-chevron-left"></i></button>
-                        <button onclick="nextGallerySlide()" class="w-10 h-10 bg-slate-800 hover:bg-spl-gold text-white hover:text-spl-blue transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-chevron-right"></i></button>
-                    </div>
-                </div>
-                
-                <div class="overflow-hidden rounded-xl relative shadow-2xl bg-black" id="gallery-container">
-                    <div id="gallery-track" class="flex transition-transform duration-500 ease-in-out">
-                        <!-- Gallery images injected here -->
-                        <div class="w-full flex-shrink-0 text-center py-20 text-gray-500"><i class="fa-solid fa-spinner fa-spin text-3xl text-spl-gold mb-2"></i><br>Loading Gallery...</div>
-                    </div>
+                    <button onclick="prevGallerySlide()" class="w-10 h-10 bg-slate-800 hover:bg-spl-gold text-white hover:text-spl-blue transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button onclick="nextGallerySlide()" class="w-10 h-10 bg-slate-800 hover:bg-spl-gold text-white hover:text-spl-blue transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
             </div>
-        </section>
+            
+            <div class="overflow-hidden rounded-xl relative" id="gallery-container">
+                <div id="gallery-track" class="flex transition-transform duration-500 ease-in-out gap-4">
+                    <!-- Gallery images injected here -->
+                    <div class="w-full flex-shrink-0 text-center py-20 text-gray-500"><i class="fa-solid fa-spinner fa-spin text-3xl text-spl-gold mb-2"></i><br>Loading Gallery...</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
         <!-- About Us -->
         <section id="about" class="py-16 bg-slate-900 border-t border-gray-800 scroll-mt-20">
@@ -825,7 +825,10 @@
             startSeasonAutoScroll();
         }
         
-        window.addEventListener('resize', updateSeasonSlider);
+        window.addEventListener('resize', () => {
+            updateSeasonSlider();
+            if(typeof updateGallerySlider === 'function') updateGallerySlider();
+        });
 
 
         // --- TEAMS LOGIC (File Upload & Logo Only View) ---
@@ -1066,11 +1069,16 @@
                 });
             }
 
+            track.className = "flex transition-transform duration-500 ease-in-out gap-4";
             track.innerHTML = '';
+            
             images.forEach(img => {
                 track.innerHTML += `
-                    <div class="w-full flex-shrink-0 flex items-center justify-center h-[300px] md:h-[450px] lg:h-[600px] bg-black">
-                        <img src="${img.url}" alt="SPL Action" class="max-w-full max-h-full object-contain" onerror="this.src='https://placehold.co/800x600/152238/F4B036?text=Image+Not+Found';">
+                    <div class="w-full md:w-[calc(50%-8px)] lg:w-[calc(33.333%-10.66px)] flex-shrink-0 relative h-[300px] md:h-[400px] rounded-xl overflow-hidden bg-black shadow-xl group border border-gray-800 hover:border-spl-gold transition-colors">
+                        <!-- Blurred Background to elegantly fill portrait space -->
+                        <div class="absolute inset-0 bg-cover bg-center blur-xl opacity-40 scale-125 group-hover:opacity-60 transition-opacity duration-500" style="background-image: url('${img.url}')"></div>
+                        <!-- Main Uncropped Image -->
+                        <img src="${img.url}" alt="SPL Action" class="relative z-10 w-full h-full object-contain p-2 drop-shadow-2xl" onerror="this.src='https://placehold.co/800x600/152238/F4B036?text=Image+Not+Found';">
                     </div>
                 `;
             });
@@ -1083,27 +1091,62 @@
         function updateGallerySlider() {
             const track = document.getElementById('gallery-track');
             if(!track || totalGalleryImages === 0) return;
-            track.style.transform = `translateX(-${currGalleryIndex * 100}%)`;
+            
+            const isDesktop = window.innerWidth >= 1024;
+            const isTablet = window.innerWidth >= 768;
+            
+            let cardWidthPct = 100;
+            if(isDesktop) cardWidthPct = 33.333;
+            else if(isTablet) cardWidthPct = 50;
+
+            const translatePct = -(currGalleryIndex * cardWidthPct);
+            const pxOffset = currGalleryIndex * 16; // 16px for gap-4
+            
+            track.style.transform = `translateX(calc(${translatePct}% - ${pxOffset}px))`;
         }
 
         window.nextGallerySlide = function() {
             if (totalGalleryImages === 0) return;
-            currGalleryIndex = (currGalleryIndex + 1) % totalGalleryImages;
+            const isDesktop = window.innerWidth >= 1024;
+            const isTablet = window.innerWidth >= 768;
+            const itemsPerPage = isDesktop ? 3 : (isTablet ? 2 : 1);
+
+            if (currGalleryIndex < totalGalleryImages - itemsPerPage) {
+                currGalleryIndex++;
+            } else {
+                currGalleryIndex = 0;
+            }
             updateGallerySlider();
             resetGalleryAutoScroll();
         };
 
         window.prevGallerySlide = function() {
             if (totalGalleryImages === 0) return;
-            currGalleryIndex = (currGalleryIndex - 1 + totalGalleryImages) % totalGalleryImages;
+            const isDesktop = window.innerWidth >= 1024;
+            const isTablet = window.innerWidth >= 768;
+            const itemsPerPage = isDesktop ? 3 : (isTablet ? 2 : 1);
+
+            if (currGalleryIndex > 0) {
+                currGalleryIndex--;
+            } else {
+                currGalleryIndex = Math.max(0, totalGalleryImages - itemsPerPage);
+            }
             updateGallerySlider();
             resetGalleryAutoScroll();
         };
 
         function startGalleryAutoScroll() {
             galleryAutoScrollInterval = setInterval(() => {
-                if (totalGalleryImages > 0) {
-                    currGalleryIndex = (currGalleryIndex + 1) % totalGalleryImages;
+                const isDesktop = window.innerWidth >= 1024;
+                const isTablet = window.innerWidth >= 768;
+                const itemsPerPage = isDesktop ? 3 : (isTablet ? 2 : 1);
+
+                if (totalGalleryImages > itemsPerPage) {
+                    if (currGalleryIndex < totalGalleryImages - itemsPerPage) {
+                        currGalleryIndex++;
+                    } else {
+                        currGalleryIndex = 0;
+                    }
                     updateGallerySlider();
                 }
             }, 3000); // Auto slide every 3 seconds
@@ -1113,7 +1156,6 @@
             clearInterval(galleryAutoScrollInterval);
             startGalleryAutoScroll();
         }
-
 
         // --- EDIT TEXT / WRITINGS LOGIC ---
         window.handleTextSubmit = async function(e) {
