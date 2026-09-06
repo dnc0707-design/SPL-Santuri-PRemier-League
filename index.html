@@ -60,6 +60,9 @@
 
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Poll Bar Animation */
+        .poll-bar { transition: width 1s ease-in-out; }
     </style>
 </head>
 <body class="font-inter bg-slate-900 text-white min-h-screen flex flex-col">
@@ -89,7 +92,8 @@
                     <a href="#seasons" class="nav-link hover:text-spl-gold transition-colors">Seasons</a>
                     <a href="#teams" class="nav-link hover:text-spl-gold transition-colors">Teams</a>
                     <a href="#players" class="nav-link hover:text-spl-gold transition-colors">Players</a>
-                    <a href="#gallery" class="nav-link hover:text-spl-gold transition-colors">Photo Gallery</a>
+                    <a href="#fanzone" class="nav-link hover:text-spl-gold transition-colors">Fan Zone</a>
+                    <a href="#gallery" class="nav-link hover:text-spl-gold transition-colors">Gallery</a>
                     <a href="#sponsors" class="nav-link hover:text-spl-gold transition-colors">Sponsors</a>
                     <a href="#partners" class="nav-link hover:text-spl-gold transition-colors">Partners</a>
                 </nav>
@@ -114,7 +118,8 @@
                 <a href="#seasons" class="py-3 border-b border-gray-700 hover:text-spl-gold">Seasons</a>
                 <a href="#teams" class="py-3 border-b border-gray-700 hover:text-spl-gold">Teams</a>
                 <a href="#players" class="py-3 border-b border-gray-700 hover:text-spl-gold">Players</a>
-                <a href="#gallery" class="py-3 border-b border-gray-700 hover:text-spl-gold">Photo Gallery</a>
+                <a href="#fanzone" class="py-3 border-b border-gray-700 hover:text-spl-gold">Fan Zone</a>
+                <a href="#gallery" class="py-3 border-b border-gray-700 hover:text-spl-gold">Gallery</a>
                 <a href="#sponsors" class="py-3 border-b border-gray-700 hover:text-spl-gold">Sponsors</a>
                 <a href="#partners" class="py-3 hover:text-spl-gold">Partners</a>
                 <button onclick="toggleAdminModal()" class="mt-4 bg-spl-gold text-spl-blue font-bold px-4 py-2 uppercase rounded text-center w-full shadow-lg">Admin Login</button>
@@ -209,6 +214,7 @@
                         <button onclick="switchAdminTab('seasons')" id="tab-btn-seasons" class="px-4 py-2 bg-spl-gold text-spl-blue font-bold rounded uppercase text-sm">Manage Seasons</button>
                         <button onclick="switchAdminTab('teams')" id="tab-btn-teams" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Franchises</button>
                         <button onclick="switchAdminTab('players')" id="tab-btn-players" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Players</button>
+                        <button onclick="switchAdminTab('fanzone')" id="tab-btn-fanzone" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Fan Zone (Polls)</button>
                         <button onclick="switchAdminTab('gallery')" id="tab-btn-gallery" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Gallery</button>
                         <button onclick="switchAdminTab('video')" id="tab-btn-video" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Manage Video</button>
                         <button onclick="switchAdminTab('texts')" id="tab-btn-texts" class="px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm">Edit Writings</button>
@@ -313,7 +319,42 @@
                         </form>
                     </div>
 
-                    <!-- TAB 4: GALLERY -->
+                    <!-- TAB 4: FAN ZONE POLLS -->
+                    <div id="admin-tab-fanzone" class="admin-tab-content hidden">
+                        <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Create New Fan Poll</h3>
+                        <form id="add-poll-form" onsubmit="handlePollSubmit(event)" class="bg-slate-800/50 p-6 rounded-lg border border-gray-700 mb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="md:col-span-2">
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Poll Question</label>
+                                <input type="text" id="poll-question" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="e.g. Who will win the title this season?" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Option 1</label>
+                                <input type="text" id="poll-opt0" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="e.g. JMK Sixers" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Option 2</label>
+                                <input type="text" id="poll-opt1" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="e.g. Krishnapur United" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Option 3 (Optional)</label>
+                                <input type="text" id="poll-opt2" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="Leave blank if not needed">
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Option 4 (Optional)</label>
+                                <input type="text" id="poll-opt3" class="w-full bg-slate-800 border border-gray-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="Leave blank if not needed">
+                            </div>
+                            <div class="md:col-span-2 mt-2">
+                                <button type="submit" class="bg-spl-gold text-spl-blue font-oswald font-bold text-xl uppercase tracking-wide py-3 px-8 rounded hover:bg-spl-goldHover transition-colors shadow-lg"><i class="fa-solid fa-square-poll-vertical mr-2"></i> Publish Poll</button>
+                            </div>
+                        </form>
+                        
+                        <div class="border-t border-gray-700 pt-6 mt-4">
+                            <h4 class="font-bold text-gray-300 mb-4 text-sm uppercase"><i class="fa-solid fa-list mr-2"></i> Active Polls:</h4>
+                            <div id="admin-polls-grid" class="space-y-4"></div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 5: GALLERY -->
                     <div id="admin-tab-gallery" class="admin-tab-content hidden">
                         <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Photo Gallery Management (Local Upload)</h3>
                         <form id="add-gallery-form" onsubmit="handleGallerySubmit(event)" class="mb-6 bg-slate-800/50 p-4 rounded border border-gray-700">
@@ -327,7 +368,7 @@
                         <div id="admin-gallery-grid" class="flex gap-4 overflow-x-auto pb-4 custom-scrollbar"></div>
                     </div>
 
-                    <!-- TAB: VIDEO -->
+                    <!-- TAB 6: VIDEO -->
                     <div id="admin-tab-video" class="admin-tab-content hidden">
                         <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Update Featured Video</h3>
                         <form id="update-video-form" onsubmit="handleVideoSubmit(event)" class="bg-slate-800/50 p-6 rounded border border-gray-700 mb-8">
@@ -340,7 +381,7 @@
                         </form>
                     </div>
 
-                    <!-- TAB 5: EDIT WRITINGS -->
+                    <!-- TAB 7: EDIT WRITINGS -->
                     <div id="admin-tab-texts" class="admin-tab-content hidden">
                         <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Edit Website Writings & Content</h3>
                         <form id="update-text-form" onsubmit="handleTextSubmit(event)" class="space-y-6">
@@ -358,7 +399,7 @@
                         </form>
                     </div>
 
-                    <!-- TAB 6: SPONSORS -->
+                    <!-- TAB 8: SPONSORS -->
                     <div id="admin-tab-sponsors" class="admin-tab-content hidden">
                         <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Add / Manage Sponsors</h3>
                         <form id="add-sponsor-form" onsubmit="handleSponsorSubmit(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 bg-slate-800/50 p-6 rounded-lg border border-gray-700">
@@ -392,7 +433,7 @@
                         </div>
                     </div>
 
-                    <!-- TAB 7: PARTNERS -->
+                    <!-- TAB 9: PARTNERS -->
                     <div id="admin-tab-partners" class="admin-tab-content hidden">
                         <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Add / Manage Official Partners</h3>
                         <form id="add-partner-form" onsubmit="handlePartnerSubmit(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 bg-slate-800/50 p-6 rounded-lg border border-gray-700">
@@ -499,6 +540,28 @@
                 
                 <div id="players-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
                     <!-- Players injected dynamically -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- Fan Zone (Polls & Engagement) -->
+        <section id="fanzone" class="py-16 bg-slate-950 border-t border-gray-800 scroll-mt-20 relative">
+            <div class="absolute top-0 left-0 w-full h-full bg-spl-blueLight/30 z-0 pointer-events-none"></div>
+            <div class="container mx-auto px-4 lg:px-8 relative z-10">
+                <div class="text-center mb-10">
+                    <h2 class="font-oswald text-4xl md:text-5xl font-bold uppercase tracking-wide mb-4 relative inline-block text-white">
+                        <i class="fa-solid fa-fire text-spl-red mr-2 drop-shadow-md"></i> Fan <span class="text-spl-gold">Zone</span>
+                        <div class="w-3/4 h-1 bg-spl-gold mx-auto mt-2 rounded"></div>
+                    </h2>
+                    <p class="text-gray-400 font-medium mt-2">Vote in our live polls and make your voice heard!</p>
+                </div>
+                
+                <div id="polls-public-container" class="max-w-3xl mx-auto space-y-8">
+                    <!-- Dynamic Polls Go Here -->
+                    <div class="w-full text-center py-8">
+                        <i class="fa-solid fa-spinner fa-spin text-3xl text-spl-gold mb-4"></i>
+                        <p class="text-gray-400 font-bold tracking-widest uppercase text-sm">Loading Polls...</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -657,8 +720,8 @@
                 if (cropperInstance) cropperInstance.destroy();
 
                 cropperInstance = new Cropper(document.getElementById('crop-image'), {
-                    viewMode: 2, // Restricts the crop box to not exceed the canvas
-                    aspectRatio: aspect, // NaN for free crop, 1 for square logos
+                    viewMode: 2,
+                    aspectRatio: aspect, 
                     autoCropArea: 0.9,
                 });
             };
@@ -668,8 +731,6 @@
         window.closeCropper = function() {
             document.getElementById('crop-modal').classList.add('hidden');
             if (cropperInstance) cropperInstance.destroy();
-            
-            // If they canceled without saving a crop, reset the file input so they can click it again
             let fileInput;
             if(currentCropType === 'season') fileInput = document.getElementById('post-image-file');
             if(currentCropType === 'team') fileInput = document.getElementById('team-logo-file');
@@ -681,32 +742,17 @@
 
         window.applyCrop = function() {
             if (!cropperInstance) return;
-            
-            // Generate the compressed cropped image immediately
             const canvas = cropperInstance.getCroppedCanvas({
-                maxWidth: 1000,
-                maxHeight: 1000,
-                imageSmoothingEnabled: true,
-                imageSmoothingQuality: 'high',
-                fillColor: 'transparent',
+                maxWidth: 1000, maxHeight: 1000,
+                imageSmoothingEnabled: true, imageSmoothingQuality: 'high', fillColor: 'transparent',
             });
+            let base64Url = (currentCropType === 'team' || currentCropType === 'sponsor' || currentCropType === 'partner') 
+                            ? canvas.toDataURL('image/png') 
+                            : canvas.toDataURL('image/jpeg', 0.85); 
             
-            // Use PNG for logos to preserve transparency, JPEG for heavy gallery/season images
-            let base64Url;
-            if (currentCropType === 'team' || currentCropType === 'sponsor' || currentCropType === 'partner') {
-                base64Url = canvas.toDataURL('image/png');
-            } else {
-                base64Url = canvas.toDataURL('image/jpeg', 0.85); 
-            }
-            
-            window.croppedImages[currentCropType] = base64Url; // Save for form submit
-            
-            // Show preview below the upload button
+            window.croppedImages[currentCropType] = base64Url;
             const previewImg = document.getElementById('preview-' + currentCropType);
-            if(previewImg) {
-                previewImg.src = base64Url;
-                previewImg.classList.remove('hidden');
-            }
+            if(previewImg) { previewImg.src = base64Url; previewImg.classList.remove('hidden'); }
             
             document.getElementById('crop-modal').classList.add('hidden');
             cropperInstance.destroy();
@@ -715,28 +761,14 @@
         window.clearCropPreview = function(type) {
             window.croppedImages[type] = null;
             const previewImg = document.getElementById('preview-' + type);
-            if(previewImg) {
-                previewImg.src = '';
-                previewImg.classList.add('hidden');
-            }
+            if(previewImg) { previewImg.src = ''; previewImg.classList.add('hidden'); }
         };
 
         // --- SLIDER STATE VARIABLES ---
-        let currSeasonIndex = 0;
-        let totalSeasons = 0;
-        let seasonAutoScrollInterval;
-        
-        let currGalleryIndex = 0;
-        let totalGalleryImages = 0;
-        let galleryAutoScrollInterval;
-
-        let currTeamIndex = 0;
-        let totalTeams = 0;
-        let teamAutoScrollInterval;
-
-        let currSponsorIndex = 0;
-        let totalOfficialSponsors = 0;
-        let sponsorAutoScrollInterval;
+        let currSeasonIndex = 0; let totalSeasons = 0; let seasonAutoScrollInterval;
+        let currGalleryIndex = 0; let totalGalleryImages = 0; let galleryAutoScrollInterval;
+        let currTeamIndex = 0; let totalTeams = 0; let teamAutoScrollInterval;
+        let currSponsorIndex = 0; let totalOfficialSponsors = 0; let sponsorAutoScrollInterval;
 
         const defaultPartners = [
             { id: 'P1', name: 'SPL Media', category: 'Media Partner', logo: 'https://placehold.co/400x200/152238/ffffff?text=Media+Partner' },
@@ -746,41 +778,35 @@
         // --- DEFAULT DATA ARRAYS ---
         const defaultSeasons = [
             { season: 5, year: "2025", title: "🏆 JMK Sixers Champions", desc: "The most watched season to date. JMK Sixers won the title and runner up AMAN XI Bheti in a spectacular showdown.", image: "" },
-            { season: 4, year: "2024", title: "🏆 Krishnapur United Champions", desc: "An underdog story for the ages as Krishnapur United stunned the reigning champions in the semi-finals to win their maiden title, with Shri Ram Xi Ramchandrapur finishing as Runner Up.", image: "" },
-            { season: 3, year: "2023", title: "🏆 Radha Binod Muradi Champions", desc: "Remembered for the final over drama where Radha Binod Muradi clinched the Championship and Krishnapur United took Runner up.", image: "" },
-            { season: 2, year: "2022", title: "🏆 SOVA HARDWARE MURADI", desc: "SOVA HARDWARE MURADI dominated the season with a devastating batting lineup that chased every target set before them to become the undisputed winners of that season.", image: "" },
-            { season: 1, year: "2021", title: "🏆 KINANDI KNIGHT RIDERS", desc: "The season that started it all in Santuri Block, Purulia. Over 200 players registered for the auction. Winner KINANDI KNIGHT RIDERS and Runner up - SOVA HARDWARE.", image: "" }
+            { season: 4, year: "2024", title: "🏆 Krishnapur United Champions", desc: "An underdog story for the ages as Krishnapur United stunned the reigning champions in the semi-finals to win their maiden title.", image: "" },
+            { season: 3, year: "2023", title: "🏆 Radha Binod Muradi Champions", desc: "Remembered for the final over drama where Radha Binod Muradi clinched the Championship.", image: "" },
+            { season: 2, year: "2022", title: "🏆 SOVA HARDWARE MURADI", desc: "SOVA HARDWARE MURADI dominated the season with a devastating batting lineup.", image: "" },
+            { season: 1, year: "2021", title: "🏆 KINANDI KNIGHT RIDERS", desc: "The season that started it all in Santuri Block, Purulia.", image: "" }
         ];
 
         const defaultTeams = [
             { id: 'KU', name: 'Krishnapur United', color: 'from-blue-600 to-blue-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/KRISHANPUR%20UNITED.jpg?raw=true' },
             { id: 'AXI', name: 'Aman XI Bheti', color: 'from-orange-500 to-red-600', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/aman%20XI%20bheti.png?raw=true' },
-            { id: 'SRX', name: 'Shri Ram XI', color: 'from-yellow-400 to-yellow-600', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/Shri%20Ram.jpg?raw=true' },
-            { id: 'RBM', name: 'Radha Binod Muradi', color: 'from-green-600 to-green-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/RADHA%20BINOD%20MURADI.jpg?raw=true' },
-            { id: 'NDC', name: 'NDC Foundation', color: 'from-indigo-600 to-purple-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/NDC%20FOUNDATION%20.jpg?raw=true' },
-            { id: 'JSP', name: 'Jashpur', color: 'from-teal-500 to-teal-800', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/jashpur.jpg?raw=true' },
             { id: 'JMK', name: 'JMK Sixers', color: 'from-red-600 to-red-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/JMK%20SIXER.jpg?raw=true' }
         ];
 
         const defaultPlayers = [
             { name: 'Virat Sharma', team: 'Santuri Strikers', achievement: 'Top Run Scorer • S5' },
-            { name: 'Rashid Khan', team: 'Valley Vipers', achievement: 'Most Wickets • S5' },
-            { name: 'David Warner', team: 'Coastal Chargers', achievement: 'MVP • S1 Finale' },
-            { name: 'MS Dhoni', team: 'Heroes', achievement: 'Best Captain • All Seasons' }
+            { name: 'Rashid Khan', team: 'Valley Vipers', achievement: 'Most Wickets • S5' }
         ];
 
         const defaultGalleryPics = [
             { url: "https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/WhatsApp%20Image%202026-09-05%20at%2010.44.36%20PM%20(1).jpeg?raw=true" },
-            { url: "https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/WhatsApp%20Image%202026-09-05%20at%2010.44.39%20PM%20(1).jpeg?raw=true" },
-            { url: "https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/WhatsApp%20Image%202026-09-05%20at%2010.44.44%20PM.jpeg?raw=true" }
+            { url: "https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/WhatsApp%20Image%202026-09-05%20at%2010.44.39%20PM%20(1).jpeg?raw=true" }
         ];
 
         const defaultSponsors = [
             { id: 'S1', name: 'Netaji Eye Hospital', type: 'title', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/NEtaji%20eye%20hospital%20logo.png?raw=true' },
-            { id: 'S2', name: 'Sakambari Ispat & Power', type: 'official', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/Elegant.jpg?raw=true' },
-            { id: 'S3', name: 'Ghadi Detergent', type: 'official', logo: 'https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/a6771841eeab75a6b1705730a8a92cff1553f100/Ghadi%20detegent.jpg' },
-            { id: 'S4', name: 'TAO', type: 'official', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/TAo.jpg?raw=true' },
-            { id: 'S5', name: 'Big Telecom', type: 'official', logo: 'https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/65f383e531d02a80903c7ec5700c4b1df5504824/Big%20telecom.jpg' }
+            { id: 'S2', name: 'Sakambari Ispat & Power', type: 'official', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/Elegant.jpg?raw=true' }
+        ];
+        
+        const defaultPolls = [
+            { id: 'poll_demo1', question: 'Which team will lift the Season 6 Trophy?', opt0: 'JMK Sixers', val0: 45, opt1: 'Krishnapur United', val1: 30, opt2: 'Aman XI Bheti', val2: 15, opt3: 'Shri Ram XI', val3: 10, createdAt: Date.now() }
         ];
 
         const defaultAboutText = {
@@ -796,7 +822,7 @@
         window.logoutAdmin = function() {
             window.isAdmin = false;
             document.getElementById('admin-dashboard').classList.add('hidden');
-            loadPosts(); loadTeams(); loadPlayers(); loadGallery(); loadAboutText(); loadSponsors(); loadPartners(); loadVideo();
+            loadAllData();
             alert('Logged out of Admin Dashboard.');
         };
 
@@ -812,7 +838,7 @@
                 document.getElementById('admin-user').value = '';
                 document.getElementById('admin-pass').value = '';
                 
-                loadPosts(); loadTeams(); loadPlayers(); loadGallery(); loadAboutText(); loadSponsors(); loadPartners(); loadVideo();
+                loadAllData();
                 alert('Access Granted! Welcome to the Master Admin Dashboard.');
                 document.getElementById('admin-dashboard').scrollIntoView({ behavior: 'smooth' });
             } else {
@@ -821,7 +847,7 @@
         };
 
         window.switchAdminTab = function(tabName) {
-            ['seasons', 'teams', 'players', 'gallery', 'video', 'texts', 'sponsors', 'partners'].forEach(t => {
+            ['seasons', 'teams', 'players', 'fanzone', 'gallery', 'video', 'texts', 'sponsors', 'partners'].forEach(t => {
                 document.getElementById(`admin-tab-${t}`)?.classList.add('hidden');
                 const btn = document.getElementById(`tab-btn-${t}`);
                 if(btn) btn.className = 'px-4 py-2 bg-slate-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm';
@@ -849,13 +875,161 @@
                 
                 onAuthStateChanged(auth, (user) => {
                     if(!user) signInAnonymously(auth).catch(e => console.warn(e));
-                    loadPosts(); loadTeams(); loadPlayers(); loadGallery(); loadAboutText(); loadSponsors(); loadPartners(); loadVideo();
+                    loadAllData();
                 });
             } catch(e) {
                 console.warn("Offline mode", e);
-                loadPosts(true); loadTeams(true); loadPlayers(true); loadGallery(true); loadAboutText(true); loadSponsors(true); loadPartners(true); loadVideo(true);
+                loadAllData(true);
             }
         }
+        
+        function loadAllData(local = false) {
+            loadPosts(local); loadTeams(local); loadPlayers(local); loadGallery(local); 
+            loadAboutText(local); loadSponsors(local); loadPartners(local); loadVideo(local); loadPolls(local);
+        }
+
+        // --- FAN ZONE (POLLS) LOGIC ---
+        window.handlePollSubmit = async function(e) {
+            e.preventDefault();
+            if(!window.isAdmin) return;
+            
+            const pollData = {
+                question: document.getElementById('poll-question').value,
+                opt0: document.getElementById('poll-opt0').value, val0: 0,
+                opt1: document.getElementById('poll-opt1').value, val1: 0,
+                opt2: document.getElementById('poll-opt2').value, val2: 0,
+                opt3: document.getElementById('poll-opt3').value, val3: 0,
+                createdAt: Date.now()
+            };
+            
+            try {
+                await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'polls'), pollData);
+                document.getElementById('add-poll-form').reset();
+                alert('Poll published to Fan Zone!');
+            } catch(err) { alert('Error publishing poll'); }
+        };
+
+        window.deletePoll = async function(id) {
+            if(!confirm('Delete this poll?')) return;
+            try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'polls', id)); } catch(e) {}
+        };
+
+        window.submitVote = async function(pollId, optionIndex) {
+            // Check if user already voted in this session/browser
+            if(localStorage.getItem('spl_voted_' + pollId)) {
+                alert('You have already voted on this poll! Thanks for participating.');
+                return;
+            }
+            
+            try {
+                const pollRef = doc(db, 'artifacts', myAppId, 'public', 'data', 'polls', pollId);
+                await updateDoc(pollRef, {
+                    [`val${optionIndex}`]: increment(1)
+                });
+                
+                // Save locally to prevent spam
+                localStorage.setItem('spl_voted_' + pollId, 'true');
+                
+            } catch(e) {
+                alert("Couldn't submit vote at this time.");
+            }
+        };
+
+        function loadPolls(local = false) {
+            const container = document.getElementById('polls-public-container');
+            if(!container) return;
+            if(local) { renderPolls(defaultPolls); return; }
+
+            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'polls'), (snap) => {
+                let polls = [];
+                snap.forEach(d => polls.push({ id: d.id, ...d.data() }));
+                
+                if(polls.length === 0) {
+                    defaultPolls.forEach(p => addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'polls'), p));
+                    return;
+                }
+                
+                // Sort newest first
+                polls.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+                renderPolls(polls);
+            }, () => renderPolls(defaultPolls));
+        }
+
+        function renderPolls(polls) {
+            const publicContainer = document.getElementById('polls-public-container');
+            const adminContainer = document.getElementById('admin-polls-grid');
+            
+            if(adminContainer && window.isAdmin) {
+                adminContainer.innerHTML = '';
+                polls.forEach(p => {
+                    const totalVotes = (p.val0||0) + (p.val1||0) + (p.val2||0) + (p.val3||0);
+                    adminContainer.innerHTML += `
+                        <div class="bg-slate-800 p-4 rounded border border-gray-700 flex justify-between items-center shadow">
+                            <div>
+                                <h5 class="text-white font-bold mb-1">${p.question}</h5>
+                                <p class="text-xs text-gray-400 font-medium">Total Votes: ${totalVotes} | Created: ${new Date(p.createdAt).toLocaleDateString()}</p>
+                            </div>
+                            <button onclick="deletePoll('${p.id}')" class="bg-red-600 hover:bg-red-700 text-white w-10 h-10 rounded shadow transition"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    `;
+                });
+            }
+
+            publicContainer.innerHTML = '';
+            polls.forEach(p => {
+                const totalVotes = (p.val0||0) + (p.val1||0) + (p.val2||0) + (p.val3||0);
+                const hasVoted = localStorage.getItem('spl_voted_' + p.id);
+                
+                let optionsHtml = '';
+                
+                for(let i=0; i<4; i++) {
+                    const optText = p['opt'+i];
+                    const optVal = p['val'+i] || 0;
+                    if(!optText) continue; // skip empty options
+                    
+                    const pct = totalVotes === 0 ? 0 : Math.round((optVal / totalVotes) * 100);
+                    
+                    if(hasVoted) {
+                        // Display results mode
+                        optionsHtml += `
+                            <div class="mb-3 relative w-full bg-slate-800 rounded overflow-hidden border border-gray-700 shadow-inner">
+                                <div class="poll-bar absolute top-0 left-0 h-full bg-gradient-to-r from-spl-gold/80 to-yellow-400/80" style="width: ${pct}%"></div>
+                                <div class="relative z-10 flex justify-between items-center p-3">
+                                    <span class="font-bold text-white text-sm md:text-base">${optText}</span>
+                                    <span class="font-bold text-spl-gold text-sm bg-black/50 px-2 py-0.5 rounded">${pct}%</span>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        // Voting mode
+                        optionsHtml += `
+                            <button onclick="submitVote('${p.id}', ${i})" class="w-full text-left mb-3 p-3 bg-slate-800 hover:bg-slate-700 border border-gray-700 hover:border-spl-gold transition-colors duration-300 rounded shadow-md group flex justify-between items-center">
+                                <span class="font-bold text-gray-200 group-hover:text-white transition-colors text-sm md:text-base">${optText}</span>
+                                <i class="fa-regular fa-circle-check text-gray-500 group-hover:text-spl-gold transition-colors"></i>
+                            </button>
+                        `;
+                    }
+                }
+
+                publicContainer.innerHTML += `
+                    <div class="bg-slate-900 border border-gray-800 p-6 md:p-8 rounded-2xl shadow-xl hover:border-spl-gold/50 transition-colors duration-300">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="w-10 h-10 rounded-full bg-spl-blueLight border border-gray-700 flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-chart-pie text-spl-gold"></i>
+                            </div>
+                            <h3 class="font-oswald text-2xl md:text-3xl font-bold text-white leading-tight">${p.question}</h3>
+                        </div>
+                        <div class="mb-4">
+                            ${optionsHtml}
+                        </div>
+                        <div class="text-right border-t border-gray-800 pt-3">
+                            <span class="text-xs text-gray-500 font-bold uppercase tracking-widest"><i class="fa-solid fa-users mr-1"></i> ${totalVotes} Total Votes</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
 
         // --- FEATURED VIDEO LOGIC ---
         window.handleVideoSubmit = async function(e) {
@@ -1015,7 +1189,7 @@
             if (currSeasonIndex < totalSeasons - itemsPerPage) {
                 currSeasonIndex++;
             } else {
-                currSeasonIndex = 0; // loop to beginning
+                currSeasonIndex = 0; 
             }
             updateSeasonSlider();
             resetSeasonAutoScroll();
@@ -1027,7 +1201,7 @@
             if (currSeasonIndex > 0) {
                 currSeasonIndex--;
             } else {
-                currSeasonIndex = Math.max(0, totalSeasons - itemsPerPage); // loop to end
+                currSeasonIndex = Math.max(0, totalSeasons - itemsPerPage); 
             }
             updateSeasonSlider();
             resetSeasonAutoScroll();
@@ -1149,7 +1323,6 @@
                     track.innerHTML += `
                         <div class="w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] flex-shrink-0 group relative cursor-pointer mx-auto">
                             <div class="aspect-square bg-gradient-to-br ${t.color} rounded-2xl flex flex-col items-center justify-center border-2 border-gray-700 shadow-[0_0_15px_rgba(0,0,0,0.5)] group-hover:scale-105 group-hover:border-spl-gold transition-all duration-300 relative overflow-hidden">
-                                <!-- Background pattern/glow -->
                                 <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-0"></div>
                                 ${logoContent}
                             </div>
@@ -1334,9 +1507,7 @@
             images.forEach(img => {
                 track.innerHTML += `
                     <div class="w-full md:w-[calc(50%-8px)] lg:w-[calc(33.333%-10.66px)] flex-shrink-0 relative h-[300px] md:h-[400px] rounded-xl overflow-hidden bg-black shadow-xl group border border-gray-800 hover:border-spl-gold transition-colors">
-                        <!-- Blurred Background to elegantly fill portrait space -->
                         <div class="absolute inset-0 bg-cover bg-center blur-xl opacity-40 scale-125 group-hover:opacity-60 transition-opacity duration-500" style="background-image: url('${img.url}')"></div>
-                        <!-- Main Uncropped Image -->
                         <img src="${img.url}" alt="SPL Action" class="relative z-10 w-full h-full object-contain p-2 drop-shadow-2xl" onerror="this.src='https://placehold.co/800x600/152238/F4B036?text=Image+Not+Found';">
                     </div>
                 `;
@@ -1794,7 +1965,6 @@
             }
         }
 
-        // Attach swipe listeners to the static container wrappers
         setupSwipe('seasons-slider-container', window.nextSeason, window.prevSeason);
         setupSwipe('teams-slider-container', window.nextTeam, window.prevTeam);
         setupSwipe('gallery-container', window.nextGallerySlide, window.prevGallerySlide);
