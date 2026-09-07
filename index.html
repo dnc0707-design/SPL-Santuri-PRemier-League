@@ -29,11 +29,11 @@
                             red: '#E12D39'
                         },
                         premium: {
-                            950: '#050a15', // Ultra Deep Blue (Footer/Headers)
-                            900: '#0a1428', // Base Body Blue (Sophisticated FB vibe)
-                            800: '#11203d', // Elevated Cards
-                            700: '#1a2f57', // Borders / Hovers
-                            600: '#244073', // Lightest accents
+                            950: '#0B1426', // Deepest Navy
+                            900: '#132342', // Rich Facebook/Vlog Blue base
+                            800: '#1C335E', // Elevated Elements & Cards
+                            700: '#2A4985', // Borders & Accents
+                            600: '#3A62B0', // Highlights
                         }
                     },
                     keyframes: {
@@ -52,7 +52,7 @@
     <style>
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #050a15; }
+        ::-webkit-scrollbar-track { background: #0B1426; }
         ::-webkit-scrollbar-thumb { background: #F4B036; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #d49626; }
         
@@ -70,22 +70,22 @@
         .poll-bar { transition: width 1s ease-in-out; }
     </style>
 </head>
-<body class="font-inter bg-premium-900 text-white min-h-screen flex flex-col selection:bg-spl-gold selection:text-black">
+<body class="font-inter bg-premium-900 text-white min-h-screen flex flex-col selection:bg-spl-gold selection:text-premium-950">
 
     <!-- Header / Navbar (Upgraded with Glassmorphism) -->
-    <header class="bg-premium-950/85 backdrop-blur-md sticky top-0 z-50 border-b border-premium-700/60 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
+    <header class="bg-premium-950/90 backdrop-blur-md sticky top-0 z-50 border-b border-premium-700/60 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
         <div class="container mx-auto px-4 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <!-- Logo & Branding -->
                 <div class="flex items-center gap-3">
-                    <div class="w-16 h-16 relative flex-shrink-0 flex items-center justify-center rounded-full bg-white p-1 shadow-[0_0_15px_rgba(244,176,54,0.3)] overflow-hidden">
+                    <div class="w-12 h-12 md:w-16 md:h-16 relative flex-shrink-0 flex items-center justify-center rounded-full bg-white p-1 shadow-[0_0_15px_rgba(244,176,54,0.3)] overflow-hidden">
                         <img src="https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/main/ChatGPT%20Image%20Sep%205%2C%202026%2C%2003_22_40%20PM.png" alt="SPL Logo" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://placehold.co/150/ffffff/0B1221?text=SPL';">
                     </div>
-                    <div class="hidden md:block">
-                        <h1 class="font-oswald text-lg lg:text-xl font-bold uppercase tracking-wide leading-tight whitespace-nowrap">Santuri <span class="text-spl-gold">Premier League</span></h1>
-                        <div class="flex flex-col mt-0.5">
+                    <div class="flex flex-col">
+                        <h1 class="font-oswald text-base sm:text-lg lg:text-xl font-bold uppercase tracking-wide leading-tight md:whitespace-nowrap">Santuri <span class="text-spl-gold">Premier League</span></h1>
+                        <div class="hidden sm:flex flex-col mt-0.5">
                             <span class="text-[9px] text-white bg-premium-800 px-1.5 py-0.5 border border-spl-gold/50 rounded inline-block w-max font-bold uppercase tracking-widest mb-0.5 shadow-sm">Where Cricket Roars</span>
-                            <span class="text-[9px] text-gray-400 uppercase tracking-widest font-bold">Org. by Lalgarh Village Club</span>
+                            <span class="text-[9px] text-gray-300 uppercase tracking-widest font-bold">Org. by Lalgarh Village Club</span>
                         </div>
                     </div>
                 </div>
@@ -136,9 +136,9 @@
     <main class="flex-grow">
         <!-- Hero Section (Premium Depth Gradient) -->
         <section class="relative bg-gradient-to-b from-premium-800 via-premium-900 to-premium-950 pt-16 pb-24 overflow-hidden border-b border-premium-700/50">
-            <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0 opacity-20">
-                <div class="absolute -top-24 -left-24 w-96 h-96 bg-spl-gold rounded-full blur-3xl"></div>
-                <div class="absolute top-1/2 -right-24 w-[30rem] h-[30rem] bg-premium-600 rounded-full blur-3xl"></div>
+            <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0 opacity-30">
+                <div class="absolute -top-24 -left-24 w-96 h-96 bg-spl-gold rounded-full blur-[100px]"></div>
+                <div class="absolute top-1/2 -right-24 w-[30rem] h-[30rem] bg-premium-600 rounded-full blur-[100px]"></div>
             </div>
             <div class="container mx-auto px-4 relative z-10 text-center">
                 
@@ -161,12 +161,12 @@
 
         <!-- Featured Video Section -->
         <section id="video" class="py-16 bg-premium-950 border-b border-premium-700/50 relative scroll-mt-20">
-            <div class="absolute inset-0 bg-spl-red/5 blur-3xl z-0 pointer-events-none"></div>
+            <div class="absolute inset-0 bg-spl-red/10 blur-[100px] z-0 pointer-events-none"></div>
             <div class="container mx-auto px-4 max-w-5xl text-center relative z-10">
                 <h2 class="font-oswald text-4xl font-bold uppercase tracking-wide mb-8 text-white">
                     <i class="fa-brands fa-youtube text-spl-red mr-2"></i> SPL <span class="text-spl-red">Featured Action</span>
                 </h2>
-                <div class="aspect-video w-full rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(225,45,57,0.15)] border border-premium-700 bg-black">
+                <div class="aspect-video w-full rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(225,45,57,0.15)] border border-premium-700 bg-premium-950">
                     <iframe id="featured-video-iframe" class="w-full h-full" src="https://www.youtube.com/embed/k9alqPSW5BY" title="SPL YouTube Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 </div>
             </div>
@@ -187,7 +187,7 @@
                 <div class="overflow-hidden rounded-xl relative shadow-2xl bg-premium-950 border border-premium-700/60" id="gallery-container">
                     <div id="gallery-track" class="flex transition-transform duration-500 ease-in-out gap-4">
                         <!-- Gallery images injected here -->
-                        <div class="w-full flex-shrink-0 text-center py-20 text-gray-500"><i class="fa-solid fa-spinner fa-spin text-3xl text-spl-gold mb-2"></i><br>Loading Gallery...</div>
+                        <div class="w-full flex-shrink-0 text-center py-20 text-gray-400"><i class="fa-solid fa-spinner fa-spin text-3xl text-spl-gold mb-2"></i><br>Loading Gallery...</div>
                     </div>
                 </div>
             </div>
@@ -667,7 +667,7 @@
                 <h3 class="text-spl-gold font-bold font-oswald text-2xl uppercase tracking-wide"><i class="fa-solid fa-crop-simple mr-2"></i> Adjust & Crop Photo</h3>
                 <button onclick="closeCropper()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-2xl"></i></button>
             </div>
-            <div class="flex-grow p-4 flex items-center justify-center bg-black overflow-hidden relative">
+            <div class="flex-grow p-4 flex items-center justify-center bg-premium-950 overflow-hidden relative">
                 <img id="crop-image" src="" class="max-w-full max-h-full block">
             </div>
             <div class="p-4 bg-premium-800 border-t border-premium-700 flex flex-col sm:flex-row justify-end gap-4">
@@ -1315,7 +1315,7 @@
                 track.innerHTML = '';
                 totalTeams = teams.length;
                 teams.forEach(t => {
-                    const fallbackLogo = `<div class="font-oswald text-4xl font-bold text-white mb-2 drop-shadow-md">${t.id}</div><p class="text-sm font-bold uppercase tracking-wider text-center text-white drop-shadow-md bg-black/60 px-2 py-1 rounded w-full line-clamp-1">${t.name}</p>`;
+                    const fallbackLogo = `<div class="font-oswald text-4xl font-bold text-white mb-2 drop-shadow-md">${t.id}</div><p class="text-sm font-bold uppercase tracking-wider text-center text-white drop-shadow-md bg-premium-950/60 px-2 py-1 rounded w-full line-clamp-1">${t.name}</p>`;
                     const logoContent = t.logo ? `<img src="${t.logo}" alt="${t.name}" class="w-full h-full object-contain drop-shadow-2xl z-10 p-4">` : fallbackLogo;
                     
                     track.innerHTML += `
@@ -1504,7 +1504,7 @@
             
             images.forEach(img => {
                 track.innerHTML += `
-                    <div class="w-full md:w-[calc(50%-8px)] lg:w-[calc(33.333%-10.66px)] flex-shrink-0 relative h-[300px] md:h-[400px] rounded-xl overflow-hidden bg-black shadow-xl group border border-premium-800 hover:border-spl-gold transition-colors">
+                    <div class="w-full md:w-[calc(50%-8px)] lg:w-[calc(33.333%-10.66px)] flex-shrink-0 relative h-[300px] md:h-[400px] rounded-xl overflow-hidden bg-premium-950 shadow-xl group border border-premium-800 hover:border-spl-gold transition-colors">
                         <div class="absolute inset-0 bg-cover bg-center blur-xl opacity-40 scale-125 group-hover:opacity-60 transition-opacity duration-500" style="background-image: url('${img.url}')"></div>
                         <img src="${img.url}" alt="SPL Action" class="relative z-10 w-full h-full object-contain p-2 drop-shadow-2xl" onerror="this.src='https://placehold.co/800x600/152238/F4B036?text=Image+Not+Found';">
                     </div>
