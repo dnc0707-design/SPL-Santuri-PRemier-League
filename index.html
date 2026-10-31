@@ -101,8 +101,8 @@
                     <a href="#gallery" class="nav-link hover:text-spl-gold transition-colors">Gallery</a>
                     <a href="#sponsors" class="nav-link hover:text-spl-gold transition-colors">Sponsors</a>
                     <a href="#partners" class="nav-link hover:text-spl-gold transition-colors">Partners</a>
-                    <a href="#" onclick="showComingSoon(event, 'Player Registration')" class="nav-link text-spl-red hover:text-spl-gold transition-colors">Player Reg.</a>
-                    <a href="#" onclick="showComingSoon(event, 'Owner Registration')" class="nav-link text-spl-red hover:text-spl-gold transition-colors">Owner Reg.</a>
+                    <a href="#" onclick="showComingSoon(event, 'Player Registration')" class="bg-spl-gold/10 text-spl-gold font-bold px-3 py-1 rounded animate-pulse hover:bg-spl-gold hover:text-premium-950 transition-colors shadow-[0_0_10px_rgba(244,176,54,0.3)]">Player Reg.</a>
+                    <a href="#" onclick="showComingSoon(event, 'Owner Registration')" class="bg-spl-red/10 text-spl-red font-bold px-3 py-1 rounded animate-pulse hover:bg-spl-red hover:text-white transition-colors shadow-[0_0_10px_rgba(225,45,57,0.3)]">Owner Reg.</a>
                 </nav>
 
                 <!-- Right Actions -->
@@ -129,8 +129,8 @@
                 <a href="#gallery" class="py-3 border-b border-premium-800 hover:text-spl-gold transition-colors">Gallery</a>
                 <a href="#sponsors" class="py-3 border-b border-premium-800 hover:text-spl-gold transition-colors">Sponsors</a>
                 <a href="#partners" class="py-3 border-b border-premium-800 hover:text-spl-gold transition-colors">Partners</a>
-                <a href="#" onclick="showComingSoon(event, 'Player Registration')" class="py-3 border-b border-premium-800 text-spl-red hover:text-spl-gold transition-colors">Player Registration</a>
-                <a href="#" onclick="showComingSoon(event, 'Owner Registration')" class="py-3 text-spl-red hover:text-spl-gold transition-colors">Owner Registration</a>
+                <a href="#" onclick="showComingSoon(event, 'Player Registration')" class="py-3 border-b border-premium-800 text-spl-gold font-bold animate-pulse hover:text-white transition-colors"><i class="fa-solid fa-user-plus mr-2"></i> Player Registration</a>
+                <a href="#" onclick="showComingSoon(event, 'Owner Registration')" class="py-3 text-spl-red font-bold animate-pulse hover:text-white transition-colors"><i class="fa-solid fa-building-user mr-2"></i> Owner Registration</a>
                 <button onclick="toggleAdminModal()" class="mt-4 bg-spl-gold text-premium-950 font-bold px-4 py-2 uppercase rounded text-center w-full shadow-lg">Admin Login</button>
             </nav>
         </div>
@@ -158,8 +158,27 @@
                     </div>
                 </div>
                 
-                <br>
-                <a href="#seasons" class="inline-block bg-spl-red hover:bg-red-700 text-white font-oswald font-bold px-8 py-3 uppercase tracking-wider rounded transition-colors text-xl shadow-[0_10px_20px_rgba(225,45,57,0.3)] hover:shadow-[0_15px_30px_rgba(225,45,57,0.5)]">Read Season History</a>
+                <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-6">
+                    <!-- Player Registration (Blinking) -->
+                    <div class="relative w-full sm:w-auto group">
+                        <div class="absolute inset-0 bg-spl-gold rounded animate-ping opacity-75"></div>
+                        <a href="#" onclick="showComingSoon(event, 'Player Registration')" class="relative w-full sm:w-auto flex justify-center items-center bg-spl-gold hover:bg-spl-goldHover text-premium-950 font-oswald font-bold px-8 py-3.5 uppercase tracking-wider rounded transition-colors text-xl shadow-[0_0_25px_rgba(244,176,54,0.8)]">
+                            <i class="fa-solid fa-user-plus mr-3"></i> Player Registration
+                        </a>
+                    </div>
+                    
+                    <!-- Owner Registration (Blinking) -->
+                    <div class="relative w-full sm:w-auto group">
+                        <div class="absolute inset-0 bg-white rounded animate-ping opacity-50" style="animation-delay: 0.3s"></div>
+                        <a href="#" onclick="showComingSoon(event, 'Owner Registration')" class="relative w-full sm:w-auto flex justify-center items-center bg-white hover:bg-gray-200 text-spl-red font-oswald font-bold px-8 py-3.5 uppercase tracking-wider rounded transition-all text-xl shadow-[0_0_25px_rgba(255,255,255,0.6)]">
+                            <i class="fa-solid fa-building-user mr-3"></i> Owner Registration
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mt-12">
+                    <a href="#seasons" class="inline-block bg-transparent border border-premium-600 hover:border-spl-gold text-gray-400 hover:text-spl-gold font-oswald font-bold px-6 py-2 uppercase tracking-wider rounded transition-colors text-sm"><i class="fa-solid fa-book-open mr-2"></i> View Season History</a>
+                </div>
             </div>
         </section>
 
