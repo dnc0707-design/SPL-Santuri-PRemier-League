@@ -1039,18 +1039,19 @@
         window.applyCrop = function() {
             if (!cropperInstance) return;
             
-            // Apply aggressive compression for registration docs to avoid 1MB DB limit
+            // Apply aggressive compression for registration docs & QR to avoid 1MB DB limit
             let isReg = currentCropType.startsWith('reg_');
-            let maxDim = isReg ? 600 : 1000;
-            let quality = isReg ? 0.6 : 0.85;
+            let isQR = currentCropType === 'payment_qr';
+            let maxDim = isReg ? 600 : (isQR ? 400 : 1000);
+            let quality = isReg ? 0.6 : (isQR ? 0.7 : 0.85);
+            let isPng = (currentCropType === 'team' || currentCropType === 'sponsor' || currentCropType === 'partner');
 
             const canvas = cropperInstance.getCroppedCanvas({
                 maxWidth: maxDim, maxHeight: maxDim,
-                imageSmoothingEnabled: true, imageSmoothingQuality: 'medium', fillColor: 'transparent',
+                imageSmoothingEnabled: true, imageSmoothingQuality: 'medium', fillColor: isPng ? 'transparent' : '#ffffff',
             });
-            let base64Url = (currentCropType === 'team' || currentCropType === 'sponsor' || currentCropType === 'partner' || currentCropType === 'payment_qr') 
-                            ? canvas.toDataURL('image/png') 
-                            : canvas.toDataURL('image/jpeg', quality); 
+            
+            let base64Url = isPng ? canvas.toDataURL('image/png') : canvas.toDataURL('image/jpeg', quality); 
             
             window.croppedImages[currentCropType] = base64Url;
             const previewImg = document.getElementById('preview-' + currentCropType);
@@ -1489,7 +1490,9 @@
                 window.clearCropPreview('payment_qr');
                 document.getElementById('qr-image-file').value = '';
                 alert('Payment QR Code updated successfully!');
-            } catch(err) { alert('Error updating QR code'); }
+            } catch(err) { 
+                alert('Error updating QR code: ' + err.message + '\n\nTry cropping the image slightly smaller.'); 
+            }
         };
 
         function loadSettings(local = false) {
