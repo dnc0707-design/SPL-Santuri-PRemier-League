@@ -103,7 +103,7 @@
                     <a href="#sponsors" class="nav-link hover:text-spl-gold transition-colors">Sponsors</a>
                     <a href="#partners" class="nav-link hover:text-spl-gold transition-colors">Partners</a>
                     <a href="#" onclick="openRegModal(event)" class="bg-spl-gold/10 text-spl-gold font-bold px-3 py-1 rounded animate-pulse hover:bg-spl-gold hover:text-premium-950 transition-colors shadow-[0_0_10px_rgba(244,176,54,0.3)]">Player Reg.</a>
-                    <a href="#" onclick="openOwnerRegModal(event)" class="bg-spl-red/10 text-spl-red font-bold px-3 py-1 rounded animate-pulse hover:bg-spl-red hover:text-white transition-colors shadow-[0_0_10px_rgba(225,45,57,0.3)]">Owner Reg.</a>
+                    <a href="#" onclick="showComingSoon(event, 'Owner Registration')" class="bg-spl-red/10 text-spl-red font-bold px-3 py-1 rounded animate-pulse hover:bg-spl-red hover:text-white transition-colors shadow-[0_0_10px_rgba(225,45,57,0.3)]">Owner Reg.</a>
                 </nav>
 
                 <!-- Right Actions -->
@@ -132,7 +132,7 @@
                 <a href="#sponsors" class="py-3 border-b border-premium-800 hover:text-spl-gold transition-colors">Sponsors</a>
                 <a href="#partners" class="py-3 border-b border-premium-800 hover:text-spl-gold transition-colors">Partners</a>
                 <a href="#" onclick="openRegModal(event)" class="py-3 border-b border-premium-800 text-spl-gold font-bold animate-pulse hover:text-white transition-colors"><i class="fa-solid fa-user-plus mr-2"></i> Player Registration</a>
-                <a href="#" onclick="openOwnerRegModal(event)" class="py-3 text-spl-red font-bold animate-pulse hover:text-white transition-colors"><i class="fa-solid fa-building-user mr-2"></i> Owner Registration</a>
+                <a href="#" onclick="showComingSoon(event, 'Owner Registration')" class="py-3 text-spl-red font-bold animate-pulse hover:text-white transition-colors"><i class="fa-solid fa-building-user mr-2"></i> Owner Registration</a>
                 <button onclick="toggleAdminModal()" class="mt-4 bg-spl-gold text-premium-950 font-bold px-4 py-2 uppercase rounded text-center w-full shadow-lg">Admin Login</button>
             </nav>
         </div>
@@ -172,7 +172,7 @@
                     <!-- Owner Registration (Blinking) -->
                     <div class="relative w-full sm:w-auto group">
                         <div class="absolute inset-0 bg-white rounded animate-ping opacity-50" style="animation-delay: 0.3s"></div>
-                        <a href="#" onclick="openOwnerRegModal(event)" class="relative w-full sm:w-auto flex justify-center items-center bg-white hover:bg-gray-200 text-spl-red font-oswald font-bold px-8 py-3.5 uppercase tracking-wider rounded transition-all text-xl shadow-[0_0_25px_rgba(255,255,255,0.6)]">
+                        <a href="#" onclick="showComingSoon(event, 'Owner Registration')" class="relative w-full sm:w-auto flex justify-center items-center bg-white hover:bg-gray-200 text-spl-red font-oswald font-bold px-8 py-3.5 uppercase tracking-wider rounded transition-all text-xl shadow-[0_0_25px_rgba(255,255,255,0.6)]">
                             <i class="fa-solid fa-building-user mr-3"></i> Owner Registration
                         </a>
                     </div>
@@ -243,7 +243,6 @@
                     <!-- Tab Navigation for Admin -->
                     <div class="flex flex-wrap gap-2 mb-8 border-b border-premium-800 pb-4">
                         <button onclick="switchAdminTab('registrations')" id="tab-btn-registrations" class="px-4 py-2 bg-spl-red text-white font-bold rounded uppercase text-sm animate-pulse border border-transparent hover:border-red-400">Player Reg. (New)</button>
-                        <button onclick="switchAdminTab('owner_regs')" id="tab-btn-owner_regs" class="px-4 py-2 bg-orange-600 text-white font-bold rounded uppercase text-sm animate-pulse border border-transparent hover:border-orange-400">Owner Reg. (New)</button>
                         <button onclick="switchAdminTab('seasons')" id="tab-btn-seasons" class="px-4 py-2 bg-spl-gold text-premium-950 font-bold rounded uppercase text-sm">Manage Seasons</button>
                         <button onclick="switchAdminTab('teams')" id="tab-btn-teams" class="px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700">Manage Franchises</button>
                         <button onclick="switchAdminTab('players')" id="tab-btn-players" class="px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700">Manage Players</button>
@@ -305,21 +304,6 @@ service cloud.firestore {
                         <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-green-500 pl-3">Approved Players (Auction Pool)</h3>
                         <div id="admin-registrations-approved" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <!-- Approved Registrations Injected Here -->
-                        </div>
-                    </div>
-
-                    <!-- TAB 0B: OWNER REGISTRATIONS (NEW) -->
-                    <div id="admin-tab-owner_regs" class="admin-tab-content hidden">
-                        <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-orange-500 pl-3">Pending Franchise / Owner Registrations</h3>
-                        <p class="text-gray-400 text-sm mb-6">Review franchise owner details and ₹1,000 confirmation payment screenshots. Approving an owner generates an official Franchise Reg ID and opens WhatsApp confirmation.</p>
-                        
-                        <div id="admin-owner-regs-pending" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-                            <!-- Pending Owner Registrations Injected Here -->
-                        </div>
-
-                        <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-green-500 pl-3">Approved Franchise Owners</h3>
-                        <div id="admin-owner-regs-approved" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            <!-- Approved Owner Registrations Injected Here -->
                         </div>
                     </div>
 
@@ -895,97 +879,6 @@ service cloud.firestore {
         </div>
     </div>
 
-    <!-- Owner Registration Modal -->
-    <div id="owner-reg-modal" class="hidden fixed inset-0 z-[150] bg-premium-950/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-premium-900 border border-spl-gold rounded-xl max-w-3xl w-full shadow-2xl relative my-8">
-            <div class="sticky top-0 bg-premium-900 border-b border-premium-700 p-4 rounded-t-xl flex justify-between items-center z-10">
-                <h3 class="font-oswald text-2xl font-bold uppercase text-spl-gold"><i class="fa-solid fa-building-user mr-2"></i> Franchise Owner Registration</h3>
-                <button onclick="closeOwnerRegModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-2xl"></i></button>
-            </div>
-            
-            <div class="p-6 md:p-8">
-                <!-- Payment Breakup & QR Instructions -->
-                <div class="bg-premium-800 border border-spl-gold/50 p-4 rounded-lg mb-8 text-sm text-gray-300 shadow-inner">
-                    <p class="font-bold text-white mb-2 uppercase tracking-wide"><i class="fa-solid fa-coins text-spl-gold mr-2"></i> Franchise Fee & Payment Breakup:</p>
-                    <div class="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
-                        <div class="flex-grow space-y-2">
-                            <div class="bg-premium-950/80 p-3 rounded border border-premium-700">
-                                <p class="text-spl-gold font-bold text-base"><i class="fa-solid fa-circle-check mr-1.5"></i> Step 1 (Now): ₹1,000 — For Confirmation Now</p>
-                                <p class="text-xs text-gray-400 mt-0.5">Pay ₹1,000 now via UPI / QR and upload the payment screenshot below to confirm your franchise slot.</p>
-                            </div>
-                            <div class="bg-premium-950/80 p-3 rounded border border-premium-700">
-                                <p class="text-white font-bold text-sm"><i class="fa-solid fa-calendar-check text-spl-red mr-1.5"></i> Step 2 (Before Auction): ₹3,000 + ₹8,000 = ₹11,000</p>
-                                <p class="text-xs text-gray-400 mt-0.5">Remaining balance of ₹11,000 (₹3,000 + ₹8,000) is to be cleared before the Season 6 Mega Auction.</p>
-                            </div>
-                            <p class="text-xs text-gray-300 pt-1"><strong>UPI Number:</strong> <span class="text-spl-gold font-bold">8335929505</span> (Or scan the QR code)</p>
-                        </div>
-                        <div class="text-center bg-premium-950 p-3 rounded-xl border border-premium-700 shadow-md flex-shrink-0 w-40">
-                            <p class="text-[10px] text-spl-gold mb-2 font-bold uppercase tracking-widest border-b border-premium-700 pb-1">Scan to Pay ₹1000</p>
-                            <img id="public-owner-payment-qr" src="" alt="Payment QR" class="w-full aspect-square object-contain hidden border border-gray-700 p-1 bg-white rounded-lg">
-                            <p id="public-owner-payment-qr-fallback" class="text-xs text-gray-500 py-4 hidden">No QR uploaded</p>
-                        </div>
-                    </div>
-                </div>
-
-                <form id="owner-reg-form" onsubmit="handleOwnerRegSubmit(event)" class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="md:col-span-2">
-                            <label class="block text-gray-300 text-sm font-bold mb-2">Franchise / Team Name <span class="text-red-500">*</span></label>
-                            <input type="text" id="owner-franchise-name" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="Enter proposed Franchise Name" required>
-                        </div>
-
-                        <!-- Dynamic Multi-Owner Name Inputs -->
-                        <div class="md:col-span-2">
-                            <div class="flex justify-between items-center mb-2">
-                                <label class="block text-gray-300 text-sm font-bold">Owner / Owners Name <span class="text-red-500">*</span></label>
-                                <button type="button" onclick="addOwnerNameField()" class="text-xs bg-spl-gold/20 hover:bg-spl-gold text-spl-gold hover:text-premium-950 border border-spl-gold/50 font-bold px-3 py-1 rounded transition flex items-center gap-1">
-                                    <i class="fa-solid fa-plus"></i> Add More Owner
-                                </button>
-                            </div>
-                            <div id="owner-names-container" class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                <input type="text" name="owner_name[]" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="Owner 1 Full Name *" required>
-                                <input type="text" name="owner_name[]" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="Owner 2 Full Name (Optional)">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-gray-300 text-sm font-bold mb-2">Primary Phone / WhatsApp No <span class="text-red-500">*</span></label>
-                            <input type="tel" id="owner-phone" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="10-digit WhatsApp number" pattern="[0-9]{10}" required>
-                        </div>
-
-                        <div>
-                            <label class="block text-gray-300 text-sm font-bold mb-2">Full Address <span class="text-red-500">*</span></label>
-                            <input type="text" id="owner-address" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="Village, Post, Block, District" required>
-                        </div>
-                    </div>
-
-                    <hr class="border-premium-700 my-6">
-
-                    <!-- Payment Screenshot Upload -->
-                    <div class="bg-premium-800 p-4 rounded border border-premium-700 flex flex-col items-center text-center max-w-md mx-auto">
-                        <label class="block text-spl-gold text-sm font-bold mb-2 uppercase w-full border-b border-premium-700 pb-2">Upload Confirmation Payment Screenshot (₹1,000) <span class="text-red-500">*</span></label>
-                        <input type="file" id="file-owner-payment" accept="image/*" onchange="openCropper(event, 'owner_payment', NaN)" class="w-full text-xs text-gray-400 file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-spl-gold file:text-premium-950 file:font-bold hover:file:bg-spl-goldHover mb-3 mt-1" required>
-                        <img id="preview-owner_payment" class="hidden h-28 w-full object-contain rounded border border-gray-600 shadow-lg mt-auto">
-                    </div>
-
-                    <!-- Declaration Checkbox -->
-                    <div class="bg-premium-950/90 p-4 rounded-lg border border-premium-700">
-                        <label class="flex items-start gap-3 cursor-pointer">
-                            <input type="checkbox" id="owner-declaration" required class="accent-spl-gold w-5 h-5 mt-0.5 flex-shrink-0">
-                            <span class="text-xs sm:text-sm text-gray-200 leading-relaxed">
-                                <strong class="text-spl-gold uppercase">Declaration:</strong> I / We hereby declare that all the information provided above is true and accurate. I / We agree to <strong>abide by all rules and regulations</strong> of the Santuri Premier League (SPL) and Lalgarh Village Club, and agree to complete the remaining payment breakup (₹3,000 + ₹8,000 = ₹11,000) before the auction.
-                            </span>
-                        </label>
-                    </div>
-
-                    <div class="mt-8">
-                        <button type="submit" id="owner-reg-submit-btn" class="w-full bg-spl-gold text-premium-950 font-oswald font-bold text-2xl uppercase tracking-wide py-4 rounded hover:bg-spl-goldHover transition-colors shadow-lg"><i class="fa-solid fa-paper-plane mr-2"></i> Submit Owner Registration</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <!-- Photo Cropper Modal -->
     <div id="crop-modal" class="hidden fixed inset-0 z-[200] bg-premium-950/95 flex flex-col items-center justify-center p-4 backdrop-blur-sm">
         <div class="w-full max-w-4xl bg-premium-900 border border-spl-gold rounded-xl overflow-hidden flex flex-col h-[85vh] shadow-2xl">
@@ -1188,7 +1081,7 @@ service cloud.firestore {
         };
 
         // --- CROPPER STATE & LOGIC ---
-        window.croppedImages = { season: null, team: null, gallery: null, sponsor: null, partner: null, reg_photo: null, reg_aadhaar: null, reg_payment: null, owner_payment: null, payment_qr: null };
+        window.croppedImages = { season: null, team: null, gallery: null, sponsor: null, partner: null, reg_photo: null, reg_aadhaar: null, reg_payment: null, payment_qr: null };
         let cropperInstance = null;
         let currentCropType = '';
 
@@ -1225,7 +1118,6 @@ service cloud.firestore {
             if(currentCropType === 'reg_photo') fileInput = document.getElementById('file-reg-photo');
             if(currentCropType === 'reg_aadhaar') fileInput = document.getElementById('file-reg-aadhaar');
             if(currentCropType === 'reg_payment') fileInput = document.getElementById('file-reg-payment');
-            if(currentCropType === 'owner_payment') fileInput = document.getElementById('file-owner-payment');
             if(currentCropType === 'payment_qr') fileInput = document.getElementById('qr-image-file');
             if(fileInput && !window.croppedImages[currentCropType]) fileInput.value = '';
         };
@@ -1234,7 +1126,7 @@ service cloud.firestore {
             if (!cropperInstance) return;
             
             // Apply aggressive compression for registration docs & QR to avoid 1MB DB limit
-            let isReg = currentCropType.startsWith('reg_') || currentCropType === 'owner_payment';
+            let isReg = currentCropType.startsWith('reg_');
             let isQR = currentCropType === 'payment_qr';
             let maxDim = isReg ? 600 : (isQR ? 400 : 1000);
             let quality = isReg ? 0.6 : (isQR ? 0.7 : 0.85);
@@ -1332,113 +1224,61 @@ service cloud.firestore {
             document.getElementById('reg-modal').classList.add('hidden');
         };
 
-        // --- OWNER REGISTRATION LOGIC ---
-        window.allOwnerRegistrations = [];
-
-        window.openOwnerRegModal = function(e) {
-            if(e) e.preventDefault();
-            document.getElementById('owner-reg-modal').classList.remove('hidden');
-            document.getElementById('mobile-menu')?.classList.add('hidden');
-            window.croppedImages['owner_payment'] = null;
-            const prev = document.getElementById('preview-owner_payment');
-            if(prev) { prev.src = ''; prev.classList.add('hidden'); }
-            document.getElementById('owner-reg-form').reset();
-            // Reset owner fields back to default 2 boxes
-            const container = document.getElementById('owner-names-container');
-            if(container) {
-                container.innerHTML = `
-                    <input type="text" name="owner_name[]" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="Owner 1 Full Name *" required>
-                    <input type="text" name="owner_name[]" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="Owner 2 Full Name (Optional)">
-                `;
-            }
-        };
-
-        window.closeOwnerRegModal = function() {
-            document.getElementById('owner-reg-modal').classList.add('hidden');
-        };
-
-        window.addOwnerNameField = function() {
-            const container = document.getElementById('owner-names-container');
-            if(!container) return;
-            const count = container.querySelectorAll('input[name="owner_name[]"]').length + 1;
-            const wrapper = document.createElement('div');
-            wrapper.className = 'flex gap-2 items-center';
-            wrapper.innerHTML = `
-                <input type="text" name="owner_name[]" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="Owner ${count} Full Name">
-                <button type="button" onclick="this.parentElement.remove()" class="bg-red-600/80 hover:bg-red-600 text-white px-3 py-2.5 rounded text-xs shadow flex-shrink-0" title="Remove"><i class="fa-solid fa-xmark"></i></button>
-            `;
-            container.appendChild(wrapper);
-        };
-
-        window.handleOwnerRegSubmit = async function(e) {
+        window.handleRegSubmit = async function(e) {
             e.preventDefault();
-            const payment = window.croppedImages['owner_payment'];
-            if(!payment) {
-                showNotice("Please select and crop your ₹1,000 Confirmation Payment Screenshot.", "Missing Payment Screenshot");
-                return;
-            }
-            const decl = document.getElementById('owner-declaration');
-            if(!decl || !decl.checked) {
-                showNotice("Please accept the declaration to abide by all rules and regulations.", "Declaration Required");
-                return;
-            }
-
-            const ownerInputs = document.querySelectorAll('#owner-names-container input[name="owner_name[]"]');
-            const ownersList = [];
-            ownerInputs.forEach(inp => {
-                if(inp.value && inp.value.trim() !== '') ownersList.push(inp.value.trim());
-            });
-
-            if(ownersList.length === 0) {
-                showNotice("Please enter at least one Owner name.", "Missing Owner Name");
+            
+            const photo = window.croppedImages['reg_photo'];
+            const aadhaar = window.croppedImages['reg_aadhaar'];
+            const payment = window.croppedImages['reg_payment'];
+            
+            if(!photo || !aadhaar || !payment) {
+                showNotice("Please make sure you have selected and cropped your Photo, Aadhaar, and Payment Screenshot.", "Missing Documents");
                 return;
             }
 
-            const btn = document.getElementById('owner-reg-submit-btn');
+            const btn = document.getElementById('reg-submit-btn');
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Submitting...';
             btn.disabled = true;
 
-            const ownerData = {
-                isOwnerRegistration: true,
-                franchiseName: document.getElementById('owner-franchise-name').value.trim(),
-                owners: ownersList,
-                phone: document.getElementById('owner-phone').value.trim(),
-                address: document.getElementById('owner-address').value.trim(),
-                declarationAccepted: true,
-                paymentBreakup: '1000 Confirmation Now | 3000 + 8000 = 11000 Before Auction',
+            const skillEl = document.querySelector('input[name="reg-skill"]:checked');
+
+            const regData = {
+                isRegistration: true,
+                name: document.getElementById('reg-name').value,
+                dob: document.getElementById('reg-dob').value,
+                panchayat: document.getElementById('reg-panchayat').value,
+                village: document.getElementById('reg-village').value,
+                phone: document.getElementById('reg-phone').value,
+                skill: skillEl ? skillEl.value : '',
+                photo: photo,
+                aadhaar: aadhaar,
                 payment: payment,
                 status: 'pending',
-                ownerSrNo: null,
+                srNo: null,
                 createdAt: Date.now()
             };
 
             try {
-                await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), ownerData);
-                closeOwnerRegModal();
-                showNotice("Franchise Owner Registration Submitted Successfully! Your ₹1,000 confirmation payment is under verification. You will receive a WhatsApp confirmation from 7980230656 once approved.", "Success");
+                await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), regData);
+                closeRegModal();
+                showNotice("Registration Submitted Successfully! Your profile is pending verification. You will receive a WhatsApp message once approved.", "Success");
             } catch (error) {
-                console.error("Owner Reg Error:", error);
-                // Save to local fallback so submission never fails
-                const fallbackList = getLocalList('owner_registrations', []);
-                ownerData.id = 'LOCAL_OWN_' + Date.now();
-                fallbackList.push(ownerData);
-                setLocalList('owner_registrations', fallbackList);
-                renderOwnerRegistrationsList(fallbackList);
-                closeOwnerRegModal();
-                showNotice("Owner Registration saved! Your profile is pending admin verification.", "Submitted");
+                console.error("Submission Error:", error);
+                showNotice("Database Permission Error: " + error.message + "\n\nAdmin: Please copy the rules from the 'DB Rules Code' tab and paste them into Firebase Console.", "Error");
             } finally {
-                btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i> Submit Owner Registration';
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i> Submit Registration';
                 btn.disabled = false;
             }
         };
 
-        window.approveOwnerRegistration = function(docId, franchiseName, ownersStr, phone) {
-            showConfirmDialog(`Approve Franchise "${franchiseName}" (${ownersStr})? This will assign an official Franchise ID and open WhatsApp confirmation.`, async () => {
+        window.approveRegistration = function(docId, name, phone) {
+            showConfirmDialog(`Approve registration for ${name}? This will assign an SR Number and make them public.`, async () => {
                 try {
+                    // Calculate sequential SR Number starting from 001 (e.g., SR-001, SR-002)
                     let maxSr = 0;
-                    window.allOwnerRegistrations.forEach(r => {
-                        if (r.status === 'approved' && r.ownerSrNo) {
-                            const match = String(r.ownerSrNo).match(/(\d+)/);
+                    window.allRegistrations.forEach(r => {
+                        if (r.status === 'approved' && r.srNo) {
+                            const match = String(r.srNo).match(/(\d+)/);
                             if (match) {
                                 const num = parseInt(match[1], 10);
                                 if (num > maxSr) maxSr = num;
@@ -1446,112 +1286,188 @@ service cloud.firestore {
                         }
                     });
                     const nextNum = maxSr + 1;
-                    const newOwnerSrNo = "FR-" + String(nextNum).padStart(3, '0');
+                    const newSrNo = "SR-" + String(nextNum).padStart(3, '0');
 
-                    if (!String(docId).startsWith('LOCAL_')) {
-                        const regRef = doc(db, 'artifacts', myAppId, 'public', 'data', 'players', docId);
-                        await updateDoc(regRef, {
-                            status: 'approved',
-                            ownerSrNo: newOwnerSrNo
-                        });
-                    } else {
-                        const localList = getLocalList('owner_registrations', []);
-                        const idx = localList.findIndex(x => x.id === docId);
-                        if (idx > -1) {
-                            localList[idx].status = 'approved';
-                            localList[idx].ownerSrNo = newOwnerSrNo;
-                            setLocalList('owner_registrations', localList);
-                            renderOwnerRegistrationsList(localList);
-                        }
-                    }
+                    const regRef = doc(db, 'artifacts', myAppId, 'public', 'data', 'players', docId);
+                    await updateDoc(regRef, {
+                        status: 'approved',
+                        srNo: newSrNo
+                    });
 
-                    const msg = `Hello ${ownersStr}, your Franchise Registration for *${franchiseName}* in SPL Season 6 is APPROVED!%0A%0AFranchise Reg No: *${newOwnerSrNo}*%0AConfirmation Paid: *Rs. 1,000*%0ABalance Before Auction: *Rs. 3,000 + Rs. 8,000 = Rs. 11,000*%0A%0AWelcome to SPL Season 6!%0A- SPL Management (7980230656)`;
+                    const msg = `Hello ${name}, your registration for SPL Season 6 is APPROVED!%0A%0AYour Official SR Number is: *${newSrNo}*.%0A%0ABest of luck for the mega auction!%0A- SPL Management`;
                     const waLink = `https://wa.me/91${phone}?text=${msg}`;
                     
-                    showNotice(`Approved! Franchise assigned ${newOwnerSrNo}. Clicking OK will open WhatsApp to send confirmation.`, 'Approved', () => {
+                    showNotice(`Approved! Player assigned ${newSrNo}. Clicking OK will open WhatsApp to message them.`, 'Approved', () => {
                         window.open(waLink, '_blank');
                     });
                 } catch (err) {
-                    showNotice("Failed to approve: " + err.message, "Error");
+                    showNotice("Failed to approve. " + err.message, "Error");
                 }
             });
         };
 
-        window.deleteOwnerRegistration = function(id) {
-            showConfirmDialog("Are you sure you want to delete this owner registration?", async () => {
-                if (String(id).startsWith('LOCAL_')) {
-                    const localList = getLocalList('owner_registrations', []).filter(x => x.id !== id);
-                    setLocalList('owner_registrations', localList);
-                    renderOwnerRegistrationsList(localList);
-                    return;
-                }
+        window.deleteRegistration = function(id) {
+            showConfirmDialog("Are you sure you want to completely delete this registration?", async () => {
                 try {
                     await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'players', id));
-                } catch(e) {}
+                } catch(e) { }
             });
         };
 
-        function renderOwnerRegistrationsList(regs) {
-            window.allOwnerRegistrations = regs;
-            const pendingContainer = document.getElementById('admin-owner-regs-pending');
-            const approvedContainer = document.getElementById('admin-owner-regs-approved');
+        window.editAdminRegistration = function(id) {
+            const reg = window.allRegistrations.find(r => r.id === id);
+            if(!reg) return;
+            
+            document.getElementById('edit-reg-id').value = reg.id;
+            document.getElementById('edit-reg-name').value = reg.name || '';
+            document.getElementById('edit-reg-dob').value = reg.dob || '';
+            document.getElementById('edit-reg-panchayat').value = reg.panchayat || '';
+            document.getElementById('edit-reg-village').value = reg.village || '';
+            document.getElementById('edit-reg-phone').value = reg.phone || '';
+            document.getElementById('edit-reg-skill').value = reg.skill || 'Batsman';
+            document.getElementById('edit-reg-status').value = reg.status || 'pending';
+            document.getElementById('edit-reg-srNo').value = reg.srNo || '';
+            
+            document.getElementById('admin-edit-reg-modal').classList.remove('hidden');
+        };
+
+        window.closeAdminEditRegModal = function() {
+            document.getElementById('admin-edit-reg-modal').classList.add('hidden');
+        };
+
+        window.handleAdminEditRegSubmit = async function(e) {
+            e.preventDefault();
+            const id = document.getElementById('edit-reg-id').value;
+            const name = document.getElementById('edit-reg-name').value;
+            const dob = document.getElementById('edit-reg-dob').value;
+            const panchayat = document.getElementById('edit-reg-panchayat').value;
+            const village = document.getElementById('edit-reg-village').value;
+            const phone = document.getElementById('edit-reg-phone').value;
+            const skill = document.getElementById('edit-reg-skill').value;
+            const status = document.getElementById('edit-reg-status').value;
+            const srNo = document.getElementById('edit-reg-srNo').value;
+            
+            try {
+                await updateDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'players', id), {
+                    name, dob, panchayat, village, phone, skill, status, srNo
+                });
+                window.closeAdminEditRegModal();
+                showNotice('Registration details updated successfully!', 'Updated');
+            } catch(err) {
+                showNotice('Failed to update: ' + err.message, 'Error');
+            }
+        };
+
+        function loadRegistrations(local = false) {
+            const localRegs = getLocalList('registrations', []);
+            renderRegistrationsList(localRegs);
+            if(local || !db) return;
+
+            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), (snap) => {
+                const mergedMap = new Map();
+                getLocalList('registrations', []).forEach(r => mergedMap.set(r.id, r));
+                snap.forEach(d => {
+                    const data = { id: d.id, ...d.data() };
+                    if(data.isRegistration) mergedMap.set(data.id, data);
+                });
+                const combined = Array.from(mergedMap.values());
+                setLocalList('registrations', combined);
+                renderRegistrationsList(combined);
+            }, (error) => {
+                console.warn("Registrations cloud sync fallback active:", error);
+                renderRegistrationsList(getLocalList('registrations', []));
+            });
+        }
+
+        function renderRegistrationsList(regs) {
+            window.allRegistrations = regs;
+            const pendingContainer = document.getElementById('admin-registrations-pending');
+            const approvedContainer = document.getElementById('admin-registrations-approved');
+            const publicAuctionGrid = document.getElementById('public-auction-grid');
 
             const pending = regs.filter(r => r.status !== 'approved').sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
             const approved = regs.filter(r => r.status === 'approved').sort((a,b) => {
-                const numA = parseInt(String(a.ownerSrNo || '0').replace(/\D/g, ''), 10) || 0;
-                const numB = parseInt(String(b.ownerSrNo || '0').replace(/\D/g, ''), 10) || 0;
+                const numA = parseInt(String(a.srNo || '0').replace(/\D/g, ''), 10) || 0;
+                const numB = parseInt(String(b.srNo || '0').replace(/\D/g, ''), 10) || 0;
                 return numA - numB;
             });
 
             if (pendingContainer && window.isAdmin) {
                 if (pending.length === 0) {
-                    pendingContainer.innerHTML = `<p class="text-gray-500 text-sm col-span-full">No pending owner registrations.</p>`;
+                    pendingContainer.innerHTML = `<p class="text-gray-500 text-sm col-span-full">No pending registrations.</p>`;
                 } else {
-                    pendingContainer.innerHTML = pending.map(r => {
-                        const ownersStr = Array.isArray(r.owners) ? r.owners.join(', ') : (r.owners || '');
-                        return `
-                        <div class="bg-premium-800 border border-orange-500/60 rounded-xl p-4 shadow-lg flex flex-col gap-3">
-                            <div>
-                                <span class="bg-orange-600/30 text-orange-300 border border-orange-500/40 text-[10px] font-bold px-2 py-0.5 rounded uppercase">Franchise Request</span>
-                                <h4 class="font-oswald font-bold text-spl-gold text-xl mt-1">${r.franchiseName || 'Unnamed Franchise'}</h4>
-                                <p class="text-xs text-white font-semibold mt-1"><i class="fa-solid fa-users text-spl-gold mr-1"></i> Owners: ${ownersStr}</p>
-                                <p class="text-xs text-gray-300 mt-1"><i class="fa-solid fa-location-dot text-spl-red mr-1"></i> ${r.address || ''}</p>
-                                <p class="text-xs text-gray-400 mt-1">📞 ${r.phone || ''} | ✅ Rules Accepted</p>
-                                <p class="text-[11px] text-green-400 font-bold mt-1">Breakup: ₹1,000 Now | ₹3,000 + ₹8,000 = ₹11,000 Before Auction</p>
+                    pendingContainer.innerHTML = pending.map(r => `
+                        <div class="bg-premium-800 border border-premium-700 rounded-xl p-4 shadow-lg flex flex-col gap-3">
+                            <div class="flex items-center gap-3">
+                                <img src="${r.photo || ''}" class="w-16 h-16 rounded-full object-cover border-2 border-spl-gold bg-premium-950">
+                                <div>
+                                    <h4 class="font-bold text-white text-lg leading-tight">${r.name}</h4>
+                                    <p class="text-xs text-spl-gold font-bold uppercase">${r.skill} • ${r.village}</p>
+                                    <p class="text-xs text-gray-300">Panchayat: ${r.panchayat}</p>
+                                    <p class="text-xs text-gray-400">DOB: ${r.dob} | 📞 ${r.phone}</p>
+                                </div>
                             </div>
-                            <div class="text-center text-xs">
+                            <div class="grid grid-cols-2 gap-2 text-center text-xs">
+                                <a href="${r.aadhaar || '#'}" target="_blank" class="bg-premium-950 p-2 rounded border border-premium-700 hover:border-spl-gold text-gray-300 block">
+                                    <img src="${r.aadhaar || ''}" class="h-16 w-full object-contain mb-1 rounded">Aadhaar
+                                </a>
                                 <a href="${r.payment || '#'}" target="_blank" class="bg-premium-950 p-2 rounded border border-premium-700 hover:border-spl-gold text-gray-300 block">
-                                    <img src="${r.payment || ''}" class="h-24 w-full object-contain mb-1 rounded">₹1,000 Payment Screenshot
+                                    <img src="${r.payment || ''}" class="h-16 w-full object-contain mb-1 rounded">Payment SS
                                 </a>
                             </div>
                             <div class="flex gap-2 mt-auto pt-2 border-t border-premium-700">
-                                <button onclick="approveOwnerRegistration('${r.id}', '${(r.franchiseName||'').replace(/'/g, "\\'")}', '${ownersStr.replace(/'/g, "\\'")}', '${r.phone||''}')" class="flex-1 bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded text-xs uppercase shadow"><i class="fa-solid fa-check mr-1"></i> Approve Owner</button>
-                                <button onclick="deleteOwnerRegistration('${r.id}')" class="bg-red-600 hover:bg-red-500 text-white px-3 py-2 rounded text-xs shadow"><i class="fa-solid fa-trash"></i></button>
+                                <button onclick="approveRegistration('${r.id}', '${(r.name||'').replace(/'/g, "\\'")}', '${r.phone||''}')" class="flex-1 bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded text-xs uppercase shadow"><i class="fa-solid fa-check mr-1"></i> Approve</button>
+                                <button onclick="editAdminRegistration('${r.id}')" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded text-xs shadow"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="deleteRegistration('${r.id}')" class="bg-red-600 hover:bg-red-500 text-white px-3 py-2 rounded text-xs shadow"><i class="fa-solid fa-trash"></i></button>
                             </div>
                         </div>
-                        `;
-                    }).join('');
+                    `).join('');
                 }
             }
 
             if (approvedContainer && window.isAdmin) {
                 if (approved.length === 0) {
-                    approvedContainer.innerHTML = `<p class="text-gray-500 text-sm col-span-full">No approved franchise owners yet.</p>`;
+                    approvedContainer.innerHTML = `<p class="text-gray-500 text-sm col-span-full">No approved players yet.</p>`;
                 } else {
-                    approvedContainer.innerHTML = approved.map(r => {
-                        const ownersStr = Array.isArray(r.owners) ? r.owners.join(', ') : (r.owners || '');
-                        return `
+                    approvedContainer.innerHTML = approved.map(r => `
                         <div class="bg-premium-800 border border-green-600/50 rounded-xl p-4 shadow-lg flex items-center justify-between gap-3">
-                            <div>
-                                <span class="bg-spl-gold text-premium-950 text-[10px] font-extrabold px-2 py-0.5 rounded uppercase">${r.ownerSrNo || 'FR-001'}</span>
-                                <h4 class="font-oswald font-bold text-white text-lg mt-0.5">${r.franchiseName}</h4>
-                                <p class="text-xs text-spl-gold font-semibold">Owners: ${ownersStr}</p>
-                                <p class="text-[11px] text-gray-400">${r.address} | 📞 ${r.phone}</p>
+                            <div class="flex items-center gap-3">
+                                <img src="${r.photo || ''}" class="w-12 h-12 rounded-full object-cover border border-spl-gold">
+                                <div>
+                                    <span class="bg-spl-gold text-premium-950 text-[10px] font-extrabold px-2 py-0.5 rounded uppercase">${r.srNo || 'SR-001'}</span>
+                                    <h4 class="font-bold text-white text-sm mt-0.5">${r.name}</h4>
+                                    <p class="text-[11px] text-gray-400">${r.skill} • ${r.village}</p>
+                                </div>
                             </div>
-                            <button onclick="deleteOwnerRegistration('${r.id}')" class="bg-red-600 hover:bg-red-500 text-white w-8 h-8 rounded text-xs shadow flex-shrink-0"><i class="fa-solid fa-trash"></i></button>
+                            <div class="flex gap-1.5">
+                                <button onclick="editAdminRegistration('${r.id}')" class="bg-blue-600 hover:bg-blue-500 text-white w-8 h-8 rounded text-xs shadow"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="deleteRegistration('${r.id}')" class="bg-red-600 hover:bg-red-500 text-white w-8 h-8 rounded text-xs shadow"><i class="fa-solid fa-trash"></i></button>
+                            </div>
                         </div>
-                        `;
-                    }).join('');
+                    `).join('');
+                }
+            }
+
+            if (publicAuctionGrid) {
+                if (approved.length === 0) {
+                    publicAuctionGrid.innerHTML = `
+                        <div class="col-span-full w-full text-center py-8">
+                            <p class="text-gray-500 font-bold tracking-widest uppercase text-sm">Registrations are opening soon...</p>
+                        </div>
+                    `;
+                } else {
+                    publicAuctionGrid.innerHTML = approved.map(r => `
+                        <div class="bg-premium-900 border border-premium-700 hover:border-spl-gold rounded-xl p-4 text-center shadow-xl transition group relative overflow-hidden">
+                            <div class="absolute top-2 right-2 bg-spl-gold text-premium-950 font-oswald font-bold text-xs px-2.5 py-0.5 rounded shadow">${r.srNo || 'SR-001'}</div>
+                            <div class="w-20 h-20 rounded-full mx-auto mb-3 border-2 border-spl-gold overflow-hidden bg-premium-950 shadow-inner">
+                                <img src="${r.photo || ''}" alt="${r.name}" class="w-full h-full object-cover">
+                            </div>
+                            <h3 class="font-oswald text-xl font-bold text-white leading-tight mb-1 truncate">${r.name}</h3>
+                            <p class="text-[11px] text-spl-gold font-bold uppercase tracking-wider bg-premium-950 inline-block px-2.5 py-0.5 rounded-full border border-premium-700 mb-2">${r.skill}</p>
+                            <p class="text-xs text-gray-300 font-medium truncate"><i class="fa-solid fa-location-dot text-spl-red mr-1"></i>${r.village}</p>
+                            <p class="text-[10px] text-gray-400 uppercase tracking-wider mt-0.5 truncate">${r.panchayat}</p>
+                        </div>
+                    `).join('');
                 }
             }
         }
@@ -1697,33 +1613,33 @@ service cloud.firestore {
                 await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'sponsors', 'SYSTEM_PAYMENT_QR'), {
                     id: 'SYSTEM_PAYMENT_QR',
                     name: 'System Payment QR',
-        function loadRegistrations(local = false) {
-            const localRegs = getLocalList('registrations', []);
-            const localOwners = getLocalList('owner_registrations', []);
-            renderRegistrationsList(localRegs);
-            renderOwnerRegistrationsList(localOwners);
-            if(local || !db) return;
-
-            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), (snap) => {
-                const mergedMap = new Map();
-                const ownerMap = new Map();
-                getLocalList('registrations', []).forEach(r => mergedMap.set(r.id, r));
-                getLocalList('owner_registrations', []).forEach(r => ownerMap.set(r.id, r));
-                snap.forEach(d => {
-                    const data = { id: d.id, ...d.data() };
-                    if(data.isRegistration) mergedMap.set(data.id, data);
-                    if(data.isOwnerRegistration) ownerMap.set(data.id, data);
+                    type: 'system_qr',
+                    logo: base64Url,
+                    createdAt: Date.now()
                 });
-                const combined = Array.from(mergedMap.values());
-                const combinedOwners = Array.from(ownerMap.values());
-                setLocalList('registrations', combined);
-                setLocalList('owner_registrations', combinedOwners);
-                renderRegistrationsList(combined);
-                renderOwnerRegistrationsList(combinedOwners);
+                window.clearCropPreview('payment_qr');
+                document.getElementById('qr-image-file').value = '';
+                showNotice('Payment QR Code updated successfully!', 'Success');
+            } catch(err) { 
+                window.clearCropPreview('payment_qr');
+                document.getElementById('qr-image-file').value = '';
+                showNotice('Saved locally on this browser, but Firebase blocked cloud sync (' + err.message + ').\n\nOpen the "DB Rules Code" tab in Admin Dashboard to copy the exact rules for Firebase Console.', 'Saved Locally'); 
+            }
+        };
+
+        function loadSettings(local = false) {
+            const cachedQr = localStorage.getItem('spl_payment_qr_backup');
+            if(cachedQr) applyQrToUI(cachedQr);
+            if(local) return;
+            
+            onSnapshot(doc(db, 'artifacts', myAppId, 'public', 'data', 'sponsors', 'SYSTEM_PAYMENT_QR'), (docSnap) => {
+                if(docSnap.exists() && docSnap.data().logo) {
+                    applyQrToUI(docSnap.data().logo);
+                } else if(!cachedQr) {
+                    applyQrToUI(null);
+                }
             }, (error) => {
-                console.warn("Registrations cloud sync fallback active:", error);
-                renderRegistrationsList(getLocalList('registrations', []));
-                renderOwnerRegistrationsList(getLocalList('owner_registrations', []));
+                console.warn("QR listener error:", error);
             });
         }
 
@@ -1744,27 +1660,27 @@ service cloud.firestore {
             try {
                 await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'polls'), pollData);
                 document.getElementById('add-poll-form').reset();
-        window.switchAdminTab = function(tabName) {
-            ['registrations', 'owner_regs', 'seasons', 'teams', 'players', 'fanzone', 'gallery', 'video', 'texts', 'sponsors', 'partners', 'rules'].forEach(t => {
-                document.getElementById(`admin-tab-${t}`)?.classList.add('hidden');
-                const btn = document.getElementById(`tab-btn-${t}`);
-                if(btn) {
-                    if(t === 'registrations') {
-                        btn.className = 'px-4 py-2 bg-spl-red text-white font-bold rounded uppercase text-sm animate-pulse border border-transparent hover:border-red-400';
-                    } else if(t === 'owner_regs') {
-                        btn.className = 'px-4 py-2 bg-orange-600 text-white font-bold rounded uppercase text-sm animate-pulse border border-transparent hover:border-orange-400';
-                    } else if(t === 'rules') {
-                        btn.className = 'px-4 py-2 bg-green-700 text-white hover:bg-green-600 font-bold rounded uppercase text-sm border border-transparent';
-                    } else {
-                        btn.className = 'px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700';
-                    }
-                }
+                showNotice('Poll published to Fan Zone!', 'Success');
+            } catch(err) { showNotice('Error publishing poll', 'Error'); }
+        };
+
+        window.deletePoll = function(id) {
+            showConfirmDialog('Delete this poll?', async () => {
+                try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'polls', id)); } catch(e) {}
             });
-            document.getElementById(`admin-tab-${tabName}`).classList.remove('hidden');
-            const targetBtn = document.getElementById(`tab-btn-${tabName}`);
-            if(targetBtn) {
-                if(tabName === 'registrations' || tabName === 'owner_regs') targetBtn.classList.remove('animate-pulse');
-                targetBtn.className = 'px-4 py-2 bg-spl-gold text-premium-950 font-bold rounded uppercase text-sm shadow-lg';
+        };
+
+        window.submitVote = async function(pollId, optionIndex) {
+            if(localStorage.getItem('spl_voted_' + pollId)) {
+                showNotice('You have already voted on this poll! Thanks for participating.', 'Already Voted');
+                return;
+            }
+            try {
+                const pollRef = doc(db, 'artifacts', myAppId, 'public', 'data', 'polls', pollId);
+                await updateDoc(pollRef, { [`val${optionIndex}`]: increment(1) });
+                localStorage.setItem('spl_voted_' + pollId, 'true');
+            } catch(e) {
+                showNotice("Couldn't submit vote at this time.", "Error");
             }
         };
 
@@ -2150,29 +2066,29 @@ service cloud.firestore {
                             </div>
                         </div>
                     `;
-        // --- SETTINGS / QR LOGIC ---
-        function applyQrToUI(url) {
-            const pubQr = document.getElementById('public-payment-qr');
-            const pubFallback = document.getElementById('public-payment-qr-fallback');
-            const pubOwnerQr = document.getElementById('public-owner-payment-qr');
-            const pubOwnerFallback = document.getElementById('public-owner-payment-qr-fallback');
-            const adminQr = document.getElementById('admin-current-qr');
-            const adminFallback = document.getElementById('admin-current-qr-fallback');
-            
-            if(url) {
-                if(pubQr) { pubQr.src = url; pubQr.classList.remove('hidden'); }
-                if(pubFallback) pubFallback.classList.add('hidden');
-                if(pubOwnerQr) { pubOwnerQr.src = url; pubOwnerQr.classList.remove('hidden'); }
-                if(pubOwnerFallback) pubOwnerFallback.classList.add('hidden');
-                if(adminQr) { adminQr.src = url; adminQr.classList.remove('hidden'); }
-                if(adminFallback) adminFallback.classList.add('hidden');
-            } else {
-                if(pubQr) pubQr.classList.add('hidden');
-                if(pubFallback) pubFallback.classList.remove('hidden');
-                if(pubOwnerQr) pubOwnerQr.classList.add('hidden');
-                if(pubOwnerFallback) pubOwnerFallback.classList.remove('hidden');
-                if(adminQr) adminQr.classList.add('hidden');
-                if(adminFallback) adminFallback.classList.remove('hidden');
+                });
+            }
+
+            if(track) {
+                track.innerHTML = '';
+                totalTeams = teams.length;
+                teams.forEach(t => {
+                    const fallbackLogo = `<div class="font-oswald text-4xl font-bold text-white mb-2 drop-shadow-md">${t.id}</div><p class="text-sm font-bold uppercase tracking-wider text-center text-white drop-shadow-md bg-premium-950/60 px-2 py-1 rounded w-full line-clamp-1">${t.name}</p>`;
+                    const logoContent = t.logo ? `<img src="${t.logo}" alt="${t.name}" class="w-full h-full object-contain drop-shadow-2xl z-10 p-4">` : fallbackLogo;
+                    
+                    track.innerHTML += `
+                        <div class="w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] flex-shrink-0 group relative cursor-pointer mx-auto">
+                            <div class="aspect-square bg-gradient-to-br ${t.color} rounded-2xl flex flex-col items-center justify-center border-2 border-premium-700 shadow-[0_0_15px_rgba(0,0,0,0.5)] group-hover:scale-105 group-hover:border-spl-gold transition-all duration-300 relative overflow-hidden">
+                                <div class="absolute inset-0 bg-premium-950/20 group-hover:bg-transparent transition-colors z-0"></div>
+                                ${logoContent}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                currTeamIndex = 0;
+                updateTeamSlider();
+                resetTeamAutoScroll();
             }
         }
 
@@ -2256,7 +2172,7 @@ service cloud.firestore {
                 let players = [];
                 snap.forEach(d => {
                     const data = d.data();
-                    if(!data.isRegistration && !data.isOwnerRegistration) {
+                    if(!data.isRegistration) {
                         players.push({ id: d.id, ...data });
                     }
                 });
