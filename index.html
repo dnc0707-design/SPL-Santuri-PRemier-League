@@ -1038,13 +1038,19 @@
 
         window.applyCrop = function() {
             if (!cropperInstance) return;
+            
+            // Apply aggressive compression for registration docs to avoid 1MB DB limit
+            let isReg = currentCropType.startsWith('reg_');
+            let maxDim = isReg ? 600 : 1000;
+            let quality = isReg ? 0.6 : 0.85;
+
             const canvas = cropperInstance.getCroppedCanvas({
-                maxWidth: 1000, maxHeight: 1000,
-                imageSmoothingEnabled: true, imageSmoothingQuality: 'high', fillColor: 'transparent',
+                maxWidth: maxDim, maxHeight: maxDim,
+                imageSmoothingEnabled: true, imageSmoothingQuality: 'medium', fillColor: 'transparent',
             });
             let base64Url = (currentCropType === 'team' || currentCropType === 'sponsor' || currentCropType === 'partner' || currentCropType === 'payment_qr') 
                             ? canvas.toDataURL('image/png') 
-                            : canvas.toDataURL('image/jpeg', 0.85); 
+                            : canvas.toDataURL('image/jpeg', quality); 
             
             window.croppedImages[currentCropType] = base64Url;
             const previewImg = document.getElementById('preview-' + currentCropType);
@@ -1169,7 +1175,8 @@
                 closeRegModal();
                 alert("Registration Submitted Successfully! Your profile is pending verification. You will receive a WhatsApp message once approved.");
             } catch (error) {
-                alert("Error submitting registration. Please try again.");
+                console.error("Submission Error:", error);
+                alert("Error submitting registration: " + error.message + ".\n\nTip: Try taking a screenshot of your document and uploading the screenshot to reduce size further.");
             } finally {
                 btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i> Submit Registration';
                 btn.disabled = false;
@@ -1360,6 +1367,9 @@
                         });
                     }
                 }
+            }, (error) => {
+                console.warn("Registrations listener error:", error);
+                if(publicGrid) publicGrid.innerHTML = `<div class="col-span-full w-full text-center py-8"><p class="text-gray-500 font-bold tracking-widest uppercase text-sm">Registrations temporarily unavailable.</p></div>`;
             });
         }
 
@@ -1443,8 +1453,14 @@
                 db = getFirestore(app);
                 
                 onAuthStateChanged(auth, (user) => {
-                    if(!user) signInAnonymously(auth).catch(e => console.warn(e));
-                    loadAllData();
+                    if (user) {
+                        loadAllData();
+                    } else {
+                        signInAnonymously(auth).catch(e => {
+                            console.warn("Auth failed", e);
+                            loadAllData(true);
+                        });
+                    }
                 });
             } catch(e) {
                 console.warn("Offline mode", e);
@@ -1496,6 +1512,8 @@
                     if(adminQr) adminQr.classList.add('hidden');
                     if(adminFallback) adminFallback.classList.remove('hidden');
                 }
+            }, (error) => {
+                console.warn("Settings listener error:", error);
             });
         }
 
