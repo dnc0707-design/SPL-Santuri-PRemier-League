@@ -1157,6 +1157,7 @@
             const skillEl = document.querySelector('input[name="reg-skill"]:checked');
 
             const regData = {
+                isRegistration: true,
                 name: document.getElementById('reg-name').value,
                 dob: document.getElementById('reg-dob').value,
                 panchayat: document.getElementById('reg-panchayat').value,
@@ -1172,12 +1173,12 @@
             };
 
             try {
-                await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'player_registrations'), regData);
+                await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), regData);
                 closeRegModal();
                 alert("Registration Submitted Successfully! Your profile is pending verification. You will receive a WhatsApp message once approved.");
             } catch (error) {
                 console.error("Submission Error:", error);
-                alert("Error submitting registration: " + error.message + ".\n\nTip: Try taking a screenshot of your document and uploading the screenshot to reduce size further.");
+                alert("Database Permission Error: " + error.message + "\n\nAdmin: Please update your Firebase Firestore Rules to 'allow read, write: if true;' in the Firebase Console.");
             } finally {
                 btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i> Submit Registration';
                 btn.disabled = false;
@@ -1188,13 +1189,10 @@
             if(!confirm(`Approve registration for ${name}? This will assign an SR Number and make them public.`)) return;
             
             try {
-                // Using a simpler approach: get count from DOM or global array
-                const srCounterRef = doc(db, 'artifacts', myAppId, 'public', 'data', 'settings', 'sr_counter');
-                
-                // For safety in this environment, generating a random 3 digit SR number if counter fails, or using timestamp digits
+                // Generating a 3 digit SR number
                 const newSrNo = "SR-" + Math.floor(100 + Math.random() * 900);
 
-                const regRef = doc(db, 'artifacts', myAppId, 'public', 'data', 'player_registrations', docId);
+                const regRef = doc(db, 'artifacts', myAppId, 'public', 'data', 'players', docId);
                 await updateDoc(regRef, {
                     status: 'approved',
                     srNo: newSrNo
@@ -1215,7 +1213,7 @@
         window.deleteRegistration = async function(id) {
             if(!confirm("Are you sure you want to completely delete this registration?")) return;
             try {
-                await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'player_registrations', id));
+                await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'players', id));
             } catch(e) { }
         };
 
@@ -1253,7 +1251,7 @@
             const srNo = document.getElementById('edit-reg-srNo').value;
             
             try {
-                await updateDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'player_registrations', id), {
+                await updateDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'players', id), {
                     name, dob, panchayat, village, phone, skill, status, srNo
                 });
                 window.closeAdminEditRegModal();
@@ -1275,13 +1273,14 @@
                 return;
             }
 
-            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'player_registrations'), (snap) => {
+            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), (snap) => {
                 window.allRegistrations = []; // Reset the cache array
                 let pending = [];
                 let approved = [];
                 
                 snap.forEach(d => {
                     const data = { id: d.id, ...d.data() };
+                    if(!data.isRegistration) return; // Skip regular legendary players
                     window.allRegistrations.push(data); // Store in cache for editing function
                     if(data.status === 'approved') approved.push(data);
                     else pending.push(data);
@@ -1477,6 +1476,25 @@
         }
 
         // --- SETTINGS / QR LOGIC ---
+        function applyQrToUI(url) {
+            const pubQr = document.getElementById('public-payment-qr');
+            const pubFallback = document.getElementById('public-payment-qr-fallback');
+            const adminQr = document.getElementById('admin-current-qr');
+            const adminFallback = document.getElementById('admin-current-qr-fallback');
+            
+            if(url) {
+                if(pubQr) { pubQr.src = url; pubQr.classList.remove('hidden'); }
+                if(pubFallback) pubFallback.classList.add('hidden');
+                if(adminQr) { adminQr.src = url; adminQr.classList.remove('hidden'); }
+                if(adminFallback) adminFallback.classList.add('hidden');
+            } else {
+                if(pubQr) pubQr.classList.add('hidden');
+                if(pubFallback) pubFallback.classList.remove('hidden');
+                if(adminQr) adminQr.classList.add('hidden');
+                if(adminFallback) adminFallback.classList.remove('hidden');
+            }
+        }
+
         window.handleQrSubmit = async function(e) {
             e.preventDefault();
             if(!window.isAdmin) return;
@@ -1485,38 +1503,42 @@
                 alert("Please select and crop a QR code image.");
                 return;
             }
+            
+            // Always save to local storage as immediate fallback
+            localStorage.setItem('spl_payment_qr_backup', base64Url);
+            applyQrToUI(base64Url);
+
             try {
-                await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'settings', 'payment_qr'), { url: base64Url });
+                await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'sponsors', 'SYSTEM_PAYMENT_QR'), {
+                    id: 'SYSTEM_PAYMENT_QR',
+                    name: 'System Payment QR',
+                    type: 'system_qr',
+                    logo: base64Url,
+                    createdAt: Date.now()
+                });
                 window.clearCropPreview('payment_qr');
                 document.getElementById('qr-image-file').value = '';
                 alert('Payment QR Code updated successfully!');
             } catch(err) { 
-                alert('Error updating QR code: ' + err.message + '\n\nTry cropping the image slightly smaller.'); 
+                window.clearCropPreview('payment_qr');
+                document.getElementById('qr-image-file').value = '';
+                alert('Saved locally on this browser, but Firebase blocked cloud sync (' + err.message + ').\n\nTo make it visible on all devices, please open your Firebase Console -> Firestore Database -> Rules, and set: allow read, write: if true;'); 
             }
         };
 
         function loadSettings(local = false) {
+            const cachedQr = localStorage.getItem('spl_payment_qr_backup');
+            if(cachedQr) applyQrToUI(cachedQr);
             if(local) return;
-            onSnapshot(doc(db, 'artifacts', myAppId, 'public', 'data', 'settings', 'payment_qr'), (docSnap) => {
-                const pubQr = document.getElementById('public-payment-qr');
-                const pubFallback = document.getElementById('public-payment-qr-fallback');
-                const adminQr = document.getElementById('admin-current-qr');
-                const adminFallback = document.getElementById('admin-current-qr-fallback');
-                
-                if(docSnap.exists() && docSnap.data().url) {
-                    const url = docSnap.data().url;
-                    if(pubQr) { pubQr.src = url; pubQr.classList.remove('hidden'); }
-                    if(pubFallback) pubFallback.classList.add('hidden');
-                    if(adminQr) { adminQr.src = url; adminQr.classList.remove('hidden'); }
-                    if(adminFallback) adminFallback.classList.add('hidden');
-                } else {
-                    if(pubQr) pubQr.classList.add('hidden');
-                    if(pubFallback) pubFallback.classList.remove('hidden');
-                    if(adminQr) adminQr.classList.add('hidden');
-                    if(adminFallback) adminFallback.classList.remove('hidden');
+            
+            onSnapshot(doc(db, 'artifacts', myAppId, 'public', 'data', 'sponsors', 'SYSTEM_PAYMENT_QR'), (docSnap) => {
+                if(docSnap.exists() && docSnap.data().logo) {
+                    applyQrToUI(docSnap.data().logo);
+                } else if(!cachedQr) {
+                    applyQrToUI(null);
                 }
             }, (error) => {
-                console.warn("Settings listener error:", error);
+                console.warn("QR listener error:", error);
             });
         }
 
@@ -2039,7 +2061,12 @@
 
             onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), (snap) => {
                 let players = [];
-                snap.forEach(d => players.push({ id: d.id, ...d.data() }));
+                snap.forEach(d => {
+                    const data = d.data();
+                    if(!data.isRegistration) {
+                        players.push({ id: d.id, ...data });
+                    }
+                });
                 if(players.length === 0) {
                     defaultPlayers.forEach(p => addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), p));
                     return;
@@ -2355,7 +2382,14 @@
 
             onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'sponsors'), (snap) => {
                 let sponsors = [];
-                snap.forEach(d => sponsors.push(d.data()));
+                snap.forEach(d => {
+                    const data = d.data();
+                    if(data.type === 'system_qr') {
+                        applyQrToUI(data.logo);
+                    } else {
+                        sponsors.push(data);
+                    }
+                });
                 
                 if(sponsors.length === 0) {
                     defaultSponsors.forEach(s => setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'sponsors', s.id), s));
