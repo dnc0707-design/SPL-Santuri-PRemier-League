@@ -93,13 +93,13 @@
                 <!-- Desktop Nav -->
                 <nav class="hidden lg:flex items-center gap-3 xl:gap-5 font-oswald text-[13px] xl:text-base tracking-wide uppercase">
                     <a href="#" class="nav-link active text-spl-gold">Home</a>
-                    <a href="#about" class="nav-link hover:text-spl-gold transition-colors">About Us</a>
-                    <a href="#seasons" class="nav-link hover:text-spl-gold transition-colors">Seasons</a>
-                    <a href="#teams" class="nav-link hover:text-spl-gold transition-colors">Teams</a>
-                    <a href="#players" class="nav-link hover:text-spl-gold transition-colors">Players</a>
+                    <a href="#teams" class="nav-link hover:text-spl-gold transition-colors">Franchises</a>
                     <a href="#auction-pool" class="nav-link hover:text-spl-gold transition-colors">Auction Pool</a>
                     <a href="#fanzone" class="nav-link hover:text-spl-gold transition-colors">Fan Zone</a>
                     <a href="#gallery" class="nav-link hover:text-spl-gold transition-colors">Gallery</a>
+                    <a href="#about" class="nav-link hover:text-spl-gold transition-colors">About Us</a>
+                    <a href="#seasons" class="nav-link hover:text-spl-gold transition-colors">Seasons</a>
+                    <a href="#players" class="nav-link hover:text-spl-gold transition-colors">Players</a>
                     <a href="#sponsors" class="nav-link hover:text-spl-gold transition-colors">Sponsors</a>
                     <a href="#partners" class="nav-link hover:text-spl-gold transition-colors">Partners</a>
                     <button type="button" onclick="openRegModal(event)" class="bg-spl-gold/10 text-spl-gold font-bold px-3 py-1 rounded hover:bg-spl-gold hover:text-premium-950 transition-colors shadow-[0_0_10px_rgba(244,176,54,0.3)]">Player Reg.</button>
@@ -122,13 +122,13 @@
         <div id="mobile-menu" class="hidden lg:hidden bg-premium-900 border-t border-premium-700/60 shadow-xl">
             <nav class="flex flex-col px-4 py-4 font-oswald text-lg uppercase tracking-wide">
                 <a href="#" class="py-3 border-b border-premium-800 text-spl-gold">Home</a>
-                <a href="#about" class="py-3 border-b border-premium-800 hover:text-spl-gold transition-colors">About Us</a>
-                <a href="#seasons" class="py-3 border-b border-premium-800 hover:text-spl-gold transition-colors">Seasons</a>
-                <a href="#teams" class="py-3 border-b border-premium-800 hover:text-spl-gold transition-colors">Teams</a>
-                <a href="#players" class="py-3 border-b border-premium-800 hover:text-spl-gold transition-colors">Players</a>
+                <a href="#teams" class="py-3 border-b border-premium-800 hover:text-spl-gold transition-colors">Franchises</a>
                 <a href="#auction-pool" class="py-3 border-b border-premium-800 hover:text-spl-gold transition-colors">Auction Pool</a>
                 <a href="#fanzone" class="py-3 border-b border-premium-800 hover:text-spl-gold transition-colors">Fan Zone</a>
                 <a href="#gallery" class="py-3 border-b border-premium-800 hover:text-spl-gold transition-colors">Gallery</a>
+                <a href="#about" class="py-3 border-b border-premium-800 hover:text-spl-gold transition-colors">About Us</a>
+                <a href="#seasons" class="py-3 border-b border-premium-800 hover:text-spl-gold transition-colors">Seasons</a>
+                <a href="#players" class="py-3 border-b border-premium-800 hover:text-spl-gold transition-colors">Players</a>
                 <a href="#sponsors" class="py-3 border-b border-premium-800 hover:text-spl-gold transition-colors">Sponsors</a>
                 <a href="#partners" class="py-3 border-b border-premium-800 hover:text-spl-gold transition-colors">Partners</a>
                 <button type="button" onclick="openRegModal(event)" class="py-3 border-b border-premium-800 text-left text-spl-gold font-bold hover:text-white transition-colors"><i class="fa-solid fa-user-plus mr-2"></i> Player Registration</button>
@@ -192,6 +192,73 @@
                     </h2>
                     <p class="text-gray-300 text-base md:text-lg font-medium max-w-2xl mx-auto">Click here to review the official rules, player eligibility, and franchise guidelines for the upcoming Santuri Premier League mega auction and tournament.</p>
                     <button class="mt-6 bg-spl-gold text-premium-950 font-oswald font-bold px-8 py-3 uppercase tracking-widest rounded hover:bg-spl-goldHover transition shadow-lg text-lg">View Rulebook</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Teams Showcase Slider -->
+        <section id="teams" class="bg-premium-950 border-b border-premium-700/50 py-24 scroll-mt-20">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row md:justify-between items-start md:items-center mb-12 gap-4 text-center md:text-left">
+                    <h2 class="font-oswald text-4xl md:text-5xl font-bold uppercase tracking-wide relative inline-block text-white">
+                        Season 6 <span class="text-spl-gold">Franchises</span>
+                        <div class="w-3/4 h-1 bg-spl-gold mt-2 rounded md:mx-0 mx-auto"></div>
+                    </h2>
+                    
+                    <!-- Slider Navigation Arrows -->
+                    <div class="flex gap-3 self-center md:self-auto">
+                        <button onclick="prevTeam()" class="w-12 h-12 bg-premium-800 hover:bg-spl-gold text-white hover:text-premium-950 border border-premium-700 hover:border-transparent transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-arrow-left text-xl"></i></button>
+                        <button onclick="nextTeam()" class="w-12 h-12 bg-premium-800 hover:bg-spl-gold text-white hover:text-premium-950 border border-premium-700 hover:border-transparent transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-arrow-right text-xl"></i></button>
+                    </div>
+                </div>
+
+                <div class="overflow-hidden px-1 py-4" id="teams-slider-container">
+                    <div id="teams-track" class="flex transition-transform duration-500 ease-out gap-6 items-stretch">
+                        <!-- Teams injected dynamically -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Registered Players / Auction Pool Section -->
+        <section id="auction-pool" class="py-20 bg-premium-950 border-b border-premium-700/50 scroll-mt-20 relative">
+            <div class="absolute inset-0 bg-spl-gold/5 blur-3xl z-0 pointer-events-none"></div>
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="text-center mb-12">
+                    <h2 class="font-oswald text-4xl md:text-5xl font-bold uppercase tracking-wide mb-4 relative inline-block text-white">
+                        Season 6 <span class="text-spl-gold">Auction Pool</span>
+                        <div class="w-3/4 h-1 bg-spl-gold mx-auto mt-2 rounded"></div>
+                    </h2>
+                    <p class="text-gray-400 font-medium mt-2">Officially registered players waiting for the mega auction.</p>
+                </div>
+                
+                <div id="public-auction-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 lg:gap-6 max-w-7xl mx-auto">
+                    <!-- Approved Players injected dynamically -->
+                    <div class="col-span-full w-full text-center py-8">
+                        <p class="text-gray-500 font-bold tracking-widest uppercase text-sm">Registrations are opening soon...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Fan Zone (Polls & Engagement) -->
+        <section id="fanzone" class="py-20 bg-premium-950 border-b border-premium-700/50 scroll-mt-20 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-premium-800/60 via-premium-950 to-premium-950 z-0 pointer-events-none"></div>
+            <div class="container mx-auto px-4 lg:px-8 relative z-10">
+                <div class="text-center mb-10">
+                    <h2 class="font-oswald text-4xl md:text-5xl font-bold uppercase tracking-wide mb-4 relative inline-block text-white">
+                        <i class="fa-solid fa-fire text-spl-red mr-2 drop-shadow-md"></i> Fan <span class="text-spl-gold">Zone</span>
+                        <div class="w-3/4 h-1 bg-spl-gold mx-auto mt-2 rounded"></div>
+                    </h2>
+                    <p class="text-gray-400 font-medium mt-2">Vote in our live polls and make your voice heard!</p>
+                </div>
+                
+                <div id="polls-public-container" class="max-w-3xl mx-auto space-y-8">
+                    <!-- Dynamic Polls Go Here -->
+                    <div class="w-full text-center py-8">
+                        <i class="fa-solid fa-spinner fa-spin text-3xl text-spl-gold mb-4"></i>
+                        <p class="text-gray-400 font-bold tracking-widest uppercase text-sm">Loading Polls...</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -309,7 +376,7 @@ service cloud.firestore {
                     <!-- TAB 0B: OWNER REGISTRATIONS (NEW) -->
                     <div id="admin-tab-owner_regs" class="admin-tab-content hidden">
                         <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-orange-500 pl-3">Pending Franchise / Owner Registrations</h3>
-                        <p class="text-gray-400 text-sm mb-6">Review franchise owner details and ₹1,000 confirmation payment screenshots. Approving an owner generates an official Franchise Reg ID and opens WhatsApp confirmation.</p>
+                        <p class="text-gray-400 text-sm mb-6">Review franchise owner details and ₹2,000 confirmation payment screenshots. Approving an owner generates an official Franchise Reg ID and opens WhatsApp confirmation.</p>
                         
                         <div id="admin-owner-regs-pending" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
                             <!-- Pending Owner Registrations Injected Here -->
@@ -589,30 +656,6 @@ service cloud.firestore {
             </div>
         </section>
 
-        <!-- Teams Showcase Slider -->
-        <section id="teams" class="bg-premium-950 border-b border-premium-700/50 py-24 scroll-mt-20">
-            <div class="container mx-auto px-4">
-                <div class="flex flex-col md:flex-row md:justify-between items-start md:items-center mb-12 gap-4 text-center md:text-left">
-                    <h2 class="font-oswald text-4xl md:text-5xl font-bold uppercase tracking-wide relative inline-block text-white">
-                        The <span class="text-spl-gold">Franchises</span>
-                        <div class="w-3/4 h-1 bg-spl-gold mt-2 rounded md:mx-0 mx-auto"></div>
-                    </h2>
-                    
-                    <!-- Slider Navigation Arrows -->
-                    <div class="flex gap-3 self-center md:self-auto">
-                        <button onclick="prevTeam()" class="w-12 h-12 bg-premium-800 hover:bg-spl-gold text-white hover:text-premium-950 border border-premium-700 hover:border-transparent transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-arrow-left text-xl"></i></button>
-                        <button onclick="nextTeam()" class="w-12 h-12 bg-premium-800 hover:bg-spl-gold text-white hover:text-premium-950 border border-premium-700 hover:border-transparent transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-arrow-right text-xl"></i></button>
-                    </div>
-                </div>
-
-                <div class="overflow-hidden px-1 py-4" id="teams-slider-container">
-                    <div id="teams-track" class="flex transition-transform duration-500 ease-out gap-6 items-stretch">
-                        <!-- Teams injected dynamically -->
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- Players Spotlight -->
         <section id="players" class="py-20 bg-premium-900 border-b border-premium-700/50 scroll-mt-20">
             <div class="container mx-auto px-4">
@@ -635,49 +678,6 @@ service cloud.firestore {
                 <div class="overflow-hidden px-1 py-4" id="players-slider-container">
                     <div id="players-track" class="flex transition-transform duration-500 ease-out gap-6 items-stretch">
                         <!-- Players injected dynamically -->
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Registered Players / Auction Pool Section -->
-        <section id="auction-pool" class="py-20 bg-premium-950 border-b border-premium-700/50 scroll-mt-20 relative">
-            <div class="absolute inset-0 bg-spl-gold/5 blur-3xl z-0 pointer-events-none"></div>
-            <div class="container mx-auto px-4 relative z-10">
-                <div class="text-center mb-12">
-                    <h2 class="font-oswald text-4xl md:text-5xl font-bold uppercase tracking-wide mb-4 relative inline-block text-white">
-                        Season 6 <span class="text-spl-gold">Auction Pool</span>
-                        <div class="w-3/4 h-1 bg-spl-gold mx-auto mt-2 rounded"></div>
-                    </h2>
-                    <p class="text-gray-400 font-medium mt-2">Officially registered players waiting for the mega auction.</p>
-                </div>
-                
-                <div id="public-auction-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 lg:gap-6 max-w-7xl mx-auto">
-                    <!-- Approved Players injected dynamically -->
-                    <div class="col-span-full w-full text-center py-8">
-                        <p class="text-gray-500 font-bold tracking-widest uppercase text-sm">Registrations are opening soon...</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Fan Zone (Polls & Engagement) -->
-        <section id="fanzone" class="py-20 bg-premium-950 border-b border-premium-700/50 scroll-mt-20 relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-premium-800/60 via-premium-950 to-premium-950 z-0 pointer-events-none"></div>
-            <div class="container mx-auto px-4 lg:px-8 relative z-10">
-                <div class="text-center mb-10">
-                    <h2 class="font-oswald text-4xl md:text-5xl font-bold uppercase tracking-wide mb-4 relative inline-block text-white">
-                        <i class="fa-solid fa-fire text-spl-red mr-2 drop-shadow-md"></i> Fan <span class="text-spl-gold">Zone</span>
-                        <div class="w-3/4 h-1 bg-spl-gold mx-auto mt-2 rounded"></div>
-                    </h2>
-                    <p class="text-gray-400 font-medium mt-2">Vote in our live polls and make your voice heard!</p>
-                </div>
-                
-                <div id="polls-public-container" class="max-w-3xl mx-auto space-y-8">
-                    <!-- Dynamic Polls Go Here -->
-                    <div class="w-full text-center py-8">
-                        <i class="fa-solid fa-spinner fa-spin text-3xl text-spl-gold mb-4"></i>
-                        <p class="text-gray-400 font-bold tracking-widest uppercase text-sm">Loading Polls...</p>
                     </div>
                 </div>
             </div>
@@ -1934,6 +1934,7 @@ service cloud.firestore {
             window.allOwnerRegistrations = regs;
             const pendingContainer = document.getElementById('admin-owner-regs-pending');
             const approvedContainer = document.getElementById('admin-owner-regs-approved');
+            const publicOwnerGrid = document.getElementById('public-owner-grid');
 
             const pending = regs.filter(r => r.status !== 'approved').sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
             const approved = regs.filter(r => r.status === 'approved').sort((a,b) => {
@@ -1982,6 +1983,28 @@ service cloud.firestore {
                             <div class="flex gap-1.5">
                                 <button onclick="deleteOwnerRegistration('${r.id}')" class="bg-red-600 hover:bg-red-500 text-white w-8 h-8 rounded text-xs shadow flex items-center justify-center"><i class="fa-solid fa-trash"></i></button>
                             </div>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            if (publicOwnerGrid) {
+                if (approved.length === 0) {
+                    publicOwnerGrid.innerHTML = `
+                        <div class="col-span-full w-full text-center py-12 bg-premium-950 rounded-2xl border border-premium-800">
+                            <i class="fa-solid fa-building-user text-4xl text-spl-gold mb-3"></i>
+                            <p class="text-gray-400 font-bold tracking-widest uppercase text-sm">Franchise slots are filling up. Registrations are live!</p>
+                        </div>
+                    `;
+                } else {
+                    publicOwnerGrid.innerHTML = approved.map(r => `
+                        <div class="bg-premium-950 border border-premium-700 hover:border-spl-gold transition rounded-xl p-6 text-center shadow-xl group flex flex-col items-center relative overflow-hidden h-full">
+                            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-spl-gold to-orange-500"></div>
+                            <span class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-xs px-3 py-1 rounded-full uppercase shadow-sm mb-3 mt-1">${r.franchiseId || 'FR-001'}</span>
+                            <h3 class="font-oswald text-2xl font-bold text-white leading-tight mb-3 uppercase text-spl-gold">${r.franchiseName}</h3>
+                            <p class="text-xs text-gray-400 font-bold uppercase tracking-widest mb-2 border-b border-premium-700 pb-1 w-full"><i class="fa-solid fa-crown text-spl-gold mr-1"></i> Team Owners</p>
+                            <p class="text-sm text-white font-medium flex-grow">${(r.owners || []).join('<br>')}</p>
+                            <p class="text-[10px] text-gray-500 mt-4 truncate w-full"><i class="fa-solid fa-location-dot text-spl-red mr-1"></i> ${r.address}</p>
                         </div>
                     `).join('');
                 }
