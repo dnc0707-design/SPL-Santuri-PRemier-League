@@ -1666,7 +1666,10 @@ service cloud.firestore {
                 }
                 try {
                     await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'players', id));
-                } catch(e) {}
+                    showNotice("Registration deleted successfully.", "Deleted");
+                } catch(e) {
+                    showNotice("Failed to delete: " + e.message, "Error");
+                }
             });
         };
 
@@ -1920,7 +1923,10 @@ service cloud.firestore {
                 }
                 try {
                     await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'players', id));
-                } catch(e) {}
+                    showNotice("Owner Registration deleted successfully.", "Deleted");
+                } catch(e) {
+                    showNotice("Failed to delete: " + e.message, "Error");
+                }
             });
         };
 
@@ -1992,8 +1998,15 @@ service cloud.firestore {
             onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), (snap) => {
                 const mergedMap = new Map();
                 const ownerMap = new Map();
-                getLocalList('registrations', []).forEach(r => mergedMap.set(r.id, r));
-                getLocalList('owner_registrations', []).forEach(r => ownerMap.set(r.id, r));
+                
+                // Only merge purely LOCAL backups. Let Firebase override the rest so deletions work!
+                getLocalList('registrations', []).forEach(r => {
+                    if (String(r.id).startsWith('LOCAL_')) mergedMap.set(r.id, r);
+                });
+                getLocalList('owner_registrations', []).forEach(r => {
+                    if (String(r.id).startsWith('LOCAL_')) ownerMap.set(r.id, r);
+                });
+
                 snap.forEach(d => {
                     const data = { id: d.id, ...d.data() };
                     if(data.isRegistration) mergedMap.set(data.id, data);
