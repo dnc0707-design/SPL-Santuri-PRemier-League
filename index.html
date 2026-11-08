@@ -102,8 +102,8 @@
                     <a href="#gallery" class="nav-link hover:text-spl-gold transition-colors">Gallery</a>
                     <a href="#sponsors" class="nav-link hover:text-spl-gold transition-colors">Sponsors</a>
                     <a href="#partners" class="nav-link hover:text-spl-gold transition-colors">Partners</a>
-                    <a href="#" onclick="openRegModal(event)" class="bg-spl-gold/10 text-spl-gold font-bold px-3 py-1 rounded animate-pulse hover:bg-spl-gold hover:text-premium-950 transition-colors shadow-[0_0_10px_rgba(244,176,54,0.3)]">Player Reg.</a>
-                    <a href="#" onclick="showComingSoon(event, 'Owner Registration')" class="bg-spl-red/10 text-spl-red font-bold px-3 py-1 rounded animate-pulse hover:bg-spl-red hover:text-white transition-colors shadow-[0_0_10px_rgba(225,45,57,0.3)]">Owner Reg.</a>
+                    <button type="button" onclick="openRegModal(event)" class="bg-spl-gold/10 text-spl-gold font-bold px-3 py-1 rounded hover:bg-spl-gold hover:text-premium-950 transition-colors shadow-[0_0_10px_rgba(244,176,54,0.3)]">Player Reg.</button>
+                    <button type="button" onclick="openOwnerRegModal(event)" class="bg-spl-red/10 text-spl-red font-bold px-3 py-1 rounded hover:bg-spl-red hover:text-white transition-colors shadow-[0_0_10px_rgba(225,45,57,0.3)]">Owner Reg.</button>
                 </nav>
 
                 <!-- Right Actions -->
@@ -131,8 +131,8 @@
                 <a href="#gallery" class="py-3 border-b border-premium-800 hover:text-spl-gold transition-colors">Gallery</a>
                 <a href="#sponsors" class="py-3 border-b border-premium-800 hover:text-spl-gold transition-colors">Sponsors</a>
                 <a href="#partners" class="py-3 border-b border-premium-800 hover:text-spl-gold transition-colors">Partners</a>
-                <a href="#" onclick="openRegModal(event)" class="py-3 border-b border-premium-800 text-spl-gold font-bold animate-pulse hover:text-white transition-colors"><i class="fa-solid fa-user-plus mr-2"></i> Player Registration</a>
-                <a href="#" onclick="showComingSoon(event, 'Owner Registration')" class="py-3 text-spl-red font-bold animate-pulse hover:text-white transition-colors"><i class="fa-solid fa-building-user mr-2"></i> Owner Registration</a>
+                <button type="button" onclick="openRegModal(event)" class="py-3 border-b border-premium-800 text-left text-spl-gold font-bold hover:text-white transition-colors"><i class="fa-solid fa-user-plus mr-2"></i> Player Registration</button>
+                <button type="button" onclick="openOwnerRegModal(event)" class="py-3 text-left text-spl-red font-bold hover:text-white transition-colors"><i class="fa-solid fa-building-user mr-2"></i> Owner Registration</button>
                 <button onclick="toggleAdminModal()" class="mt-4 bg-spl-gold text-premium-950 font-bold px-4 py-2 uppercase rounded text-center w-full shadow-lg">Admin Login</button>
             </nav>
         </div>
@@ -160,21 +160,19 @@
                     </div>
                 </div>
                 
-                <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-6">
-                    <!-- Player Registration (Blinking) -->
-                    <div class="relative w-full sm:w-auto group">
-                        <div class="absolute inset-0 bg-spl-gold rounded animate-ping opacity-75"></div>
-                        <a href="#" onclick="openRegModal(event)" class="relative w-full sm:w-auto flex justify-center items-center bg-spl-gold hover:bg-spl-goldHover text-premium-950 font-oswald font-bold px-8 py-3.5 uppercase tracking-wider rounded transition-colors text-xl shadow-[0_0_25px_rgba(244,176,54,0.8)]">
+                <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
+                    <!-- Player Registration -->
+                    <div class="w-full sm:w-auto">
+                        <button type="button" onclick="openRegModal(event)" class="w-full sm:w-auto flex justify-center items-center bg-spl-gold hover:bg-spl-goldHover text-premium-950 font-oswald font-bold px-8 py-3.5 uppercase tracking-wider rounded transition-colors text-xl shadow-[0_0_20px_rgba(244,176,54,0.5)] cursor-pointer">
                             <i class="fa-solid fa-user-plus mr-3"></i> Player Registration
-                        </a>
+                        </button>
                     </div>
                     
-                    <!-- Owner Registration (Blinking) -->
-                    <div class="relative w-full sm:w-auto group">
-                        <div class="absolute inset-0 bg-white rounded animate-ping opacity-50" style="animation-delay: 0.3s"></div>
-                        <a href="#" onclick="showComingSoon(event, 'Owner Registration')" class="relative w-full sm:w-auto flex justify-center items-center bg-white hover:bg-gray-200 text-spl-red font-oswald font-bold px-8 py-3.5 uppercase tracking-wider rounded transition-all text-xl shadow-[0_0_25px_rgba(255,255,255,0.6)]">
+                    <!-- Owner Registration -->
+                    <div class="w-full sm:w-auto">
+                        <button type="button" onclick="openOwnerRegModal(event)" class="w-full sm:w-auto flex justify-center items-center bg-white hover:bg-gray-200 text-spl-red font-oswald font-bold px-8 py-3.5 uppercase tracking-wider rounded transition-all text-xl shadow-[0_0_20px_rgba(255,255,255,0.4)] cursor-pointer">
                             <i class="fa-solid fa-building-user mr-3"></i> Owner Registration
-                        </a>
+                        </button>
                     </div>
                 </div>
 
@@ -184,15 +182,16 @@
             </div>
         </section>
 
-        <!-- Featured Video Section -->
-        <section id="video" class="py-16 bg-premium-950 border-b border-premium-700/50 relative scroll-mt-20">
+        <!-- SPL 6 Rules Banner Section (Replaced Video) -->
+        <section id="rules-banner-section" class="py-16 bg-premium-950 border-b border-premium-700/50 relative scroll-mt-20 cursor-pointer hover:bg-premium-900 transition-colors" onclick="openRulesModal()">
             <div class="absolute inset-0 bg-spl-red/10 blur-[100px] z-0 pointer-events-none"></div>
-            <div class="container mx-auto px-4 max-w-5xl text-center relative z-10">
-                <h2 class="font-oswald text-4xl font-bold uppercase tracking-wide mb-8 text-white">
-                    <i class="fa-brands fa-youtube text-spl-red mr-2"></i> SPL <span class="text-spl-red">Featured Action</span>
-                </h2>
-                <div class="aspect-video w-full rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(225,45,57,0.15)] border border-premium-700 bg-premium-950">
-                    <iframe id="featured-video-iframe" class="w-full h-full" src="https://www.youtube.com/embed/k9alqPSW5BY" title="SPL YouTube Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <div class="container mx-auto px-4 max-w-4xl text-center relative z-10">
+                <div class="border-4 border-spl-gold border-dashed rounded-3xl p-8 md:p-12 shadow-[0_0_30px_rgba(244,176,54,0.15)] bg-premium-950/80 transform hover:scale-105 transition-transform duration-300">
+                    <h2 class="font-oswald text-3xl md:text-5xl font-bold uppercase tracking-wide mb-4 text-spl-gold">
+                        <i class="fa-solid fa-scale-balanced text-white mr-3"></i> SPL Season 6 Official Rules
+                    </h2>
+                    <p class="text-gray-300 text-base md:text-lg font-medium max-w-2xl mx-auto">Click here to review the official rules, player eligibility, and franchise guidelines for the upcoming Santuri Premier League mega auction and tournament.</p>
+                    <button class="mt-6 bg-spl-gold text-premium-950 font-oswald font-bold px-8 py-3 uppercase tracking-widest rounded hover:bg-spl-goldHover transition shadow-lg text-lg">View Rulebook</button>
                 </div>
             </div>
         </section>
@@ -242,13 +241,13 @@
                     
                     <!-- Tab Navigation for Admin -->
                     <div class="flex flex-wrap gap-2 mb-8 border-b border-premium-800 pb-4">
-                        <button onclick="switchAdminTab('registrations')" id="tab-btn-registrations" class="px-4 py-2 bg-spl-red text-white font-bold rounded uppercase text-sm animate-pulse border border-transparent hover:border-red-400">Player Reg. (New)</button>
+                        <button onclick="switchAdminTab('registrations')" id="tab-btn-registrations" class="px-4 py-2 bg-spl-red text-white font-bold rounded uppercase text-sm border border-transparent hover:border-red-400">Player Reg. (New)</button>
+                        <button onclick="switchAdminTab('owner_regs')" id="tab-btn-owner_regs" class="px-4 py-2 bg-orange-600 text-white font-bold rounded uppercase text-sm border border-transparent hover:border-orange-400">Owner Reg. (New)</button>
                         <button onclick="switchAdminTab('seasons')" id="tab-btn-seasons" class="px-4 py-2 bg-spl-gold text-premium-950 font-bold rounded uppercase text-sm">Manage Seasons</button>
                         <button onclick="switchAdminTab('teams')" id="tab-btn-teams" class="px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700">Manage Franchises</button>
                         <button onclick="switchAdminTab('players')" id="tab-btn-players" class="px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700">Manage Players</button>
                         <button onclick="switchAdminTab('fanzone')" id="tab-btn-fanzone" class="px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700">Manage Fan Zone</button>
                         <button onclick="switchAdminTab('gallery')" id="tab-btn-gallery" class="px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700">Manage Gallery</button>
-                        <button onclick="switchAdminTab('video')" id="tab-btn-video" class="px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700">Manage Video</button>
                         <button onclick="switchAdminTab('texts')" id="tab-btn-texts" class="px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700">Edit Writings</button>
                         <button onclick="switchAdminTab('sponsors')" id="tab-btn-sponsors" class="px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700">Manage Sponsors</button>
                         <button onclick="switchAdminTab('partners')" id="tab-btn-partners" class="px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700">Manage Partners</button>
@@ -304,6 +303,21 @@ service cloud.firestore {
                         <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-green-500 pl-3">Approved Players (Auction Pool)</h3>
                         <div id="admin-registrations-approved" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <!-- Approved Registrations Injected Here -->
+                        </div>
+                    </div>
+
+                    <!-- TAB 0B: OWNER REGISTRATIONS (NEW) -->
+                    <div id="admin-tab-owner_regs" class="admin-tab-content hidden">
+                        <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-orange-500 pl-3">Pending Franchise / Owner Registrations</h3>
+                        <p class="text-gray-400 text-sm mb-6">Review franchise owner details and ₹1,000 confirmation payment screenshots. Approving an owner generates an official Franchise Reg ID and opens WhatsApp confirmation.</p>
+                        
+                        <div id="admin-owner-regs-pending" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                            <!-- Pending Owner Registrations Injected Here -->
+                        </div>
+
+                        <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-green-500 pl-3">Approved Franchise Owners</h3>
+                        <div id="admin-owner-regs-approved" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- Approved Owner Registrations Injected Here -->
                         </div>
                     </div>
 
@@ -451,19 +465,6 @@ service cloud.firestore {
                         </form>
                         <h4 class="font-bold text-gray-300 mb-3 text-sm uppercase">Current Gallery Images:</h4>
                         <div id="admin-gallery-grid" class="flex gap-4 overflow-x-auto pb-4 custom-scrollbar"></div>
-                    </div>
-
-                    <!-- TAB 6: VIDEO -->
-                    <div id="admin-tab-video" class="admin-tab-content hidden">
-                        <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Update Featured Video</h3>
-                        <form id="update-video-form" onsubmit="handleVideoSubmit(event)" class="bg-premium-800/40 p-6 rounded border border-premium-700/60 shadow-inner mb-8">
-                            <div class="mb-4">
-                                <label class="block text-gray-400 text-sm font-bold mb-2">Paste YouTube Video Link</label>
-                                <input type="text" id="video-url-input" class="w-full bg-premium-800 border border-premium-700 rounded px-4 py-3 text-white focus:outline-none focus:border-spl-gold" placeholder="e.g., https://youtu.be/k9alqPSW5BY" required>
-                                <p class="text-xs text-gray-500 mt-2"><i class="fa-solid fa-circle-info mr-1"></i> Paste any standard YouTube link, it will be automatically converted to embed format.</p>
-                            </div>
-                            <button type="submit" class="bg-spl-gold text-premium-950 font-oswald font-bold text-lg uppercase tracking-wide py-2 px-8 rounded hover:bg-spl-goldHover transition-colors shadow-lg"><i class="fa-brands fa-youtube mr-2"></i> Save Video</button>
-                        </form>
                     </div>
 
                     <!-- TAB 7: EDIT WRITINGS -->
@@ -698,7 +699,7 @@ service cloud.firestore {
                 <div class="flex flex-col md:flex-row md:justify-between items-start md:items-center mb-12 gap-4 text-center md:text-left">
                     <h2 class="font-oswald text-4xl font-bold uppercase tracking-wide relative inline-block text-white">
                         Official <span class="text-spl-gold">Partners</span>
-                        <div class="w-3/4 h-1 bg-spl-gold mt-2 rounded md:mx-0 mx-auto"></div>
+                        <div class="w-3/4 h-1 bg-spl-gold mx-auto mt-2 rounded"></div>
                     </h2>
                     <!-- Slider Navigation Arrows -->
                     <div class="flex gap-3 self-center md:self-auto">
@@ -779,14 +780,14 @@ service cloud.firestore {
     </footer>
 
     <!-- Player Registration Modal -->
-    <div id="reg-modal" class="hidden fixed inset-0 z-[150] bg-premium-950/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-premium-900 border border-spl-gold rounded-xl max-w-3xl w-full shadow-2xl relative my-8">
-            <div class="sticky top-0 bg-premium-900 border-b border-premium-700 p-4 rounded-t-xl flex justify-between items-center z-10">
+    <div id="reg-modal" class="hidden fixed inset-0 z-[150] bg-premium-950/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-premium-900 border border-spl-gold rounded-xl max-w-3xl w-full shadow-2xl relative my-4 flex flex-col max-h-[90vh]">
+            <div class="flex-shrink-0 bg-premium-900 border-b border-premium-700 p-4 rounded-t-xl flex justify-between items-center z-10">
                 <h3 class="font-oswald text-2xl font-bold uppercase text-spl-gold"><i class="fa-solid fa-address-card mr-2"></i> Player Registration</h3>
                 <button onclick="closeRegModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-2xl"></i></button>
             </div>
             
-            <div class="p-6 md:p-8">
+            <div class="p-6 flex-grow overflow-y-auto custom-scrollbar">
                 <div class="bg-premium-800 border border-spl-gold/50 p-4 rounded-lg mb-8 text-sm text-gray-300 shadow-inner">
                     <p class="font-bold text-white mb-2 uppercase tracking-wide"><i class="fa-solid fa-circle-exclamation text-spl-gold mr-2"></i> Instructions:</p>
                     <div class="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
@@ -871,8 +872,99 @@ service cloud.firestore {
                         </div>
                     </div>
 
-                    <div class="mt-8">
+                    <div class="mt-8 pb-4">
                         <button type="submit" id="reg-submit-btn" class="w-full bg-spl-gold text-premium-950 font-oswald font-bold text-2xl uppercase tracking-wide py-4 rounded hover:bg-spl-goldHover transition-colors shadow-lg"><i class="fa-solid fa-paper-plane mr-2"></i> Submit Registration</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Owner Registration Modal -->
+    <div id="owner-reg-modal" class="hidden fixed inset-0 z-[150] bg-premium-950/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-premium-900 border border-spl-gold rounded-xl max-w-3xl w-full shadow-2xl relative my-4 flex flex-col max-h-[90vh]">
+            <div class="flex-shrink-0 bg-premium-900 border-b border-premium-700 p-4 rounded-t-xl flex justify-between items-center z-10">
+                <h3 class="font-oswald text-2xl font-bold uppercase text-spl-gold"><i class="fa-solid fa-building-user mr-2"></i> Franchise Owner Registration</h3>
+                <button onclick="closeOwnerRegModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-2xl"></i></button>
+            </div>
+            
+            <div class="p-6 flex-grow overflow-y-auto custom-scrollbar">
+                <!-- Payment Breakup & QR Instructions -->
+                <div class="bg-premium-800 border border-spl-gold/50 p-4 rounded-lg mb-8 text-sm text-gray-300 shadow-inner">
+                    <p class="font-bold text-white mb-2 uppercase tracking-wide"><i class="fa-solid fa-coins text-spl-gold mr-2"></i> Franchise Fee & Payment Breakup:</p>
+                    <div class="flex flex-col sm:flex-row gap-6 items-center sm:items-start">
+                        <div class="flex-grow space-y-2">
+                            <div class="bg-premium-950/80 p-3 rounded border border-premium-700">
+                                <p class="text-spl-gold font-bold text-base"><i class="fa-solid fa-circle-check mr-1.5"></i> Step 1 (Now): ₹2,000 — Advance for Team Registration</p>
+                                <p class="text-xs text-gray-400 mt-0.5">Pay ₹2,000 now via UPI / QR and upload the payment screenshot below to secure your franchise slot.</p>
+                            </div>
+                            <div class="bg-premium-950/80 p-3 rounded border border-premium-700">
+                                <p class="text-white font-bold text-sm"><i class="fa-solid fa-calendar-check text-spl-red mr-1.5"></i> Step 2 (Before Auction): Remaining Balance</p>
+                                <p class="text-xs text-gray-400 mt-0.5">The remaining balance amount is to be cleared before the Season 6 Mega Auction begins.</p>
+                            </div>
+                            <p class="text-xs text-gray-300 pt-1"><strong>UPI Number:</strong> <span class="text-spl-gold font-bold">8335929505</span> (Or scan the QR code)</p>
+                        </div>
+                        <div class="text-center bg-premium-950 p-3 rounded-xl border border-premium-700 shadow-md flex-shrink-0 w-40">
+                            <p class="text-[10px] text-spl-gold mb-2 font-bold uppercase tracking-widest border-b border-premium-700 pb-1">Scan to Pay ₹2000</p>
+                            <img id="public-owner-payment-qr" src="" alt="Payment QR" class="w-full aspect-square object-contain hidden border border-gray-700 p-1 bg-white rounded-lg">
+                            <p id="public-owner-payment-qr-fallback" class="text-xs text-gray-500 py-4 hidden">No QR uploaded</p>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="owner-reg-form" onsubmit="handleOwnerRegSubmit(event)" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="md:col-span-2">
+                            <label class="block text-gray-300 text-sm font-bold mb-2">Franchise / Team Name <span class="text-red-500">*</span></label>
+                            <input type="text" id="owner-franchise-name" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="Enter proposed Franchise Name" required>
+                        </div>
+
+                        <!-- Dynamic Multi-Owner Name Inputs -->
+                        <div class="md:col-span-2">
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-300 text-sm font-bold">Owner / Owners Name <span class="text-red-500">*</span></label>
+                                <button type="button" onclick="addOwnerNameField()" class="text-xs bg-spl-gold/20 hover:bg-spl-gold text-spl-gold hover:text-premium-950 border border-spl-gold/50 font-bold px-3 py-1 rounded transition flex items-center gap-1">
+                                    <i class="fa-solid fa-plus"></i> Add More Owner
+                                </button>
+                            </div>
+                            <div id="owner-names-container" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <input type="text" name="owner_name[]" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="Owner 1 Full Name *" required>
+                                <input type="text" name="owner_name[]" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="Owner 2 Full Name (Optional)">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-300 text-sm font-bold mb-2">Primary Phone / WhatsApp No <span class="text-red-500">*</span></label>
+                            <input type="tel" id="owner-phone" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="10-digit WhatsApp number" pattern="[0-9]{10}" required>
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-300 text-sm font-bold mb-2">Full Address <span class="text-red-500">*</span></label>
+                            <input type="text" id="owner-address" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="Village, Post, Block, District" required>
+                        </div>
+                    </div>
+
+                    <hr class="border-premium-700 my-6">
+
+                    <!-- Payment Screenshot Upload -->
+                    <div class="bg-premium-800 p-4 rounded border border-premium-700 flex flex-col items-center text-center max-w-md mx-auto">
+                        <label class="block text-spl-gold text-sm font-bold mb-2 uppercase w-full border-b border-premium-700 pb-2">Upload Advance Payment Screenshot (₹2,000) <span class="text-red-500">*</span></label>
+                        <input type="file" id="file-owner-payment" accept="image/*" onchange="openCropper(event, 'owner_payment', NaN)" class="w-full text-xs text-gray-400 file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-spl-gold file:text-premium-950 file:font-bold hover:file:bg-spl-goldHover mb-3 mt-1" required>
+                        <img id="preview-owner_payment" class="hidden h-28 w-full object-contain rounded border border-gray-600 shadow-lg mt-auto">
+                    </div>
+
+                    <!-- Declaration Checkbox -->
+                    <div class="bg-premium-950/90 p-4 rounded-lg border border-premium-700">
+                        <label class="flex items-start gap-3 cursor-pointer">
+                            <input type="checkbox" id="owner-declaration" required class="accent-spl-gold w-5 h-5 mt-0.5 flex-shrink-0">
+                            <span class="text-xs sm:text-sm text-gray-200 leading-relaxed">
+                                <strong class="text-spl-gold uppercase">Declaration:</strong> I / We hereby declare that all the information provided above is true and accurate. I / We agree to <strong>abide by all rules and regulations</strong> of the Santuri Premier League (SPL) and Lalgarh Village Club, and agree to complete the remaining payment balance before the auction.
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="mt-8 pb-4">
+                        <button type="submit" id="owner-reg-submit-btn" class="w-full bg-spl-gold text-premium-950 font-oswald font-bold text-2xl uppercase tracking-wide py-4 rounded hover:bg-spl-goldHover transition-colors shadow-lg"><i class="fa-solid fa-paper-plane mr-2"></i> Submit Owner Registration</button>
                     </div>
                 </form>
             </div>
@@ -893,6 +985,168 @@ service cloud.firestore {
                 <p class="text-gray-400 text-sm hidden sm:block mr-auto self-center"><i class="fa-solid fa-circle-info mr-1"></i> Drag to move, scroll to zoom, adjust corners to fit.</p>
                 <button onclick="closeCropper()" class="px-6 py-2 bg-premium-700 text-white font-bold rounded hover:bg-premium-600 transition shadow">Cancel</button>
                 <button onclick="applyCrop()" class="px-6 py-2 bg-spl-gold text-premium-950 font-bold rounded hover:bg-spl-goldHover transition shadow shadow-[0_0_15px_rgba(244,176,54,0.4)]">Apply Crop & Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rules Modal (Replaces YouTube Section) -->
+    <div id="rules-modal" class="hidden fixed inset-0 z-[250] bg-premium-950/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-premium-900 border border-spl-gold rounded-xl max-w-4xl w-full shadow-2xl relative my-4 flex flex-col max-h-[90vh]">
+            <div class="flex-shrink-0 bg-premium-900 border-b border-premium-700 p-4 rounded-t-xl flex justify-between items-center z-10">
+                <h3 class="font-oswald text-2xl font-bold uppercase text-spl-gold"><i class="fa-solid fa-scale-balanced mr-2"></i> SPL Season 6 Rulebook</h3>
+                <button onclick="closeRulesModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-2xl"></i></button>
+            </div>
+            <div class="p-6 md:p-8 text-gray-300 space-y-6 text-sm md:text-base flex-grow overflow-y-auto custom-scrollbar">
+                
+                <div class="text-center border-b border-premium-700 pb-6 mb-6">
+                    <h2 class="text-2xl md:text-3xl font-oswald font-bold text-white mb-2 tracking-wide">🏏🏆 SANTURI PREMIER LEAGUE (SPL) – SEASON 6 🏆🏏</h2>
+                    <p class="text-spl-gold font-bold text-lg mb-4 animate-pulse">🔥 THE BIGGER CRICKET FESTIVAL IS BACK! 🔥</p>
+                    <p class="inline-block bg-premium-950 px-4 py-2 rounded-full border border-premium-700 text-white font-bold tracking-widest"><i class="fa-solid fa-calendar-days text-spl-red mr-2"></i> TOURNAMENT DATES: 25, 26 & 27 DECEMBER 2026</p>
+                </div>
+
+                <!-- PART 1 -->
+                <div>
+                    <h4 class="font-oswald text-xl md:text-2xl font-bold text-spl-gold mb-3 uppercase flex items-center bg-premium-950/80 p-2 rounded"><i class="fa-solid fa-clipboard-user mr-3 text-spl-red"></i> PART 1: PLAYER REGISTRATION</h4>
+                    <div class="space-y-4 bg-premium-950/30 p-4 md:p-6 rounded-lg border border-premium-800">
+                        <div>
+                            <p class="text-white font-bold mb-1">১. REGISTRATION FEE</p>
+                            <ul class="list-disc list-inside ml-2"><li>Registration Fee: ₹50 (Non-refundable)।</li></ul>
+                        </div>
+                        <div>
+                            <p class="text-white font-bold mb-1">২. REQUIRED DOCUMENTS</p>
+                            <p class="mb-1 text-sm">রেজিস্ট্রেশনের সময় নিম্নলিখিত ডকুমেন্ট জমা দিতে হবে:</p>
+                            <ul class="list-disc list-inside ml-2">
+                                <li><span class="text-green-400">✅</span> Aadhaar Card Copy (শুধুমাত্র Santuri Block-এর স্থায়ী বাসিন্দাদের জন্য)।</li>
+                                <li><span class="text-green-400">✅</span> Recent Photograph।</li>
+                                <li><span class="text-green-400">✅</span> Registration Fee Payment Screenshot।</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-white font-bold mb-1">৩. PAYMENT PROCESS</p>
+                            <ul class="list-disc list-inside ml-2">
+                                <li>Online Registration Form-এ দেওয়া QR Code স্ক্যান করে ₹50 জমা দিতে হবে।</li>
+                                <li>Payment Screenshot ফর্মে Upload করতে হবে।</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-white font-bold mb-1">৪. AUCTION SEQUENCE</p>
+                            <ul class="list-disc list-inside ml-2">
+                                <li>Registration Form পূরণের Serial Number (SR No) অনুযায়ী Auction-এ খেলোয়াড়দের নাম তোলা হবে।</li>
+                                <li>অর্থাৎ, যিনি আগে Registration করবেন, তাঁর নাম আগে Auction Sequence-এ আসবে।</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PART 2 -->
+                <div>
+                    <h4 class="font-oswald text-xl md:text-2xl font-bold text-spl-gold mb-3 uppercase flex items-center bg-premium-950/80 p-2 rounded"><i class="fa-solid fa-building-user mr-3 text-spl-red"></i> PART 2: FRANCHISE RULES</h4>
+                    <div class="space-y-4 bg-premium-950/30 p-4 md:p-6 rounded-lg border border-premium-800">
+                        <div>
+                            <p class="text-white font-bold mb-2">১. TEAM & FRANCHISE DETAILS</p>
+                            <ul class="space-y-1 ml-2 font-medium">
+                                <li>🏏 Total Teams: <span class="text-white">8</span></li>
+                                <li>💰 Franchise Entry Fee: <span class="text-white">₹4,000</span></li>
+                                <li>💰 Player Auction Fee: <span class="text-white">₹8,000</span></li>
+                                <li>💰 Total Franchise Fee: <span class="text-spl-gold font-bold">₹12,000</span></li>
+                            </ul>
+                        </div>
+                        <div class="bg-premium-900 p-4 rounded border border-spl-gold/30 mt-4">
+                            <p class="text-white font-bold mb-2 uppercase tracking-wide">২. PRIZE MONEY</p>
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <div class="flex-1 bg-premium-950 p-3 rounded text-center border border-spl-gold">
+                                    <span class="text-2xl">🥇</span> <br><span class="font-bold text-white">WINNER</span><br><span class="text-spl-gold font-bold text-lg">₹25,000 + Trophy</span>
+                                </div>
+                                <div class="flex-1 bg-premium-950 p-3 rounded text-center border border-gray-400">
+                                    <span class="text-2xl">🥈</span> <br><span class="font-bold text-white">RUNNER-UP</span><br><span class="text-gray-300 font-bold text-lg">₹20,000 + Trophy</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PART 3 -->
+                <div>
+                    <h4 class="font-oswald text-xl md:text-2xl font-bold text-spl-gold mb-3 uppercase flex items-center bg-premium-950/80 p-2 rounded"><i class="fa-solid fa-users mr-3 text-spl-red"></i> PART 3: PLAYER ELIGIBILITY & TEAM COMPOSITION</h4>
+                    <div class="space-y-4 bg-premium-950/30 p-4 md:p-6 rounded-lg border border-premium-800">
+                        <div>
+                            <p class="text-white font-bold mb-1">৩. PLAYER ELIGIBILITY</p>
+                            <ul class="list-disc list-inside ml-2 space-y-1">
+                                <li>শুধুমাত্র Santuri Block-এর স্থায়ী বাসিন্দা খেলোয়াড়রাই Auction-এ অংশগ্রহণ করতে পারবেন।</li>
+                                <li>প্রত্যেক Franchise-কে Auction-এর মাধ্যমে <strong class="text-white">13 জন Santuri Player</strong> নিতে হবে।</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-white font-bold mb-1">৪. OUTSIDE PLAYER RULE</p>
+                            <ul class="list-disc list-inside ml-2 space-y-1">
+                                <li>প্রত্যেক Franchise যেকোনো জায়গা থেকে <strong class="text-spl-gold">1 জন Outside Player</strong> নিতে পারবে।</li>
+                                <li>Outside Player-এর জন্য Auction হবে না। Franchise নিজেদের পছন্দ অনুযায়ী নির্বাচন করতে পারবে।</li>
+                                <li>Outside Player Playing XI-তে খেলতে পারবেন।</li>
+                                <li>Outside Player Man of the Match (MOM) এবং Man of the Series পুরস্কারের জন্য বিবেচিত হবেন না। <br><span class="ml-5">তবে Outside Player-এর জন্য আলাদা <strong>SPECIAL PRIZE</strong> থাকবে। 🏅</span></li>
+                                <li>শুধুমাত্র Santuri Players-রাই মূল ব্যক্তিগত পুরস্কারগুলির জন্য বিবেচিত হবেন।</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="text-white font-bold mb-1">৫. TEAM COMPOSITION</p>
+                            <p class="mb-1">প্রত্যেক দলের মোট Squad Strength হবে <strong class="text-white">14 জন</strong>।</p>
+                            <ul class="list-disc list-inside ml-2 font-medium">
+                                <li><span class="text-spl-gold">13 Santuri Players</span> (Through Auction)</li>
+                                <li><span class="text-spl-red">1 Outside Player</span> (Direct Selection)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PART 4 -->
+                <div>
+                    <h4 class="font-oswald text-xl md:text-2xl font-bold text-spl-gold mb-3 uppercase flex items-center bg-premium-950/80 p-2 rounded"><i class="fa-solid fa-gavel mr-3 text-spl-red"></i> PART 4: PLAYING XI RULE</h4>
+                    <div class="bg-premium-950/30 p-4 md:p-6 rounded-lg border border-premium-800">
+                        <p class="text-white font-bold mb-1">৬. MANDATORY PLAYING XI</p>
+                        <ul class="list-disc list-inside ml-2 space-y-1">
+                            <li>প্রত্যেক দলের Playing XI-তে অন্তত <strong class="text-spl-gold">1 জন Under-19 (U-19) Santuri Player</strong> থাকা বাধ্যতামূলক।</li>
+                            <li>এই নিয়ম প্রতিটি ম্যাচের ক্ষেত্রেই প্রযোজ্য।</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- PART 5 -->
+                <div>
+                    <h4 class="font-oswald text-xl md:text-2xl font-bold text-spl-gold mb-3 uppercase flex items-center bg-premium-950/80 p-2 rounded"><i class="fa-solid fa-hammer mr-3 text-spl-red"></i> PART 5: AUCTION RULES</h4>
+                    <div class="bg-premium-950/30 p-4 md:p-6 rounded-lg border border-premium-800">
+                        <p class="text-white font-bold mb-1">৭. AUCTION RULES & REGULATIONS</p>
+                        <ul class="list-disc list-inside ml-2 space-y-2">
+                            <li>প্রত্যেক Franchise নির্ধারিত Auction Purse অনুযায়ী খেলোয়াড়দের জন্য Bid করতে পারবে।</li>
+                            <li>কোনো Franchise-এর Auction Purse সম্পূর্ণ শেষ হয়ে গেলে, তারা প্রথম রাউন্ডে আর Bid করতে পারবে না।</li>
+                            <li>Purse শেষ হয়ে যাওয়া Franchise-গুলিকে দ্বিতীয় রাউন্ডের <strong>UNSOLD PLAYERS AUCTION</strong> পর্যন্ত অপেক্ষা করতে হবে।</li>
+                            <li>দ্বিতীয় রাউন্ডে কোনো Unsold Player কেনার ক্ষেত্রে সংশ্লিষ্ট খেলোয়াড়ের ক্রয়মূল্যের <strong class="text-spl-red">50% অতিরিক্ত জরিমানা</strong> হিসেবে Organising Committee-কে জমা দিতে হবে।</li>
+                        </ul>
+                        <div class="mt-3 bg-red-900/30 border-l-4 border-spl-red p-3 rounded">
+                            <p class="text-sm font-medium"><strong class="text-spl-gold">📌 উদাহরণ:</strong> দ্বিতীয় রাউন্ডে কোনো Franchise যদি ₹1,000-এ একজন Unsold Player কেনে, তাহলে তাকে অতিরিক্ত ₹500 জরিমানা দিতে হবে।</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IMPORTANT INFO -->
+                <div class="bg-premium-900 border border-premium-700 p-6 rounded-xl text-center shadow-lg mt-8">
+                    <h4 class="font-oswald text-xl font-bold text-white mb-3 tracking-wider uppercase"><i class="fa-solid fa-circle-exclamation text-spl-gold mr-2"></i> IMPORTANT INFORMATION</h4>
+                    <ul class="text-sm md:text-base space-y-2 mb-6 text-gray-300">
+                        <li>সকল Player ও Franchise-কে নিয়মাবলি ভালোভাবে পড়ে সেই অনুযায়ী প্রস্তুতি নেওয়ার অনুরোধ করা হচ্ছে।</li>
+                        <li>Registration-এর সময় সঠিক তথ্য ও প্রয়োজনীয় Documents জমা দিতে হবে।</li>
+                        <li>Tournament পরিচালনা ও স্বচ্ছতা বজায় রাখতে সকলকে Organising Committee-এর নিয়ম মেনে চলতে হবে।</li>
+                    </ul>
+                    
+                    <div class="border-t border-premium-700 pt-6">
+                        <h3 class="font-oswald text-xl md:text-2xl font-bold text-spl-gold mb-2">🔥 SPL SEASON 6 – LET'S MAKE IT BIGGER, BETTER & MORE EXCITING! 🔥</h3>
+                        <p class="text-white font-bold tracking-widest mb-4">🏏 8 TEAMS | 14 PLAYERS | 3 DAYS | ONE CHAMPION! 🏆</p>
+                        <p class="text-sm font-medium italic mb-2">আসুন, সকলের সহযোগিতায় Santuri-র ক্রিকেট উৎসবকে আরও বড় ও আকর্ষণীয় করে তুলি।</p>
+                        <p class="text-xl font-bold text-white mb-1">🙏 THANK YOU</p>
+                        <p class="text-xs text-gray-400 uppercase tracking-widest font-bold">TEAM SPL SEASON 6 ORGANISED BY: Lalgarh Village Club</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="flex-shrink-0 p-4 border-t border-premium-700 flex justify-end bg-premium-900 rounded-b-xl">
+                <button onclick="closeRulesModal()" class="px-8 py-2.5 bg-spl-gold text-premium-950 font-bold uppercase tracking-wide rounded hover:bg-spl-goldHover transition shadow-lg">I Understand</button>
             </div>
         </div>
     </div>
@@ -935,13 +1189,13 @@ service cloud.firestore {
     </div>
 
     <!-- Admin Edit Registration Modal -->
-    <div id="admin-edit-reg-modal" class="hidden fixed inset-0 z-[250] bg-premium-950/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-premium-900 border border-spl-gold rounded-xl max-w-2xl w-full shadow-2xl relative my-8">
-            <div class="sticky top-0 bg-premium-900 border-b border-premium-700 p-4 rounded-t-xl flex justify-between items-center z-10">
+    <div id="admin-edit-reg-modal" class="hidden fixed inset-0 z-[250] bg-premium-950/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-premium-900 border border-spl-gold rounded-xl max-w-2xl w-full shadow-2xl relative my-4 flex flex-col max-h-[90vh]">
+            <div class="flex-shrink-0 bg-premium-900 border-b border-premium-700 p-4 rounded-t-xl flex justify-between items-center z-10">
                 <h3 class="font-oswald text-2xl font-bold uppercase text-spl-gold"><i class="fa-solid fa-user-pen mr-2"></i> Edit Registration</h3>
                 <button type="button" onclick="closeAdminEditRegModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-2xl"></i></button>
             </div>
-            <div class="p-6">
+            <div class="p-6 flex-grow overflow-y-auto custom-scrollbar">
                 <form id="admin-edit-reg-form" onsubmit="handleAdminEditRegSubmit(event)" class="space-y-4">
                     <input type="hidden" id="edit-reg-id">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1024,7 +1278,7 @@ service cloud.firestore {
 
         let db, auth, app;
         window.isAdmin = false;
-        window.allRegistrations = []; // Added to cache registrations for quick editing
+        window.allRegistrations = [];
         const myAppId = 'spl-santuri-premier-league';
 
         function getLocalList(key, fallback = []) {
@@ -1081,7 +1335,7 @@ service cloud.firestore {
         };
 
         // --- CROPPER STATE & LOGIC ---
-        window.croppedImages = { season: null, team: null, gallery: null, sponsor: null, partner: null, reg_photo: null, reg_aadhaar: null, reg_payment: null, payment_qr: null };
+        window.croppedImages = { season: null, team: null, gallery: null, sponsor: null, partner: null, reg_photo: null, reg_aadhaar: null, reg_payment: null, owner_payment: null, payment_qr: null };
         let cropperInstance = null;
         let currentCropType = '';
 
@@ -1118,6 +1372,7 @@ service cloud.firestore {
             if(currentCropType === 'reg_photo') fileInput = document.getElementById('file-reg-photo');
             if(currentCropType === 'reg_aadhaar') fileInput = document.getElementById('file-reg-aadhaar');
             if(currentCropType === 'reg_payment') fileInput = document.getElementById('file-reg-payment');
+            if(currentCropType === 'owner_payment') fileInput = document.getElementById('file-owner-payment');
             if(currentCropType === 'payment_qr') fileInput = document.getElementById('qr-image-file');
             if(fileInput && !window.croppedImages[currentCropType]) fileInput.value = '';
         };
@@ -1125,8 +1380,7 @@ service cloud.firestore {
         window.applyCrop = function() {
             if (!cropperInstance) return;
             
-            // Apply aggressive compression for registration docs & QR to avoid 1MB DB limit
-            let isReg = currentCropType.startsWith('reg_');
+            let isReg = currentCropType.startsWith('reg_') || currentCropType === 'owner_payment';
             let isQR = currentCropType === 'payment_qr';
             let maxDim = isReg ? 600 : (isQR ? 400 : 1000);
             let quality = isReg ? 0.6 : (isQR ? 0.7 : 0.85);
@@ -1166,7 +1420,6 @@ service cloud.firestore {
             { id: 'P2', name: 'DJ Sound', category: 'Sound Partner', logo: 'https://placehold.co/400x200/152238/ffffff?text=Sound+Partner' }
         ];
 
-        // --- DEFAULT DATA ARRAYS ---
         const defaultSeasons = [
             { season: 5, year: "2025", title: "🏆 JMK Sixers Champions", desc: "The most watched season to date. JMK Sixers won the title and runner up AMAN XI Bheti in a spectacular showdown.", image: "" },
             { season: 4, year: "2024", title: "🏆 Krishnapur United Champions", desc: "An underdog story for the ages as Krishnapur United stunned the reigning champions in the semi-finals to win their maiden title.", image: "" },
@@ -1210,8 +1463,6 @@ service cloud.firestore {
             if(e) e.preventDefault();
             document.getElementById('reg-modal').classList.remove('hidden');
             document.getElementById('mobile-menu')?.classList.add('hidden');
-            
-            // Clear previous crop data if any
             ['reg_photo', 'reg_aadhaar', 'reg_payment'].forEach(type => {
                 window.croppedImages[type] = null;
                 const prev = document.getElementById('preview-' + type);
@@ -1224,15 +1475,55 @@ service cloud.firestore {
             document.getElementById('reg-modal').classList.add('hidden');
         };
 
+        window.openOwnerRegModal = function(e) {
+            if(e) e.preventDefault();
+            document.getElementById('owner-reg-modal').classList.remove('hidden');
+            document.getElementById('mobile-menu')?.classList.add('hidden');
+            
+            window.croppedImages['owner_payment'] = null;
+            const prev = document.getElementById('preview-owner_payment');
+            if(prev) { prev.src = ''; prev.classList.add('hidden'); }
+            
+            document.getElementById('owner-reg-form').reset();
+            // Reset owner names to default 2
+            const container = document.getElementById('owner-names-container');
+            container.innerHTML = `
+                <input type="text" name="owner_name[]" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="Owner 1 Full Name *" required>
+                <input type="text" name="owner_name[]" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="Owner 2 Full Name (Optional)">
+            `;
+        };
+
+        window.closeOwnerRegModal = function() {
+            document.getElementById('owner-reg-modal').classList.add('hidden');
+        };
+        
+        window.addOwnerNameField = function() {
+            const container = document.getElementById('owner-names-container');
+            const currentCount = container.children.length;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'owner_name[]';
+            input.className = 'w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner';
+            input.placeholder = `Owner ${currentCount + 1} Full Name (Optional)`;
+            container.appendChild(input);
+        };
+
+        window.openRulesModal = function() {
+            document.getElementById('rules-modal').classList.remove('hidden');
+        };
+
+        window.closeRulesModal = function() {
+            document.getElementById('rules-modal').classList.add('hidden');
+        };
+
         window.handleRegSubmit = async function(e) {
             e.preventDefault();
-            
             const photo = window.croppedImages['reg_photo'];
             const aadhaar = window.croppedImages['reg_aadhaar'];
             const payment = window.croppedImages['reg_payment'];
-            
-            if(!photo || !aadhaar || !payment) {
-                showNotice("Please make sure you have selected and cropped your Photo, Aadhaar, and Payment Screenshot.", "Missing Documents");
+
+            if (!photo || !aadhaar || !payment) {
+                showNotice("Please upload and crop all three required attachments (Photo, Aadhaar, and Payment SS).", "Missing Attachments");
                 return;
             }
 
@@ -1241,15 +1532,14 @@ service cloud.firestore {
             btn.disabled = true;
 
             const skillEl = document.querySelector('input[name="reg-skill"]:checked');
-
             const regData = {
                 isRegistration: true,
-                name: document.getElementById('reg-name').value,
+                name: document.getElementById('reg-name').value.trim(),
                 dob: document.getElementById('reg-dob').value,
                 panchayat: document.getElementById('reg-panchayat').value,
-                village: document.getElementById('reg-village').value,
-                phone: document.getElementById('reg-phone').value,
-                skill: skillEl ? skillEl.value : '',
+                village: document.getElementById('reg-village').value.trim(),
+                phone: document.getElementById('reg-phone').value.trim(),
+                skill: skillEl ? skillEl.value : 'Batsman',
                 photo: photo,
                 aadhaar: aadhaar,
                 payment: payment,
@@ -1261,10 +1551,16 @@ service cloud.firestore {
             try {
                 await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), regData);
                 closeRegModal();
-                showNotice("Registration Submitted Successfully! Your profile is pending verification. You will receive a WhatsApp message once approved.", "Success");
+                showNotice("Registration Submitted Successfully! Your details and ₹50 payment are pending admin verification. You will receive a WhatsApp confirmation with your SR No once approved.", "Success");
             } catch (error) {
-                console.error("Submission Error:", error);
-                showNotice("Database Permission Error: " + error.message + "\n\nAdmin: Please copy the rules from the 'DB Rules Code' tab and paste them into Firebase Console.", "Error");
+                console.error("Reg Error:", error);
+                const localList = getLocalList('registrations', []);
+                regData.id = 'LOCAL_' + Date.now();
+                localList.push(regData);
+                setLocalList('registrations', localList);
+                renderRegistrationsList(localList);
+                closeRegModal();
+                showNotice("Registration saved locally! Pending admin verification.", "Submitted");
             } finally {
                 btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i> Submit Registration';
                 btn.disabled = false;
@@ -1272,62 +1568,75 @@ service cloud.firestore {
         };
 
         window.approveRegistration = function(docId, name, phone) {
-            showConfirmDialog(`Approve registration for ${name}? This will assign an SR Number and make them public.`, async () => {
+            showConfirmDialog(`Approve player "${name}"? This will assign the next sequential SR Number and open WhatsApp confirmation.`, async () => {
                 try {
-                    // Calculate sequential SR Number starting from 001 (e.g., SR-001, SR-002)
-                    let maxSr = 0;
+                    let maxNum = 0;
                     window.allRegistrations.forEach(r => {
                         if (r.status === 'approved' && r.srNo) {
                             const match = String(r.srNo).match(/(\d+)/);
                             if (match) {
-                                const num = parseInt(match[1], 10);
-                                if (num > maxSr) maxSr = num;
+                                const val = parseInt(match[1], 10);
+                                if (val > maxNum) maxNum = val;
                             }
                         }
                     });
-                    const nextNum = maxSr + 1;
-                    const newSrNo = "SR-" + String(nextNum).padStart(3, '0');
+                    const nextSrNum = maxNum + 1;
+                    const newSrNo = "SR-" + String(nextSrNum).padStart(3, '0');
 
-                    const regRef = doc(db, 'artifacts', myAppId, 'public', 'data', 'players', docId);
-                    await updateDoc(regRef, {
-                        status: 'approved',
-                        srNo: newSrNo
-                    });
+                    if (!String(docId).startsWith('LOCAL_')) {
+                        const regRef = doc(db, 'artifacts', myAppId, 'public', 'data', 'players', docId);
+                        await updateDoc(regRef, {
+                            status: 'approved',
+                            srNo: newSrNo
+                        });
+                    } else {
+                        const localList = getLocalList('registrations', []);
+                        const idx = localList.findIndex(x => x.id === docId);
+                        if (idx > -1) {
+                            localList[idx].status = 'approved';
+                            localList[idx].srNo = newSrNo;
+                            setLocalList('registrations', localList);
+                            renderRegistrationsList(localList);
+                        }
+                    }
 
-                    const msg = `Hello ${name}, your registration for SPL Season 6 is APPROVED!%0A%0AYour Official SR Number is: *${newSrNo}*.%0A%0ABest of luck for the mega auction!%0A- SPL Management`;
+                    const msg = `Hello ${name}, your registration for SPL Season 6 is APPROVED!%0A%0AYour Official SR Number is: *${newSrNo}*%0A%0AWelcome to the Official Auction Pool!%0A- SPL Management (7980230656)`;
                     const waLink = `https://wa.me/91${phone}?text=${msg}`;
                     
-                    showNotice(`Approved! Player assigned ${newSrNo}. Clicking OK will open WhatsApp to message them.`, 'Approved', () => {
+                    showNotice(`Approved successfully with ${newSrNo}! Click OK to send WhatsApp confirmation message.`, 'Approved', () => {
                         window.open(waLink, '_blank');
                     });
                 } catch (err) {
-                    showNotice("Failed to approve. " + err.message, "Error");
+                    showNotice("Approval failed: " + err.message, "Error");
                 }
             });
         };
 
         window.deleteRegistration = function(id) {
-            showConfirmDialog("Are you sure you want to completely delete this registration?", async () => {
+            showConfirmDialog("Are you sure you want to delete this registration?", async () => {
+                if (String(id).startsWith('LOCAL_')) {
+                    const localList = getLocalList('registrations', []).filter(x => x.id !== id);
+                    setLocalList('registrations', localList);
+                    renderRegistrationsList(localList);
+                    return;
+                }
                 try {
                     await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'players', id));
-                } catch(e) { }
+                } catch(e) {}
             });
         };
 
-        window.editAdminRegistration = function(id) {
-            const reg = window.allRegistrations.find(r => r.id === id);
-            if(!reg) return;
-            
-            document.getElementById('edit-reg-id').value = reg.id;
-            document.getElementById('edit-reg-name').value = reg.name || '';
-            document.getElementById('edit-reg-dob').value = reg.dob || '';
-            document.getElementById('edit-reg-panchayat').value = reg.panchayat || '';
-            document.getElementById('edit-reg-village').value = reg.village || '';
-            document.getElementById('edit-reg-phone').value = reg.phone || '';
-            document.getElementById('edit-reg-skill').value = reg.skill || 'Batsman';
-            document.getElementById('edit-reg-status').value = reg.status || 'pending';
-            document.getElementById('edit-reg-srNo').value = reg.srNo || '';
-            
+        // --- ADMIN EDIT REGISTRATION ---
+        window.openAdminEditRegModal = function(id, name, dob, panchayat, village, phone, skill, status, srNo) {
+            document.getElementById('edit-reg-id').value = id;
+            document.getElementById('edit-reg-name').value = name || '';
+            document.getElementById('edit-reg-dob').value = dob || '';
+            document.getElementById('edit-reg-panchayat').value = panchayat || 'Muradi';
+            document.getElementById('edit-reg-village').value = village || '';
+            document.getElementById('edit-reg-phone').value = phone || '';
+            document.getElementById('edit-reg-skill').value = skill || 'Batsman';
+            document.getElementById('edit-reg-status').value = status || 'pending';
+            document.getElementById('edit-reg-srNo').value = srNo || '';
             document.getElementById('admin-edit-reg-modal').classList.remove('hidden');
         };
 
@@ -1338,46 +1647,35 @@ service cloud.firestore {
         window.handleAdminEditRegSubmit = async function(e) {
             e.preventDefault();
             const id = document.getElementById('edit-reg-id').value;
-            const name = document.getElementById('edit-reg-name').value;
-            const dob = document.getElementById('edit-reg-dob').value;
-            const panchayat = document.getElementById('edit-reg-panchayat').value;
-            const village = document.getElementById('edit-reg-village').value;
-            const phone = document.getElementById('edit-reg-phone').value;
-            const skill = document.getElementById('edit-reg-skill').value;
-            const status = document.getElementById('edit-reg-status').value;
-            const srNo = document.getElementById('edit-reg-srNo').value;
-            
+            const updated = {
+                name: document.getElementById('edit-reg-name').value.trim(),
+                dob: document.getElementById('edit-reg-dob').value,
+                panchayat: document.getElementById('edit-reg-panchayat').value,
+                village: document.getElementById('edit-reg-village').value.trim(),
+                phone: document.getElementById('edit-reg-phone').value.trim(),
+                skill: document.getElementById('edit-reg-skill').value,
+                status: document.getElementById('edit-reg-status').value,
+                srNo: document.getElementById('edit-reg-srNo').value.trim() || null
+            };
+
             try {
-                await updateDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'players', id), {
-                    name, dob, panchayat, village, phone, skill, status, srNo
-                });
-                window.closeAdminEditRegModal();
-                showNotice('Registration details updated successfully!', 'Updated');
-            } catch(err) {
-                showNotice('Failed to update: ' + err.message, 'Error');
+                if (!String(id).startsWith('LOCAL_')) {
+                    await updateDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'players', id), updated);
+                } else {
+                    const list = getLocalList('registrations', []);
+                    const idx = list.findIndex(x => x.id === id);
+                    if (idx > -1) {
+                        list[idx] = { ...list[idx], ...updated };
+                        setLocalList('registrations', list);
+                        renderRegistrationsList(list);
+                    }
+                }
+                closeAdminEditRegModal();
+                showNotice("Player registration updated successfully!", "Saved");
+            } catch (err) {
+                showNotice("Error updating registration: " + err.message, "Error");
             }
         };
-
-        function loadRegistrations(local = false) {
-            const localRegs = getLocalList('registrations', []);
-            renderRegistrationsList(localRegs);
-            if(local || !db) return;
-
-            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), (snap) => {
-                const mergedMap = new Map();
-                getLocalList('registrations', []).forEach(r => mergedMap.set(r.id, r));
-                snap.forEach(d => {
-                    const data = { id: d.id, ...d.data() };
-                    if(data.isRegistration) mergedMap.set(data.id, data);
-                });
-                const combined = Array.from(mergedMap.values());
-                setLocalList('registrations', combined);
-                renderRegistrationsList(combined);
-            }, (error) => {
-                console.warn("Registrations cloud sync fallback active:", error);
-                renderRegistrationsList(getLocalList('registrations', []));
-            });
-        }
 
         function renderRegistrationsList(regs) {
             window.allRegistrations = regs;
@@ -1394,31 +1692,26 @@ service cloud.firestore {
 
             if (pendingContainer && window.isAdmin) {
                 if (pending.length === 0) {
-                    pendingContainer.innerHTML = `<p class="text-gray-500 text-sm col-span-full">No pending registrations.</p>`;
+                    pendingContainer.innerHTML = `<p class="text-gray-500 text-sm col-span-full">No pending player registrations.</p>`;
                 } else {
                     pendingContainer.innerHTML = pending.map(r => `
                         <div class="bg-premium-800 border border-premium-700 rounded-xl p-4 shadow-lg flex flex-col gap-3">
-                            <div class="flex items-center gap-3">
-                                <img src="${r.photo || ''}" class="w-16 h-16 rounded-full object-cover border-2 border-spl-gold bg-premium-950">
+                            <div class="flex items-center gap-3 border-b border-premium-700 pb-3">
+                                <img src="${r.photo || ''}" class="w-14 h-14 object-cover rounded-full border border-spl-gold">
                                 <div>
-                                    <h4 class="font-bold text-white text-lg leading-tight">${r.name}</h4>
-                                    <p class="text-xs text-spl-gold font-bold uppercase">${r.skill} • ${r.village}</p>
-                                    <p class="text-xs text-gray-300">Panchayat: ${r.panchayat}</p>
-                                    <p class="text-xs text-gray-400">DOB: ${r.dob} | 📞 ${r.phone}</p>
+                                    <h4 class="font-oswald font-bold text-white text-lg leading-tight">${r.name}</h4>
+                                    <p class="text-xs text-spl-gold font-semibold">${r.skill} • ${r.panchayat}</p>
+                                    <p class="text-xs text-gray-300">Village: ${r.village} | 📞 ${r.phone}</p>
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-2 text-center text-xs">
-                                <a href="${r.aadhaar || '#'}" target="_blank" class="bg-premium-950 p-2 rounded border border-premium-700 hover:border-spl-gold text-gray-300 block">
-                                    <img src="${r.aadhaar || ''}" class="h-16 w-full object-contain mb-1 rounded">Aadhaar
-                                </a>
-                                <a href="${r.payment || '#'}" target="_blank" class="bg-premium-950 p-2 rounded border border-premium-700 hover:border-spl-gold text-gray-300 block">
-                                    <img src="${r.payment || ''}" class="h-16 w-full object-contain mb-1 rounded">Payment SS
-                                </a>
+                                <a href="${r.aadhaar || '#'}" target="_blank" class="bg-premium-950 p-2 rounded border border-premium-700 hover:border-spl-gold text-gray-300">View Aadhaar</a>
+                                <a href="${r.payment || '#'}" target="_blank" class="bg-premium-950 p-2 rounded border border-premium-700 hover:border-spl-gold text-gray-300">Payment SS</a>
                             </div>
                             <div class="flex gap-2 mt-auto pt-2 border-t border-premium-700">
-                                <button onclick="approveRegistration('${r.id}', '${(r.name||'').replace(/'/g, "\\'")}', '${r.phone||''}')" class="flex-1 bg-green-600 hover:bg-green-500 text-white font-bold py-2 rounded text-xs uppercase shadow"><i class="fa-solid fa-check mr-1"></i> Approve</button>
-                                <button onclick="editAdminRegistration('${r.id}')" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-2 rounded text-xs shadow"><i class="fa-solid fa-pen"></i></button>
-                                <button onclick="deleteRegistration('${r.id}')" class="bg-red-600 hover:bg-red-500 text-white px-3 py-2 rounded text-xs shadow"><i class="fa-solid fa-trash"></i></button>
+                                <button onclick="approveRegistration('${r.id}', '${r.name.replace(/'/g, "\\'")}', '${r.phone}')" class="flex-1 bg-green-600 hover:bg-green-500 text-white font-bold py-1.5 rounded text-xs uppercase shadow"><i class="fa-solid fa-check mr-1"></i> Approve</button>
+                                <button onclick="openAdminEditRegModal('${r.id}', '${r.name.replace(/'/g, "\\'")}', '${r.dob||''}', '${r.panchayat||''}', '${(r.village||'').replace(/'/g, "\\'")}', '${r.phone||''}', '${r.skill||''}', '${r.status||''}', '${r.srNo||''}')" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs shadow" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="deleteRegistration('${r.id}')" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded text-xs shadow"><i class="fa-solid fa-trash"></i></button>
                             </div>
                         </div>
                     `).join('');
@@ -1432,16 +1725,16 @@ service cloud.firestore {
                     approvedContainer.innerHTML = approved.map(r => `
                         <div class="bg-premium-800 border border-green-600/50 rounded-xl p-4 shadow-lg flex items-center justify-between gap-3">
                             <div class="flex items-center gap-3">
-                                <img src="${r.photo || ''}" class="w-12 h-12 rounded-full object-cover border border-spl-gold">
+                                <img src="${r.photo || ''}" class="w-12 h-12 object-cover rounded-full border border-green-500">
                                 <div>
-                                    <span class="bg-spl-gold text-premium-950 text-[10px] font-extrabold px-2 py-0.5 rounded uppercase">${r.srNo || 'SR-001'}</span>
-                                    <h4 class="font-bold text-white text-sm mt-0.5">${r.name}</h4>
-                                    <p class="text-[11px] text-gray-400">${r.skill} • ${r.village}</p>
+                                    <span class="bg-spl-gold text-premium-950 text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase">${r.srNo || 'SR-001'}</span>
+                                    <h4 class="font-oswald font-bold text-white text-base mt-0.5">${r.name}</h4>
+                                    <p class="text-xs text-gray-300">${r.skill} • ${r.village} (${r.panchayat})</p>
                                 </div>
                             </div>
                             <div class="flex gap-1.5">
-                                <button onclick="editAdminRegistration('${r.id}')" class="bg-blue-600 hover:bg-blue-500 text-white w-8 h-8 rounded text-xs shadow"><i class="fa-solid fa-pen"></i></button>
-                                <button onclick="deleteRegistration('${r.id}')" class="bg-red-600 hover:bg-red-500 text-white w-8 h-8 rounded text-xs shadow"><i class="fa-solid fa-trash"></i></button>
+                                <button onclick="openAdminEditRegModal('${r.id}', '${r.name.replace(/'/g, "\\'")}', '${r.dob||''}', '${r.panchayat||''}', '${(r.village||'').replace(/'/g, "\\'")}', '${r.phone||''}', '${r.skill||''}', '${r.status||''}', '${r.srNo||''}')" class="bg-blue-600 hover:bg-blue-500 text-white w-8 h-8 rounded text-xs shadow flex items-center justify-center"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="deleteRegistration('${r.id}')" class="bg-red-600 hover:bg-red-500 text-white w-8 h-8 rounded text-xs shadow flex items-center justify-center"><i class="fa-solid fa-trash"></i></button>
                             </div>
                         </div>
                     `).join('');
@@ -1451,195 +1744,227 @@ service cloud.firestore {
             if (publicAuctionGrid) {
                 if (approved.length === 0) {
                     publicAuctionGrid.innerHTML = `
-                        <div class="col-span-full w-full text-center py-8">
-                            <p class="text-gray-500 font-bold tracking-widest uppercase text-sm">Registrations are opening soon...</p>
+                        <div class="col-span-full w-full text-center py-12 bg-premium-900 rounded-2xl border border-premium-800">
+                            <i class="fa-solid fa-users-viewfinder text-4xl text-spl-gold mb-3"></i>
+                            <p class="text-gray-400 font-bold tracking-widest uppercase text-sm">Auction Pool is filling up. Registrations are live!</p>
                         </div>
                     `;
                 } else {
                     publicAuctionGrid.innerHTML = approved.map(r => `
-                        <div class="bg-premium-900 border border-premium-700 hover:border-spl-gold rounded-xl p-4 text-center shadow-xl transition group relative overflow-hidden">
-                            <div class="absolute top-2 right-2 bg-spl-gold text-premium-950 font-oswald font-bold text-xs px-2.5 py-0.5 rounded shadow">${r.srNo || 'SR-001'}</div>
-                            <div class="w-20 h-20 rounded-full mx-auto mb-3 border-2 border-spl-gold overflow-hidden bg-premium-950 shadow-inner">
-                                <img src="${r.photo || ''}" alt="${r.name}" class="w-full h-full object-cover">
+                        <div class="bg-premium-900 border border-premium-700 hover:border-spl-gold transition rounded-xl p-4 text-center shadow-xl group flex flex-col items-center">
+                            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-spl-gold mb-3 shadow-inner bg-premium-950">
+                                <img src="${r.photo || ''}" alt="${r.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform">
                             </div>
-                            <h3 class="font-oswald text-xl font-bold text-white leading-tight mb-1 truncate">${r.name}</h3>
-                            <p class="text-[11px] text-spl-gold font-bold uppercase tracking-wider bg-premium-950 inline-block px-2.5 py-0.5 rounded-full border border-premium-700 mb-2">${r.skill}</p>
-                            <p class="text-xs text-gray-300 font-medium truncate"><i class="fa-solid fa-location-dot text-spl-red mr-1"></i>${r.village}</p>
-                            <p class="text-[10px] text-gray-400 uppercase tracking-wider mt-0.5 truncate">${r.panchayat}</p>
+                            <span class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-xs px-2.5 py-0.5 rounded-full uppercase shadow-sm mb-1.5">${r.srNo || 'SR-001'}</span>
+                            <h4 class="font-oswald font-bold text-white text-lg md:text-xl leading-tight mb-1 line-clamp-1">${r.name}</h4>
+                            <p class="text-[11px] text-spl-gold font-bold uppercase tracking-wider mb-2">${r.skill}</p>
+                            <p class="text-xs text-gray-400 mt-auto"><i class="fa-solid fa-location-dot text-spl-red mr-1"></i>${r.village}</p>
                         </div>
                     `).join('');
                 }
             }
         }
 
-        // --- UI TOGGLES ---
-        window.showComingSoon = function(e, type) {
-            if(e) e.preventDefault();
-            document.getElementById('coming-soon-title').innerText = type + ' Coming Soon';
-            document.getElementById('coming-soon-modal').classList.remove('hidden');
-            document.getElementById('mobile-menu')?.classList.add('hidden');
-        };
+        // --- OWNER REGISTRATION MANAGEMENT ---
+        window.allOwnerRegistrations = [];
 
-        window.closeComingSoon = function() {
-            document.getElementById('coming-soon-modal').classList.add('hidden');
-        };
-
-        window.toggleAdminModal = function() {
-            document.getElementById('admin-modal').classList.toggle('hidden');
-        };
-
-        window.logoutAdmin = function() {
-            window.isAdmin = false;
-            document.getElementById('admin-dashboard').classList.add('hidden');
-            loadAllData();
-            showNotice('Logged out of Admin Dashboard.', 'Logged Out');
-        };
-
-        window.handleAdminLogin = function(e) {
+        window.handleOwnerRegSubmit = async function(e) {
             e.preventDefault();
-            const user = document.getElementById('admin-user').value;
-            const pass = document.getElementById('admin-pass').value;
+            const payment = window.croppedImages['owner_payment'];
             
-            if (user === 'admin' && pass === '1234') {
-                window.isAdmin = true;
-                document.getElementById('admin-dashboard').classList.remove('hidden');
-                window.toggleAdminModal();
-                document.getElementById('admin-user').value = '';
-                document.getElementById('admin-pass').value = '';
-                
-                loadAllData();
-                showNotice('Access Granted! Welcome to the Master Admin Dashboard.', 'Welcome Admin');
-                document.getElementById('admin-dashboard').scrollIntoView({ behavior: 'smooth' });
-            } else {
-                showNotice('Invalid Username or Password. Please try again.', 'Login Failed');
-            }
-        };
-
-        window.switchAdminTab = function(tabName) {
-            ['registrations', 'seasons', 'teams', 'players', 'fanzone', 'gallery', 'video', 'texts', 'sponsors', 'partners', 'rules'].forEach(t => {
-                document.getElementById(`admin-tab-${t}`)?.classList.add('hidden');
-                const btn = document.getElementById(`tab-btn-${t}`);
-                if(btn) {
-                    if(t === 'registrations') {
-                        btn.className = 'px-4 py-2 bg-spl-red text-white font-bold rounded uppercase text-sm animate-pulse border border-transparent hover:border-red-400';
-                    } else if(t === 'rules') {
-                        btn.className = 'px-4 py-2 bg-green-700 text-white hover:bg-green-600 font-bold rounded uppercase text-sm border border-transparent';
-                    } else {
-                        btn.className = 'px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700';
-                    }
-                }
-            });
-            document.getElementById(`admin-tab-${tabName}`).classList.remove('hidden');
-            const targetBtn = document.getElementById(`tab-btn-${tabName}`);
-            if(targetBtn) {
-                if(tabName === 'registrations') targetBtn.classList.remove('animate-pulse');
-                targetBtn.className = 'px-4 py-2 bg-spl-gold text-premium-950 font-bold rounded uppercase text-sm shadow-lg';
-            }
-        };
-
-        // --- INITIALIZE FIREBASE ---
-        async function initFirebase() {
-            try {
-                const firebaseConfig = {
-                  apiKey: "AIzaSyDub6J70tx5i9plbWrHWLuO1LVFkyxXMls",
-                  authDomain: "spl-santuri-premier-league.firebaseapp.com",
-                  projectId: "spl-santuri-premier-league",
-                  storageBucket: "spl-santuri-premier-league.firebasestorage.app",
-                  messagingSenderId: "82581808443",
-                  appId: "1:82581808443:web:82eca1ec7bf17577e1831e"
-                };
-
-                app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
-                db = getFirestore(app);
-                
-                onAuthStateChanged(auth, (user) => {
-                    if (user) {
-                        loadAllData();
-                    } else {
-                        signInAnonymously(auth).catch(e => {
-                            console.warn("Auth failed", e);
-                            loadAllData(true);
-                        });
-                    }
-                });
-            } catch(e) {
-                console.warn("Offline mode", e);
-                loadAllData(true);
-            }
-        }
-        
-        function loadAllData(local = false) {
-            loadPosts(local); loadTeams(local); loadPlayers(local); loadGallery(local); 
-            loadAboutText(local); loadSponsors(local); loadPartners(local); loadVideo(local); loadPolls(local);
-            loadRegistrations(local);
-            loadSettings(local);
-        }
-
-        // --- SETTINGS / QR LOGIC ---
-        function applyQrToUI(url) {
-            const pubQr = document.getElementById('public-payment-qr');
-            const pubFallback = document.getElementById('public-payment-qr-fallback');
-            const adminQr = document.getElementById('admin-current-qr');
-            const adminFallback = document.getElementById('admin-current-qr-fallback');
-            
-            if(url) {
-                if(pubQr) { pubQr.src = url; pubQr.classList.remove('hidden'); }
-                if(pubFallback) pubFallback.classList.add('hidden');
-                if(adminQr) { adminQr.src = url; adminQr.classList.remove('hidden'); }
-                if(adminFallback) adminFallback.classList.add('hidden');
-            } else {
-                if(pubQr) pubQr.classList.add('hidden');
-                if(pubFallback) pubFallback.classList.remove('hidden');
-                if(adminQr) adminQr.classList.add('hidden');
-                if(adminFallback) adminFallback.classList.remove('hidden');
-            }
-        }
-
-        window.handleQrSubmit = async function(e) {
-            e.preventDefault();
-            if(!window.isAdmin) return;
-            const base64Url = window.croppedImages['payment_qr'];
-            if(!base64Url) {
-                showNotice("Please select and crop a QR code image.", "Missing Image");
+            if (!payment) {
+                showNotice("Please upload and crop your ₹2,000 Advance Payment Screenshot.", "Missing Payment Proof");
                 return;
             }
             
-            // Always save to local storage as immediate fallback
-            localStorage.setItem('spl_payment_qr_backup', base64Url);
-            applyQrToUI(base64Url);
+            const decl = document.getElementById('owner-declaration');
+            if(!decl.checked) {
+                showNotice("You must check the declaration box to agree to the rules.", "Declaration Required");
+                return;
+            }
+
+            const btn = document.getElementById('owner-reg-submit-btn');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Submitting...';
+            btn.disabled = true;
+
+            const nameInputs = document.querySelectorAll('input[name="owner_name[]"]');
+            const ownerNames = Array.from(nameInputs).map(i => i.value.trim()).filter(v => v !== '');
+
+            const regData = {
+                isOwnerRegistration: true,
+                franchiseName: document.getElementById('owner-franchise-name').value.trim(),
+                owners: ownerNames,
+                phone: document.getElementById('owner-phone').value.trim(),
+                address: document.getElementById('owner-address').value.trim(),
+                payment: payment,
+                status: 'pending',
+                franchiseId: null,
+                createdAt: Date.now()
+            };
 
             try {
-                await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'sponsors', 'SYSTEM_PAYMENT_QR'), {
-                    id: 'SYSTEM_PAYMENT_QR',
-                    name: 'System Payment QR',
-                    type: 'system_qr',
-                    logo: base64Url,
-                    createdAt: Date.now()
-                });
-                window.clearCropPreview('payment_qr');
-                document.getElementById('qr-image-file').value = '';
-                showNotice('Payment QR Code updated successfully!', 'Success');
-            } catch(err) { 
-                window.clearCropPreview('payment_qr');
-                document.getElementById('qr-image-file').value = '';
-                showNotice('Saved locally on this browser, but Firebase blocked cloud sync (' + err.message + ').\n\nOpen the "DB Rules Code" tab in Admin Dashboard to copy the exact rules for Firebase Console.', 'Saved Locally'); 
+                await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), regData);
+                closeOwnerRegModal();
+                showNotice("Owner Registration Submitted Successfully! Your details and ₹2,000 advance payment are pending admin verification. You will receive a WhatsApp confirmation once approved.", "Success");
+            } catch (error) {
+                console.error("Owner Reg Error:", error);
+                const localList = getLocalList('owner_registrations', []);
+                regData.id = 'LOCAL_OWNER_' + Date.now();
+                localList.push(regData);
+                setLocalList('owner_registrations', localList);
+                renderOwnerRegistrationsList(localList);
+                closeOwnerRegModal();
+                showNotice("Owner Registration saved locally! Pending admin verification.", "Submitted");
+            } finally {
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i> Submit Owner Registration';
+                btn.disabled = false;
             }
         };
 
-        function loadSettings(local = false) {
-            const cachedQr = localStorage.getItem('spl_payment_qr_backup');
-            if(cachedQr) applyQrToUI(cachedQr);
-            if(local) return;
-            
-            onSnapshot(doc(db, 'artifacts', myAppId, 'public', 'data', 'sponsors', 'SYSTEM_PAYMENT_QR'), (docSnap) => {
-                if(docSnap.exists() && docSnap.data().logo) {
-                    applyQrToUI(docSnap.data().logo);
-                } else if(!cachedQr) {
-                    applyQrToUI(null);
+        window.approveOwnerRegistration = function(docId, fName, phone) {
+            showConfirmDialog(`Approve franchise ownership for "${fName}"? This assigns an official Franchise ID and opens WhatsApp confirmation.`, async () => {
+                try {
+                    let maxNum = 0;
+                    window.allOwnerRegistrations.forEach(r => {
+                        if (r.status === 'approved' && r.franchiseId) {
+                            const match = String(r.franchiseId).match(/(\d+)/);
+                            if (match) {
+                                const val = parseInt(match[1], 10);
+                                if (val > maxNum) maxNum = val;
+                            }
+                        }
+                    });
+                    const nextNum = maxNum + 1;
+                    const newFrId = "FR-" + String(nextNum).padStart(3, '0');
+
+                    if (!String(docId).startsWith('LOCAL_')) {
+                        const regRef = doc(db, 'artifacts', myAppId, 'public', 'data', 'players', docId);
+                        await updateDoc(regRef, {
+                            status: 'approved',
+                            franchiseId: newFrId
+                        });
+                    } else {
+                        const localList = getLocalList('owner_registrations', []);
+                        const idx = localList.findIndex(x => x.id === docId);
+                        if (idx > -1) {
+                            localList[idx].status = 'approved';
+                            localList[idx].franchiseId = newFrId;
+                            setLocalList('owner_registrations', localList);
+                            renderOwnerRegistrationsList(localList);
+                        }
+                    }
+
+                    const msg = `Congratulations! Your franchise registration for *${fName}* in SPL Season 6 is APPROVED!%0A%0AOfficial Franchise Reg ID: *${newFrId}*%0A%0AReminder: Please clear the remaining balance before the Mega Auction.%0A- SPL Management (7980230656)`;
+                    const waLink = `https://wa.me/91${phone}?text=${msg}`;
+                    
+                    showNotice(`Franchise Approved! Assigned ID: ${newFrId}. Click OK to send WhatsApp confirmation.`, 'Approved', () => {
+                        window.open(waLink, '_blank');
+                    });
+                } catch (err) {
+                    showNotice("Approval failed: " + err.message, "Error");
                 }
+            });
+        };
+
+        window.deleteOwnerRegistration = function(id) {
+            showConfirmDialog("Are you sure you want to completely delete this Owner registration?", async () => {
+                if (String(id).startsWith('LOCAL_')) {
+                    const localList = getLocalList('owner_registrations', []).filter(x => x.id !== id);
+                    setLocalList('owner_registrations', localList);
+                    renderOwnerRegistrationsList(localList);
+                    return;
+                }
+                try {
+                    await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'players', id));
+                } catch(e) {}
+            });
+        };
+
+        function renderOwnerRegistrationsList(regs) {
+            window.allOwnerRegistrations = regs;
+            const pendingContainer = document.getElementById('admin-owner-regs-pending');
+            const approvedContainer = document.getElementById('admin-owner-regs-approved');
+
+            const pending = regs.filter(r => r.status !== 'approved').sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+            const approved = regs.filter(r => r.status === 'approved').sort((a,b) => {
+                const numA = parseInt(String(a.franchiseId || '0').replace(/\D/g, ''), 10) || 0;
+                const numB = parseInt(String(b.franchiseId || '0').replace(/\D/g, ''), 10) || 0;
+                return numA - numB;
+            });
+
+            if (pendingContainer && window.isAdmin) {
+                if (pending.length === 0) {
+                    pendingContainer.innerHTML = `<p class="text-gray-500 text-sm col-span-full">No pending owner registrations.</p>`;
+                } else {
+                    pendingContainer.innerHTML = pending.map(r => `
+                        <div class="bg-premium-800 border border-premium-700 rounded-xl p-4 shadow-lg flex flex-col gap-3">
+                            <div class="border-b border-premium-700 pb-2">
+                                <h4 class="font-oswald font-bold text-spl-gold text-lg leading-tight uppercase">${r.franchiseName}</h4>
+                                <p class="text-xs text-white mt-1"><strong>Owners:</strong> ${(r.owners || []).join(', ')}</p>
+                                <p class="text-xs text-gray-400 mt-1">📞 ${r.phone}</p>
+                                <p class="text-xs text-gray-400">📍 ${r.address}</p>
+                            </div>
+                            <div class="text-center text-xs">
+                                <a href="${r.payment || '#'}" target="_blank" class="bg-premium-950 p-2 rounded border border-premium-700 hover:border-spl-gold text-gray-300 block">
+                                    <img src="${r.payment || ''}" class="h-20 w-full object-contain mb-1 rounded">Advance Payment SS
+                                </a>
+                            </div>
+                            <div class="flex gap-2 mt-auto pt-2 border-t border-premium-700">
+                                <button onclick="approveOwnerRegistration('${r.id}', '${(r.franchiseName||'').replace(/'/g, "\\'")}', '${r.phone||''}')" class="flex-1 bg-green-600 hover:bg-green-500 text-white font-bold py-1.5 rounded text-xs uppercase shadow"><i class="fa-solid fa-check mr-1"></i> Approve</button>
+                                <button onclick="deleteOwnerRegistration('${r.id}')" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded text-xs shadow"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            if (approvedContainer && window.isAdmin) {
+                if (approved.length === 0) {
+                    approvedContainer.innerHTML = `<p class="text-gray-500 text-sm col-span-full">No approved owners yet.</p>`;
+                } else {
+                    approvedContainer.innerHTML = approved.map(r => `
+                        <div class="bg-premium-800 border border-green-600/50 rounded-xl p-4 shadow-lg flex items-center justify-between gap-3">
+                            <div>
+                                <span class="bg-spl-gold text-premium-950 text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase">${r.franchiseId || 'FR-001'}</span>
+                                <h4 class="font-oswald font-bold text-white text-base mt-1 uppercase text-spl-gold">${r.franchiseName}</h4>
+                                <p class="text-xs text-gray-300 mt-1">${(r.owners || []).join(', ')}</p>
+                            </div>
+                            <div class="flex gap-1.5">
+                                <button onclick="deleteOwnerRegistration('${r.id}')" class="bg-red-600 hover:bg-red-500 text-white w-8 h-8 rounded text-xs shadow flex items-center justify-center"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
+        function loadRegistrations(local = false) {
+            const localRegs = getLocalList('registrations', []);
+            const localOwners = getLocalList('owner_registrations', []);
+            renderRegistrationsList(localRegs);
+            renderOwnerRegistrationsList(localOwners);
+            if(local || !db) return;
+
+            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), (snap) => {
+                const mergedMap = new Map();
+                const ownerMap = new Map();
+                getLocalList('registrations', []).forEach(r => mergedMap.set(r.id, r));
+                getLocalList('owner_registrations', []).forEach(r => ownerMap.set(r.id, r));
+                snap.forEach(d => {
+                    const data = { id: d.id, ...d.data() };
+                    if(data.isRegistration) mergedMap.set(data.id, data);
+                    if(data.isOwnerRegistration) ownerMap.set(data.id, data);
+                });
+                const combined = Array.from(mergedMap.values());
+                const combinedOwners = Array.from(ownerMap.values());
+                setLocalList('registrations', combined);
+                setLocalList('owner_registrations', combinedOwners);
+                renderRegistrationsList(combined);
+                renderOwnerRegistrationsList(combinedOwners);
             }, (error) => {
-                console.warn("QR listener error:", error);
+                console.warn("Registrations cloud sync fallback active:", error);
+                renderRegistrationsList(getLocalList('registrations', []));
+                renderOwnerRegistrationsList(getLocalList('owner_registrations', []));
             });
         }
 
@@ -1681,6 +2006,30 @@ service cloud.firestore {
                 localStorage.setItem('spl_voted_' + pollId, 'true');
             } catch(e) {
                 showNotice("Couldn't submit vote at this time.", "Error");
+            }
+        };
+
+        window.switchAdminTab = function(tabName) {
+            ['registrations', 'owner_regs', 'seasons', 'teams', 'players', 'fanzone', 'gallery', 'texts', 'sponsors', 'partners', 'rules'].forEach(t => {
+                document.getElementById(`admin-tab-${t}`)?.classList.add('hidden');
+                const btn = document.getElementById(`tab-btn-${t}`);
+                if(btn) {
+                    if(t === 'registrations') {
+                        btn.className = 'px-4 py-2 bg-spl-red text-white font-bold rounded uppercase text-sm animate-pulse border border-transparent hover:border-red-400';
+                    } else if(t === 'owner_regs') {
+                        btn.className = 'px-4 py-2 bg-orange-600 text-white font-bold rounded uppercase text-sm animate-pulse border border-transparent hover:border-orange-400';
+                    } else if(t === 'rules') {
+                        btn.className = 'px-4 py-2 bg-green-700 text-white hover:bg-green-600 font-bold rounded uppercase text-sm border border-transparent';
+                    } else {
+                        btn.className = 'px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700';
+                    }
+                }
+            });
+            document.getElementById(`admin-tab-${tabName}`).classList.remove('hidden');
+            const targetBtn = document.getElementById(`tab-btn-${tabName}`);
+            if(targetBtn) {
+                if(tabName === 'registrations' || tabName === 'owner_regs') targetBtn.classList.remove('animate-pulse');
+                targetBtn.className = 'px-4 py-2 bg-spl-gold text-premium-950 font-bold rounded uppercase text-sm shadow-lg';
             }
         };
 
@@ -1783,60 +2132,34 @@ service cloud.firestore {
             }, 100);
         }
 
-        // --- FEATURED VIDEO LOGIC ---
-        window.handleVideoSubmit = async function(e) {
-            e.preventDefault();
-            if(!window.isAdmin) return;
+        // --- SETTINGS / QR LOGIC ---
+        function applyQrToUI(url) {
+            const pubQr = document.getElementById('public-payment-qr');
+            const pubFallback = document.getElementById('public-payment-qr-fallback');
+            const pubOwnerQr = document.getElementById('public-owner-payment-qr');
+            const pubOwnerFallback = document.getElementById('public-owner-payment-qr-fallback');
+            const adminQr = document.getElementById('admin-current-qr');
+            const adminFallback = document.getElementById('admin-current-qr-fallback');
             
-            const rawUrl = document.getElementById('video-url-input').value;
-            let videoId = '';
-            
-            try {
-                if (rawUrl.includes('youtu.be/')) {
-                    videoId = rawUrl.split('youtu.be/')[1].split('?')[0];
-                } else if (rawUrl.includes('youtube.com/watch')) {
-                    const url = new URL(rawUrl);
-                    videoId = url.searchParams.get('v');
-                } else if (rawUrl.includes('youtube.com/embed/')) {
-                    videoId = rawUrl.split('embed/')[1].split('?')[0];
-                }
-            } catch (error) { console.error("URL Parse error", error); }
-
-            if(!videoId) {
-                showNotice("Invalid YouTube URL. Please paste a valid link.", "Invalid URL");
-                return;
+            if(url) {
+                if(pubQr) { pubQr.src = url; pubQr.classList.remove('hidden'); }
+                if(pubFallback) pubFallback.classList.add('hidden');
+                if(pubOwnerQr) { pubOwnerQr.src = url; pubOwnerQr.classList.remove('hidden'); }
+                if(pubOwnerFallback) pubOwnerFallback.classList.add('hidden');
+                if(adminQr) { adminQr.src = url; adminQr.classList.remove('hidden'); }
+                if(adminFallback) adminFallback.classList.add('hidden');
+            } else {
+                if(pubQr) pubQr.classList.add('hidden');
+                if(pubFallback) pubFallback.classList.remove('hidden');
+                if(pubOwnerQr) pubOwnerQr.classList.add('hidden');
+                if(pubOwnerFallback) pubOwnerFallback.classList.remove('hidden');
+                if(adminQr) adminQr.classList.add('hidden');
+                if(adminFallback) adminFallback.classList.remove('hidden');
             }
-
-            const embedUrl = `https://www.youtube.com/embed/${videoId}`;
-            try {
-                await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'settings', 'featured_video'), { url: embedUrl });
-                showNotice('Featured video updated successfully!', 'Success');
-            } catch(err) { showNotice('Error updating video', 'Error'); }
-        };
-
-        function loadVideo(local = false) {
-            const iframe = document.getElementById('featured-video-iframe');
-            const input = document.getElementById('video-url-input');
-            if(!iframe) return;
-
-            const defaultVideo = localStorage.getItem('spl_featured_video') || "https://www.youtube.com/embed/k9alqPSW5BY";
-
-            if(local) { 
-                iframe.src = defaultVideo; 
-                return; 
-            }
-
-            onSnapshot(doc(db, 'artifacts', myAppId, 'public', 'data', 'settings', 'featured_video'), (docSnap) => {
-                let embedUrl = defaultVideo;
-                if(docSnap.exists() && docSnap.data().url) {
-                    embedUrl = docSnap.data().url;
-                }
-                iframe.src = embedUrl;
-                if(input && !input.value) input.value = embedUrl;
-            }, () => {
-                iframe.src = defaultVideo;
-            });
         }
+
+        // --- FEATURED VIDEO LOGIC (REMOVED) ---
+        // Video section removed as per user request to replace with Rules Banner
 
         // --- GLOBAL RESIZE LISTENER FOR ALL SLIDERS ---
         window.addEventListener('resize', () => {
@@ -1847,1012 +2170,6 @@ service cloud.firestore {
             updatePlayerSlider();
             updatePartnerSlider();
         });
-
-
-        // --- SEASONS LOGIC (Slider Mode) ---
-        window.handlePostSubmit = async function(e) {
-            e.preventDefault();
-            if(!window.isAdmin) return;
-            const imgUrl = window.croppedImages['season'] || '';
-            await saveSeasonPost(imgUrl);
-        };
-
-        async function saveSeasonPost(imgUrl) {
-            const post = {
-                season: parseInt(document.getElementById('post-season').value),
-                year: document.getElementById('post-year').value,
-                title: document.getElementById('post-title').value,
-                image: imgUrl,
-                desc: document.getElementById('post-desc').value,
-                createdAt: Date.now()
-            };
-            try {
-                await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'seasons'), post);
-                document.getElementById('add-post-form').reset();
-                window.clearCropPreview('season');
-                showNotice('Season archive saved successfully!', 'Success');
-            } catch(err) { showNotice('Error saving post', 'Error'); }
-        }
-
-        window.deletePost = function(id) {
-            showConfirmDialog('Delete this season archive?', async () => {
-                try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'seasons', id)); } catch(e) {}
-            });
-        };
-
-        function loadPosts(local = false) {
-            const grid = document.getElementById('seasons-slider');
-            if(!grid) return;
-            if(local) { renderPosts(getLocalList('seasons', defaultSeasons)); return; }
-
-            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'seasons'), (snap) => {
-                let fetched = [];
-                snap.forEach(d => fetched.push({ id: d.id, ...d.data() }));
-                let all = fetched.sort((a,b) => b.season - a.season).filter(p => p.season <= 5);
-                if(all.length === 0 && fetched.length === 0) {
-                    defaultSeasons.forEach(s => addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'seasons'), s).catch(()=>{}));
-                    renderPosts(getLocalList('seasons', defaultSeasons));
-                    return;
-                }
-                setLocalList('seasons', all);
-                renderPosts(all);
-            }, () => renderPosts(getLocalList('seasons', defaultSeasons)));
-        }
-
-        function renderPosts(posts) {
-            const slider = document.getElementById('seasons-slider');
-            totalSeasons = posts.length;
-            slider.innerHTML = '';
-            
-            posts.forEach(p => {
-                const bg = p.image ? `style="background-image: url('${p.image}')"` : '';
-                const cls = p.image ? '' : 'bg-gradient-to-tr from-premium-700 to-premium-900';
-                const del = window.isAdmin && p.id ? `<button onclick="deletePost('${p.id}')" class="absolute top-4 right-4 bg-red-600 text-white w-8 h-8 rounded-full z-20 flex items-center justify-center hover:bg-red-700 shadow-lg"><i class="fa-solid fa-trash"></i></button>` : '';
-                
-                slider.innerHTML += `
-                    <article class="w-[calc(100%-0px)] md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] flex-shrink-0 bg-premium-950 rounded-xl overflow-hidden border border-premium-700 hover:border-spl-gold transition duration-300 group flex flex-col shadow-xl relative h-full min-h-[400px]">
-                        ${del}
-                        <div class="h-48 w-full flex-shrink-0 relative flex items-center justify-center bg-cover bg-center border-b border-premium-800 ${cls}" ${bg}>
-                            <div class="absolute inset-0 bg-premium-950/60 group-hover:bg-premium-950/20 transition z-0"></div>
-                            <div class="absolute top-4 left-4 bg-premium-950/90 px-3 py-1 rounded text-xs font-bold text-spl-gold uppercase border border-spl-gold/50 z-10 shadow-lg">Season ${p.season}</div>
-                        </div>
-                        <div class="p-6 flex-grow flex flex-col z-10 relative bg-premium-950 h-full">
-                            <h3 class="font-oswald text-2xl md:text-3xl font-bold mb-3 group-hover:text-spl-gold transition leading-tight">${p.title} (${p.year})</h3>
-                            <p class="text-sm md:text-base text-gray-400 mb-4 flex-grow font-medium leading-relaxed">${p.desc}</p>
-                            <div class="flex justify-between items-center border-t border-premium-800 pt-4 mt-auto">
-                                <span class="text-xs text-gray-500 font-bold uppercase tracking-widest"><i class="fa-solid fa-book-open mr-1"></i> SPL Archives</span>
-                            </div>
-                        </div>
-                    </article>
-                `;
-            });
-            
-            currSeasonIndex = 0;
-            updateSeasonSlider();
-            resetSeasonAutoScroll();
-        }
-
-        function updateSeasonSlider() {
-            const slider = document.getElementById('seasons-slider');
-            if(!slider || slider.children.length === 0) return;
-            const itemWidth = slider.children[0].getBoundingClientRect().width;
-            const gap = 24; 
-            slider.style.transform = `translateX(-${currSeasonIndex * (itemWidth + gap)}px)`;
-        }
-
-        window.nextSeason = function() {
-            if(totalSeasons === 0) return;
-            const itemsPerPage = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
-            if (currSeasonIndex < totalSeasons - itemsPerPage) {
-                currSeasonIndex++;
-            } else {
-                currSeasonIndex = 0; 
-            }
-            updateSeasonSlider();
-            resetSeasonAutoScroll();
-        };
-
-        window.prevSeason = function() {
-            if(totalSeasons === 0) return;
-            const itemsPerPage = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
-            if (currSeasonIndex > 0) {
-                currSeasonIndex--;
-            } else {
-                currSeasonIndex = Math.max(0, totalSeasons - itemsPerPage); 
-            }
-            updateSeasonSlider();
-            resetSeasonAutoScroll();
-        };
-
-        function startSeasonAutoScroll() {
-            seasonAutoScrollInterval = setInterval(() => {
-                const itemsPerPage = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
-                if (totalSeasons > itemsPerPage) {
-                    if (currSeasonIndex < totalSeasons - itemsPerPage) currSeasonIndex++;
-                    else currSeasonIndex = 0;
-                    updateSeasonSlider();
-                }
-            }, 4000); 
-        }
-
-        function resetSeasonAutoScroll() {
-            clearInterval(seasonAutoScrollInterval);
-            startSeasonAutoScroll();
-        }
-        
-
-        // --- TEAMS LOGIC (File Upload & Logo Only View) ---
-        window.resetTeamForm = function() {
-            document.getElementById('add-team-form').reset();
-            document.getElementById('team-edit-id').value = '';
-            document.getElementById('team-id').removeAttribute('readonly');
-            document.getElementById('team-existing-logo').value = '';
-            document.getElementById('team-cancel-btn').classList.add('hidden');
-            window.clearCropPreview('team');
-        };
-
-        window.handleTeamSubmit = async function(e) {
-            e.preventDefault();
-            if(!window.isAdmin) return;
-            
-            const teamId = document.getElementById('team-id').value.toUpperCase();
-            const name = document.getElementById('team-name').value;
-            const color = document.getElementById('team-color').value;
-            const existingLogo = document.getElementById('team-existing-logo').value;
-            const newLogo = window.croppedImages['team'];
-            
-            const logoData = newLogo ? newLogo : (existingLogo ? existingLogo : '');
-
-            const team = { id: teamId, name: name, color: color, logo: logoData };
-            try {
-                await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', teamId), team);
-                resetTeamForm();
-                showNotice('Franchise saved successfully!', 'Success');
-            } catch(e) { showNotice('Error saving team', 'Error'); }
-        };
-
-        window.deleteTeam = function(id) {
-            showConfirmDialog(`Delete franchise ${id}?`, async () => {
-                try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', id)); } catch(e) {}
-            });
-        };
-
-        window.editTeam = function(id, name, color, logo) {
-            document.getElementById('team-edit-id').value = id;
-            document.getElementById('team-id').value = id;
-            document.getElementById('team-id').setAttribute('readonly', 'true');
-            document.getElementById('team-name').value = name;
-            document.getElementById('team-color').value = color;
-            document.getElementById('team-existing-logo').value = logo || '';
-            document.getElementById('team-logo-file').value = '';
-            document.getElementById('team-cancel-btn').classList.remove('hidden');
-            window.clearCropPreview('team');
-            document.getElementById('admin-dashboard').scrollIntoView({ behavior: 'smooth' });
-        };
-
-        function loadTeams(local = false) {
-            const track = document.getElementById('teams-track');
-            if(!track) return;
-            if(local) { renderTeams(defaultTeams); return; }
-
-            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'teams'), (snap) => {
-                let teams = [];
-                snap.forEach(d => teams.push(d.data()));
-                if(teams.length === 0) {
-                    defaultTeams.forEach(t => setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', t.id), t));
-                    return;
-                }
-                renderTeams(teams);
-            }, () => renderTeams(defaultTeams));
-        }
-
-        function renderTeams(teams) {
-            const track = document.getElementById('teams-track');
-            const adminGrid = document.getElementById('admin-teams-grid');
-            
-            if(adminGrid && window.isAdmin) {
-                adminGrid.innerHTML = '';
-                teams.forEach(t => {
-                    const logoHtml = t.logo ? `<img src="${t.logo}" class="max-w-full max-h-full object-contain">` : `<span class="text-xs text-gray-500 font-bold">NO LOGO</span>`;
-                    adminGrid.innerHTML += `
-                        <div class="bg-premium-800 border border-premium-700 rounded p-4 flex flex-col items-center text-center relative shadow-lg">
-                            <div class="w-16 h-16 bg-white p-1 rounded-full border-2 border-premium-600 mb-2 flex items-center justify-center overflow-hidden shadow-inner">
-                                ${logoHtml}
-                            </div>
-                            <span class="font-bold text-white text-sm leading-tight mb-3">${t.name}</span>
-                            <div class="flex gap-2 w-full mt-auto">
-                                <button onclick="editTeam('${t.id}', '${t.name.replace(/'/g, "\\'")}', '${t.color}', '${t.logo || ''}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-pen"></i></button>
-                                <button onclick="deleteTeam('${t.id}')" class="flex-1 bg-red-600 hover:bg-red-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-
-            if(track) {
-                track.innerHTML = '';
-                totalTeams = teams.length;
-                teams.forEach(t => {
-                    const fallbackLogo = `<div class="font-oswald text-4xl font-bold text-white mb-2 drop-shadow-md">${t.id}</div><p class="text-sm font-bold uppercase tracking-wider text-center text-white drop-shadow-md bg-premium-950/60 px-2 py-1 rounded w-full line-clamp-1">${t.name}</p>`;
-                    const logoContent = t.logo ? `<img src="${t.logo}" alt="${t.name}" class="w-full h-full object-contain drop-shadow-2xl z-10 p-4">` : fallbackLogo;
-                    
-                    track.innerHTML += `
-                        <div class="w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] flex-shrink-0 group relative cursor-pointer mx-auto">
-                            <div class="aspect-square bg-gradient-to-br ${t.color} rounded-2xl flex flex-col items-center justify-center border-2 border-premium-700 shadow-[0_0_15px_rgba(0,0,0,0.5)] group-hover:scale-105 group-hover:border-spl-gold transition-all duration-300 relative overflow-hidden">
-                                <div class="absolute inset-0 bg-premium-950/20 group-hover:bg-transparent transition-colors z-0"></div>
-                                ${logoContent}
-                            </div>
-                        </div>
-                    `;
-                });
-
-                currTeamIndex = 0;
-                updateTeamSlider();
-                resetTeamAutoScroll();
-            }
-        }
-
-        function updateTeamSlider() {
-            const track = document.getElementById('teams-track');
-            if(!track || track.children.length === 0) return;
-            const itemWidth = track.children[0].getBoundingClientRect().width;
-            const gap = 24; 
-            track.style.transform = `translateX(-${currTeamIndex * (itemWidth + gap)}px)`;
-        }
-
-        window.nextTeam = function() {
-            if(totalTeams === 0) return;
-            const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 3 : 2);
-            if (currTeamIndex < totalTeams - visibleItems) {
-                currTeamIndex++;
-            } else {
-                currTeamIndex = 0;
-            }
-            updateTeamSlider();
-            resetTeamAutoScroll();
-        };
-
-        window.prevTeam = function() {
-            if(totalTeams === 0) return;
-            const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 3 : 2);
-            if (currTeamIndex > 0) {
-                currTeamIndex--;
-            } else {
-                currTeamIndex = Math.max(0, totalTeams - visibleItems);
-            }
-            updateTeamSlider();
-            resetTeamAutoScroll();
-        };
-
-        function startTeamAutoScroll() {
-            teamAutoScrollInterval = setInterval(() => {
-                const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 3 : 2);
-                if (totalTeams > visibleItems) {
-                    if (currTeamIndex < totalTeams - visibleItems) currTeamIndex++;
-                    else currTeamIndex = 0;
-                    updateTeamSlider();
-                }
-            }, 4000);
-        }
-        function resetTeamAutoScroll() {
-            clearInterval(teamAutoScrollInterval);
-            startTeamAutoScroll();
-        }
-
-
-        // --- PLAYERS LOGIC (Slider Mode) ---
-        window.handlePlayerSubmit = async function(e) {
-            e.preventDefault();
-            if(!window.isAdmin) return;
-            const player = {
-                name: document.getElementById('player-name').value,
-                team: document.getElementById('player-team').value,
-                achievement: document.getElementById('player-achievement').value,
-                createdAt: Date.now()
-            };
-            try {
-                await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), player);
-                document.getElementById('add-player-form').reset();
-                showNotice('Player profile saved!', 'Success');
-            } catch(e) { showNotice('Error saving player', 'Error'); }
-        };
-
-        window.deletePlayer = function(id) {
-            showConfirmDialog('Delete player profile?', async () => {
-                try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'players', id)); } catch(e) {}
-            });
-        };
-
-        function loadPlayers(local = false) {
-            const track = document.getElementById('players-track');
-            if(!track) return;
-            if(local) { renderPlayers(defaultPlayers); return; }
-
-            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), (snap) => {
-                let players = [];
-                snap.forEach(d => {
-                    const data = d.data();
-                    if(!data.isRegistration) {
-                        players.push({ id: d.id, ...data });
-                    }
-                });
-                if(players.length === 0) {
-                    defaultPlayers.forEach(p => addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), p));
-                    return;
-                }
-                renderPlayers(players);
-            }, () => renderPlayers(defaultPlayers));
-        }
-
-        function renderPlayers(players) {
-            const track = document.getElementById('players-track');
-            if(!track) return;
-            
-            track.innerHTML = '';
-            totalPlayers = players.length;
-            
-            players.forEach(p => {
-                const del = window.isAdmin && p.id ? `<button onclick="deletePlayer('${p.id}')" class="absolute top-2 right-2 bg-red-600 text-white w-6 h-6 rounded-full z-20 flex items-center justify-center hover:bg-red-700 text-xs shadow"><i class="fa-solid fa-trash"></i></button>` : '';
-                track.innerHTML += `
-                    <div class="w-[calc(100%-0px)] sm:w-[calc(50%-12px)] lg:w-[calc(25%-18px)] flex-shrink-0 bg-premium-950 border border-premium-700 rounded-xl p-6 text-center hover:border-spl-gold transition group shadow-lg relative h-full">
-                        ${del}
-                        <div class="w-24 h-24 bg-gradient-to-b from-premium-700 to-premium-800 rounded-full mx-auto mb-4 border-2 border-spl-gold flex items-center justify-center overflow-hidden shadow-inner">
-                             <i class="fa-solid fa-user-ninja text-3xl text-gray-400 group-hover:text-spl-gold transition"></i>
-                        </div>
-                        <h3 class="font-oswald text-2xl md:text-3xl font-bold text-white mb-2 leading-tight">${p.name}</h3>
-                        <p class="text-xs text-spl-gold font-bold uppercase tracking-wider mb-3 bg-premium-900 inline-block px-3 py-1 rounded-full border border-premium-700 line-clamp-1">${p.team}</p>
-                        <p class="text-sm text-gray-400 font-medium line-clamp-2">${p.achievement}</p>
-                    </div>
-                `;
-            });
-            
-            currPlayerIndex = 0;
-            updatePlayerSlider();
-            resetPlayerAutoScroll();
-        }
-
-        function updatePlayerSlider() {
-            const track = document.getElementById('players-track');
-            if(!track || track.children.length === 0) return;
-            const itemWidth = track.children[0].getBoundingClientRect().width;
-            const gap = 24; 
-            track.style.transform = `translateX(-${currPlayerIndex * (itemWidth + gap)}px)`;
-        }
-
-        window.nextPlayer = function() {
-            if(totalPlayers === 0) return;
-            const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 640 ? 2 : 1);
-            if (currPlayerIndex < totalPlayers - visibleItems) {
-                currPlayerIndex++;
-            } else {
-                currPlayerIndex = 0;
-            }
-            updatePlayerSlider();
-            resetPlayerAutoScroll();
-        };
-
-        window.prevPlayer = function() {
-            if(totalPlayers === 0) return;
-            const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 640 ? 2 : 1);
-            if (currPlayerIndex > 0) {
-                currPlayerIndex--;
-            } else {
-                currPlayerIndex = Math.max(0, totalPlayers - visibleItems);
-            }
-            updatePlayerSlider();
-            resetPlayerAutoScroll();
-        };
-
-        function startPlayerAutoScroll() {
-            playerAutoScrollInterval = setInterval(() => {
-                const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 640 ? 2 : 1);
-                if (totalPlayers > visibleItems) {
-                    if (currPlayerIndex < totalPlayers - visibleItems) currPlayerIndex++;
-                    else currPlayerIndex = 0;
-                    updatePlayerSlider();
-                }
-            }, 4000);
-        }
-        function resetPlayerAutoScroll() {
-            clearInterval(playerAutoScrollInterval);
-            startPlayerAutoScroll();
-        }
-
-
-        // --- GALLERY LOGIC (Local Storage File Upload & Slider) ---
-        window.handleGallerySubmit = async function(e) {
-            e.preventDefault();
-            if(!window.isAdmin) return;
-            
-            const base64Url = window.croppedImages['gallery'];
-            
-            if(base64Url) {
-                try {
-                    await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'gallery'), { url: base64Url, createdAt: Date.now() });
-                    document.getElementById('add-gallery-form').reset();
-                    window.clearCropPreview('gallery');
-                    showNotice('Image uploaded successfully!', 'Success');
-                } catch(e) { showNotice('Error uploading image', 'Error'); }
-            } else {
-                showNotice("Please select and crop an image first.", "Missing Image");
-            }
-        };
-
-        window.deleteGalleryImage = function(id) {
-            showConfirmDialog('Delete gallery image?', async () => {
-                try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'gallery', id)); } catch(e) {}
-            });
-        };
-
-        function loadGallery(local = false) {
-            const track = document.getElementById('gallery-track');
-            if(!track) return;
-            if(local) { renderGallery(defaultGalleryPics); return; }
-
-            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'gallery'), (snap) => {
-                let imgs = [];
-                snap.forEach(d => imgs.push({ id: d.id, ...d.data() }));
-                imgs.sort((a,b) => (a.createdAt||0) - (b.createdAt||0));
-                if(imgs.length === 0) {
-                    defaultGalleryPics.forEach(p => addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'gallery'), { url: p.url, createdAt: Date.now() }));
-                    return;
-                }
-                renderGallery(imgs);
-            }, () => renderGallery(defaultGalleryPics));
-        }
-
-        function renderGallery(images) {
-            const track = document.getElementById('gallery-track');
-            const adminGrid = document.getElementById('admin-gallery-grid');
-            
-            totalGalleryImages = images.length;
-
-            if(adminGrid && window.isAdmin) {
-                adminGrid.innerHTML = '';
-                images.forEach(img => {
-                    adminGrid.innerHTML += `
-                        <div class="relative flex-shrink-0 w-32 h-24 border border-premium-700 rounded overflow-hidden group shadow-lg">
-                            <img src="${img.url}" class="w-full h-full object-cover">
-                            <button onclick="deleteGalleryImage('${img.id}')" class="absolute inset-0 bg-red-600/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><i class="fa-solid fa-trash text-white"></i></button>
-                        </div>
-                    `;
-                });
-            }
-
-            track.className = "flex transition-transform duration-500 ease-out gap-4 items-stretch";
-            track.innerHTML = '';
-            
-            images.forEach(img => {
-                track.innerHTML += `
-                    <div class="w-[calc(100%-0px)] md:w-[calc(50%-8px)] lg:w-[calc(33.333%-10.66px)] flex-shrink-0 relative h-[300px] md:h-[400px] rounded-xl overflow-hidden bg-premium-950 shadow-xl group border border-premium-800 hover:border-spl-gold transition-colors">
-                        <div class="absolute inset-0 bg-cover bg-center blur-xl opacity-40 scale-125 group-hover:opacity-60 transition-opacity duration-500" style="background-image: url('${img.url}')"></div>
-                        <img src="${img.url}" alt="SPL Action" class="relative z-10 w-full h-full object-contain p-2 drop-shadow-2xl" onerror="this.src='https://placehold.co/800x600/152238/F4B036?text=Image+Not+Found';">
-                    </div>
-                `;
-            });
-
-            currGalleryIndex = 0;
-            updateGallerySlider();
-            resetGalleryAutoScroll();
-        }
-
-        function updateGallerySlider() {
-            const track = document.getElementById('gallery-track');
-            if(!track || track.children.length === 0) return;
-            const itemWidth = track.children[0].getBoundingClientRect().width;
-            const gap = 16;
-            track.style.transform = `translateX(-${currGalleryIndex * (itemWidth + gap)}px)`;
-        }
-
-        window.nextGallerySlide = function() {
-            if (totalGalleryImages === 0) return;
-            const itemsPerPage = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
-
-            if (currGalleryIndex < totalGalleryImages - itemsPerPage) {
-                currGalleryIndex++;
-            } else {
-                currGalleryIndex = 0;
-            }
-            updateGallerySlider();
-            resetGalleryAutoScroll();
-        };
-
-        window.prevGallerySlide = function() {
-            if (totalGalleryImages === 0) return;
-            const itemsPerPage = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
-
-            if (currGalleryIndex > 0) {
-                currGalleryIndex--;
-            } else {
-                currGalleryIndex = Math.max(0, totalGalleryImages - itemsPerPage);
-            }
-            updateGallerySlider();
-            resetGalleryAutoScroll();
-        };
-
-        function startGalleryAutoScroll() {
-            galleryAutoScrollInterval = setInterval(() => {
-                const itemsPerPage = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
-                if (totalGalleryImages > itemsPerPage) {
-                    if (currGalleryIndex < totalGalleryImages - itemsPerPage) currGalleryIndex++;
-                    else currGalleryIndex = 0;
-                    updateGallerySlider();
-                }
-            }, 3000);
-        }
-
-        function resetGalleryAutoScroll() {
-            clearInterval(galleryAutoScrollInterval);
-            startGalleryAutoScroll();
-        }
-
-        // --- EDIT TEXT / WRITINGS LOGIC ---
-        window.handleTextSubmit = async function(e) {
-            e.preventDefault();
-            if(!window.isAdmin) return;
-            const p1 = document.getElementById('text-about-1').value;
-            const p2 = document.getElementById('text-about-2').value;
-            try {
-                const textRef = doc(db, 'artifacts', myAppId, 'public', 'data', 'settings', 'about_text');
-                await setDoc(textRef, { p1, p2 }, { merge: true });
-                showNotice('Writings updated successfully!', 'Success');
-            } catch(e) { showNotice('Error updating writings', 'Error'); }
-        };
-
-        function loadAboutText(local = false) {
-            const container = document.getElementById('about-content-display');
-            if(!container) return;
-
-            if(local) {
-                renderAboutText(defaultAboutText);
-                return;
-            }
-
-            const textRef = doc(db, 'artifacts', myAppId, 'public', 'data', 'settings', 'about_text');
-            onSnapshot(textRef, (docSnap) => {
-                if(docSnap.exists()) {
-                    const data = docSnap.data();
-                    renderAboutText(data);
-                    
-                    const t1 = document.getElementById('text-about-1');
-                    const t2 = document.getElementById('text-about-2');
-                    if(t1 && data.p1 && !t1.value) t1.value = data.p1;
-                    if(t2 && data.p2 && !t2.value) t2.value = data.p2;
-                } else if(window.isAdmin) {
-                    setDoc(textRef, defaultAboutText);
-                }
-            }, () => renderAboutText(defaultAboutText));
-        }
-
-        function renderAboutText(data) {
-            const container = document.getElementById('about-content-display');
-            if(!container) return;
-            container.innerHTML = `
-                <p class="mb-4">${data.p1 || defaultAboutText.p1}</p>
-                <p>${data.p2 || defaultAboutText.p2}</p>
-            `;
-        }
-
-        // --- SPONSORS LOGIC ---
-        window.resetSponsorForm = function() {
-            document.getElementById('add-sponsor-form').reset();
-            document.getElementById('sponsor-id').value = '';
-            document.getElementById('sponsor-existing-logo').value = '';
-            document.getElementById('sponsor-cancel-btn').classList.add('hidden');
-            window.clearCropPreview('sponsor');
-        };
-
-        window.handleSponsorSubmit = async function(e) {
-            e.preventDefault();
-            if(!window.isAdmin) return;
-            
-            let sponsorId = document.getElementById('sponsor-id').value;
-            if(!sponsorId) sponsorId = 'SP_' + Date.now(); 
-            
-            const sponsorName = document.getElementById('sponsor-name').value;
-            const sponsorType = document.getElementById('sponsor-type').value;
-            const existingLogo = document.getElementById('sponsor-existing-logo').value;
-            
-            const newLogo = window.croppedImages['sponsor'];
-            const logoData = newLogo ? newLogo : (existingLogo ? existingLogo : '');
-            
-            if(!logoData) {
-                showNotice("Please select and crop a logo for the sponsor.", "Missing Logo");
-                return;
-            }
-
-            const sponsor = { id: sponsorId, name: sponsorName, type: sponsorType, logo: logoData, createdAt: Date.now() };
-            try {
-                await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'sponsors', sponsorId), sponsor);
-                resetSponsorForm();
-                showNotice('Sponsor saved successfully!', 'Success');
-            } catch(err) { showNotice('Error saving sponsor', 'Error'); }
-        };
-
-        window.deleteSponsor = function(id) {
-            showConfirmDialog(`Delete this sponsor?`, async () => {
-                try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'sponsors', id)); } catch(e) {}
-            });
-        };
-
-        window.editSponsor = function(id, name, type, logo) {
-            document.getElementById('sponsor-id').value = id;
-            document.getElementById('sponsor-name').value = name;
-            document.getElementById('sponsor-type').value = type;
-            document.getElementById('sponsor-existing-logo').value = logo || '';
-            document.getElementById('sponsor-logo-file').value = '';
-            document.getElementById('sponsor-cancel-btn').classList.remove('hidden');
-            window.clearCropPreview('sponsor');
-            document.getElementById('admin-dashboard').scrollIntoView({ behavior: 'smooth' });
-        };
-
-        function loadSponsors(local = false) {
-            const container = document.getElementById('sponsors-display-container');
-            if(!container) return;
-            if(local) { renderSponsors(defaultSponsors); return; }
-
-            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'sponsors'), (snap) => {
-                let sponsors = [];
-                snap.forEach(d => {
-                    const data = d.data();
-                    if(data.type === 'system_qr') {
-                        applyQrToUI(data.logo);
-                    } else {
-                        sponsors.push(data);
-                    }
-                });
-                
-                if(sponsors.length === 0) {
-                    defaultSponsors.forEach(s => setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'sponsors', s.id), s));
-                    return;
-                }
-                sponsors.sort((a,b) => (a.createdAt||0) - (b.createdAt||0));
-                renderSponsors(sponsors);
-            }, () => renderSponsors(defaultSponsors));
-        }
-
-        function renderSponsors(sponsors) {
-            const displayContainer = document.getElementById('sponsors-display-container');
-            const adminGrid = document.getElementById('admin-sponsors-grid');
-            
-            if(adminGrid && window.isAdmin) {
-                adminGrid.innerHTML = '';
-                sponsors.forEach(s => {
-                    adminGrid.innerHTML += `
-                        <div class="bg-premium-800 border border-premium-700 rounded p-4 flex flex-col items-center text-center relative shadow-lg">
-                            <span class="absolute top-0 right-0 bg-premium-950 text-[10px] text-gray-400 px-2 py-1 rounded-bl uppercase font-bold border-l border-b border-premium-700">${s.type}</span>
-                            <div class="w-16 h-16 bg-white p-1 rounded-full border-2 border-premium-600 mb-2 flex items-center justify-center shadow-inner overflow-hidden">
-                                <img src="${s.logo}" class="max-w-full max-h-full object-contain">
-                            </div>
-                            <span class="font-bold text-white text-sm leading-tight mb-3">${s.name}</span>
-                            <div class="flex gap-2 w-full mt-auto">
-                                <button onclick="editSponsor('${s.id}', '${s.name.replace(/'/g, "\\'")}', '${s.type}', '${s.logo}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-pen"></i></button>
-                                <button onclick="deleteSponsor('${s.id}')" class="flex-1 bg-red-600 hover:bg-red-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-
-            let titleSponsorsHTML = '';
-            let officialSponsorsHTML = '';
-            let officialCount = 0;
-
-            sponsors.forEach(s => {
-                if(s.type === 'title') {
-                    titleSponsorsHTML += `
-                        <div class="flex justify-center mb-16">
-                            <div class="w-full text-center">
-                                <h2 class="font-oswald text-4xl md:text-5xl font-bold uppercase tracking-wide mb-8 text-spl-gold relative inline-block">
-                                    <span class="bg-premium-900 px-4 relative z-10"><i class="fa-solid fa-crown mr-2 text-3xl"></i> Title Sponsor</span>
-                                    <div class="absolute inset-0 flex items-center z-0"><div class="w-full border-t border-premium-700/50"></div></div>
-                                </h2>
-                                <br>
-                                <div class="bg-white p-8 rounded-2xl shadow-[0_0_40px_rgba(244,176,54,0.3)] border-2 border-spl-gold/80 hover:scale-105 transition-transform duration-300 inline-block mx-auto">
-                                    <img src="${s.logo}" alt="${s.name}" class="h-32 md:h-40 object-contain mx-auto">
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    officialCount++;
-                    officialSponsorsHTML += `
-                        <div class="w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] flex-shrink-0 bg-white p-4 rounded-xl shadow-xl border border-premium-700 hover:scale-105 hover:border-spl-gold transition-all duration-300 flex items-center justify-center h-28 md:h-36">
-                            <img src="${s.logo}" alt="${s.name}" class="max-w-full max-h-full object-contain">
-                        </div>
-                    `;
-                }
-            });
-            
-            totalOfficialSponsors = officialCount;
-            let finalHTML = titleSponsorsHTML;
-
-            if(officialSponsorsHTML !== '') {
-                finalHTML += `
-                    <div class="flex flex-col md:flex-row md:justify-between items-start md:items-center mb-8 gap-4 text-left">
-                        <h2 class="font-oswald text-3xl md:text-4xl font-bold uppercase tracking-wide text-white relative inline-block">
-                            <span class="bg-premium-900 px-4 relative z-10">Official Sponsors</span>
-                            <div class="absolute inset-0 flex items-center z-0"><div class="w-full border-t border-premium-700/50"></div></div>
-                        </h2>
-                        <div class="flex gap-2 self-center md:self-auto relative z-10 bg-premium-900 px-2">
-                            <button onclick="prevSponsor()" class="w-10 h-10 bg-premium-800 hover:bg-spl-gold text-white hover:text-premium-950 transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-chevron-left"></i></button>
-                            <button onclick="nextSponsor()" class="w-10 h-10 bg-premium-800 hover:bg-spl-gold text-white hover:text-premium-950 transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-chevron-right"></i></button>
-                        </div>
-                    </div>
-                    <div class="overflow-hidden py-4 px-1" id="sponsors-slider-wrapper">
-                        <div id="sponsors-track" class="flex transition-transform duration-500 ease-out gap-6 items-stretch">
-                            ${officialSponsorsHTML}
-                        </div>
-                    </div>
-                `;
-            }
-
-            displayContainer.innerHTML = finalHTML;
-            currSponsorIndex = 0;
-            updateSponsorSlider();
-            resetSponsorAutoScroll();
-        }
-
-        function updateSponsorSlider() {
-            const track = document.getElementById('sponsors-track');
-            if(!track || track.children.length === 0) return;
-            const itemWidth = track.children[0].getBoundingClientRect().width;
-            const gap = 24; 
-            track.style.transform = `translateX(-${currSponsorIndex * (itemWidth + gap)}px)`;
-        }
-
-        window.nextSponsor = function() {
-            if(totalOfficialSponsors === 0) return;
-            const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 3 : 2);
-            if (currSponsorIndex < totalOfficialSponsors - visibleItems) {
-                currSponsorIndex++;
-            } else {
-                currSponsorIndex = 0;
-            }
-            updateSponsorSlider();
-            resetSponsorAutoScroll();
-        };
-
-        window.prevSponsor = function() {
-            if(totalOfficialSponsors === 0) return;
-            const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 3 : 2);
-            if (currSponsorIndex > 0) {
-                currSponsorIndex--;
-            } else {
-                currSponsorIndex = Math.max(0, totalOfficialSponsors - visibleItems);
-            }
-            updateSponsorSlider();
-            resetSponsorAutoScroll();
-        };
-
-        function startSponsorAutoScroll() {
-            sponsorAutoScrollInterval = setInterval(() => {
-                const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 3 : 2);
-                if (totalOfficialSponsors > visibleItems) {
-                    if (currSponsorIndex < totalOfficialSponsors - visibleItems) currSponsorIndex++;
-                    else currSponsorIndex = 0;
-                    updateSponsorSlider();
-                }
-            }, 4000);
-        }
-
-        function resetSponsorAutoScroll() {
-            clearInterval(sponsorAutoScrollInterval);
-            startSponsorAutoScroll();
-        }
-
-        // --- PARTNERS LOGIC (Slider Mode) ---
-        window.resetPartnerForm = function() {
-            document.getElementById('add-partner-form').reset();
-            document.getElementById('partner-id').value = '';
-            document.getElementById('partner-existing-logo').value = '';
-            document.getElementById('partner-cancel-btn').classList.add('hidden');
-            window.clearCropPreview('partner');
-        };
-
-        window.handlePartnerSubmit = async function(e) {
-            e.preventDefault();
-            if(!window.isAdmin) return;
-            
-            let partnerId = document.getElementById('partner-id').value;
-            if(!partnerId) partnerId = 'PRT_' + Date.now(); 
-            
-            const partnerName = document.getElementById('partner-name').value;
-            const partnerCategory = document.getElementById('partner-category').value;
-            const existingLogo = document.getElementById('partner-existing-logo').value;
-            
-            const newLogo = window.croppedImages['partner'];
-            const logoData = newLogo ? newLogo : (existingLogo ? existingLogo : '');
-            
-            if(!logoData) {
-                showNotice("Please select and crop a logo for the partner.", "Missing Logo");
-                return;
-            }
-
-            const partner = { id: partnerId, name: partnerName, category: partnerCategory, logo: logoData, createdAt: Date.now() };
-            try {
-                await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'partners', partnerId), partner);
-                resetPartnerForm();
-                showNotice('Partner saved successfully!', 'Success');
-            } catch(err) { showNotice('Error saving partner', 'Error'); }
-        };
-
-        window.deletePartner = function(id) {
-            showConfirmDialog(`Delete this partner?`, async () => {
-                try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'partners', id)); } catch(e) {}
-            });
-        };
-
-        window.editPartner = function(id, name, category, logo) {
-            document.getElementById('partner-id').value = id;
-            document.getElementById('partner-name').value = name;
-            document.getElementById('partner-category').value = category;
-            document.getElementById('partner-existing-logo').value = logo || '';
-            document.getElementById('partner-logo-file').value = '';
-            document.getElementById('partner-cancel-btn').classList.remove('hidden');
-            window.clearCropPreview('partner');
-            document.getElementById('admin-dashboard').scrollIntoView({ behavior: 'smooth' });
-        };
-
-        function loadPartners(local = false) {
-            const track = document.getElementById('partners-track');
-            if(!track) return;
-            if(local) { renderPartners(defaultPartners); return; }
-
-            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'partners'), (snap) => {
-                let partners = [];
-                snap.forEach(d => partners.push(d.data()));
-                
-                if(partners.length === 0) {
-                    defaultPartners.forEach(p => setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'partners', p.id), p));
-                    return;
-                }
-                partners.sort((a,b) => (a.createdAt||0) - (b.createdAt||0));
-                renderPartners(partners);
-            }, () => renderPartners(defaultPartners));
-        }
-
-        function renderPartners(partners) {
-            const track = document.getElementById('partners-track');
-            const adminGrid = document.getElementById('admin-partners-grid');
-            
-            if(adminGrid && window.isAdmin) {
-                adminGrid.innerHTML = '';
-                partners.forEach(p => {
-                    adminGrid.innerHTML += `
-                        <div class="bg-premium-800 border border-premium-700 rounded p-4 flex flex-col items-center text-center relative shadow-lg">
-                            <span class="absolute top-0 right-0 bg-premium-950 text-[9px] text-spl-gold px-2 py-1 rounded-bl uppercase font-bold border-l border-b border-premium-700">${p.category}</span>
-                            <div class="w-16 h-16 bg-white p-2 rounded-full border-2 border-premium-600 mb-2 flex items-center justify-center shadow-inner overflow-hidden mt-3">
-                                <img src="${p.logo}" class="max-w-full max-h-full object-contain">
-                            </div>
-                            <span class="font-bold text-white text-sm leading-tight mb-3 mt-1">${p.name}</span>
-                            <div class="flex gap-2 w-full mt-auto">
-                                <button onclick="editPartner('${p.id}', '${p.name.replace(/'/g, "\\'")}', '${p.category}', '${p.logo}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-pen"></i></button>
-                                <button onclick="deletePartner('${p.id}')" class="flex-1 bg-red-600 hover:bg-red-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-
-            if(track) {
-                track.innerHTML = '';
-                totalPartners = partners.length;
-                partners.forEach(p => {
-                    track.innerHTML += `
-                        <div class="w-[calc(50%-12px)] sm:w-[calc(33.333%-16px)] md:w-[calc(25%-18px)] lg:w-[calc(20%-19.2px)] flex-shrink-0 bg-premium-800 rounded-xl p-4 shadow-xl border border-premium-700 hover:border-spl-gold transition-colors duration-300 flex flex-col items-center group h-full">
-                            <div class="w-20 h-20 bg-white rounded-full p-2 mb-4 shadow-inner flex items-center justify-center overflow-hidden border-2 border-transparent group-hover:border-spl-gold transition-colors">
-                                <img src="${p.logo}" alt="${p.name}" class="max-w-full max-h-full object-contain">
-                            </div>
-                            <h4 class="font-bold text-white text-center leading-tight mb-2">${p.name}</h4>
-                            <span class="text-[9px] sm:text-[10px] uppercase tracking-widest font-bold text-spl-gold bg-premium-950 px-2 py-1 rounded border border-premium-700 mt-auto">${p.category}</span>
-                        </div>
-                    `;
-                });
-
-                currPartnerIndex = 0;
-                updatePartnerSlider();
-                resetPartnerAutoScroll();
-            }
-        }
-
-        function updatePartnerSlider() {
-            const track = document.getElementById('partners-track');
-            if(!track || track.children.length === 0) return;
-            const itemWidth = track.children[0].getBoundingClientRect().width;
-            const gap = 24; 
-            track.style.transform = `translateX(-${currPartnerIndex * (itemWidth + gap)}px)`;
-        }
-
-        window.nextPartner = function() {
-            if(totalPartners === 0) return;
-            const visibleItems = window.innerWidth >= 1024 ? 5 : (window.innerWidth >= 768 ? 4 : (window.innerWidth >= 640 ? 3 : 2));
-            if (currPartnerIndex < totalPartners - visibleItems) {
-                currPartnerIndex++;
-            } else {
-                currPartnerIndex = 0;
-            }
-            updatePartnerSlider();
-            resetPartnerAutoScroll();
-        };
-
-        window.prevPartner = function() {
-            if(totalPartners === 0) return;
-            const visibleItems = window.innerWidth >= 1024 ? 5 : (window.innerWidth >= 768 ? 4 : (window.innerWidth >= 640 ? 3 : 2));
-            if (currPartnerIndex > 0) {
-                currPartnerIndex--;
-            } else {
-                currPartnerIndex = Math.max(0, totalPartners - visibleItems);
-            }
-            updatePartnerSlider();
-            resetPartnerAutoScroll();
-        };
-
-        function startPartnerAutoScroll() {
-            partnerAutoScrollInterval = setInterval(() => {
-                const visibleItems = window.innerWidth >= 1024 ? 5 : (window.innerWidth >= 768 ? 4 : (window.innerWidth >= 640 ? 3 : 2));
-                if (totalPartners > visibleItems) {
-                    if (currPartnerIndex < totalPartners - visibleItems) currPartnerIndex++;
-                    else currPartnerIndex = 0;
-                    updatePartnerSlider();
-                }
-            }, 4000);
-        }
-
-        function resetPartnerAutoScroll() {
-            clearInterval(partnerAutoScrollInterval);
-            startPartnerAutoScroll();
-        }
-
-        // General Navigation & Scroll
-        document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
-        });
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.getElementById('mobile-menu')?.classList.add('hidden');
-                const target = document.querySelector(this.getAttribute('href'));
-                if(target) {
-                    window.scrollTo({ top: target.getBoundingClientRect().top + window.pageYOffset - 80, behavior: "smooth" });
-                }
-            });
-        });
-
-        // --- TOUCH SWIPE SUPPORT FOR ALL SLIDERS ---
-        function setupSwipe(containerId, nextCallback, prevCallback) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            
-            let startX = 0;
-            let endX = 0;
-            
-            container.addEventListener('touchstart', e => {
-                startX = e.changedTouches[0].screenX;
-            }, { passive: true });
-            
-            container.addEventListener('touchend', e => {
-                endX = e.changedTouches[0].screenX;
-                handleSwipe();
-            }, { passive: true });
-            
-            function handleSwipe() {
-                const threshold = 50; 
-                if (startX - endX > threshold) {
-                    nextCallback(); 
-                } else if (endX - startX > threshold) {
-                    prevCallback(); 
-                }
-            }
-        }
-
-        setupSwipe('seasons-slider-container', window.nextSeason, window.prevSeason);
-        setupSwipe('teams-slider-container', window.nextTeam, window.prevTeam);
-        setupSwipe('gallery-container', window.nextGallerySlide, window.prevGallerySlide);
-        setupSwipe('sponsors-display-container', window.nextSponsor, window.prevSponsor);
-        setupSwipe('players-slider-container', window.nextPlayer, window.prevPlayer);
-        setupSwipe('partners-slider-container', window.nextPartner, window.prevPartner);
 
         initFirebase();
     </script>
