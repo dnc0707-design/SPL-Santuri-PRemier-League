@@ -2196,8 +2196,1003 @@ service cloud.firestore {
             }
         }
 
-        // --- FEATURED VIDEO LOGIC (REMOVED) ---
-        // Video section removed as per user request to replace with Rules Banner
+        window.handleQrSubmit = async function(e) {
+            e.preventDefault();
+            if(!window.isAdmin) return;
+            const base64Url = window.croppedImages['payment_qr'];
+            if(!base64Url) {
+                showNotice("Please select and crop a QR code image.", "Missing Image");
+                return;
+            }
+            
+            localStorage.setItem('spl_payment_qr_backup', base64Url);
+            applyQrToUI(base64Url);
+
+            try {
+                await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'sponsors', 'SYSTEM_PAYMENT_QR'), {
+                    id: 'SYSTEM_PAYMENT_QR',
+                    name: 'System Payment QR',
+                    type: 'system_qr',
+                    logo: base64Url,
+                    createdAt: Date.now()
+                });
+                window.clearCropPreview('payment_qr');
+                document.getElementById('qr-image-file').value = '';
+                showNotice('Payment QR Code updated successfully!', 'Success');
+            } catch(err) { 
+                window.clearCropPreview('payment_qr');
+                document.getElementById('qr-image-file').value = '';
+                showNotice('Saved locally on this browser, but Firebase blocked cloud sync (' + err.message + ').\n\nOpen the "DB Rules Code" tab in Admin Dashboard to copy the exact rules for Firebase Console.', 'Saved Locally'); 
+            }
+        };
+
+        function loadSettings(local = false) {
+            const cachedQr = localStorage.getItem('spl_payment_qr_backup');
+            if(cachedQr) applyQrToUI(cachedQr);
+            if(local) return;
+            
+            onSnapshot(doc(db, 'artifacts', myAppId, 'public', 'data', 'sponsors', 'SYSTEM_PAYMENT_QR'), (docSnap) => {
+                if(docSnap.exists() && docSnap.data().logo) {
+                    applyQrToUI(docSnap.data().logo);
+                } else if(!cachedQr) {
+                    applyQrToUI(null);
+                }
+            }, (error) => {
+                console.warn("QR listener error:", error);
+            });
+        }
+
+        // --- SEASONS LOGIC (Slider Mode) ---
+        window.handlePostSubmit = async function(e) {
+            e.preventDefault();
+            if(!window.isAdmin) return;
+            const imgUrl = window.croppedImages['season'] || '';
+            await saveSeasonPost(imgUrl);
+        };
+
+        async function saveSeasonPost(imgUrl) {
+            const post = {
+                season: parseInt(document.getElementById('post-season').value),
+                year: document.getElementById('post-year').value,
+                title: document.getElementById('post-title').value,
+                image: imgUrl,
+                desc: document.getElementById('post-desc').value,
+                createdAt: Date.now()
+            };
+            try {
+                await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'seasons'), post);
+                document.getElementById('add-post-form').reset();
+                window.clearCropPreview('season');
+                showNotice('Season archive saved successfully!', 'Success');
+            } catch(err) { showNotice('Error saving post', 'Error'); }
+        }
+
+        window.deletePost = function(id) {
+            showConfirmDialog('Delete this season archive?', async () => {
+                try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'seasons', id)); } catch(e) {}
+            });
+        };
+
+        function loadPosts(local = false) {
+            const grid = document.getElementById('seasons-slider');
+            if(!grid) return;
+            if(local) { renderPosts(getLocalList('seasons', defaultSeasons)); return; }
+
+            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'seasons'), (snap) => {
+                let fetched = [];
+                snap.forEach(d => fetched.push({ id: d.id, ...d.data() }));
+                let all = fetched.sort((a,b) => b.season - a.season).filter(p => p.season <= 5);
+                if(all.length === 0 && fetched.length === 0) {
+                    defaultSeasons.forEach(s => addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'seasons'), s).catch(()=>{}));
+                    renderPosts(getLocalList('seasons', defaultSeasons));
+                    return;
+                }
+                setLocalList('seasons', all);
+                renderPosts(all);
+            }, () => renderPosts(getLocalList('seasons', defaultSeasons)));
+        }
+
+        function renderPosts(posts) {
+            const slider = document.getElementById('seasons-slider');
+            totalSeasons = posts.length;
+            slider.innerHTML = '';
+            
+            posts.forEach(p => {
+                const bg = p.image ? `style="background-image: url('${p.image}')"` : '';
+                const cls = p.image ? '' : 'bg-gradient-to-tr from-premium-700 to-premium-900';
+                const del = window.isAdmin && p.id ? `<button onclick="deletePost('${p.id}')" class="absolute top-4 right-4 bg-red-600 text-white w-8 h-8 rounded-full z-20 flex items-center justify-center hover:bg-red-700 shadow-lg"><i class="fa-solid fa-trash"></i></button>` : '';
+                
+                slider.innerHTML += `
+                    <article class="w-[calc(100%-0px)] md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] flex-shrink-0 bg-premium-950 rounded-xl overflow-hidden border border-premium-700 hover:border-spl-gold transition duration-300 group flex flex-col shadow-xl relative h-full min-h-[400px]">
+                        ${del}
+                        <div class="h-48 w-full flex-shrink-0 relative flex items-center justify-center bg-cover bg-center border-b border-premium-800 ${cls}" ${bg}>
+                            <div class="absolute inset-0 bg-premium-950/60 group-hover:bg-premium-950/20 transition z-0"></div>
+                            <div class="absolute top-4 left-4 bg-premium-950/90 px-3 py-1 rounded text-xs font-bold text-spl-gold uppercase border border-spl-gold/50 z-10 shadow-lg">Season ${p.season}</div>
+                        </div>
+                        <div class="p-6 flex-grow flex flex-col z-10 relative bg-premium-950 h-full">
+                            <h3 class="font-oswald text-2xl md:text-3xl font-bold mb-3 group-hover:text-spl-gold transition leading-tight">${p.title} (${p.year})</h3>
+                            <p class="text-sm md:text-base text-gray-400 mb-4 flex-grow font-medium leading-relaxed">${p.desc}</p>
+                            <div class="flex justify-between items-center border-t border-premium-800 pt-4 mt-auto">
+                                <span class="text-xs text-gray-500 font-bold uppercase tracking-widest"><i class="fa-solid fa-book-open mr-1"></i> SPL Archives</span>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            });
+            
+            currSeasonIndex = 0;
+            updateSeasonSlider();
+            resetSeasonAutoScroll();
+        }
+
+        function updateSeasonSlider() {
+            const slider = document.getElementById('seasons-slider');
+            if(!slider || slider.children.length === 0) return;
+            const itemWidth = slider.children[0].getBoundingClientRect().width;
+            const gap = 24; 
+            slider.style.transform = `translateX(-${currSeasonIndex * (itemWidth + gap)}px)`;
+        }
+
+        window.nextSeason = function() {
+            if(totalSeasons === 0) return;
+            const itemsPerPage = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
+            if (currSeasonIndex < totalSeasons - itemsPerPage) {
+                currSeasonIndex++;
+            } else {
+                currSeasonIndex = 0; 
+            }
+            updateSeasonSlider();
+            resetSeasonAutoScroll();
+        };
+
+        window.prevSeason = function() {
+            if(totalSeasons === 0) return;
+            const itemsPerPage = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
+            if (currSeasonIndex > 0) {
+                currSeasonIndex--;
+            } else {
+                currSeasonIndex = Math.max(0, totalSeasons - itemsPerPage); 
+            }
+            updateSeasonSlider();
+            resetSeasonAutoScroll();
+        };
+
+        function startSeasonAutoScroll() {
+            seasonAutoScrollInterval = setInterval(() => {
+                const itemsPerPage = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
+                if (totalSeasons > itemsPerPage) {
+                    if (currSeasonIndex < totalSeasons - itemsPerPage) currSeasonIndex++;
+                    else currSeasonIndex = 0;
+                    updateSeasonSlider();
+                }
+            }, 4000); 
+        }
+
+        function resetSeasonAutoScroll() {
+            clearInterval(seasonAutoScrollInterval);
+            startSeasonAutoScroll();
+        }
+
+        // --- TEAMS LOGIC (File Upload & Logo Only View) ---
+        window.resetTeamForm = function() {
+            document.getElementById('add-team-form').reset();
+            document.getElementById('team-edit-id').value = '';
+            document.getElementById('team-id').removeAttribute('readonly');
+            document.getElementById('team-existing-logo').value = '';
+            document.getElementById('team-cancel-btn').classList.add('hidden');
+            window.clearCropPreview('team');
+        };
+
+        window.handleTeamSubmit = async function(e) {
+            e.preventDefault();
+            if(!window.isAdmin) return;
+            
+            const teamId = document.getElementById('team-id').value.toUpperCase();
+            const name = document.getElementById('team-name').value;
+            const color = document.getElementById('team-color').value;
+            const existingLogo = document.getElementById('team-existing-logo').value;
+            const newLogo = window.croppedImages['team'];
+            
+            const logoData = newLogo ? newLogo : (existingLogo ? existingLogo : '');
+
+            const team = { id: teamId, name: name, color: color, logo: logoData };
+            try {
+                await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', teamId), team);
+                resetTeamForm();
+                showNotice('Franchise saved successfully!', 'Success');
+            } catch(e) { showNotice('Error saving team', 'Error'); }
+        };
+
+        window.deleteTeam = function(id) {
+            showConfirmDialog(`Delete franchise ${id}?`, async () => {
+                try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', id)); } catch(e) {}
+            });
+        };
+
+        window.editTeam = function(id, name, color, logo) {
+            document.getElementById('team-edit-id').value = id;
+            document.getElementById('team-id').value = id;
+            document.getElementById('team-id').setAttribute('readonly', 'true');
+            document.getElementById('team-name').value = name;
+            document.getElementById('team-color').value = color;
+            document.getElementById('team-existing-logo').value = logo || '';
+            document.getElementById('team-logo-file').value = '';
+            document.getElementById('team-cancel-btn').classList.remove('hidden');
+            window.clearCropPreview('team');
+            document.getElementById('admin-dashboard').scrollIntoView({ behavior: 'smooth' });
+        };
+
+        function loadTeams(local = false) {
+            const track = document.getElementById('teams-track');
+            if(!track) return;
+            if(local) { renderTeams(defaultTeams); return; }
+
+            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'teams'), (snap) => {
+                let teams = [];
+                snap.forEach(d => teams.push(d.data()));
+                if(teams.length === 0) {
+                    defaultTeams.forEach(t => setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', t.id), t));
+                    return;
+                }
+                renderTeams(teams);
+            }, () => renderTeams(defaultTeams));
+        }
+
+        function renderTeams(teams) {
+            const track = document.getElementById('teams-track');
+            const adminGrid = document.getElementById('admin-teams-grid');
+            
+            if(adminGrid && window.isAdmin) {
+                adminGrid.innerHTML = '';
+                teams.forEach(t => {
+                    const logoHtml = t.logo ? `<img src="${t.logo}" class="max-w-full max-h-full object-contain">` : `<span class="text-xs text-gray-500 font-bold">NO LOGO</span>`;
+                    adminGrid.innerHTML += `
+                        <div class="bg-premium-800 border border-premium-700 rounded p-4 flex flex-col items-center text-center relative shadow-lg">
+                            <div class="w-16 h-16 bg-white p-1 rounded-full border-2 border-premium-600 mb-2 flex items-center justify-center overflow-hidden shadow-inner">
+                                ${logoHtml}
+                            </div>
+                            <span class="font-bold text-white text-sm leading-tight mb-3">${t.name}</span>
+                            <div class="flex gap-2 w-full mt-auto">
+                                <button onclick="editTeam('${t.id}', '${t.name.replace(/'/g, "\\'")}', '${t.color}', '${t.logo || ''}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="deleteTeam('${t.id}')" class="flex-1 bg-red-600 hover:bg-red-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            if(track) {
+                track.innerHTML = '';
+                totalTeams = teams.length;
+                teams.forEach(t => {
+                    const fallbackLogo = `<div class="font-oswald text-4xl font-bold text-white mb-2 drop-shadow-md">${t.id}</div><p class="text-sm font-bold uppercase tracking-wider text-center text-white drop-shadow-md bg-premium-950/60 px-2 py-1 rounded w-full line-clamp-1">${t.name}</p>`;
+                    const logoContent = t.logo ? `<img src="${t.logo}" alt="${t.name}" class="w-full h-full object-contain drop-shadow-2xl z-10 p-4">` : fallbackLogo;
+                    
+                    track.innerHTML += `
+                        <div class="w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] flex-shrink-0 group relative cursor-pointer mx-auto">
+                            <div class="aspect-square bg-gradient-to-br ${t.color} rounded-2xl flex flex-col items-center justify-center border-2 border-premium-700 shadow-[0_0_15px_rgba(0,0,0,0.5)] group-hover:scale-105 group-hover:border-spl-gold transition-all duration-300 relative overflow-hidden">
+                                <div class="absolute inset-0 bg-premium-950/20 group-hover:bg-transparent transition-colors z-0"></div>
+                                ${logoContent}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                currTeamIndex = 0;
+                updateTeamSlider();
+                resetTeamAutoScroll();
+            }
+        }
+
+        function updateTeamSlider() {
+            const track = document.getElementById('teams-track');
+            if(!track || track.children.length === 0) return;
+            const itemWidth = track.children[0].getBoundingClientRect().width;
+            const gap = 24; 
+            track.style.transform = `translateX(-${currTeamIndex * (itemWidth + gap)}px)`;
+        }
+
+        window.nextTeam = function() {
+            if(totalTeams === 0) return;
+            const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 3 : 2);
+            if (currTeamIndex < totalTeams - visibleItems) {
+                currTeamIndex++;
+            } else {
+                currTeamIndex = 0;
+            }
+            updateTeamSlider();
+            resetTeamAutoScroll();
+        };
+
+        window.prevTeam = function() {
+            if(totalTeams === 0) return;
+            const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 3 : 2);
+            if (currTeamIndex > 0) {
+                currTeamIndex--;
+            } else {
+                currTeamIndex = Math.max(0, totalTeams - visibleItems);
+            }
+            updateTeamSlider();
+            resetTeamAutoScroll();
+        };
+
+        function startTeamAutoScroll() {
+            teamAutoScrollInterval = setInterval(() => {
+                const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 3 : 2);
+                if (totalTeams > visibleItems) {
+                    if (currTeamIndex < totalTeams - visibleItems) currTeamIndex++;
+                    else currTeamIndex = 0;
+                    updateTeamSlider();
+                }
+            }, 4000);
+        }
+        function resetTeamAutoScroll() {
+            clearInterval(teamAutoScrollInterval);
+            startTeamAutoScroll();
+        }
+
+        // --- PLAYERS LOGIC (Slider Mode) ---
+        window.handlePlayerSubmit = async function(e) {
+            e.preventDefault();
+            if(!window.isAdmin) return;
+            const player = {
+                name: document.getElementById('player-name').value,
+                team: document.getElementById('player-team').value,
+                achievement: document.getElementById('player-achievement').value,
+                createdAt: Date.now()
+            };
+            try {
+                await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), player);
+                document.getElementById('add-player-form').reset();
+                showNotice('Player profile saved!', 'Success');
+            } catch(e) { showNotice('Error saving player', 'Error'); }
+        };
+
+        window.deletePlayer = function(id) {
+            showConfirmDialog('Delete player profile?', async () => {
+                try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'players', id)); } catch(e) {}
+            });
+        };
+
+        function loadPlayers(local = false) {
+            const track = document.getElementById('players-track');
+            if(!track) return;
+            if(local) { renderPlayers(defaultPlayers); return; }
+
+            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), (snap) => {
+                let players = [];
+                snap.forEach(d => {
+                    const data = d.data();
+                    if(!data.isRegistration && !data.isOwnerRegistration) {
+                        players.push({ id: d.id, ...data });
+                    }
+                });
+                if(players.length === 0) {
+                    defaultPlayers.forEach(p => addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), p));
+                    return;
+                }
+                renderPlayers(players);
+            }, () => renderPlayers(defaultPlayers));
+        }
+
+        function renderPlayers(players) {
+            const track = document.getElementById('players-track');
+            if(!track) return;
+            
+            track.innerHTML = '';
+            totalPlayers = players.length;
+            
+            players.forEach(p => {
+                const del = window.isAdmin && p.id ? `<button onclick="deletePlayer('${p.id}')" class="absolute top-2 right-2 bg-red-600 text-white w-6 h-6 rounded-full z-20 flex items-center justify-center hover:bg-red-700 text-xs shadow"><i class="fa-solid fa-trash"></i></button>` : '';
+                track.innerHTML += `
+                    <div class="w-[calc(100%-0px)] sm:w-[calc(50%-12px)] lg:w-[calc(25%-18px)] flex-shrink-0 bg-premium-950 border border-premium-700 rounded-xl p-6 text-center hover:border-spl-gold transition group shadow-lg relative h-full">
+                        ${del}
+                        <div class="w-24 h-24 bg-gradient-to-b from-premium-700 to-premium-800 rounded-full mx-auto mb-4 border-2 border-spl-gold flex items-center justify-center overflow-hidden shadow-inner">
+                             <i class="fa-solid fa-user-ninja text-3xl text-gray-400 group-hover:text-spl-gold transition"></i>
+                        </div>
+                        <h3 class="font-oswald text-2xl md:text-3xl font-bold text-white mb-2 leading-tight">${p.name}</h3>
+                        <p class="text-xs text-spl-gold font-bold uppercase tracking-wider mb-3 bg-premium-900 inline-block px-3 py-1 rounded-full border border-premium-700 line-clamp-1">${p.team}</p>
+                        <p class="text-sm text-gray-400 font-medium line-clamp-2">${p.achievement}</p>
+                    </div>
+                `;
+            });
+            
+            currPlayerIndex = 0;
+            updatePlayerSlider();
+            resetPlayerAutoScroll();
+        }
+
+        function updatePlayerSlider() {
+            const track = document.getElementById('players-track');
+            if(!track || track.children.length === 0) return;
+            const itemWidth = track.children[0].getBoundingClientRect().width;
+            const gap = 24; 
+            track.style.transform = `translateX(-${currPlayerIndex * (itemWidth + gap)}px)`;
+        }
+
+        window.nextPlayer = function() {
+            if(totalPlayers === 0) return;
+            const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 640 ? 2 : 1);
+            if (currPlayerIndex < totalPlayers - visibleItems) {
+                currPlayerIndex++;
+            } else {
+                currPlayerIndex = 0;
+            }
+            updatePlayerSlider();
+            resetPlayerAutoScroll();
+        };
+
+        window.prevPlayer = function() {
+            if(totalPlayers === 0) return;
+            const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 640 ? 2 : 1);
+            if (currPlayerIndex > 0) {
+                currPlayerIndex--;
+            } else {
+                currPlayerIndex = Math.max(0, totalPlayers - visibleItems);
+            }
+            updatePlayerSlider();
+            resetPlayerAutoScroll();
+        };
+
+        function startPlayerAutoScroll() {
+            playerAutoScrollInterval = setInterval(() => {
+                const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 640 ? 2 : 1);
+                if (totalPlayers > visibleItems) {
+                    if (currPlayerIndex < totalPlayers - visibleItems) currPlayerIndex++;
+                    else currPlayerIndex = 0;
+                    updatePlayerSlider();
+                }
+            }, 4000);
+        }
+        function resetPlayerAutoScroll() {
+            clearInterval(playerAutoScrollInterval);
+            startPlayerAutoScroll();
+        }
+
+        // --- GALLERY LOGIC (Local Storage File Upload & Slider) ---
+        window.handleGallerySubmit = async function(e) {
+            e.preventDefault();
+            if(!window.isAdmin) return;
+            
+            const base64Url = window.croppedImages['gallery'];
+            
+            if(base64Url) {
+                try {
+                    await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'gallery'), { url: base64Url, createdAt: Date.now() });
+                    document.getElementById('add-gallery-form').reset();
+                    window.clearCropPreview('gallery');
+                    showNotice('Image uploaded successfully!', 'Success');
+                } catch(e) { showNotice('Error uploading image', 'Error'); }
+            } else {
+                showNotice("Please select and crop an image first.", "Missing Image");
+            }
+        };
+
+        window.deleteGalleryImage = function(id) {
+            showConfirmDialog('Delete gallery image?', async () => {
+                try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'gallery', id)); } catch(e) {}
+            });
+        };
+
+        function loadGallery(local = false) {
+            const track = document.getElementById('gallery-track');
+            if(!track) return;
+            if(local) { renderGallery(defaultGalleryPics); return; }
+
+            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'gallery'), (snap) => {
+                let imgs = [];
+                snap.forEach(d => imgs.push({ id: d.id, ...d.data() }));
+                imgs.sort((a,b) => (a.createdAt||0) - (b.createdAt||0));
+                if(imgs.length === 0) {
+                    defaultGalleryPics.forEach(p => addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'gallery'), { url: p.url, createdAt: Date.now() }));
+                    return;
+                }
+                renderGallery(imgs);
+            }, () => renderGallery(defaultGalleryPics));
+        }
+
+        function renderGallery(images) {
+            const track = document.getElementById('gallery-track');
+            const adminGrid = document.getElementById('admin-gallery-grid');
+            
+            totalGalleryImages = images.length;
+
+            if(adminGrid && window.isAdmin) {
+                adminGrid.innerHTML = '';
+                images.forEach(img => {
+                    adminGrid.innerHTML += `
+                        <div class="relative flex-shrink-0 w-32 h-24 border border-premium-700 rounded overflow-hidden group shadow-lg">
+                            <img src="${img.url}" class="w-full h-full object-cover">
+                            <button onclick="deleteGalleryImage('${img.id}')" class="absolute inset-0 bg-red-600/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><i class="fa-solid fa-trash text-white"></i></button>
+                        </div>
+                    `;
+                });
+            }
+
+            track.className = "flex transition-transform duration-500 ease-out gap-4 items-stretch";
+            track.innerHTML = '';
+            
+            images.forEach(img => {
+                track.innerHTML += `
+                    <div class="w-[calc(100%-0px)] md:w-[calc(50%-8px)] lg:w-[calc(33.333%-10.66px)] flex-shrink-0 relative h-[300px] md:h-[400px] rounded-xl overflow-hidden bg-premium-950 shadow-xl group border border-premium-800 hover:border-spl-gold transition-colors">
+                        <div class="absolute inset-0 bg-cover bg-center blur-xl opacity-40 scale-125 group-hover:opacity-60 transition-opacity duration-500" style="background-image: url('${img.url}')"></div>
+                        <img src="${img.url}" alt="SPL Action" class="relative z-10 w-full h-full object-contain p-2 drop-shadow-2xl" onerror="this.src='https://placehold.co/800x600/152238/F4B036?text=Image+Not+Found';">
+                    </div>
+                `;
+            });
+
+            currGalleryIndex = 0;
+            updateGallerySlider();
+            resetGalleryAutoScroll();
+        }
+
+        function updateGallerySlider() {
+            const track = document.getElementById('gallery-track');
+            if(!track || track.children.length === 0) return;
+            const itemWidth = track.children[0].getBoundingClientRect().width;
+            const gap = 16;
+            track.style.transform = `translateX(-${currGalleryIndex * (itemWidth + gap)}px)`;
+        }
+
+        window.nextGallerySlide = function() {
+            if (totalGalleryImages === 0) return;
+            const itemsPerPage = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
+
+            if (currGalleryIndex < totalGalleryImages - itemsPerPage) {
+                currGalleryIndex++;
+            } else {
+                currGalleryIndex = 0;
+            }
+            updateGallerySlider();
+            resetGalleryAutoScroll();
+        };
+
+        window.prevGallerySlide = function() {
+            if (totalGalleryImages === 0) return;
+            const itemsPerPage = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
+
+            if (currGalleryIndex > 0) {
+                currGalleryIndex--;
+            } else {
+                currGalleryIndex = Math.max(0, totalGalleryImages - itemsPerPage);
+            }
+            updateGallerySlider();
+            resetGalleryAutoScroll();
+        };
+
+        function startGalleryAutoScroll() {
+            galleryAutoScrollInterval = setInterval(() => {
+                const itemsPerPage = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
+                if (totalGalleryImages > itemsPerPage) {
+                    if (currGalleryIndex < totalGalleryImages - itemsPerPage) currGalleryIndex++;
+                    else currGalleryIndex = 0;
+                    updateGallerySlider();
+                }
+            }, 3000);
+        }
+
+        function resetGalleryAutoScroll() {
+            clearInterval(galleryAutoScrollInterval);
+            startGalleryAutoScroll();
+        }
+
+        // --- EDIT TEXT / WRITINGS LOGIC ---
+        window.handleTextSubmit = async function(e) {
+            e.preventDefault();
+            if(!window.isAdmin) return;
+            const p1 = document.getElementById('text-about-1').value;
+            const p2 = document.getElementById('text-about-2').value;
+            try {
+                const textRef = doc(db, 'artifacts', myAppId, 'public', 'data', 'settings', 'about_text');
+                await setDoc(textRef, { p1, p2 }, { merge: true });
+                showNotice('Writings updated successfully!', 'Success');
+            } catch(e) { showNotice('Error updating writings', 'Error'); }
+        };
+
+        function loadAboutText(local = false) {
+            const container = document.getElementById('about-content-display');
+            if(!container) return;
+
+            if(local) {
+                renderAboutText(defaultAboutText);
+                return;
+            }
+
+            const textRef = doc(db, 'artifacts', myAppId, 'public', 'data', 'settings', 'about_text');
+            onSnapshot(textRef, (docSnap) => {
+                if(docSnap.exists()) {
+                    const data = docSnap.data();
+                    renderAboutText(data);
+                    
+                    const t1 = document.getElementById('text-about-1');
+                    const t2 = document.getElementById('text-about-2');
+                    if(t1 && data.p1 && !t1.value) t1.value = data.p1;
+                    if(t2 && data.p2 && !t2.value) t2.value = data.p2;
+                } else if(window.isAdmin) {
+                    setDoc(textRef, defaultAboutText);
+                }
+            }, () => renderAboutText(defaultAboutText));
+        }
+
+        function renderAboutText(data) {
+            const container = document.getElementById('about-content-display');
+            if(!container) return;
+            container.innerHTML = `
+                <p class="mb-4">${data.p1 || defaultAboutText.p1}</p>
+                <p>${data.p2 || defaultAboutText.p2}</p>
+            `;
+        }
+
+        // --- SPONSORS LOGIC ---
+        window.resetSponsorForm = function() {
+            document.getElementById('add-sponsor-form').reset();
+            document.getElementById('sponsor-id').value = '';
+            document.getElementById('sponsor-existing-logo').value = '';
+            document.getElementById('sponsor-cancel-btn').classList.add('hidden');
+            window.clearCropPreview('sponsor');
+        };
+
+        window.handleSponsorSubmit = async function(e) {
+            e.preventDefault();
+            if(!window.isAdmin) return;
+            
+            let sponsorId = document.getElementById('sponsor-id').value;
+            if(!sponsorId) sponsorId = 'SP_' + Date.now(); 
+            
+            const sponsorName = document.getElementById('sponsor-name').value;
+            const sponsorType = document.getElementById('sponsor-type').value;
+            const existingLogo = document.getElementById('sponsor-existing-logo').value;
+            
+            const newLogo = window.croppedImages['sponsor'];
+            const logoData = newLogo ? newLogo : (existingLogo ? existingLogo : '');
+            
+            if(!logoData) {
+                showNotice("Please select and crop a logo for the sponsor.", "Missing Logo");
+                return;
+            }
+
+            const sponsor = { id: sponsorId, name: sponsorName, type: sponsorType, logo: logoData, createdAt: Date.now() };
+            try {
+                await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'sponsors', sponsorId), sponsor);
+                resetSponsorForm();
+                showNotice('Sponsor saved successfully!', 'Success');
+            } catch(err) { showNotice('Error saving sponsor', 'Error'); }
+        };
+
+        window.deleteSponsor = function(id) {
+            showConfirmDialog(`Delete this sponsor?`, async () => {
+                try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'sponsors', id)); } catch(e) {}
+            });
+        };
+
+        window.editSponsor = function(id, name, type, logo) {
+            document.getElementById('sponsor-id').value = id;
+            document.getElementById('sponsor-name').value = name;
+            document.getElementById('sponsor-type').value = type;
+            document.getElementById('sponsor-existing-logo').value = logo || '';
+            document.getElementById('sponsor-logo-file').value = '';
+            document.getElementById('sponsor-cancel-btn').classList.remove('hidden');
+            window.clearCropPreview('sponsor');
+            document.getElementById('admin-dashboard').scrollIntoView({ behavior: 'smooth' });
+        };
+
+        function loadSponsors(local = false) {
+            const container = document.getElementById('sponsors-display-container');
+            if(!container) return;
+            if(local) { renderSponsors(defaultSponsors); return; }
+
+            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'sponsors'), (snap) => {
+                let sponsors = [];
+                snap.forEach(d => {
+                    const data = d.data();
+                    if(data.type === 'system_qr') {
+                        applyQrToUI(data.logo);
+                    } else {
+                        sponsors.push(data);
+                    }
+                });
+                
+                if(sponsors.length === 0) {
+                    defaultSponsors.forEach(s => setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'sponsors', s.id), s));
+                    return;
+                }
+                sponsors.sort((a,b) => (a.createdAt||0) - (b.createdAt||0));
+                renderSponsors(sponsors);
+            }, () => renderSponsors(defaultSponsors));
+        }
+
+        function renderSponsors(sponsors) {
+            const displayContainer = document.getElementById('sponsors-display-container');
+            const adminGrid = document.getElementById('admin-sponsors-grid');
+            
+            if(adminGrid && window.isAdmin) {
+                adminGrid.innerHTML = '';
+                sponsors.forEach(s => {
+                    adminGrid.innerHTML += `
+                        <div class="bg-premium-800 border border-premium-700 rounded p-4 flex flex-col items-center text-center relative shadow-lg">
+                            <span class="absolute top-0 right-0 bg-premium-950 text-[10px] text-gray-400 px-2 py-1 rounded-bl uppercase font-bold border-l border-b border-premium-700">${s.type}</span>
+                            <div class="w-16 h-16 bg-white p-1 rounded-full border-2 border-premium-600 mb-2 flex items-center justify-center shadow-inner overflow-hidden">
+                                <img src="${s.logo}" class="max-w-full max-h-full object-contain">
+                            </div>
+                            <span class="font-bold text-white text-sm leading-tight mb-3">${s.name}</span>
+                            <div class="flex gap-2 w-full mt-auto">
+                                <button onclick="editSponsor('${s.id}', '${s.name.replace(/'/g, "\\'")}', '${s.type}', '${s.logo}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="deleteSponsor('${s.id}')" class="flex-1 bg-red-600 hover:bg-red-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            let titleSponsorsHTML = '';
+            let officialSponsorsHTML = '';
+            let officialCount = 0;
+
+            sponsors.forEach(s => {
+                if(s.type === 'title') {
+                    titleSponsorsHTML += `
+                        <div class="flex justify-center mb-16">
+                            <div class="w-full text-center">
+                                <h2 class="font-oswald text-4xl md:text-5xl font-bold uppercase tracking-wide mb-8 text-spl-gold relative inline-block">
+                                    <span class="bg-premium-900 px-4 relative z-10"><i class="fa-solid fa-crown mr-2 text-3xl"></i> Title Sponsor</span>
+                                    <div class="absolute inset-0 flex items-center z-0"><div class="w-full border-t border-premium-700/50"></div></div>
+                                </h2>
+                                <br>
+                                <div class="bg-white p-8 rounded-2xl shadow-[0_0_40px_rgba(244,176,54,0.3)] border-2 border-spl-gold/80 hover:scale-105 transition-transform duration-300 inline-block mx-auto">
+                                    <img src="${s.logo}" alt="${s.name}" class="h-32 md:h-40 object-contain mx-auto">
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    officialCount++;
+                    officialSponsorsHTML += `
+                        <div class="w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] flex-shrink-0 bg-white p-4 rounded-xl shadow-xl border border-premium-700 hover:scale-105 hover:border-spl-gold transition-all duration-300 flex items-center justify-center h-28 md:h-36">
+                            <img src="${s.logo}" alt="${s.name}" class="max-w-full max-h-full object-contain">
+                        </div>
+                    `;
+                }
+            });
+            
+            totalOfficialSponsors = officialCount;
+            let finalHTML = titleSponsorsHTML;
+
+            if(officialSponsorsHTML !== '') {
+                finalHTML += `
+                    <div class="flex flex-col md:flex-row md:justify-between items-start md:items-center mb-8 gap-4 text-left">
+                        <h2 class="font-oswald text-3xl md:text-4xl font-bold uppercase tracking-wide text-white relative inline-block">
+                            <span class="bg-premium-900 px-4 relative z-10">Official Sponsors</span>
+                            <div class="absolute inset-0 flex items-center z-0"><div class="w-full border-t border-premium-700/50"></div></div>
+                        </h2>
+                        <div class="flex gap-2 self-center md:self-auto relative z-10 bg-premium-900 px-2">
+                            <button onclick="prevSponsor()" class="w-10 h-10 bg-premium-800 hover:bg-spl-gold text-white hover:text-premium-950 transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-chevron-left"></i></button>
+                            <button onclick="nextSponsor()" class="w-10 h-10 bg-premium-800 hover:bg-spl-gold text-white hover:text-premium-950 transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="overflow-hidden py-4 px-1" id="sponsors-slider-wrapper">
+                        <div id="sponsors-track" class="flex transition-transform duration-500 ease-out gap-6 items-stretch">
+                            ${officialSponsorsHTML}
+                        </div>
+                    </div>
+                `;
+            }
+
+            displayContainer.innerHTML = finalHTML;
+            currSponsorIndex = 0;
+            updateSponsorSlider();
+            resetSponsorAutoScroll();
+        }
+
+        function updateSponsorSlider() {
+            const track = document.getElementById('sponsors-track');
+            if(!track || track.children.length === 0) return;
+            const itemWidth = track.children[0].getBoundingClientRect().width;
+            const gap = 24; 
+            track.style.transform = `translateX(-${currSponsorIndex * (itemWidth + gap)}px)`;
+        }
+
+        window.nextSponsor = function() {
+            if(totalOfficialSponsors === 0) return;
+            const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 3 : 2);
+            if (currSponsorIndex < totalOfficialSponsors - visibleItems) {
+                currSponsorIndex++;
+            } else {
+                currSponsorIndex = 0;
+            }
+            updateSponsorSlider();
+            resetSponsorAutoScroll();
+        };
+
+        window.prevSponsor = function() {
+            if(totalOfficialSponsors === 0) return;
+            const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 3 : 2);
+            if (currSponsorIndex > 0) {
+                currSponsorIndex--;
+            } else {
+                currSponsorIndex = Math.max(0, totalOfficialSponsors - visibleItems);
+            }
+            updateSponsorSlider();
+            resetSponsorAutoScroll();
+        };
+
+        function startSponsorAutoScroll() {
+            sponsorAutoScrollInterval = setInterval(() => {
+                const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 768 ? 3 : 2);
+                if (totalOfficialSponsors > visibleItems) {
+                    if (currSponsorIndex < totalOfficialSponsors - visibleItems) currSponsorIndex++;
+                    else currSponsorIndex = 0;
+                    updateSponsorSlider();
+                }
+            }, 4000);
+        }
+
+        function resetSponsorAutoScroll() {
+            clearInterval(sponsorAutoScrollInterval);
+            startSponsorAutoScroll();
+        }
+
+        // --- PARTNERS LOGIC (Slider Mode) ---
+        window.resetPartnerForm = function() {
+            document.getElementById('add-partner-form').reset();
+            document.getElementById('partner-id').value = '';
+            document.getElementById('partner-existing-logo').value = '';
+            document.getElementById('partner-cancel-btn').classList.add('hidden');
+            window.clearCropPreview('partner');
+        };
+
+        window.handlePartnerSubmit = async function(e) {
+            e.preventDefault();
+            if(!window.isAdmin) return;
+            
+            let partnerId = document.getElementById('partner-id').value;
+            if(!partnerId) partnerId = 'PRT_' + Date.now(); 
+            
+            const partnerName = document.getElementById('partner-name').value;
+            const partnerCategory = document.getElementById('partner-category').value;
+            const existingLogo = document.getElementById('partner-existing-logo').value;
+            
+            const newLogo = window.croppedImages['partner'];
+            const logoData = newLogo ? newLogo : (existingLogo ? existingLogo : '');
+            
+            if(!logoData) {
+                showNotice("Please select and crop a logo for the partner.", "Missing Logo");
+                return;
+            }
+
+            const partner = { id: partnerId, name: partnerName, category: partnerCategory, logo: logoData, createdAt: Date.now() };
+            try {
+                await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'partners', partnerId), partner);
+                resetPartnerForm();
+                showNotice('Partner saved successfully!', 'Success');
+            } catch(err) { showNotice('Error saving partner', 'Error'); }
+        };
+
+        window.deletePartner = function(id) {
+            showConfirmDialog(`Delete this partner?`, async () => {
+                try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'partners', id)); } catch(e) {}
+            });
+        };
+
+        window.editPartner = function(id, name, category, logo) {
+            document.getElementById('partner-id').value = id;
+            document.getElementById('partner-name').value = name;
+            document.getElementById('partner-category').value = category;
+            document.getElementById('partner-existing-logo').value = logo || '';
+            document.getElementById('partner-logo-file').value = '';
+            document.getElementById('partner-cancel-btn').classList.remove('hidden');
+            window.clearCropPreview('partner');
+            document.getElementById('admin-dashboard').scrollIntoView({ behavior: 'smooth' });
+        };
+
+        function loadPartners(local = false) {
+            const track = document.getElementById('partners-track');
+            if(!track) return;
+            if(local) { renderPartners(defaultPartners); return; }
+
+            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'partners'), (snap) => {
+                let partners = [];
+                snap.forEach(d => partners.push(d.data()));
+                
+                if(partners.length === 0) {
+                    defaultPartners.forEach(p => setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'partners', p.id), p));
+                    return;
+                }
+                partners.sort((a,b) => (a.createdAt||0) - (b.createdAt||0));
+                renderPartners(partners);
+            }, () => renderPartners(defaultPartners));
+        }
+
+        function renderPartners(partners) {
+            const track = document.getElementById('partners-track');
+            const adminGrid = document.getElementById('admin-partners-grid');
+            
+            if(adminGrid && window.isAdmin) {
+                adminGrid.innerHTML = '';
+                partners.forEach(p => {
+                    adminGrid.innerHTML += `
+                        <div class="bg-premium-800 border border-premium-700 rounded p-4 flex flex-col items-center text-center relative shadow-lg">
+                            <span class="absolute top-0 right-0 bg-premium-950 text-[9px] text-spl-gold px-2 py-1 rounded-bl uppercase font-bold border-l border-b border-premium-700">${p.category}</span>
+                            <div class="w-16 h-16 bg-white p-2 rounded-full border-2 border-premium-600 mb-2 flex items-center justify-center shadow-inner overflow-hidden mt-3">
+                                <img src="${p.logo}" class="max-w-full max-h-full object-contain">
+                            </div>
+                            <span class="font-bold text-white text-sm leading-tight mb-3 mt-1">${p.name}</span>
+                            <div class="flex gap-2 w-full mt-auto">
+                                <button onclick="editPartner('${p.id}', '${p.name.replace(/'/g, "\\'")}', '${p.category}', '${p.logo}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="deletePartner('${p.id}')" class="flex-1 bg-red-600 hover:bg-red-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            if(track) {
+                track.innerHTML = '';
+                totalPartners = partners.length;
+                partners.forEach(p => {
+                    track.innerHTML += `
+                        <div class="w-[calc(50%-12px)] sm:w-[calc(33.333%-16px)] md:w-[calc(25%-18px)] lg:w-[calc(20%-19.2px)] flex-shrink-0 bg-premium-800 rounded-xl p-4 shadow-xl border border-premium-700 hover:border-spl-gold transition-colors duration-300 flex flex-col items-center group h-full">
+                            <div class="w-20 h-20 bg-white rounded-full p-2 mb-4 shadow-inner flex items-center justify-center overflow-hidden border-2 border-transparent group-hover:border-spl-gold transition-colors">
+                                <img src="${p.logo}" alt="${p.name}" class="max-w-full max-h-full object-contain">
+                            </div>
+                            <h4 class="font-bold text-white text-center leading-tight mb-2">${p.name}</h4>
+                            <span class="text-[9px] sm:text-[10px] uppercase tracking-widest font-bold text-spl-gold bg-premium-950 px-2 py-1 rounded border border-premium-700 mt-auto">${p.category}</span>
+                        </div>
+                    `;
+                });
+
+                currPartnerIndex = 0;
+                updatePartnerSlider();
+                resetPartnerAutoScroll();
+            }
+        }
+
+        function updatePartnerSlider() {
+            const track = document.getElementById('partners-track');
+            if(!track || track.children.length === 0) return;
+            const itemWidth = track.children[0].getBoundingClientRect().width;
+            const gap = 24; 
+            track.style.transform = `translateX(-${currPartnerIndex * (itemWidth + gap)}px)`;
+        }
+
+        window.nextPartner = function() {
+            if(totalPartners === 0) return;
+            const visibleItems = window.innerWidth >= 1024 ? 5 : (window.innerWidth >= 768 ? 4 : (window.innerWidth >= 640 ? 3 : 2));
+            if (currPartnerIndex < totalPartners - visibleItems) {
+                currPartnerIndex++;
+            } else {
+                currPartnerIndex = 0;
+            }
+            updatePartnerSlider();
+            resetPartnerAutoScroll();
+        };
+
+        window.prevPartner = function() {
+            if(totalPartners === 0) return;
+            const visibleItems = window.innerWidth >= 1024 ? 5 : (window.innerWidth >= 768 ? 4 : (window.innerWidth >= 640 ? 3 : 2));
+            if (currPartnerIndex > 0) {
+                currPartnerIndex--;
+            } else {
+                currPartnerIndex = Math.max(0, totalPartners - visibleItems);
+            }
+            updatePartnerSlider();
+            resetPartnerAutoScroll();
+        };
+
+        function startPartnerAutoScroll() {
+            partnerAutoScrollInterval = setInterval(() => {
+                const visibleItems = window.innerWidth >= 1024 ? 5 : (window.innerWidth >= 768 ? 4 : (window.innerWidth >= 640 ? 3 : 2));
+                if (totalPartners > visibleItems) {
+                    if (currPartnerIndex < totalPartners - visibleItems) currPartnerIndex++;
+                    else currPartnerIndex = 0;
+                    updatePartnerSlider();
+                }
+            }, 4000);
+        }
+
+        function resetPartnerAutoScroll() {
+            clearInterval(partnerAutoScrollInterval);
+            startPartnerAutoScroll();
+        }
 
         // --- GLOBAL RESIZE LISTENER FOR ALL SLIDERS ---
         window.addEventListener('resize', () => {
