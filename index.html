@@ -2094,6 +2094,44 @@ service cloud.firestore {
                                 <div class="relative z-10 flex justify-between items-center p-3">
                                     <span class="font-bold text-white text-xs sm:text-sm md:text-base flex-grow mr-2 truncate drop-shadow-md">${optText}</span>
                                     <span class="font-bold text-premium-950 text-xs sm:text-sm bg-spl-gold px-2 py-1 rounded shadow-sm flex-shrink-0 ml-2">${pct}%</span>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        optionsHtml += `
+                            <button onclick="submitVote('${p.id}', ${i})" class="w-full text-left mb-3 p-3 bg-premium-800 hover:bg-premium-700 border border-premium-700 hover:border-spl-gold transition-colors duration-300 rounded shadow-md group flex justify-between items-center relative overflow-hidden">
+                                <span class="font-bold text-gray-200 group-hover:text-white transition-colors text-sm md:text-base relative z-10">${optText}</span>
+                                <i class="fa-regular fa-circle-check text-gray-500 group-hover:text-spl-gold transition-colors relative z-10"></i>
+                            </button>
+                        `;
+                    }
+                }
+
+                publicContainer.innerHTML += `
+                    <div class="bg-premium-900 border border-premium-800 p-6 md:p-8 rounded-2xl shadow-xl hover:border-spl-gold/50 transition-colors duration-300">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div class="w-10 h-10 rounded-full bg-premium-800 border border-premium-700 flex items-center justify-center flex-shrink-0 shadow-inner">
+                                <i class="fa-solid fa-chart-pie text-spl-gold"></i>
+                            </div>
+                            <h3 class="font-oswald text-2xl md:text-3xl font-bold text-white leading-tight">${p.question}</h3>
+                        </div>
+                        <div class="mb-4">
+                            ${optionsHtml}
+                        </div>
+                        <div class="text-right border-t border-premium-800 pt-3">
+                            <span class="text-xs text-gray-500 font-bold uppercase tracking-widest"><i class="fa-solid fa-users mr-1"></i> ${totalVotes} Total Votes</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            setTimeout(() => {
+                document.querySelectorAll('.poll-bar').forEach(bar => {
+                    bar.style.width = bar.getAttribute('data-width');
+                });
+            }, 100);
+        }
+
         async function initFirebase() {
             try {
                 const firebaseConfig = {
