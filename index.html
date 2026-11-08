@@ -2273,7 +2273,6 @@ service cloud.firestore {
 
         window.deletePost = function(id) {
             showConfirmDialog('Delete this season archive?', async () => {
-                localStorage.setItem('spl_init_seasons', 'true');
                 try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'seasons', id)); } catch(e) {}
             });
         };
@@ -2287,13 +2286,11 @@ service cloud.firestore {
                 let fetched = [];
                 snap.forEach(d => fetched.push({ id: d.id, ...d.data() }));
                 let all = fetched.sort((a,b) => b.season - a.season).filter(p => p.season <= 5);
-                if(all.length === 0 && fetched.length === 0 && !localStorage.getItem('spl_init_seasons')) {
-                    localStorage.setItem('spl_init_seasons', 'true');
+                if(all.length === 0 && fetched.length === 0) {
                     defaultSeasons.forEach(s => addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'seasons'), s).catch(()=>{}));
                     renderPosts(getLocalList('seasons', defaultSeasons));
                     return;
                 }
-                localStorage.setItem('spl_init_seasons', 'true');
                 setLocalList('seasons', all);
                 renderPosts(all);
             }, () => renderPosts(getLocalList('seasons', defaultSeasons)));
@@ -2394,8 +2391,8 @@ service cloud.firestore {
             e.preventDefault();
             if(!window.isAdmin) return;
             
-            const teamId = document.getElementById('team-id').value.trim().toUpperCase();
-            const name = document.getElementById('team-name').value.trim();
+            const teamId = document.getElementById('team-id').value.toUpperCase();
+            const name = document.getElementById('team-name').value;
             const color = document.getElementById('team-color').value;
             const existingLogo = document.getElementById('team-existing-logo').value;
             const newLogo = window.croppedImages['team'];
@@ -2403,32 +2400,16 @@ service cloud.firestore {
             const logoData = newLogo ? newLogo : (existingLogo ? existingLogo : '');
 
             const team = { id: teamId, name: name, color: color, logo: logoData };
-            localStorage.setItem('spl_init_teams', 'true');
-            const localTeams = getLocalList('teams', []).filter(t => t.id !== teamId);
-            localTeams.push(team);
-            setLocalList('teams', localTeams);
-            renderTeams(localTeams);
-
             try {
                 await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', teamId), team);
                 resetTeamForm();
                 showNotice('Franchise saved successfully!', 'Success');
-            } catch(e) {
-                resetTeamForm();
-                showNotice('Franchise saved locally!', 'Saved');
-            }
+            } catch(e) { showNotice('Error saving team', 'Error'); }
         };
 
         window.deleteTeam = function(id) {
             showConfirmDialog(`Delete franchise ${id}?`, async () => {
-                localStorage.setItem('spl_init_teams', 'true');
-                const updatedLocal = getLocalList('teams', []).filter(t => t.id !== id);
-                setLocalList('teams', updatedLocal);
-                renderTeams(updatedLocal);
-                try {
-                    await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', id));
-                    showNotice(`Franchise ${id} deleted successfully.`, 'Deleted');
-                } catch(e) {}
+                try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', id)); } catch(e) {}
             });
         };
 
@@ -2448,21 +2429,17 @@ service cloud.firestore {
         function loadTeams(local = false) {
             const track = document.getElementById('teams-track');
             if(!track) return;
-            if(local) { renderTeams(getLocalList('teams', defaultTeams)); return; }
+            if(local) { renderTeams(defaultTeams); return; }
 
             onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'teams'), (snap) => {
                 let teams = [];
-                snap.forEach(d => teams.push({ ...d.data(), id: d.id }));
-                if(teams.length === 0 && !localStorage.getItem('spl_init_teams')) {
-                    localStorage.setItem('spl_init_teams', 'true');
-                    defaultTeams.forEach(t => setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', t.id), t).catch(()=>{}));
-                    renderTeams(defaultTeams);
+                snap.forEach(d => teams.push(d.data()));
+                if(teams.length === 0) {
+                    defaultTeams.forEach(t => setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', t.id), t));
                     return;
                 }
-                localStorage.setItem('spl_init_teams', 'true');
-                setLocalList('teams', teams);
                 renderTeams(teams);
-            }, () => renderTeams(getLocalList('teams', defaultTeams)));
+            }, () => renderTeams(defaultTeams));
         }
 
         function renderTeams(teams) {
@@ -2471,52 +2448,39 @@ service cloud.firestore {
             
             if(adminGrid && window.isAdmin) {
                 adminGrid.innerHTML = '';
-                if (teams.length === 0) {
-                    adminGrid.innerHTML = `<p class="text-gray-500 text-sm col-span-full">No franchises added yet.</p>`;
-                } else {
-                    teams.forEach(t => {
-                        const logoHtml = t.logo ? `<img src="${t.logo}" class="max-w-full max-h-full object-contain">` : `<span class="text-xs text-gray-500 font-bold">NO LOGO</span>`;
-                        adminGrid.innerHTML += `
-                            <div class="bg-premium-800 border border-premium-700 rounded p-4 flex flex-col items-center text-center relative shadow-lg">
-                                <div class="w-16 h-16 bg-white p-1 rounded-full border-2 border-premium-600 mb-2 flex items-center justify-center overflow-hidden shadow-inner">
-                                    ${logoHtml}
-                                </div>
-                                <span class="font-bold text-white text-sm leading-tight mb-3">${t.name}</span>
-                                <div class="flex gap-2 w-full mt-auto">
-                                    <button onclick="editTeam('${t.id}', '${(t.name||'').replace(/'/g, "\\'")}', '${t.color}', '${t.logo || ''}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-pen"></i></button>
-                                    <button onclick="deleteTeam('${t.id}')" class="flex-1 bg-red-600 hover:bg-red-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-trash"></i></button>
-                                </div>
+                teams.forEach(t => {
+                    const logoHtml = t.logo ? `<img src="${t.logo}" class="max-w-full max-h-full object-contain">` : `<span class="text-xs text-gray-500 font-bold">NO LOGO</span>`;
+                    adminGrid.innerHTML += `
+                        <div class="bg-premium-800 border border-premium-700 rounded p-4 flex flex-col items-center text-center relative shadow-lg">
+                            <div class="w-16 h-16 bg-white p-1 rounded-full border-2 border-premium-600 mb-2 flex items-center justify-center overflow-hidden shadow-inner">
+                                ${logoHtml}
                             </div>
-                        `;
-                    });
-                }
+                            <span class="font-bold text-white text-sm leading-tight mb-3">${t.name}</span>
+                            <div class="flex gap-2 w-full mt-auto">
+                                <button onclick="editTeam('${t.id}', '${(t.name||'').replace(/'/g, "\\'")}', '${t.color}', '${t.logo || ''}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="deleteTeam('${t.id}')" class="flex-1 bg-red-600 hover:bg-red-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `;
+                });
             }
 
             if(track) {
                 track.innerHTML = '';
                 totalTeams = teams.length;
-                if (teams.length === 0) {
-                    track.innerHTML = `
-                        <div class="w-full text-center py-12 bg-premium-900 rounded-2xl border border-premium-800">
-                            <i class="fa-solid fa-shield-halved text-4xl text-spl-gold mb-3"></i>
-                            <p class="text-gray-400 font-bold tracking-widest uppercase text-sm">Franchises will be announced soon!</p>
+                teams.forEach(t => {
+                    const fallbackLogo = `<div class="font-oswald text-4xl font-bold text-white mb-2 drop-shadow-md">${t.id}</div><p class="text-sm font-bold uppercase tracking-wider text-center text-white drop-shadow-md bg-premium-950/60 px-2 py-1 rounded w-full line-clamp-1">${t.name}</p>`;
+                    const logoContent = t.logo ? `<img src="${t.logo}" alt="${t.name}" class="w-full h-full object-contain drop-shadow-2xl z-10 p-4">` : fallbackLogo;
+                    
+                    track.innerHTML += `
+                        <div class="w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] flex-shrink-0 group relative cursor-pointer mx-auto">
+                            <div class="aspect-square bg-gradient-to-br ${t.color} rounded-2xl flex flex-col items-center justify-center border-2 border-premium-700 shadow-[0_0_15px_rgba(0,0,0,0.5)] group-hover:scale-105 group-hover:border-spl-gold transition-all duration-300 relative overflow-hidden">
+                                <div class="absolute inset-0 bg-premium-950/20 group-hover:bg-transparent transition-colors z-0"></div>
+                                ${logoContent}
+                            </div>
                         </div>
                     `;
-                } else {
-                    teams.forEach(t => {
-                        const fallbackLogo = `<div class="font-oswald text-4xl font-bold text-white mb-2 drop-shadow-md">${t.id}</div><p class="text-sm font-bold uppercase tracking-wider text-center text-white drop-shadow-md bg-premium-950/60 px-2 py-1 rounded w-full line-clamp-1">${t.name}</p>`;
-                        const logoContent = t.logo ? `<img src="${t.logo}" alt="${t.name}" class="w-full h-full object-contain drop-shadow-2xl z-10 p-4">` : fallbackLogo;
-                        
-                        track.innerHTML += `
-                            <div class="w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] flex-shrink-0 group relative cursor-pointer mx-auto">
-                                <div class="aspect-square bg-gradient-to-br ${t.color} rounded-2xl flex flex-col items-center justify-center border-2 border-premium-700 shadow-[0_0_15px_rgba(0,0,0,0.5)] group-hover:scale-105 group-hover:border-spl-gold transition-all duration-300 relative overflow-hidden">
-                                    <div class="absolute inset-0 bg-premium-950/20 group-hover:bg-transparent transition-colors z-0"></div>
-                                    ${logoContent}
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
+                });
 
                 currTeamIndex = 0;
                 updateTeamSlider();
@@ -2592,7 +2556,6 @@ service cloud.firestore {
 
         window.deleteGalleryImage = function(id) {
             showConfirmDialog('Delete gallery image?', async () => {
-                localStorage.setItem('spl_init_gallery', 'true');
                 try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'gallery', id)); } catch(e) {}
             });
         };
@@ -2600,23 +2563,16 @@ service cloud.firestore {
         function loadGallery(local = false) {
             const track = document.getElementById('gallery-track');
             if(!track) return;
-            if(local) { renderGallery(getLocalList('gallery', defaultGalleryPics)); return; }
+            if(local) { renderGallery(defaultGalleryPics); return; }
 
             onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'gallery'), (snap) => {
                 let imgs = [];
                 snap.forEach(d => imgs.push({ id: d.id, ...d.data() }));
                 imgs.sort((a,b) => (a.createdAt||0) - (b.createdAt||0));
-                if(imgs.length === 0 && !localStorage.getItem('spl_init_gallery')) {
-                    localStorage.setItem('spl_init_gallery', 'true');
-                    defaultGalleryPics.forEach(p => addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'gallery'), { url: p.url, createdAt: Date.now() }).catch(()=>{}));
-                    renderGallery(defaultGalleryPics);
+                if(imgs.length === 0) {
+                    defaultGalleryPics.forEach(p => addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'gallery'), { url: p.url, createdAt: Date.now() }));
                     return;
                 }
-                localStorage.setItem('spl_init_gallery', 'true');
-                setLocalList('gallery', imgs);
-                renderGallery(imgs);
-            }, () => renderGallery(getLocalList('gallery', defaultGalleryPics)));
-        }
                 renderGallery(imgs);
             }, () => renderGallery(defaultGalleryPics));
         }
@@ -2791,7 +2747,6 @@ service cloud.firestore {
 
         window.deleteSponsor = function(id) {
             showConfirmDialog(`Delete this sponsor?`, async () => {
-                localStorage.setItem('spl_init_sponsors', 'true');
                 try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'sponsors', id)); } catch(e) {}
             });
         };
@@ -2810,12 +2765,12 @@ service cloud.firestore {
         function loadSponsors(local = false) {
             const container = document.getElementById('sponsors-display-container');
             if(!container) return;
-            if(local) { renderSponsors(getLocalList('sponsors', defaultSponsors)); return; }
+            if(local) { renderSponsors(defaultSponsors); return; }
 
             onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'sponsors'), (snap) => {
                 let sponsors = [];
                 snap.forEach(d => {
-                    const data = { ...d.data(), id: d.id };
+                    const data = d.data();
                     if(data.type === 'system_qr') {
                         applyQrToUI(data.logo);
                     } else if(data.type === 'system_reg_control') {
@@ -2823,20 +2778,6 @@ service cloud.firestore {
                     } else {
                         sponsors.push(data);
                     }
-                });
-                
-                if(sponsors.length === 0 && !localStorage.getItem('spl_init_sponsors')) {
-                    localStorage.setItem('spl_init_sponsors', 'true');
-                    defaultSponsors.forEach(s => setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'sponsors', s.id), s).catch(()=>{}));
-                    renderSponsors(defaultSponsors);
-                    return;
-                }
-                localStorage.setItem('spl_init_sponsors', 'true');
-                sponsors.sort((a,b) => (a.createdAt||0) - (b.createdAt||0));
-                setLocalList('sponsors', sponsors);
-                renderSponsors(sponsors);
-            }, () => renderSponsors(getLocalList('sponsors', defaultSponsors)));
-        }
                 });
                 
                 if(sponsors.length === 0) {
@@ -3016,7 +2957,6 @@ service cloud.firestore {
 
         window.deletePartner = function(id) {
             showConfirmDialog(`Delete this partner?`, async () => {
-                localStorage.setItem('spl_init_partners', 'true');
                 try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'partners', id)); } catch(e) {}
             });
         };
@@ -3035,24 +2975,16 @@ service cloud.firestore {
         function loadPartners(local = false) {
             const track = document.getElementById('partners-track');
             if(!track) return;
-            if(local) { renderPartners(getLocalList('partners', defaultPartners)); return; }
+            if(local) { renderPartners(defaultPartners); return; }
 
             onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'partners'), (snap) => {
                 let partners = [];
-                snap.forEach(d => partners.push({ ...d.data(), id: d.id }));
+                snap.forEach(d => partners.push(d.data()));
                 
-                if(partners.length === 0 && !localStorage.getItem('spl_init_partners')) {
-                    localStorage.setItem('spl_init_partners', 'true');
-                    defaultPartners.forEach(p => setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'partners', p.id), p).catch(()=>{}));
-                    renderPartners(defaultPartners);
+                if(partners.length === 0) {
+                    defaultPartners.forEach(p => setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'partners', p.id), p));
                     return;
                 }
-                localStorage.setItem('spl_init_partners', 'true');
-                partners.sort((a,b) => (a.createdAt||0) - (b.createdAt||0));
-                setLocalList('partners', partners);
-                renderPartners(partners);
-            }, () => renderPartners(getLocalList('partners', defaultPartners)));
-        }
                 partners.sort((a,b) => (a.createdAt||0) - (b.createdAt||0));
                 renderPartners(partners);
             }, () => renderPartners(defaultPartners));
