@@ -360,8 +360,13 @@ service cloud.firestore {
                             </div>
                         </div>
 
-                        <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-red pl-3">Pending Player Registrations</h3>
-                        <p class="text-gray-400 text-sm mb-6">Review payment screenshots and details. Approving a player generates their SR Number and adds them to the public Auction Pool.</p>
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 gap-4 border-b border-premium-700 pb-4">
+                            <div>
+                                <h3 class="font-bold text-white mb-2 text-xl border-l-4 border-spl-red pl-3">Player Registrations Database</h3>
+                                <p class="text-gray-400 text-sm">Review payment screenshots and approve players to generate their SR Number.</p>
+                            </div>
+                            <button type="button" onclick="exportRegistrationsCSV()" class="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-5 rounded transition shadow-lg flex items-center whitespace-nowrap"><i class="fa-solid fa-file-excel mr-2"></i> Export to Excel</button>
+                        </div>
                         
                         <div id="admin-registrations-pending" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
                             <!-- Pending Registrations Injected Here -->
@@ -1673,6 +1678,46 @@ service cloud.firestore {
             });
         };
 
+        window.exportRegistrationsCSV = function() {
+            if (!window.allRegistrations || window.allRegistrations.length === 0) {
+                showNotice("No player registrations found to export.", "Empty Database");
+                return;
+            }
+            
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "SR No,Name,Status,Phone,DOB,Panchayat,Village,Skill,Applied Date\n";
+            
+            window.allRegistrations.forEach(r => {
+                const dateApplied = new Date(r.createdAt || Date.now()).toLocaleDateString();
+                const safeName = `"${(r.name || '').replace(/"/g, '""')}"`;
+                const safeVillage = `"${(r.village || '').replace(/"/g, '""')}"`;
+                // Force Excel to treat phone as a string so it doesn't drop leading zeros
+                const safePhone = `="${r.phone || ''}"`; 
+                
+                const row = [
+                    r.srNo || 'Pending',
+                    safeName,
+                    (r.status || 'pending').toUpperCase(),
+                    safePhone,
+                    r.dob || '',
+                    r.panchayat || '',
+                    safeVillage,
+                    r.skill || '',
+                    dateApplied
+                ].join(",");
+                
+                csvContent += row + "\n";
+            });
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "SPL_Player_Registrations.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
         // --- ADMIN EDIT REGISTRATION ---
         window.openAdminEditRegModal = function(id, name, dob, panchayat, village, phone, skill, status, srNo) {
             document.getElementById('edit-reg-id').value = id;
@@ -2071,7 +2116,17 @@ service cloud.firestore {
 
         window.deletePoll = function(id) {
             showConfirmDialog('Delete this poll?', async () => {
-                try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'polls', id)); } catch(e) {}
+                // Ensure local memory removes it instantly to prevent phantom respawns
+                const localPolls = getLocalList('polls', []).filter(p => p.id !== id);
+                setLocalList('polls', localPolls);
+                renderPolls(localPolls);
+                
+                try { 
+                    await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'polls', id)); 
+                    showNotice("Poll deleted successfully.", "Deleted");
+                } catch(e) {
+                    showNotice("Failed to delete poll.", "Error");
+                }
             });
         };
 
@@ -2122,11 +2177,14 @@ service cloud.firestore {
                 let polls = [];
                 snap.forEach(d => polls.push({ id: d.id, ...d.data() }));
                 
-                if(polls.length === 0) {
+                if(polls.length === 0 && !localStorage.getItem('spl_polls_init')) {
                     defaultPolls.forEach(p => addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'polls'), p).catch(()=>{}));
+                    localStorage.setItem('spl_polls_init', 'true');
                     renderPolls(getLocalList('polls', defaultPolls));
                     return;
                 }
+                
+                localStorage.setItem('spl_polls_init', 'true');
                 polls.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
                 setLocalList('polls', polls);
                 renderPolls(polls);
