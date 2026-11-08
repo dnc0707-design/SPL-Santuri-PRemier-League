@@ -97,7 +97,6 @@
                     <a href="#gallery" class="nav-link hover:text-spl-gold transition-colors">Gallery</a>
                     <a href="#about" class="nav-link hover:text-spl-gold transition-colors">About Us</a>
                     <a href="#seasons" class="nav-link hover:text-spl-gold transition-colors">Seasons</a>
-                    <a href="#players" class="nav-link hover:text-spl-gold transition-colors">Players</a>
                     <a href="#sponsors" class="nav-link hover:text-spl-gold transition-colors">Sponsors</a>
                     <a href="#partners" class="nav-link hover:text-spl-gold transition-colors">Partners</a>
                     <button type="button" onclick="openRegModal(event)" class="bg-spl-gold/10 text-spl-gold font-bold px-3 py-1 rounded hover:bg-spl-gold hover:text-premium-950 transition-colors shadow-[0_0_10px_rgba(244,176,54,0.3)]">Player Reg.</button>
@@ -125,7 +124,6 @@
                 <a href="#gallery" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-images w-6 mr-2 text-spl-gold"></i> Gallery</a>
                 <a href="#about" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-circle-info w-6 mr-2 text-spl-gold"></i> About Us</a>
                 <a href="#seasons" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-book-open w-6 mr-2 text-spl-gold"></i> Seasons</a>
-                <a href="#players" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-user-ninja w-6 mr-2 text-spl-gold"></i> Players</a>
                 <a href="#sponsors" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-handshake w-6 mr-2 text-spl-gold"></i> Sponsors</a>
                 <a href="#partners" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-handshake-angle w-6 mr-2 text-spl-gold"></i> Partners</a>
                 
@@ -290,7 +288,6 @@
                         <button onclick="switchAdminTab('owner_regs')" id="tab-btn-owner_regs" class="px-4 py-2 bg-orange-600 text-white font-bold rounded uppercase text-sm border border-transparent hover:border-orange-400">Owner Reg. (New)</button>
                         <button onclick="switchAdminTab('seasons')" id="tab-btn-seasons" class="px-4 py-2 bg-spl-gold text-premium-950 font-bold rounded uppercase text-sm">Manage Seasons</button>
                         <button onclick="switchAdminTab('teams')" id="tab-btn-teams" class="px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700">Manage Franchises</button>
-                        <button onclick="switchAdminTab('players')" id="tab-btn-players" class="px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700">Manage Players</button>
                         <button onclick="switchAdminTab('gallery')" id="tab-btn-gallery" class="px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700">Manage Gallery</button>
                         <button onclick="switchAdminTab('texts')" id="tab-btn-texts" class="px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700">Edit Writings</button>
                         <button onclick="switchAdminTab('sponsors')" id="tab-btn-sponsors" class="px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700">Manage Sponsors</button>
@@ -480,28 +477,6 @@ service cloud.firestore {
                         </div>
                     </div>
 
-                    <!-- TAB 3: PLAYERS -->
-                    <div id="admin-tab-players" class="admin-tab-content hidden">
-                        <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Add / Manage Legendary Players</h3>
-                        <form id="add-player-form" onsubmit="handlePlayerSubmit(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                            <div>
-                                <label class="block text-gray-400 text-sm font-bold mb-2">Player Name</label>
-                                <input type="text" id="player-name" class="w-full bg-premium-800 border border-premium-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="e.g. Virat Sharma" required>
-                            </div>
-                            <div>
-                                <label class="block text-gray-400 text-sm font-bold mb-2">Team / Franchise</label>
-                                <input type="text" id="player-team" class="w-full bg-premium-800 border border-premium-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="e.g. JMK Sixers" required>
-                            </div>
-                            <div class="md:col-span-2">
-                                <label class="block text-gray-400 text-sm font-bold mb-2">Achievement / Bio</label>
-                                <input type="text" id="player-achievement" class="w-full bg-premium-800 border border-premium-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="e.g. Top Run Scorer • S5" required>
-                            </div>
-                            <div class="md:col-span-2">
-                                <button type="submit" class="bg-spl-gold text-premium-950 font-oswald font-bold text-xl uppercase tracking-wide py-3 px-8 rounded hover:bg-spl-goldHover transition-colors shadow-lg"><i class="fa-solid fa-user-plus mr-2"></i> Save Player Profile</button>
-                            </div>
-                        </form>
-                    </div>
-
                     <!-- TAB 5: GALLERY -->
                     <div id="admin-tab-gallery" class="admin-tab-content hidden">
                         <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Photo Gallery Management (Local Upload)</h3>
@@ -633,33 +608,6 @@ service cloud.firestore {
                             <i class="fa-solid fa-spinner fa-spin text-5xl text-spl-gold mb-4"></i>
                             <p class="text-gray-400 font-bold tracking-widest uppercase text-xl">Loading Archives...</p>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Players Spotlight -->
-        <section id="players" class="py-20 bg-premium-900 border-b border-premium-700/50 scroll-mt-20">
-            <div class="container mx-auto px-4">
-                <div class="flex flex-col md:flex-row md:justify-between items-start md:items-center mb-12 gap-4 text-center md:text-left">
-                    <div>
-                        <h2 class="font-oswald text-4xl md:text-5xl font-bold uppercase tracking-wide relative inline-block">
-                            Legendary <span class="text-spl-gold">Players</span>
-                            <div class="w-3/4 h-1 bg-spl-gold mt-2 rounded md:mx-0 mx-auto"></div>
-                        </h2>
-                        <p class="text-gray-400 font-medium mt-2 hidden md:block">The heroes who shaped the seasons of SPL.</p>
-                    </div>
-                    
-                    <!-- Slider Navigation Arrows -->
-                    <div class="flex gap-3 self-center md:self-auto">
-                        <button onclick="prevPlayer()" class="w-12 h-12 bg-premium-800 hover:bg-spl-gold text-white hover:text-premium-950 border border-premium-700 hover:border-transparent transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-arrow-left text-xl"></i></button>
-                        <button onclick="nextPlayer()" class="w-12 h-12 bg-premium-800 hover:bg-spl-gold text-white hover:text-premium-950 border border-premium-700 hover:border-transparent transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-arrow-right text-xl"></i></button>
-                    </div>
-                </div>
-                
-                <div class="overflow-hidden px-1 py-4" id="players-slider-container">
-                    <div id="players-track" class="flex transition-transform duration-500 ease-out gap-6 items-stretch">
-                        <!-- Players injected dynamically -->
                     </div>
                 </div>
             </div>
@@ -1475,7 +1423,6 @@ service cloud.firestore {
         let currGalleryIndex = 0; let totalGalleryImages = 0; let galleryAutoScrollInterval;
         let currTeamIndex = 0; let totalTeams = 0; let teamAutoScrollInterval;
         let currSponsorIndex = 0; let totalOfficialSponsors = 0; let sponsorAutoScrollInterval;
-        let currPlayerIndex = 0; let totalPlayers = 0; let playerAutoScrollInterval;
         let currPartnerIndex = 0; let totalPartners = 0; let partnerAutoScrollInterval;
 
         const defaultPartners = [
@@ -1495,11 +1442,6 @@ service cloud.firestore {
             { id: 'KU', name: 'Krishnapur United', color: 'from-blue-600 to-blue-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/KRISHANPUR%20UNITED.jpg?raw=true' },
             { id: 'AXI', name: 'Aman XI Bheti', color: 'from-orange-500 to-red-600', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/aman%20XI%20bheti.png?raw=true' },
             { id: 'JMK', name: 'JMK Sixers', color: 'from-red-600 to-red-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/JMK%20SIXER.jpg?raw=true' }
-        ];
-
-        const defaultPlayers = [
-            { name: 'Virat Sharma', team: 'Santuri Strikers', achievement: 'Top Run Scorer • S5' },
-            { name: 'Rashid Khan', team: 'Valley Vipers', achievement: 'Most Wickets • S5' }
         ];
 
         const defaultGalleryPics = [
@@ -2116,7 +2058,7 @@ service cloud.firestore {
         }
 
         window.switchAdminTab = function(tabName) {
-            ['registrations', 'owner_regs', 'seasons', 'teams', 'players', 'gallery', 'texts', 'sponsors', 'partners', 'rules'].forEach(t => {
+            ['registrations', 'owner_regs', 'seasons', 'teams', 'gallery', 'texts', 'sponsors', 'partners', 'rules'].forEach(t => {
                 document.getElementById(`admin-tab-${t}`)?.classList.add('hidden');
                 const btn = document.getElementById(`tab-btn-${t}`);
                 if(btn) {
@@ -2170,7 +2112,7 @@ service cloud.firestore {
         }
         
         function loadAllData(local = false) {
-            loadPosts(local); loadTeams(local); loadPlayers(local); loadGallery(local); 
+            loadPosts(local); loadTeams(local); loadGallery(local); 
             loadAboutText(local); loadSponsors(local); loadPartners(local);
             loadRegistrations(local);
             loadSettings(local);
@@ -2591,124 +2533,6 @@ service cloud.firestore {
         function resetTeamAutoScroll() {
             clearInterval(teamAutoScrollInterval);
             startTeamAutoScroll();
-        }
-
-        // --- PLAYERS LOGIC (Slider Mode) ---
-        window.handlePlayerSubmit = async function(e) {
-            e.preventDefault();
-            if(!window.isAdmin) return;
-            const player = {
-                name: document.getElementById('player-name').value,
-                team: document.getElementById('player-team').value,
-                achievement: document.getElementById('player-achievement').value,
-                createdAt: Date.now()
-            };
-            try {
-                await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), player);
-                document.getElementById('add-player-form').reset();
-                showNotice('Player profile saved!', 'Success');
-            } catch(e) { showNotice('Error saving player', 'Error'); }
-        };
-
-        window.deletePlayer = function(id) {
-            showConfirmDialog('Delete player profile?', async () => {
-                try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'players', id)); } catch(e) {}
-            });
-        };
-
-        function loadPlayers(local = false) {
-            const track = document.getElementById('players-track');
-            if(!track) return;
-            if(local) { renderPlayers(defaultPlayers); return; }
-
-            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), (snap) => {
-                let players = [];
-                snap.forEach(d => {
-                    const data = d.data();
-                    if(!data.isRegistration && !data.isOwnerRegistration) {
-                        players.push({ id: d.id, ...data });
-                    }
-                });
-                if(players.length === 0) {
-                    defaultPlayers.forEach(p => addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), p));
-                    return;
-                }
-                renderPlayers(players);
-            }, () => renderPlayers(defaultPlayers));
-        }
-
-        function renderPlayers(players) {
-            const track = document.getElementById('players-track');
-            if(!track) return;
-            
-            track.innerHTML = '';
-            totalPlayers = players.length;
-            
-            players.forEach(p => {
-                const del = window.isAdmin && p.id ? `<button onclick="deletePlayer('${p.id}')" class="absolute top-2 right-2 bg-red-600 text-white w-6 h-6 rounded-full z-20 flex items-center justify-center hover:bg-red-700 text-xs shadow"><i class="fa-solid fa-trash"></i></button>` : '';
-                track.innerHTML += `
-                    <div class="w-[calc(100%-0px)] sm:w-[calc(50%-12px)] lg:w-[calc(25%-18px)] flex-shrink-0 bg-premium-950 border border-premium-700 rounded-xl p-6 text-center hover:border-spl-gold transition group shadow-lg relative h-full">
-                        ${del}
-                        <div class="w-24 h-24 bg-gradient-to-b from-premium-700 to-premium-800 rounded-full mx-auto mb-4 border-2 border-spl-gold flex items-center justify-center overflow-hidden shadow-inner">
-                             <i class="fa-solid fa-user-ninja text-3xl text-gray-400 group-hover:text-spl-gold transition"></i>
-                        </div>
-                        <h3 class="font-oswald text-2xl md:text-3xl font-bold text-white mb-2 leading-tight">${p.name}</h3>
-                        <p class="text-xs text-spl-gold font-bold uppercase tracking-wider mb-3 bg-premium-900 inline-block px-3 py-1 rounded-full border border-premium-700 line-clamp-1">${p.team}</p>
-                        <p class="text-sm text-gray-400 font-medium line-clamp-2">${p.achievement}</p>
-                    </div>
-                `;
-            });
-            
-            currPlayerIndex = 0;
-            updatePlayerSlider();
-            resetPlayerAutoScroll();
-        }
-
-        function updatePlayerSlider() {
-            const track = document.getElementById('players-track');
-            if(!track || track.children.length === 0) return;
-            const itemWidth = track.children[0].getBoundingClientRect().width;
-            const gap = 24; 
-            track.style.transform = `translateX(-${currPlayerIndex * (itemWidth + gap)}px)`;
-        }
-
-        window.nextPlayer = function() {
-            if(totalPlayers === 0) return;
-            const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 640 ? 2 : 1);
-            if (currPlayerIndex < totalPlayers - visibleItems) {
-                currPlayerIndex++;
-            } else {
-                currPlayerIndex = 0;
-            }
-            updatePlayerSlider();
-            resetPlayerAutoScroll();
-        };
-
-        window.prevPlayer = function() {
-            if(totalPlayers === 0) return;
-            const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 640 ? 2 : 1);
-            if (currPlayerIndex > 0) {
-                currPlayerIndex--;
-            } else {
-                currPlayerIndex = Math.max(0, totalPlayers - visibleItems);
-            }
-            updatePlayerSlider();
-            resetPlayerAutoScroll();
-        };
-
-        function startPlayerAutoScroll() {
-            playerAutoScrollInterval = setInterval(() => {
-                const visibleItems = window.innerWidth >= 1024 ? 4 : (window.innerWidth >= 640 ? 2 : 1);
-                if (totalPlayers > visibleItems) {
-                    if (currPlayerIndex < totalPlayers - visibleItems) currPlayerIndex++;
-                    else currPlayerIndex = 0;
-                    updatePlayerSlider();
-                }
-            }, 4000);
-        }
-        function resetPlayerAutoScroll() {
-            clearInterval(playerAutoScrollInterval);
-            startPlayerAutoScroll();
         }
 
         // --- GALLERY LOGIC (Local Storage File Upload & Slider) ---
@@ -3264,7 +3088,6 @@ service cloud.firestore {
             updateGallerySlider();
             updateTeamSlider();
             updateSponsorSlider();
-            updatePlayerSlider();
             updatePartnerSlider();
         });
 
