@@ -1334,6 +1334,50 @@ service cloud.firestore {
             showNotice('Firebase Rules copied to clipboard! Paste them into your Firebase Console -> Firestore Database -> Rules tab and click Publish.', 'Copied!');
         };
 
+        // --- UI TOGGLES & ADMIN LOGIN ---
+        window.showComingSoon = function(e, type) {
+            if(e) e.preventDefault();
+            document.getElementById('coming-soon-title').innerText = type + ' Coming Soon';
+            document.getElementById('coming-soon-modal').classList.remove('hidden');
+            document.getElementById('mobile-menu')?.classList.add('hidden');
+        };
+
+        window.closeComingSoon = function() {
+            document.getElementById('coming-soon-modal').classList.add('hidden');
+        };
+
+        window.toggleAdminModal = function() {
+            document.getElementById('admin-modal').classList.toggle('hidden');
+            document.getElementById('mobile-menu')?.classList.add('hidden');
+        };
+
+        window.logoutAdmin = function() {
+            window.isAdmin = false;
+            document.getElementById('admin-dashboard').classList.add('hidden');
+            loadAllData();
+            showNotice('Logged out of Admin Dashboard.', 'Logged Out');
+        };
+
+        window.handleAdminLogin = function(e) {
+            e.preventDefault();
+            const user = document.getElementById('admin-user').value;
+            const pass = document.getElementById('admin-pass').value;
+            
+            if (user === 'admin' && pass === '1234') {
+                window.isAdmin = true;
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+                window.toggleAdminModal();
+                document.getElementById('admin-user').value = '';
+                document.getElementById('admin-pass').value = '';
+                
+                loadAllData();
+                showNotice('Access Granted! Welcome to the Master Admin Dashboard.', 'Welcome Admin');
+                document.getElementById('admin-dashboard').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                showNotice('Invalid Username or Password. Please try again.', 'Login Failed');
+            }
+        };
+
         // --- CROPPER STATE & LOGIC ---
         window.croppedImages = { season: null, team: null, gallery: null, sponsor: null, partner: null, reg_photo: null, reg_aadhaar: null, reg_payment: null, owner_payment: null, payment_qr: null };
         let cropperInstance = null;
@@ -1709,8 +1753,8 @@ service cloud.firestore {
                                 <a href="${r.payment || '#'}" target="_blank" class="bg-premium-950 p-2 rounded border border-premium-700 hover:border-spl-gold text-gray-300">Payment SS</a>
                             </div>
                             <div class="flex gap-2 mt-auto pt-2 border-t border-premium-700">
-                                <button onclick="approveRegistration('${r.id}', '${r.name.replace(/'/g, "\\'")}', '${r.phone}')" class="flex-1 bg-green-600 hover:bg-green-500 text-white font-bold py-1.5 rounded text-xs uppercase shadow"><i class="fa-solid fa-check mr-1"></i> Approve</button>
-                                <button onclick="openAdminEditRegModal('${r.id}', '${r.name.replace(/'/g, "\\'")}', '${r.dob||''}', '${r.panchayat||''}', '${(r.village||'').replace(/'/g, "\\'")}', '${r.phone||''}', '${r.skill||''}', '${r.status||''}', '${r.srNo||''}')" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs shadow" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="approveRegistration('${r.id}', '${(r.name||'').replace(/'/g, "\\'")}', '${r.phone}')" class="flex-1 bg-green-600 hover:bg-green-500 text-white font-bold py-1.5 rounded text-xs uppercase shadow"><i class="fa-solid fa-check mr-1"></i> Approve</button>
+                                <button onclick="openAdminEditRegModal('${r.id}', '${(r.name||'').replace(/'/g, "\\'")}', '${r.dob||''}', '${r.panchayat||''}', '${(r.village||'').replace(/'/g, "\\'")}', '${r.phone||''}', '${r.skill||''}', '${r.status||''}', '${r.srNo||''}')" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs shadow" title="Edit"><i class="fa-solid fa-pen"></i></button>
                                 <button onclick="deleteRegistration('${r.id}')" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded text-xs shadow"><i class="fa-solid fa-trash"></i></button>
                             </div>
                         </div>
@@ -1733,7 +1777,7 @@ service cloud.firestore {
                                 </div>
                             </div>
                             <div class="flex gap-1.5">
-                                <button onclick="openAdminEditRegModal('${r.id}', '${r.name.replace(/'/g, "\\'")}', '${r.dob||''}', '${r.panchayat||''}', '${(r.village||'').replace(/'/g, "\\'")}', '${r.phone||''}', '${r.skill||''}', '${r.status||''}', '${r.srNo||''}')" class="bg-blue-600 hover:bg-blue-500 text-white w-8 h-8 rounded text-xs shadow flex items-center justify-center"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="openAdminEditRegModal('${r.id}', '${(r.name||'').replace(/'/g, "\\'")}', '${r.dob||''}', '${r.panchayat||''}', '${(r.village||'').replace(/'/g, "\\'")}', '${r.phone||''}', '${r.skill||''}', '${r.status||''}', '${r.srNo||''}')" class="bg-blue-600 hover:bg-blue-500 text-white w-8 h-8 rounded text-xs shadow flex items-center justify-center"><i class="fa-solid fa-pen"></i></button>
                                 <button onclick="deleteRegistration('${r.id}')" class="bg-red-600 hover:bg-red-500 text-white w-8 h-8 rounded text-xs shadow flex items-center justify-center"><i class="fa-solid fa-trash"></i></button>
                             </div>
                         </div>
@@ -2453,7 +2497,7 @@ service cloud.firestore {
                             </div>
                             <span class="font-bold text-white text-sm leading-tight mb-3">${t.name}</span>
                             <div class="flex gap-2 w-full mt-auto">
-                                <button onclick="editTeam('${t.id}', '${t.name.replace(/'/g, "\\'")}', '${t.color}', '${t.logo || ''}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="editTeam('${t.id}', '${(t.name||'').replace(/'/g, "\\'")}', '${t.color}', '${t.logo || ''}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-pen"></i></button>
                                 <button onclick="deleteTeam('${t.id}')" class="flex-1 bg-red-600 hover:bg-red-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-trash"></i></button>
                             </div>
                         </div>
