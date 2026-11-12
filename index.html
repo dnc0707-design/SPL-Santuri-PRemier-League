@@ -92,8 +92,9 @@
                 <!-- Desktop Nav -->
                 <nav class="hidden lg:flex items-center gap-3 xl:gap-5 font-oswald text-[13px] xl:text-base tracking-wide uppercase">
                     <a href="#" class="nav-link active text-spl-gold">Home</a>
-                    <a href="#teams" class="nav-link hover:text-spl-gold transition-colors">Franchises</a>
                     <a href="#auction-pool" class="nav-link hover:text-spl-gold transition-colors">Auction Pool</a>
+                    <a href="#rules-banner-section" class="nav-link hover:text-spl-gold transition-colors">Rules</a>
+                    <a href="#teams" class="nav-link hover:text-spl-gold transition-colors">Franchises</a>
                     <a href="#gallery" class="nav-link hover:text-spl-gold transition-colors">Gallery</a>
                     <a href="#about" class="nav-link hover:text-spl-gold transition-colors">About Us</a>
                     <a href="#seasons" class="nav-link hover:text-spl-gold transition-colors">Seasons</a>
@@ -119,8 +120,9 @@
         <div id="mobile-menu" class="hidden lg:hidden bg-premium-950/95 border-t border-premium-700 shadow-2xl backdrop-blur-xl max-h-[82vh] overflow-y-auto">
             <nav class="flex flex-col px-6 py-6 font-oswald text-lg uppercase tracking-wide space-y-3">
                 <a href="#" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 text-spl-gold flex items-center"><i class="fa-solid fa-house w-6 mr-2 text-spl-gold"></i> Home</a>
-                <a href="#teams" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-shield-halved w-6 mr-2 text-spl-gold"></i> Franchises</a>
                 <a href="#auction-pool" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-users w-6 mr-2 text-spl-gold"></i> Auction Pool</a>
+                <a href="#rules-banner-section" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-scale-balanced w-6 mr-2 text-spl-gold"></i> SPL-6 Rules</a>
+                <a href="#teams" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-shield-halved w-6 mr-2 text-spl-gold"></i> Franchises</a>
                 <a href="#gallery" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-images w-6 mr-2 text-spl-gold"></i> Gallery</a>
                 <a href="#about" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-circle-info w-6 mr-2 text-spl-gold"></i> About Us</a>
                 <a href="#seasons" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-book-open w-6 mr-2 text-spl-gold"></i> Seasons</a>
@@ -180,7 +182,28 @@
             </div>
         </section>
 
-        <!-- SPL 6 Rules Banner Section (Replaced Video) -->
+        <!-- Registered Players / Auction Pool Section (First Section Below Hero Buttons) -->
+        <section id="auction-pool" class="py-20 bg-premium-950 border-b border-premium-700/50 scroll-mt-20 relative">
+            <div class="absolute inset-0 bg-spl-gold/5 blur-3xl z-0 pointer-events-none"></div>
+            <div class="container mx-auto px-4 relative z-10">
+                <div class="text-center mb-10">
+                    <h2 class="font-oswald text-4xl md:text-5xl font-bold uppercase tracking-wide mb-4 relative inline-block text-white">
+                        Season 6 <span class="text-spl-gold">Auction Pool</span>
+                        <div class="w-3/4 h-1 bg-spl-gold mx-auto mt-2 rounded"></div>
+                    </h2>
+                    <p class="text-gray-300 font-medium mt-2">Officially registered players for the Mega Auction. <span class="text-spl-gold font-bold">Swipe sideways</span> to browse & tap any card for a full-screen <span class="text-white font-bold">FB / Insta Poster</span> screenshot!</p>
+                </div>
+                
+                <div id="public-auction-grid" class="space-y-10 max-w-7xl mx-auto">
+                    <!-- Approved Players injected dynamically in horizontal rows of 20 -->
+                    <div class="w-full text-center py-8">
+                        <p class="text-gray-500 font-bold tracking-widest uppercase text-sm">Registrations are opening soon...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SPL 6 Rules Banner Section -->
         <section id="rules-banner-section" class="py-16 bg-premium-950 border-b border-premium-700/50 relative scroll-mt-20 cursor-pointer hover:bg-premium-900 transition-colors" onclick="openRulesModal()">
             <div class="absolute inset-0 bg-spl-red/10 blur-[100px] z-0 pointer-events-none"></div>
             <div class="container mx-auto px-4 max-w-4xl text-center relative z-10">
@@ -213,27 +236,6 @@
                 <div class="overflow-hidden px-1 py-4" id="teams-slider-container">
                     <div id="teams-track" class="flex transition-transform duration-500 ease-out gap-6 items-stretch">
                         <!-- Teams injected dynamically -->
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Registered Players / Auction Pool Section -->
-        <section id="auction-pool" class="py-20 bg-premium-950 border-b border-premium-700/50 scroll-mt-20 relative">
-            <div class="absolute inset-0 bg-spl-gold/5 blur-3xl z-0 pointer-events-none"></div>
-            <div class="container mx-auto px-4 relative z-10">
-                <div class="text-center mb-10">
-                    <h2 class="font-oswald text-4xl md:text-5xl font-bold uppercase tracking-wide mb-4 relative inline-block text-white">
-                        Season 6 <span class="text-spl-gold">Auction Pool</span>
-                        <div class="w-3/4 h-1 bg-spl-gold mx-auto mt-2 rounded"></div>
-                    </h2>
-                    <p class="text-gray-300 font-medium mt-2">Officially registered players for the Mega Auction. <span class="text-spl-gold font-bold">Swipe sideways</span> to browse & tap any card for a full-screen <span class="text-white font-bold">FB / Insta Poster</span> screenshot!</p>
-                </div>
-                
-                <div id="public-auction-grid" class="space-y-10 max-w-7xl mx-auto">
-                    <!-- Approved Players injected dynamically in horizontal rows of 20 -->
-                    <div class="w-full text-center py-8">
-                        <p class="text-gray-500 font-bold tracking-widest uppercase text-sm">Registrations are opening soon...</p>
                     </div>
                 </div>
             </div>
@@ -283,16 +285,47 @@
                     </div>
                     
                     <!-- Tab Navigation for Admin -->
-                    <div class="flex flex-wrap gap-2 mb-8 border-b border-premium-800 pb-4">
-                        <button onclick="switchAdminTab('registrations')" id="tab-btn-registrations" class="px-4 py-2 bg-spl-red text-white font-bold rounded uppercase text-sm border border-transparent hover:border-red-400">Player Reg. (New)</button>
-                        <button onclick="switchAdminTab('owner_regs')" id="tab-btn-owner_regs" class="px-4 py-2 bg-orange-600 text-white font-bold rounded uppercase text-sm border border-transparent hover:border-orange-400">Owner Reg. (New)</button>
-                        <button onclick="switchAdminTab('seasons')" id="tab-btn-seasons" class="px-4 py-2 bg-spl-gold text-premium-950 font-bold rounded uppercase text-sm">Manage Seasons</button>
-                        <button onclick="switchAdminTab('teams')" id="tab-btn-teams" class="px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700">Manage Franchises</button>
-                        <button onclick="switchAdminTab('gallery')" id="tab-btn-gallery" class="px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700">Manage Gallery</button>
-                        <button onclick="switchAdminTab('texts')" id="tab-btn-texts" class="px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700">Edit Writings</button>
-                        <button onclick="switchAdminTab('sponsors')" id="tab-btn-sponsors" class="px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700">Manage Sponsors</button>
-                        <button onclick="switchAdminTab('partners')" id="tab-btn-partners" class="px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700">Manage Partners</button>
-                        <button onclick="switchAdminTab('rules')" id="tab-btn-rules" class="px-4 py-2 bg-green-700 text-white hover:bg-green-600 font-bold rounded uppercase text-sm border border-transparent">DB Rules Code</button>
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-8 border-b border-premium-800 pb-4 relative">
+                        <!-- Upfront Primary Tab: Player Registrations -->
+                        <button type="button" onclick="switchAdminTab('registrations')" id="tab-btn-registrations" class="px-5 py-2.5 bg-spl-gold text-premium-950 font-oswald font-bold rounded-lg uppercase text-base tracking-wide shadow-lg flex items-center gap-2 transition">
+                            <i class="fa-solid fa-user-check"></i> Player Registrations (Approve Players)
+                        </button>
+
+                        <!-- Sub-Menu Dropdown for All Other Admin Menus -->
+                        <div class="relative" id="admin-submenu-wrapper">
+                            <button type="button" onclick="toggleAdminSubMenu(event)" id="admin-submenu-trigger" class="px-4 py-2.5 bg-premium-800 hover:bg-premium-700 text-gray-200 hover:text-white font-oswald font-bold rounded-lg uppercase text-sm tracking-wide border border-premium-600 flex items-center gap-2.5 shadow transition">
+                                <i class="fa-solid fa-layer-group text-spl-gold"></i>
+                                <span id="admin-submenu-label">Other Admin Menus</span>
+                                <i id="admin-submenu-chevron" class="fa-solid fa-chevron-down text-xs text-spl-gold transition-transform duration-200"></i>
+                            </button>
+
+                            <div id="admin-submenu-dropdown" class="hidden absolute right-0 left-0 sm:left-auto mt-2 w-64 bg-premium-950 border border-spl-gold/60 rounded-xl shadow-2xl py-2 z-50 divide-y divide-premium-800/60">
+                                <button type="button" onclick="switchAdminTab('owner_regs')" id="tab-btn-owner_regs" class="w-full text-left px-4 py-2.5 text-gray-300 hover:bg-premium-800 hover:text-spl-gold font-bold uppercase text-xs flex items-center gap-2.5 transition">
+                                    <i class="fa-solid fa-building-user text-orange-400 w-4"></i> Owner Reg. (New)
+                                </button>
+                                <button type="button" onclick="switchAdminTab('teams')" id="tab-btn-teams" class="w-full text-left px-4 py-2.5 text-gray-300 hover:bg-premium-800 hover:text-spl-gold font-bold uppercase text-xs flex items-center gap-2.5 transition">
+                                    <i class="fa-solid fa-shield-halved text-spl-gold w-4"></i> Manage Franchises
+                                </button>
+                                <button type="button" onclick="switchAdminTab('seasons')" id="tab-btn-seasons" class="w-full text-left px-4 py-2.5 text-gray-300 hover:bg-premium-800 hover:text-spl-gold font-bold uppercase text-xs flex items-center gap-2.5 transition">
+                                    <i class="fa-solid fa-book-open text-spl-gold w-4"></i> Manage Seasons
+                                </button>
+                                <button type="button" onclick="switchAdminTab('gallery')" id="tab-btn-gallery" class="w-full text-left px-4 py-2.5 text-gray-300 hover:bg-premium-800 hover:text-spl-gold font-bold uppercase text-xs flex items-center gap-2.5 transition">
+                                    <i class="fa-solid fa-images text-spl-gold w-4"></i> Manage Gallery
+                                </button>
+                                <button type="button" onclick="switchAdminTab('texts')" id="tab-btn-texts" class="w-full text-left px-4 py-2.5 text-gray-300 hover:bg-premium-800 hover:text-spl-gold font-bold uppercase text-xs flex items-center gap-2.5 transition">
+                                    <i class="fa-solid fa-pen-to-square text-spl-gold w-4"></i> Edit Writings
+                                </button>
+                                <button type="button" onclick="switchAdminTab('sponsors')" id="tab-btn-sponsors" class="w-full text-left px-4 py-2.5 text-gray-300 hover:bg-premium-800 hover:text-spl-gold font-bold uppercase text-xs flex items-center gap-2.5 transition">
+                                    <i class="fa-solid fa-handshake text-spl-gold w-4"></i> Manage Sponsors
+                                </button>
+                                <button type="button" onclick="switchAdminTab('partners')" id="tab-btn-partners" class="w-full text-left px-4 py-2.5 text-gray-300 hover:bg-premium-800 hover:text-spl-gold font-bold uppercase text-xs flex items-center gap-2.5 transition">
+                                    <i class="fa-solid fa-handshake-angle text-spl-gold w-4"></i> Manage Partners
+                                </button>
+                                <button type="button" onclick="switchAdminTab('rules')" id="tab-btn-rules" class="w-full text-left px-4 py-2.5 text-green-400 hover:bg-premium-800 hover:text-green-300 font-bold uppercase text-xs flex items-center gap-2.5 transition">
+                                    <i class="fa-solid fa-database text-green-400 w-4"></i> DB Rules Code
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- TAB 10: FIREBASE RULES HELPER -->
@@ -313,7 +346,7 @@ service cloud.firestore {
                     </div>
 
                     <!-- TAB 0: PLAYER REGISTRATIONS (NEW) -->
-                    <div id="admin-tab-registrations" class="admin-tab-content hidden">
+                    <div id="admin-tab-registrations" class="admin-tab-content">
                         <!-- Open / Close Registrations Control Panel -->
                         <div class="mb-8 bg-premium-800/80 p-6 rounded-lg border border-spl-gold/50 shadow-inner">
                             <h3 class="font-bold text-white mb-4 text-lg border-l-4 border-spl-gold pl-3"><i class="fa-solid fa-toggle-on text-spl-gold mr-2"></i> Open / Close Registrations & Custom Message</h3>
@@ -403,7 +436,7 @@ service cloud.firestore {
                     </div>
 
                     <!-- TAB 1: SEASONS -->
-                    <div id="admin-tab-seasons" class="admin-tab-content">
+                    <div id="admin-tab-seasons" class="admin-tab-content hidden">
                         <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Add / Edit Season History</h3>
                         <form id="add-post-form" onsubmit="handlePostSubmit(event)" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                             <div>
@@ -1349,6 +1382,7 @@ service cloud.firestore {
             if (user === 'admin' && pass === '1234') {
                 window.isAdmin = true;
                 document.getElementById('admin-dashboard').classList.remove('hidden');
+                window.switchAdminTab('registrations');
                 window.toggleAdminModal();
                 document.getElementById('admin-user').value = '';
                 document.getElementById('admin-pass').value = '';
@@ -1824,6 +1858,7 @@ service cloud.firestore {
                 } else {
                     const chunkSize = 20;
                     let rowsHtml = '';
+                    const spl6LogoUrl = "https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/main/SPL-6%20logo.jpeg";
 
                     for (let i = 0; i < approved.length; i += chunkSize) {
                         const chunk = approved.slice(i, i + chunkSize);
@@ -1837,29 +1872,30 @@ service cloud.firestore {
                             if (r.skill === 'All-Rounder') skillIcon = 'fa-bolt';
 
                             return `
-                                <div onclick="openPlayerPosterModal('${r.id}')" class="w-[265px] sm:w-[285px] flex-shrink-0 snap-center bg-gradient-to-b from-premium-800 via-premium-950 to-[#070d19] border-2 border-spl-gold/80 hover:border-spl-gold rounded-2xl overflow-hidden shadow-[0_10px_25px_rgba(0,0,0,0.7)] flex flex-col cursor-pointer group transition-all duration-300 relative select-none">
-                                    <!-- Top Official Header Bar for Publicity -->
-                                    <div class="bg-gradient-to-r from-premium-950 via-premium-900 to-premium-950 px-3 py-2 border-b border-spl-gold/40 flex items-center justify-between">
-                                        <div class="flex items-center gap-2">
-                                            <img src="https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/main/ChatGPT%20Image%20Sep%205%2C%202026%2C%2003_22_40%20PM.png" alt="SPL" class="w-7 h-7 rounded-full bg-white p-0.5 object-contain shadow" onerror="this.onerror=null; this.src='https://placehold.co/50/ffffff/0B1221?text=SPL';">
-                                            <div class="text-left leading-none">
-                                                <p class="font-oswald text-[11px] font-bold text-spl-gold tracking-wider uppercase">SPL SEASON 6</p>
-                                                <p class="text-[8px] text-gray-300 font-bold uppercase tracking-widest">Official Auction Pool</p>
+                                <div onclick="openPlayerPosterModal('${r.id}')" class="w-[275px] sm:w-[295px] flex-shrink-0 snap-center bg-gradient-to-b from-premium-800 via-premium-950 to-[#070d19] border-2 border-spl-gold/80 hover:border-spl-gold rounded-2xl overflow-hidden shadow-[0_10px_25px_rgba(0,0,0,0.7)] flex flex-col cursor-pointer group transition-all duration-300 relative select-none">
+                                    <!-- Top Official Header Bar with Prominent SPL-6 Logo -->
+                                    <div class="bg-gradient-to-r from-premium-950 via-premium-900 to-premium-950 px-3 py-2.5 border-b-2 border-spl-gold/50 flex items-center justify-between gap-2">
+                                        <div class="flex items-center gap-2.5">
+                                            <img src="${spl6LogoUrl}" alt="SPL-6 Logo" class="w-12 h-12 rounded-lg bg-white p-0.5 object-contain border-2 border-spl-gold shadow-[0_0_12px_rgba(244,176,54,0.5)] flex-shrink-0" onerror="this.onerror=null; this.src='https://placehold.co/80/ffffff/0B1221?text=SPL-6';">
+                                            <div class="text-left leading-tight">
+                                                <p class="font-oswald text-sm font-bold text-spl-gold tracking-wider uppercase">SPL SEASON 6</p>
+                                                <p class="text-[9px] text-white font-bold uppercase tracking-widest">Official Player Card</p>
                                             </div>
                                         </div>
-                                        <span class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-sm px-2.5 py-0.5 rounded shadow-md tracking-wider">${r.srNo || 'SR-001'}</span>
+                                        <span class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-sm px-2.5 py-1 rounded-md shadow-md tracking-wider flex-shrink-0">${r.srNo || 'SR-001'}</span>
                                     </div>
 
-                                    <!-- Big Portrait Photo Frame -->
+                                    <!-- Big Portrait Photo Frame + Corner SPL-6 Badge -->
                                     <div class="relative w-full h-60 sm:h-64 bg-premium-900 overflow-hidden border-b-2 border-spl-gold/60">
                                         <img src="${r.photo || ''}" alt="${r.name}" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
+                                        <img src="${spl6LogoUrl}" alt="SPL-6 Official Logo" class="absolute top-2.5 right-2.5 w-12 h-12 rounded-xl bg-white/95 p-0.5 object-contain border-2 border-spl-gold shadow-[0_4px_12px_rgba(0,0,0,0.8)]" onerror="this.style.display='none';">
                                         <div class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#070d19] via-[#070d19]/60 to-transparent"></div>
                                         <div class="absolute bottom-2.5 left-3 right-3 flex justify-between items-end">
                                             <span class="bg-spl-red text-white font-oswald font-bold text-xs uppercase px-3 py-1 rounded-full shadow-lg border border-white/20 tracking-wider flex items-center gap-1.5">
                                                 <i class="fa-solid ${skillIcon} text-[10px]"></i> ${r.skill || 'Player'}
                                             </span>
-                                            <span class="bg-black/60 backdrop-blur-sm text-spl-gold text-[10px] font-bold px-2 py-0.5 rounded border border-spl-gold/40 uppercase">
-                                                <i class="fa-solid fa-expand mr-1"></i> Poster
+                                            <span class="bg-black/70 backdrop-blur-sm text-spl-gold text-[10px] font-bold px-2.5 py-1 rounded-md border border-spl-gold/50 uppercase shadow">
+                                                <i class="fa-solid fa-expand mr-1"></i> FB/Insta Poster
                                             </span>
                                         </div>
                                     </div>
@@ -1931,34 +1967,37 @@ service cloud.firestore {
             if (r.skill === 'Bowler') skillIcon = 'fa-baseball';
             if (r.skill === 'All-Rounder') skillIcon = 'fa-bolt';
 
+            const spl6LogoUrl = "https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/main/SPL-6%20logo.jpeg";
             const content = document.getElementById('player-poster-card-content');
             if (!content) return;
 
             content.innerHTML = `
-                <!-- Poster Header -->
-                <div class="bg-gradient-to-r from-premium-950 via-premium-900 to-premium-950 px-4 py-3 border-b-2 border-spl-gold/60 flex items-center justify-between">
-                    <div class="flex items-center gap-2.5">
-                        <img src="https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/main/ChatGPT%20Image%20Sep%205%2C%202026%2C%2003_22_40%20PM.png" alt="SPL" class="w-10 h-10 rounded-full bg-white p-0.5 object-contain shadow-md" onerror="this.onerror=null; this.src='https://placehold.co/50/ffffff/0B1221?text=SPL';">
+                <!-- Poster Header with Large SPL-6 Official Logo -->
+                <div class="bg-gradient-to-r from-premium-950 via-premium-900 to-premium-950 px-4 py-3.5 border-b-2 border-spl-gold flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <img src="${spl6LogoUrl}" alt="SPL-6 Official Logo" class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-white p-1 object-contain border-2 border-spl-gold shadow-[0_0_20px_rgba(244,176,54,0.6)] flex-shrink-0" onerror="this.onerror=null; this.src='https://placehold.co/100/ffffff/0B1221?text=SPL-6';">
                         <div class="text-left leading-tight">
-                            <h4 class="font-oswald text-sm font-bold text-white uppercase tracking-wider">SANTURI <span class="text-spl-gold">PREMIER LEAGUE</span></h4>
-                            <p class="text-[9px] text-spl-gold font-bold uppercase tracking-widest">Season 6 • Official Auction Pool</p>
+                            <h4 class="font-oswald text-base sm:text-lg font-bold text-white uppercase tracking-wider">SANTURI <span class="text-spl-gold">PREMIER LEAGUE</span></h4>
+                            <p class="text-[11px] text-spl-gold font-extrabold uppercase tracking-widest mt-0.5">SEASON 6 • MEGA AUCTION</p>
+                            <p class="text-[9px] text-gray-300 font-bold uppercase tracking-wider mt-0.5">Org. Lalgarh Village Club</p>
                         </div>
                     </div>
-                    <div class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-base px-3 py-1 rounded-lg shadow-lg tracking-wider">
+                    <div class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-lg sm:text-xl px-3.5 py-1.5 rounded-lg shadow-lg tracking-wider flex-shrink-0 border border-white/40">
                         ${r.srNo || 'SR-001'}
                     </div>
                 </div>
 
-                <!-- Large Portrait Image -->
+                <!-- Large Portrait Image with Floating SPL-6 Watermark Badge -->
                 <div class="relative w-full h-80 sm:h-96 bg-premium-900 overflow-hidden border-b-2 border-spl-gold">
                     <img src="${r.photo || ''}" alt="${r.name}" class="w-full h-full object-cover object-top">
+                    <img src="${spl6LogoUrl}" alt="SPL-6 Badge" class="absolute top-3 right-3 w-14 h-14 rounded-xl bg-white/95 p-1 object-contain border-2 border-spl-gold shadow-[0_4px_15px_rgba(0,0,0,0.8)]" onerror="this.style.display='none';">
                     <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#060B16] via-[#060B16]/70 to-transparent"></div>
                     <div class="absolute bottom-3 left-4 right-4 flex justify-between items-end">
                         <span class="bg-spl-red text-white font-oswald font-bold text-sm uppercase px-4 py-1 rounded-full shadow-lg border border-white/30 tracking-wider flex items-center gap-1.5">
                             <i class="fa-solid ${skillIcon} text-xs"></i> ${r.skill || 'Player'}
                         </span>
                         <span class="bg-premium-950/90 text-spl-gold font-oswald text-xs font-bold uppercase px-3 py-1 rounded-full border border-spl-gold/50 shadow">
-                            Verified Player
+                            <i class="fa-solid fa-circle-check mr-1"></i> Verified Player
                         </span>
                     </div>
                 </div>
@@ -1978,7 +2017,7 @@ service cloud.firestore {
 
                     <div class="flex items-center justify-between text-[10px] text-gray-300 font-bold uppercase tracking-widest border-t border-premium-800 pt-3">
                         <span class="text-spl-gold"><i class="fa-solid fa-calendar-check mr-1"></i> 25, 26, 27 Dec 2026</span>
-                        <span>Org. Lalgarh Village Club</span>
+                        <span>splsanturi.online</span>
                     </div>
                 </div>
             `;
@@ -2200,7 +2239,6 @@ service cloud.firestore {
                 const mergedMap = new Map();
                 const ownerMap = new Map();
                 
-                // Only merge purely LOCAL backups. Let Firebase override the rest so deletions work!
                 getLocalList('registrations', []).forEach(r => {
                     if (String(r.id).startsWith('LOCAL_')) mergedMap.set(r.id, r);
                 });
@@ -2226,26 +2264,68 @@ service cloud.firestore {
             });
         }
 
+        window.toggleAdminSubMenu = function(e) {
+            if (e) e.stopPropagation();
+            const dropdown = document.getElementById('admin-submenu-dropdown');
+            const chevron = document.getElementById('admin-submenu-chevron');
+            if (!dropdown) return;
+            dropdown.classList.toggle('hidden');
+            if (chevron) {
+                chevron.style.transform = dropdown.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+            }
+        };
+
+        document.addEventListener('click', (e) => {
+            const wrapper = document.getElementById('admin-submenu-wrapper');
+            const dropdown = document.getElementById('admin-submenu-dropdown');
+            const chevron = document.getElementById('admin-submenu-chevron');
+            if (wrapper && dropdown && !wrapper.contains(e.target)) {
+                dropdown.classList.add('hidden');
+                if (chevron) chevron.style.transform = 'rotate(0deg)';
+            }
+        });
+
         window.switchAdminTab = function(tabName) {
+            const tabLabels = {
+                owner_regs: 'Owner Reg. (New)',
+                teams: 'Manage Franchises',
+                seasons: 'Manage Seasons',
+                gallery: 'Manage Gallery',
+                texts: 'Edit Writings',
+                sponsors: 'Manage Sponsors',
+                partners: 'Manage Partners',
+                rules: 'DB Rules Code'
+            };
+
             ['registrations', 'owner_regs', 'seasons', 'teams', 'gallery', 'texts', 'sponsors', 'partners', 'rules'].forEach(t => {
                 document.getElementById(`admin-tab-${t}`)?.classList.add('hidden');
                 const btn = document.getElementById(`tab-btn-${t}`);
-                if(btn) {
-                    if(t === 'registrations') {
-                        btn.className = 'px-4 py-2 bg-spl-red text-white font-bold rounded uppercase text-sm border border-transparent hover:border-red-400';
-                    } else if(t === 'owner_regs') {
-                        btn.className = 'px-4 py-2 bg-orange-600 text-white font-bold rounded uppercase text-sm border border-transparent hover:border-orange-400';
-                    } else if(t === 'rules') {
-                        btn.className = 'px-4 py-2 bg-green-700 text-white hover:bg-green-600 font-bold rounded uppercase text-sm border border-transparent';
-                    } else {
-                        btn.className = 'px-4 py-2 bg-premium-800 text-gray-300 hover:text-white font-bold rounded uppercase text-sm border border-transparent hover:border-premium-700';
-                    }
+                if(btn && t !== 'registrations') {
+                    btn.classList.remove('bg-premium-800', 'text-spl-gold');
                 }
             });
+
             document.getElementById(`admin-tab-${tabName}`)?.classList.remove('hidden');
-            const targetBtn = document.getElementById(`tab-btn-${tabName}`);
-            if(targetBtn) {
-                targetBtn.className = 'px-4 py-2 bg-spl-gold text-premium-950 font-bold rounded uppercase text-sm shadow-lg';
+
+            const regBtn = document.getElementById('tab-btn-registrations');
+            const subTrigger = document.getElementById('admin-submenu-trigger');
+            const subLabel = document.getElementById('admin-submenu-label');
+            const dropdown = document.getElementById('admin-submenu-dropdown');
+            const chevron = document.getElementById('admin-submenu-chevron');
+
+            if (dropdown) dropdown.classList.add('hidden');
+            if (chevron) chevron.style.transform = 'rotate(0deg)';
+
+            if (tabName === 'registrations') {
+                if (regBtn) regBtn.className = 'px-5 py-2.5 bg-spl-gold text-premium-950 font-oswald font-bold rounded-lg uppercase text-base tracking-wide shadow-lg flex items-center gap-2 transition';
+                if (subTrigger) subTrigger.className = 'px-4 py-2.5 bg-premium-800 hover:bg-premium-700 text-gray-200 hover:text-white font-oswald font-bold rounded-lg uppercase text-sm tracking-wide border border-premium-600 flex items-center gap-2.5 shadow transition';
+                if (subLabel) subLabel.innerText = 'Other Admin Menus';
+            } else {
+                if (regBtn) regBtn.className = 'px-5 py-2.5 bg-premium-800 hover:bg-premium-700 text-gray-200 hover:text-white font-oswald font-bold rounded-lg uppercase text-base tracking-wide border border-premium-600 flex items-center gap-2 transition';
+                if (subTrigger) subTrigger.className = 'px-4 py-2.5 bg-spl-gold text-premium-950 font-oswald font-bold rounded-lg uppercase text-sm tracking-wide flex items-center gap-2.5 shadow-lg transition';
+                if (subLabel) subLabel.innerText = tabLabels[tabName] || 'Other Admin Menus';
+                const activeSubBtn = document.getElementById(`tab-btn-${tabName}`);
+                if (activeSubBtn) activeSubBtn.classList.add('bg-premium-800', 'text-spl-gold');
             }
         };
 
