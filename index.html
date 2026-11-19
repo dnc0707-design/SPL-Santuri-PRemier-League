@@ -251,9 +251,8 @@
                             </label>
                             <select id="pool-filter-dob" onchange="applyAuctionPoolFilters()" class="w-full bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-spl-gold">
                                 <option value="">All Ages / DOB</option>
-                                <option value="U19">🔥 U-19 Players (2008 & Above)</option>
-                                <option value="2008">Born in 2008 (U-19)</option>
-                                <option value="SENIOR">Senior Players (Pre-2008)</option>
+                                <option value="U19">U-19 (2008 & Above)</option>
+                                <option value="NORMAL">Normal</option>
                             </select>
                         </div>
                     </div>
@@ -387,6 +386,9 @@
                                 </button>
                                 <button type="button" onclick="switchAdminTab('texts')" id="tab-btn-texts" class="w-full text-left px-4 py-2.5 text-gray-300 hover:bg-premium-800 hover:text-spl-gold font-bold uppercase text-xs flex items-center gap-2.5 transition">
                                     <i class="fa-solid fa-pen-to-square text-spl-gold w-4"></i> Edit Writings
+                                </button>
+                                <button type="button" onclick="switchAdminTab('edit_rules')" id="tab-btn-edit_rules" class="w-full text-left px-4 py-2.5 text-gray-300 hover:bg-premium-800 hover:text-spl-gold font-bold uppercase text-xs flex items-center gap-2.5 transition">
+                                    <i class="fa-solid fa-scale-balanced text-spl-gold w-4"></i> Edit SPL-6 Rules
                                 </button>
                                 <button type="button" onclick="switchAdminTab('sponsors')" id="tab-btn-sponsors" class="w-full text-left px-4 py-2.5 text-gray-300 hover:bg-premium-800 hover:text-spl-gold font-bold uppercase text-xs flex items-center gap-2.5 transition">
                                     <i class="fa-solid fa-handshake text-spl-gold w-4"></i> Manage Sponsors
@@ -631,6 +633,31 @@ service cloud.firestore {
                             </div>
                             <div>
                                 <button type="submit" class="bg-spl-gold text-premium-950 font-oswald font-bold text-xl uppercase tracking-wide py-3 px-8 rounded hover:bg-spl-goldHover transition-colors shadow-lg"><i class="fa-solid fa-pen-to-square mr-2"></i> Save Writings</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- TAB 7B: EDIT SPL-6 RULES -->
+                    <div id="admin-tab-edit_rules" class="admin-tab-content hidden">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+                            <h3 class="font-bold text-white text-xl border-l-4 border-spl-gold pl-3">Edit SPL Season 6 Official Rules</h3>
+                            <button type="button" onclick="resetRulesToDefault()" class="bg-premium-700 hover:bg-premium-600 text-gray-200 font-bold text-xs uppercase px-4 py-2 rounded border border-premium-600 transition">
+                                <i class="fa-solid fa-rotate-left mr-1.5"></i> Reset Default Rulebook
+                            </button>
+                        </div>
+                        <p class="text-gray-400 text-xs sm:text-sm mb-4">Edit the rulebook content below (supports HTML formatting). Changes update immediately in the public <strong>SPL Season 6 Official Rules</strong> modal.</p>
+                        <form id="update-rules-form" onsubmit="handleRulesUpdateSubmit(event)" class="space-y-4">
+                            <div>
+                                <label for="rules-editor-content" class="block text-gray-300 text-sm font-bold mb-2">Rulebook Content (HTML / Text)</label>
+                                <textarea id="rules-editor-content" rows="16" class="w-full bg-premium-950 border border-premium-700 rounded-lg px-4 py-3 text-gray-200 font-mono text-xs sm:text-sm leading-relaxed focus:outline-none focus:border-spl-gold shadow-inner" required></textarea>
+                            </div>
+                            <div class="flex flex-wrap gap-3">
+                                <button type="submit" class="bg-spl-gold text-premium-950 font-oswald font-bold text-xl uppercase tracking-wide py-3 px-8 rounded hover:bg-spl-goldHover transition-colors shadow-lg">
+                                    <i class="fa-solid fa-floppy-disk mr-2"></i> Save Rules
+                                </button>
+                                <button type="button" onclick="openRulesModal()" class="bg-premium-800 hover:bg-premium-700 text-spl-gold font-oswald font-bold text-lg uppercase tracking-wide py-3 px-6 rounded border border-spl-gold/50 transition">
+                                    <i class="fa-solid fa-eye mr-2"></i> Preview Rulebook
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -1052,7 +1079,7 @@ service cloud.firestore {
                 <h3 class="font-oswald text-2xl font-bold uppercase text-spl-gold"><i class="fa-solid fa-scale-balanced mr-2"></i> SPL Season 6 Rulebook</h3>
                 <button onclick="closeRulesModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-2xl"></i></button>
             </div>
-            <div class="p-6 md:p-8 text-gray-300 space-y-6 text-sm md:text-base flex-grow overflow-y-auto custom-scrollbar">
+            <div id="rules-modal-body" class="p-6 md:p-8 text-gray-300 space-y-6 text-sm md:text-base flex-grow overflow-y-auto custom-scrollbar">
                 
                 <div class="text-center border-b border-premium-700 pb-6 mb-6">
                     <h2 class="text-2xl md:text-3xl font-oswald font-bold text-white mb-2 tracking-wide">🏏🏆 SANTURI PREMIER LEAGUE (SPL) – SEASON 6 🏆🏏</h2>
@@ -1990,435 +2017,14 @@ service cloud.firestore {
                 villageSelect.value = prevVillage;
             }
 
-            // Populate unique birth years dynamically alongside U-19 options
-            const yearsSet = new Set();
-            approvedPlayers.forEach(p => {
-                const yr = window.getPlayerBirthYear(p.dob);
-                if (yr) yearsSet.add(yr);
-            });
-            const sortedYears = Array.from(yearsSet).sort((a, b) => b - a);
-            let dobOptionsHtml = `
+            // Keep DOB / Age Group filter strictly to U-19 (2008 & Above) and Normal
+            dobSelect.innerHTML = `
                 <option value="">All Ages / DOB</option>
-                <option value="U19">🔥 U-19 Players (2008 & Above)</option>
-                <option value="2008">Born in 2008 (U-19)</option>
-                <option value="SENIOR">Senior Players (Pre-2008)</option>
+                <option value="U19">U-19 (2008 & Above)</option>
+                <option value="NORMAL">Normal</option>
             `;
-            sortedYears.forEach(yr => {
-                if (yr !== 2008) {
-                    dobOptionsHtml += `<option value="YEAR_${yr}">DOB Year: ${yr}${yr >= 2008 ? ' (U-19)' : ''}</option>`;
-                }
-            });
-            dobSelect.innerHTML = dobOptionsHtml;
-            if (prevDob) dobSelect.value = prevDob;
-        }
-
-        window.resetAuctionPoolFilters = function() {
-            const searchEl = document.getElementById('pool-filter-search');
-            const panchayatEl = document.getElementById('pool-filter-panchayat');
-            const villageEl = document.getElementById('pool-filter-village');
-            const skillEl = document.getElementById('pool-filter-skill');
-            const dobEl = document.getElementById('pool-filter-dob');
-            if (searchEl) searchEl.value = '';
-            if (panchayatEl) panchayatEl.value = '';
-            if (villageEl) villageEl.value = '';
-            if (skillEl) skillEl.value = '';
-            if (dobEl) dobEl.value = '';
-            window.applyAuctionPoolFilters();
-        };
-
-        window.applyAuctionPoolFilters = function() {
-            const publicAuctionGrid = document.getElementById('public-auction-grid');
-            const countEl = document.getElementById('pool-filter-count');
-            if (!publicAuctionGrid) return;
-
-            const approved = window.approvedAuctionPlayers || [];
-            if (approved.length === 0) {
-                if (countEl) countEl.innerText = '0 approved players';
-                publicAuctionGrid.innerHTML = `
-                    <div class="col-span-full w-full text-center py-12 bg-premium-900 rounded-2xl border border-premium-800">
-                        <i class="fa-solid fa-users-viewfinder text-4xl text-spl-gold mb-3"></i>
-                        <p class="text-gray-300 font-bold tracking-widest uppercase text-sm mb-1">No Approved Players Listed Yet</p>
-                        <p class="text-gray-400 text-xs">Once players register and are approved in the Admin Dashboard, they appear here in SR No order.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            const searchVal = (document.getElementById('pool-filter-search')?.value || '').trim().toLowerCase();
-            const panchayatVal = (document.getElementById('pool-filter-panchayat')?.value || '').trim().toLowerCase();
-            const villageVal = (document.getElementById('pool-filter-village')?.value || '').trim().toLowerCase();
-            const skillVal = (document.getElementById('pool-filter-skill')?.value || '').trim().toLowerCase();
-            const dobVal = (document.getElementById('pool-filter-dob')?.value || '').trim();
-
-            const filtered = approved.filter(r => {
-                if (searchVal) {
-                    const nameMatch = String(r.name || '').toLowerCase().includes(searchVal);
-                    const srMatch = String(r.srNo || '').toLowerCase().includes(searchVal);
-                    if (!nameMatch && !srMatch) return false;
-                }
-                if (panchayatVal && String(r.panchayat || '').trim().toLowerCase() !== panchayatVal) {
-                    return false;
-                }
-                if (villageVal && String(r.village || '').trim().toLowerCase() !== villageVal) {
-                    return false;
-                }
-                if (skillVal && String(r.skill || '').trim().toLowerCase() !== skillVal) {
-                    return false;
-                }
-                if (dobVal) {
-                    const yr = window.getPlayerBirthYear(r.dob);
-                    if (dobVal === 'U19' && !(yr !== null && yr >= 2008)) return false;
-                    if (dobVal === '2008' && yr !== 2008) return false;
-                    if (dobVal === 'SENIOR' && !(yr !== null && yr < 2008)) return false;
-                    if (dobVal.startsWith('YEAR_')) {
-                        const targetYr = parseInt(dobVal.replace('YEAR_', ''), 10);
-                        if (yr !== targetYr) return false;
-                    }
-                }
-                return true;
-            });
-
-            if (countEl) {
-                countEl.innerHTML = `Showing <span class="text-spl-gold font-bold">${filtered.length}</span> of <span class="text-white font-bold">${approved.length}</span> approved players`;
-            }
-
-            if (filtered.length === 0) {
-                publicAuctionGrid.innerHTML = `
-                    <div class="col-span-full w-full text-center py-10 bg-premium-900 rounded-2xl border border-premium-800">
-                        <i class="fa-solid fa-filter-circle-xmark text-3xl text-spl-gold mb-2"></i>
-                        <p class="text-gray-200 font-bold uppercase text-sm mb-1">No Players Match Your Selected Filter</p>
-                        <button type="button" onclick="resetAuctionPoolFilters()" class="mt-2 bg-spl-gold text-premium-950 font-bold text-xs uppercase px-4 py-1.5 rounded-lg hover:bg-spl-goldHover transition">Clear All Filters</button>
-                    </div>
-                `;
-                return;
-            }
-
-            publicAuctionGrid.innerHTML = filtered.map(r => {
-                const isU19 = window.isU19Player(r);
-                const birthYear = window.getPlayerBirthYear(r.dob);
-                const u19BadgeHtml = isU19
-                    ? `<span class="bg-gradient-to-r from-orange-500 to-spl-red text-white text-[10px] font-extrabold px-2 py-0.5 rounded uppercase tracking-wider shadow border border-white/20 ml-1.5"><i class="fa-solid fa-star text-[8px] mr-0.5"></i> U-19</span>`
-                    : '';
-                const dobLabelHtml = birthYear
-                    ? `<span class="text-[11px] text-gray-400 block mt-0.5"><i class="fa-regular fa-calendar text-spl-gold mr-1"></i>DOB: ${r.dob}${birthYear === 2008 ? ' <span class="text-orange-400 font-bold">(2008 • U-19)</span>' : ''}</span>`
-                    : '';
-
-                return `
-                    <div onclick="openPlayerPosterModal('${r.id}')" class="bg-premium-800 border ${isU19 ? 'border-orange-500/70' : 'border-green-600/50'} hover:border-spl-gold rounded-xl p-4 shadow-lg flex items-center justify-between gap-3 cursor-pointer transition-all duration-200 hover:bg-premium-800/80 group relative">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <div class="relative flex-shrink-0">
-                                <img src="${r.photo || 'https://placehold.co/100x100/1C335E/F4B036?text=SPL'}" onerror="this.onerror=null;this.src='https://placehold.co/100x100/1C335E/F4B036?text=SPL';" alt="${r.name}" class="w-12 h-12 sm:w-14 sm:h-14 object-cover object-top rounded-full border-2 ${isU19 ? 'border-orange-500' : 'border-green-500'} group-hover:border-spl-gold transition-colors">
-                            </div>
-                            <div class="min-w-0">
-                                <div class="flex flex-wrap items-center gap-1">
-                                    <span class="bg-spl-gold text-premium-950 text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider">${r.srNo || 'SR-001'}</span>
-                                    ${u19BadgeHtml}
-                                </div>
-                                <h4 class="font-oswald font-bold text-white group-hover:text-spl-gold text-base sm:text-lg mt-0.5 break-words transition-colors">${r.name}</h4>
-                                <p class="text-xs text-gray-300 break-words">${r.skill || 'Player'} • ${r.village || ''} (${r.panchayat || ''})</p>
-                                ${dobLabelHtml}
-                            </div>
-                        </div>
-                        <div class="flex-shrink-0 text-gray-400 group-hover:text-spl-gold transition-colors pl-2" title="View FB / Insta Poster">
-                            <i class="fa-solid fa-expand text-sm"></i>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        };
-
-        window.openPlayerPosterModal = function(playerId) {
-            const r = (window.allRegistrations || []).find(x => x.id === playerId);
-            if (!r) return;
-
-            let skillIcon = 'fa-baseball-bat-ball';
-            if (r.skill === 'Bowler') skillIcon = 'fa-baseball';
-            if (r.skill === 'All-Rounder') skillIcon = 'fa-bolt';
-
-            const isU19 = window.isU19Player ? window.isU19Player(r) : false;
-            const birthYear = window.getPlayerBirthYear ? window.getPlayerBirthYear(r.dob) : null;
-            const posterU19Badge = isU19
-                ? `<span class="bg-gradient-to-r from-orange-500 to-spl-red text-white font-oswald text-xs font-extrabold uppercase px-3 py-1 rounded-full border border-white/40 shadow-lg tracking-wider"><i class="fa-solid fa-star mr-1"></i> U-19 PLAYER</span>`
-                : `<span class="bg-premium-950/90 text-spl-gold font-oswald text-xs font-bold uppercase px-3 py-1 rounded-full border border-spl-gold/50 shadow"><i class="fa-solid fa-circle-check mr-1"></i> Verified Player</span>`;
-
-            const spl6LogoUrl = window.customCardLogo || localStorage.getItem('spl_card_logo_backup') || "https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/SPL-6%20logo.jpeg?raw=true";
-            const fallbackSplLogo = "https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/main/ChatGPT%20Image%20Sep%205%2C%202026%2C%2003_22_40%20PM.png";
-            const content = document.getElementById('player-poster-card-content');
-            if (!content) return;
-
-            content.innerHTML = `
-                <!-- Poster Header with Large SPL-6 Official Logo -->
-                <div class="bg-gradient-to-r from-premium-950 via-premium-900 to-premium-950 px-4 py-3.5 border-b-2 border-spl-gold flex items-center justify-between gap-3">
-                    <div class="flex items-center gap-3">
-                        <img src="${spl6LogoUrl}" alt="SPL-6 Official Logo" class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-white p-1 object-contain border-2 border-spl-gold shadow-[0_0_20px_rgba(244,176,54,0.6)] flex-shrink-0" onerror="if(this.src!=='${fallbackSplLogo}'){this.src='${fallbackSplLogo}';}else{this.onerror=null;this.src='https://placehold.co/100/ffffff/0B1221?text=SPL-6';}">
-                        <div class="text-left leading-tight">
-                            <h4 class="font-oswald text-base sm:text-lg font-bold text-white uppercase tracking-wider">SANTURI <span class="text-spl-gold">PREMIER LEAGUE</span></h4>
-                            <p class="text-[11px] text-spl-gold font-extrabold uppercase tracking-widest mt-0.5">SEASON 6 • MEGA AUCTION</p>
-                            <p class="text-[9px] text-gray-300 font-bold uppercase tracking-wider mt-0.5">Org. Lalgarh Village Club</p>
-                        </div>
-                    </div>
-                    <div class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-lg sm:text-xl px-3.5 py-1.5 rounded-lg shadow-lg tracking-wider flex-shrink-0 border border-white/40">
-                        ${r.srNo || 'SR-001'}
-                    </div>
-                </div>
-
-                <!-- Large Portrait Image with Floating SPL-6 Watermark Badge -->
-                <div class="relative w-full h-80 sm:h-96 bg-premium-900 overflow-hidden border-b-2 border-spl-gold">
-                    <img src="${r.photo || ''}" alt="${r.name}" class="w-full h-full object-cover object-top">
-                    <img src="${spl6LogoUrl}" alt="SPL-6 Badge" class="absolute top-3 right-3 w-16 h-16 rounded-xl bg-white p-1 object-contain border-2 border-spl-gold shadow-[0_4px_15px_rgba(0,0,0,0.85)] z-10" onerror="if(this.src!=='${fallbackSplLogo}'){this.src='${fallbackSplLogo}';}else{this.onerror=null;this.src='https://placehold.co/100/ffffff/0B1221?text=SPL-6';}">
-                    <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#060B16] via-[#060B16]/70 to-transparent"></div>
-                    <div class="absolute bottom-3 left-4 right-4 flex justify-between items-end">
-                        <span class="bg-spl-red text-white font-oswald font-bold text-sm uppercase px-4 py-1 rounded-full shadow-lg border border-white/30 tracking-wider flex items-center gap-1.5">
-                            <i class="fa-solid ${skillIcon} text-xs"></i> ${r.skill || 'Player'}
-                        </span>
-                        ${posterU19Badge}
-                    </div>
-                </div>
-
-                <!-- Full Player Name & Info -->
-                <div class="p-5 text-center bg-gradient-to-b from-[#060B16] to-premium-950">
-                    <h2 class="font-oswald font-bold text-white text-2xl sm:text-3xl uppercase tracking-wide leading-snug break-words mb-3">${r.name}</h2>
-                    
-                    <div class="bg-premium-900/90 border border-premium-700 rounded-xl p-3 mb-4 space-y-1">
-                        <p class="text-sm text-white font-bold uppercase tracking-wide break-words">
-                            <i class="fa-solid fa-location-dot text-spl-gold mr-1.5"></i> Village: <span class="text-spl-gold">${r.village || ''}</span>
-                        </p>
-                        <p class="text-xs text-gray-300 font-semibold uppercase tracking-widest break-words">
-                            Gram Panchayat: ${r.panchayat || ''}
-                        </p>
-                        ${r.dob ? `<p class="text-xs text-gray-300 font-semibold uppercase tracking-widest pt-0.5"><i class="fa-regular fa-calendar text-spl-gold mr-1"></i> DOB: ${r.dob}${birthYear === 2008 ? ' <span class="text-orange-400 font-extrabold">(U-19)</span>' : ''}</p>` : ''}
-                    </div>
-
-                    <div class="flex items-center justify-between text-[10px] text-gray-300 font-bold uppercase tracking-widest border-t border-premium-800 pt-3">
-                        <span class="text-spl-gold"><i class="fa-solid fa-calendar-check mr-1"></i> 25, 26, 27 Dec 2026</span>
-                        <span>splsanturi.online</span>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('player-poster-modal').classList.remove('hidden');
-            if (!window._posterHistoryActive) {
-                window._posterHistoryActive = true;
-                history.pushState({ playerPosterOpen: true }, '', '#player-poster');
-            }
-        };
-
-        window.closePlayerPosterModal = function(e, fromPopState = false) {
-            const modal = document.getElementById('player-poster-modal');
-            if (modal && !modal.classList.contains('hidden')) {
-                modal.classList.add('hidden');
-            }
-            if (window._posterHistoryActive) {
-                window._posterHistoryActive = false;
-                if (!fromPopState && window.location.hash === '#player-poster') {
-                    history.back();
-                }
-            }
-        };
-
-        window.addEventListener('popstate', () => {
-            const modal = document.getElementById('player-poster-modal');
-            if (modal && !modal.classList.contains('hidden')) {
-                window.closePlayerPosterModal(null, true);
-            }
-        });
-
-        // --- OWNER REGISTRATION MANAGEMENT ---
-        window.allOwnerRegistrations = [];
-
-        window.handleOwnerRegSubmit = async function(e) {
-            e.preventDefault();
-            const payment = window.croppedImages['owner_payment'];
-            
-            if (!payment) {
-                showNotice("Please upload and crop your ₹2,000 Advance Payment Screenshot.", "Missing Payment Proof");
-                return;
-            }
-            
-            const decl = document.getElementById('owner-declaration');
-            if(!decl.checked) {
-                showNotice("You must check the declaration box to agree to the rules.", "Declaration Required");
-                return;
-            }
-
-            const btn = document.getElementById('owner-reg-submit-btn');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Submitting...';
-            btn.disabled = true;
-
-            const nameInputs = document.querySelectorAll('input[name="owner_name[]"]');
-            const ownerNames = Array.from(nameInputs).map(i => i.value.trim()).filter(v => v !== '');
-
-            const regData = {
-                isOwnerRegistration: true,
-                franchiseName: document.getElementById('owner-franchise-name').value.trim(),
-                owners: ownerNames,
-                phone: document.getElementById('owner-phone').value.trim(),
-                address: document.getElementById('owner-address').value.trim(),
-                payment: payment,
-                status: 'pending',
-                franchiseId: null,
-                createdAt: Date.now()
-            };
-
-            try {
-                await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), regData);
-                closeOwnerRegModal();
-                showNotice("Owner Registration Submitted Successfully! Your details and ₹2,000 advance payment are pending admin verification. You will receive a WhatsApp confirmation once approved.", "Success");
-            } catch (error) {
-                console.error("Owner Reg Error:", error);
-                const localList = getLocalList('owner_registrations', []);
-                regData.id = 'LOCAL_OWNER_' + Date.now();
-                localList.push(regData);
-                setLocalList('owner_registrations', localList);
-                renderOwnerRegistrationsList(localList);
-                closeOwnerRegModal();
-                showNotice("Owner Registration saved locally! Pending admin verification.", "Submitted");
-            } finally {
-                btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i> Submit Owner Registration';
-                btn.disabled = false;
-            }
-        };
-
-        window.approveOwnerRegistration = function(docId, fName, phone) {
-            showConfirmDialog(`Approve franchise ownership for "${fName}"? This assigns an official Franchise ID and opens WhatsApp confirmation.`, async () => {
-                try {
-                    let maxNum = 0;
-                    window.allOwnerRegistrations.forEach(r => {
-                        if (r.status === 'approved' && r.franchiseId) {
-                            const match = String(r.franchiseId).match(/(\d+)/);
-                            if (match) {
-                                const val = parseInt(match[1], 10);
-                                if (val > maxNum) maxNum = val;
-                            }
-                        }
-                    });
-                    const nextNum = maxNum + 1;
-                    const newFrId = "FR-" + String(nextNum).padStart(3, '0');
-
-                    if (!String(docId).startsWith('LOCAL_')) {
-                        const regRef = doc(db, 'artifacts', myAppId, 'public', 'data', 'players', docId);
-                        await updateDoc(regRef, {
-                            status: 'approved',
-                            franchiseId: newFrId
-                        });
-                    } else {
-                        const localList = getLocalList('owner_registrations', []);
-                        const idx = localList.findIndex(x => x.id === docId);
-                        if (idx > -1) {
-                            localList[idx].status = 'approved';
-                            localList[idx].franchiseId = newFrId;
-                            setLocalList('owner_registrations', localList);
-                            renderOwnerRegistrationsList(localList);
-                        }
-                    }
-
-                    const msg = `Congratulations! Your franchise registration for *${fName}* in SPL Season 6 is APPROVED!%0A%0AOfficial Franchise Reg ID: *${newFrId}*%0A%0AReminder: Please clear the remaining balance before the Mega Auction.%0A- SPL Management (7980230656)`;
-                    const waLink = `https://wa.me/91${phone}?text=${msg}`;
-                    
-                    showNotice(`Franchise Approved! Assigned ID: ${newFrId}. Click OK to send WhatsApp confirmation.`, 'Approved', () => {
-                        window.open(waLink, '_blank');
-                    });
-                } catch (err) {
-                    showNotice("Approval failed: " + err.message, "Error");
-                }
-            });
-        };
-
-        window.deleteOwnerRegistration = function(id) {
-            showConfirmDialog("Are you sure you want to completely delete this Owner registration?", async () => {
-                if (String(id).startsWith('LOCAL_')) {
-                    const localList = getLocalList('owner_registrations', []).filter(x => x.id !== id);
-                    setLocalList('owner_registrations', localList);
-                    renderOwnerRegistrationsList(localList);
-                    return;
-                }
-                try {
-                    await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'players', id));
-                    showNotice("Owner Registration deleted successfully.", "Deleted");
-                } catch(e) {
-                    showNotice("Failed to delete: " + e.message, "Error");
-                }
-            });
-        };
-
-        function renderOwnerRegistrationsList(regs) {
-            window.allOwnerRegistrations = regs;
-            const pendingContainer = document.getElementById('admin-owner-regs-pending');
-            const approvedContainer = document.getElementById('admin-owner-regs-approved');
-            const publicOwnerGrid = document.getElementById('public-owner-grid');
-
-            const pending = regs.filter(r => r.status !== 'approved').sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
-            const approved = regs.filter(r => r.status === 'approved').sort((a,b) => {
-                const numA = parseInt(String(a.franchiseId || '0').replace(/\D/g, ''), 10) || 0;
-                const numB = parseInt(String(b.franchiseId || '0').replace(/\D/g, ''), 10) || 0;
-                return numA - numB;
-            });
-
-            if (pendingContainer && window.isAdmin) {
-                if (pending.length === 0) {
-                    pendingContainer.innerHTML = `<p class="text-gray-500 text-sm col-span-full">No pending owner registrations.</p>`;
-                } else {
-                    pendingContainer.innerHTML = pending.map(r => `
-                        <div class="bg-premium-800 border border-premium-700 rounded-xl p-4 shadow-lg flex flex-col gap-3">
-                            <div class="border-b border-premium-700 pb-2">
-                                <h4 class="font-oswald font-bold text-spl-gold text-lg leading-tight uppercase">${r.franchiseName}</h4>
-                                <p class="text-xs text-white mt-1"><strong>Owners:</strong> ${(r.owners || []).join(', ')}</p>
-                                <p class="text-xs text-gray-400 mt-1">📞 ${r.phone}</p>
-                                <p class="text-xs text-gray-400">📍 ${r.address}</p>
-                            </div>
-                            <div class="text-center text-xs">
-                                <a href="${r.payment || '#'}" target="_blank" class="bg-premium-950 p-2 rounded border border-premium-700 hover:border-spl-gold text-gray-300 block">
-                                    <img src="${r.payment || ''}" class="h-20 w-full object-contain mb-1 rounded">Advance Payment SS
-                                </a>
-                            </div>
-                            <div class="flex gap-2 mt-auto pt-2 border-t border-premium-700">
-                                <button onclick="approveOwnerRegistration('${r.id}', '${(r.franchiseName||'').replace(/'/g, "\\'")}', '${r.phone||''}')" class="flex-1 bg-green-600 hover:bg-green-500 text-white font-bold py-1.5 rounded text-xs uppercase shadow"><i class="fa-solid fa-check mr-1"></i> Approve</button>
-                                <button onclick="deleteOwnerRegistration('${r.id}')" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded text-xs shadow"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </div>
-                    `).join('');
-                }
-            }
-
-            if (approvedContainer && window.isAdmin) {
-                if (approved.length === 0) {
-                    approvedContainer.innerHTML = `<p class="text-gray-500 text-sm col-span-full">No approved owners yet.</p>`;
-                } else {
-                    approvedContainer.innerHTML = approved.map(r => `
-                        <div class="bg-premium-800 border border-green-600/50 rounded-xl p-4 shadow-lg flex items-center justify-between gap-3">
-                            <div>
-                                <span class="bg-spl-gold text-premium-950 text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase">${r.franchiseId || 'FR-001'}</span>
-                                <h4 class="font-oswald font-bold text-white text-base mt-1 uppercase text-spl-gold">${r.franchiseName}</h4>
-                                <p class="text-xs text-gray-300 mt-1">${(r.owners || []).join(', ')}</p>
-                            </div>
-                            <div class="flex gap-1.5">
-                                <button onclick="deleteOwnerRegistration('${r.id}')" class="bg-red-600 hover:bg-red-500 text-white w-8 h-8 rounded text-xs shadow flex items-center justify-center"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </div>
-                    `).join('');
-                }
-            }
-
-            if (publicOwnerGrid) {
-                if (approved.length === 0) {
-                    publicOwnerGrid.innerHTML = `
-                        <div class="col-span-full w-full text-center py-12 bg-premium-950 rounded-2xl border border-premium-800">
-                            <i class="fa-solid fa-building-user text-4xl text-spl-gold mb-3"></i>
-                            <p class="text-gray-400 font-bold tracking-widest uppercase text-sm">Franchise slots are filling up. Registrations are live!</p>
-                        </div>
-                    `;
-                } else {
-                    publicOwnerGrid.innerHTML = approved.map(r => `
-                        <div class="bg-premium-950 border border-premium-700 hover:border-spl-gold transition rounded-xl p-6 text-center shadow-xl group flex flex-col items-center relative overflow-hidden h-full">
-                            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-spl-gold to-orange-500"></div>
-                            <span class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-xs px-3 py-1 rounded-full uppercase shadow-sm mb-3 mt-1">${r.franchiseId || 'FR-001'}</span>
-                            <h3 class="font-oswald text-2xl font-bold text-white leading-tight mb-3 uppercase text-spl-gold">${r.franchiseName}</h3>
-                            <p class="text-xs text-gray-400 font-bold uppercase tracking-widest mb-2 border-b border-premium-700 pb-1 w-full"><i class="fa-solid fa-crown text-spl-gold mr-1"></i> Team Owners</p>
-                            <p class="text-sm text-white font-medium flex-grow">${(r.owners || []).join('<br>')}</p>
-                            <p class="text-[10px] text-gray-500 mt-4 truncate w-full"><i class="fa-solid fa-location-dot text-spl-red mr-1"></i> ${r.address}</p>
-                        </div>
-                    `).join('');
-                }
+            if (prevDob === 'U19' || prevDob === 'NORMAL') {
+                dobSelect.value = prevDob;
             }
         }
 
@@ -2430,12 +2036,13 @@ service cloud.firestore {
             if(local || !db) return;
 
             onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), (snap) => {
-                const mergedMap = new Map();
-                const ownerMap = new Map();
-                
-                getLocalList('registrations', []).forEach(r => {
-                    if (String(r.id).startsWith('LOCAL_')) mergedMap.set(r.id, r);
-                });
+                if (dobVal) {
+                    const yr = window.getPlayerBirthYear(r.dob);
+                    if (dobVal === 'U19' && !(yr !== null && yr >= 2008)) return false;
+                    if (dobVal === 'NORMAL' && (yr !== null && yr >= 2008)) return false;
+                }
+                return true;
+            });
                 getLocalList('owner_registrations', []).forEach(r => {
                     if (String(r.id).startsWith('LOCAL_')) ownerMap.set(r.id, r);
                 });
@@ -2727,100 +2334,101 @@ service cloud.firestore {
                 if(docSnap.exists() && docSnap.data().logo) {
                     localStorage.setItem('spl_card_logo_backup', docSnap.data().logo);
                     applyCardLogoToUI(docSnap.data().logo);
-                }
-            }, (error) => {
-                console.warn("Card Logo listener error:", error);
-            });
+            publicAuctionGrid.innerHTML = filtered.map(r => {
+                const isU19 = window.isU19Player(r);
+                const u19BadgeHtml = isU19
+                    ? `<span class="bg-gradient-to-r from-orange-500 to-spl-red text-white text-[10px] font-extrabold px-2 py-0.5 rounded uppercase tracking-wider shadow border border-white/20 ml-1.5"><i class="fa-solid fa-star text-[8px] mr-0.5"></i> U-19</span>`
+                    : '';
 
-            onSnapshot(doc(db, 'artifacts', myAppId, 'public', 'data', 'sponsors', 'SYSTEM_REG_CONTROL'), (docSnap) => {
-                if(docSnap.exists()) {
-                    localStorage.setItem('spl_reg_control_backup', JSON.stringify(docSnap.data()));
-                    applyRegControlsToUI(docSnap.data());
-                }
-            }, (error) => {
-                console.warn("Reg Control listener error:", error);
-            });
-        }
-
-        // --- SEASONS LOGIC (Slider Mode) ---
-        window.handlePostSubmit = async function(e) {
-            e.preventDefault();
-            if(!window.isAdmin) return;
-            const imgUrl = window.croppedImages['season'] || '';
-            await saveSeasonPost(imgUrl);
-        };
-
-        async function saveSeasonPost(imgUrl) {
-            const post = {
-                season: parseInt(document.getElementById('post-season').value),
-                year: document.getElementById('post-year').value,
-                title: document.getElementById('post-title').value,
-                image: imgUrl,
-                desc: document.getElementById('post-desc').value,
-                createdAt: Date.now()
-            };
-            try {
-                await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'seasons'), post);
-                document.getElementById('add-post-form').reset();
-                window.clearCropPreview('season');
-                showNotice('Season archive saved successfully!', 'Success');
-            } catch(err) { showNotice('Error saving post', 'Error'); }
-        }
-
-        window.deletePost = function(id) {
-            showConfirmDialog('Delete this season archive?', async () => {
-                localStorage.setItem('spl_init_seasons', 'true');
-                try { await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'seasons', id)); } catch(e) {}
-            });
-        };
-
-        function loadPosts(local = false) {
-            const grid = document.getElementById('seasons-slider');
-            if(!grid) return;
-            if(local) { renderPosts(getLocalList('seasons', defaultSeasons)); return; }
-
-            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'seasons'), (snap) => {
-                let fetched = [];
-                snap.forEach(d => fetched.push({ id: d.id, ...d.data() }));
-                let all = fetched.sort((a,b) => b.season - a.season).filter(p => p.season <= 5);
-                if(all.length === 0 && fetched.length === 0 && !localStorage.getItem('spl_init_seasons')) {
-                    localStorage.setItem('spl_init_seasons', 'true');
-                    defaultSeasons.forEach(s => addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'seasons'), s).catch(()=>{}));
-                    renderPosts(getLocalList('seasons', defaultSeasons));
-                    return;
-                }
-                localStorage.setItem('spl_init_seasons', 'true');
-                setLocalList('seasons', all);
-                renderPosts(all);
-            }, () => renderPosts(getLocalList('seasons', defaultSeasons)));
-        }
-
-        function renderPosts(posts) {
-            const slider = document.getElementById('seasons-slider');
-            totalSeasons = posts.length;
-            slider.innerHTML = '';
-            
-            posts.forEach(p => {
-                const bg = p.image ? `style="background-image: url('${p.image}')"` : '';
-                const cls = p.image ? '' : 'bg-gradient-to-tr from-premium-700 to-premium-900';
-                const del = window.isAdmin && p.id ? `<button onclick="deletePost('${p.id}')" class="absolute top-4 right-4 bg-red-600 text-white w-8 h-8 rounded-full z-20 flex items-center justify-center hover:bg-red-700 shadow-lg"><i class="fa-solid fa-trash"></i></button>` : '';
-                
-                slider.innerHTML += `
-                    <article class="w-[calc(100%-0px)] md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] flex-shrink-0 bg-premium-950 rounded-xl overflow-hidden border border-premium-700 hover:border-spl-gold transition duration-300 group flex flex-col shadow-xl relative h-full min-h-[400px]">
-                        ${del}
-                        <div class="h-48 w-full flex-shrink-0 relative flex items-center justify-center bg-cover bg-center border-b border-premium-800 ${cls}" ${bg}>
-                            <div class="absolute inset-0 bg-premium-950/60 group-hover:bg-premium-950/20 transition z-0"></div>
-                            <div class="absolute top-4 left-4 bg-premium-950/90 px-3 py-1 rounded text-xs font-bold text-spl-gold uppercase border border-spl-gold/50 z-10 shadow-lg">Season ${p.season}</div>
-                        </div>
-                        <div class="p-6 flex-grow flex flex-col z-10 relative bg-premium-950 h-full">
-                            <h3 class="font-oswald text-2xl md:text-3xl font-bold mb-3 group-hover:text-spl-gold transition leading-tight">${p.title} (${p.year})</h3>
-                            <p class="text-sm md:text-base text-gray-400 mb-4 flex-grow font-medium leading-relaxed">${p.desc}</p>
-                            <div class="flex justify-between items-center border-t border-premium-800 pt-4 mt-auto">
-                                <span class="text-xs text-gray-500 font-bold uppercase tracking-widest"><i class="fa-solid fa-book-open mr-1"></i> SPL Archives</span>
+                return `
+                    <div onclick="openPlayerPosterModal('${r.id}')" class="bg-premium-800 border ${isU19 ? 'border-orange-500/70' : 'border-green-600/50'} hover:border-spl-gold rounded-xl p-4 shadow-lg flex items-center justify-between gap-3 cursor-pointer transition-all duration-200 hover:bg-premium-800/80 group relative">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="relative flex-shrink-0">
+                                <img src="${r.photo || 'https://placehold.co/100x100/1C335E/F4B036?text=SPL'}" onerror="this.onerror=null;this.src='https://placehold.co/100x100/1C335E/F4B036?text=SPL';" alt="${r.name}" class="w-12 h-12 sm:w-14 sm:h-14 object-cover object-top rounded-full border-2 ${isU19 ? 'border-orange-500' : 'border-green-500'} group-hover:border-spl-gold transition-colors">
+                            </div>
+                            <div class="min-w-0">
+                                <div class="flex flex-wrap items-center gap-1">
+                                    <span class="bg-spl-gold text-premium-950 text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider">${r.srNo || 'SR-001'}</span>
+                                    ${u19BadgeHtml}
+                                </div>
+                                <h4 class="font-oswald font-bold text-white group-hover:text-spl-gold text-base sm:text-lg mt-0.5 break-words transition-colors">${r.name}</h4>
+                                <p class="text-xs text-gray-300 break-words"><span class="text-spl-gold font-semibold">${r.skill || 'Player'}</span> • ${r.village || ''} (${r.panchayat || ''})</p>
                             </div>
                         </div>
-                    </article>
+                        <div class="flex-shrink-0 text-gray-400 group-hover:text-spl-gold transition-colors pl-2" title="View FB / Insta Poster">
+                            <i class="fa-solid fa-expand text-sm"></i>
+                        </div>
+                    </div>
                 `;
+            }).join('');
+        };
+
+        window.openPlayerPosterModal = function(playerId) {
+            const r = (window.allRegistrations || []).find(x => x.id === playerId);
+            if (!r) return;
+
+            let skillIcon = 'fa-baseball-bat-ball';
+            if (r.skill === 'Bowler') skillIcon = 'fa-baseball';
+            if (r.skill === 'All-Rounder') skillIcon = 'fa-bolt';
+
+            const isU19 = window.isU19Player ? window.isU19Player(r) : false;
+            const posterU19Badge = isU19
+                ? `<span class="bg-gradient-to-r from-orange-500 to-spl-red text-white font-oswald text-xs font-extrabold uppercase px-3 py-1 rounded-full border border-white/40 shadow-lg tracking-wider"><i class="fa-solid fa-star mr-1"></i> U-19 PLAYER</span>`
+                : `<span class="bg-premium-950/90 text-spl-gold font-oswald text-xs font-bold uppercase px-3 py-1 rounded-full border border-spl-gold/50 shadow"><i class="fa-solid fa-circle-check mr-1"></i> Verified Player</span>`;
+
+            const spl6LogoUrl = window.customCardLogo || localStorage.getItem('spl_card_logo_backup') || "https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/SPL-6%20logo.jpeg?raw=true";
+            const fallbackSplLogo = "https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/main/ChatGPT%20Image%20Sep%205%2C%202026%2C%2003_22_40%20PM.png";
+            const content = document.getElementById('player-poster-card-content');
+            if (!content) return;
+
+            content.innerHTML = `
+                <!-- Poster Header with Large SPL-6 Official Logo -->
+                <div class="bg-gradient-to-r from-premium-950 via-premium-900 to-premium-950 px-4 py-3.5 border-b-2 border-spl-gold flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <img src="${spl6LogoUrl}" alt="SPL-6 Official Logo" class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-white p-1 object-contain border-2 border-spl-gold shadow-[0_0_20px_rgba(244,176,54,0.6)] flex-shrink-0" onerror="if(this.src!=='${fallbackSplLogo}'){this.src='${fallbackSplLogo}';}else{this.onerror=null;this.src='https://placehold.co/100/ffffff/0B1221?text=SPL-6';}">
+                        <div class="text-left leading-tight">
+                            <h4 class="font-oswald text-base sm:text-lg font-bold text-white uppercase tracking-wider">SANTURI <span class="text-spl-gold">PREMIER LEAGUE</span></h4>
+                            <p class="text-[11px] text-spl-gold font-extrabold uppercase tracking-widest mt-0.5">SEASON 6 • MEGA AUCTION</p>
+                            <p class="text-[9px] text-gray-300 font-bold uppercase tracking-wider mt-0.5">Org. Lalgarh Village Club</p>
+                        </div>
+                    </div>
+                    <div class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-lg sm:text-xl px-3.5 py-1.5 rounded-lg shadow-lg tracking-wider flex-shrink-0 border border-white/40">
+                        ${r.srNo || 'SR-001'}
+                    </div>
+                </div>
+
+                <!-- Large Portrait Image with Floating SPL-6 Watermark Badge -->
+                <div class="relative w-full h-80 sm:h-96 bg-premium-900 overflow-hidden border-b-2 border-spl-gold">
+                    <img src="${r.photo || ''}" alt="${r.name}" class="w-full h-full object-cover object-top">
+                    <img src="${spl6LogoUrl}" alt="SPL-6 Badge" class="absolute top-3 right-3 w-16 h-16 rounded-xl bg-white p-1 object-contain border-2 border-spl-gold shadow-[0_4px_15px_rgba(0,0,0,0.85)] z-10" onerror="if(this.src!=='${fallbackSplLogo}'){this.src='${fallbackSplLogo}';}else{this.onerror=null;this.src='https://placehold.co/100/ffffff/0B1221?text=SPL-6';}">
+                    <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#060B16] via-[#060B16]/70 to-transparent"></div>
+                    <div class="absolute bottom-3 left-4 right-4 flex justify-between items-end">
+                        <span class="bg-spl-red text-white font-oswald font-bold text-sm uppercase px-4 py-1 rounded-full shadow-lg border border-white/30 tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid ${skillIcon} text-xs"></i> ${r.skill || 'Player'}
+                        </span>
+                        ${posterU19Badge}
+                    </div>
+                </div>
+
+                <!-- Full Player Name & Info -->
+                <div class="p-5 text-center bg-gradient-to-b from-[#060B16] to-premium-950">
+                    <h2 class="font-oswald font-bold text-white text-2xl sm:text-3xl uppercase tracking-wide leading-snug break-words mb-3">${r.name}</h2>
+                    
+                    <div class="bg-premium-900/90 border border-premium-700 rounded-xl p-3 mb-4 space-y-1">
+                        <p class="text-sm text-white font-bold uppercase tracking-wide break-words">
+                            <i class="fa-solid fa-location-dot text-spl-gold mr-1.5"></i> Village: <span class="text-spl-gold">${r.village || ''}</span>
+                        </p>
+                        <p class="text-xs text-gray-300 font-semibold uppercase tracking-widest break-words">
+                            Gram Panchayat: ${r.panchayat || ''}
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-between text-[10px] text-gray-300 font-bold uppercase tracking-widest border-t border-premium-800 pt-3">
+                        <span class="text-spl-gold"><i class="fa-solid fa-calendar-check mr-1"></i> 25, 26, 27 Dec 2026</span>
+                        <span>splsanturi.online</span>
+                    </div>
+                </div>
+            `;
             });
             
             currSeasonIndex = 0;
@@ -3365,49 +2973,95 @@ service cloud.firestore {
                     titleSponsorsHTML += `
                         <div class="flex justify-center mb-16">
                             <div class="w-full text-center">
-                                <h2 class="font-oswald text-4xl md:text-5xl font-bold uppercase tracking-wide mb-8 text-spl-gold relative inline-block">
-                                    <span class="bg-premium-900 px-4 relative z-10"><i class="fa-solid fa-crown mr-2 text-3xl"></i> Title Sponsor</span>
-                                    <div class="absolute inset-0 flex items-center z-0"><div class="w-full border-t border-premium-700/50"></div></div>
-                                </h2>
-                                <br>
-                                <div class="bg-white p-8 rounded-2xl shadow-[0_0_40px_rgba(244,176,54,0.3)] border-2 border-spl-gold/80 hover:scale-105 transition-transform duration-300 inline-block mx-auto">
-                                    <img src="${s.logo}" alt="${s.name}" class="h-32 md:h-40 object-contain mx-auto">
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    officialCount++;
-                    officialSponsorsHTML += `
-                        <div class="w-[calc(50%-12px)] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-18px)] flex-shrink-0 bg-white p-4 rounded-xl shadow-xl border border-premium-700 hover:scale-105 hover:border-spl-gold transition-all duration-300 flex items-center justify-center h-28 md:h-36">
-                            <img src="${s.logo}" alt="${s.name}" class="max-w-full max-h-full object-contain">
-                        </div>
-                    `;
+        window.switchAdminTab = function(tabName) {
+            const tabLabels = {
+                owner_regs: 'Owner Reg. (New)',
+                teams: 'Manage Franchises',
+                seasons: 'Manage Seasons',
+                gallery: 'Manage Gallery',
+                texts: 'Edit Writings',
+                edit_rules: 'Edit SPL-6 Rules',
+                sponsors: 'Manage Sponsors',
+                partners: 'Manage Partners',
+                rules: 'DB Rules Code'
+            };
+
+            ['registrations', 'owner_regs', 'seasons', 'teams', 'gallery', 'texts', 'edit_rules', 'sponsors', 'partners', 'rules'].forEach(t => {
+                document.getElementById(`admin-tab-${t}`)?.classList.add('hidden');
+                const btn = document.getElementById(`tab-btn-${t}`);
+                if(btn && t !== 'registrations') {
+                    btn.classList.remove('bg-premium-800', 'text-spl-gold');
                 }
             });
-            
-            totalOfficialSponsors = officialCount;
-            let finalHTML = titleSponsorsHTML;
+        function loadAllData(local = false) {
+            loadPosts(local); loadTeams(local); loadGallery(local); 
+            loadAboutText(local); loadRulesContent(local); loadSponsors(local); loadPartners(local);
+            loadRegistrations(local);
+            loadSettings(local);
+        }
 
-            if(officialSponsorsHTML !== '') {
-                finalHTML += `
-                    <div class="flex flex-col md:flex-row md:justify-between items-start md:items-center mb-8 gap-4 text-left">
-                        <h2 class="font-oswald text-3xl md:text-4xl font-bold uppercase tracking-wide text-white relative inline-block">
-                            <span class="bg-premium-900 px-4 relative z-10">Official Sponsors</span>
-                            <div class="absolute inset-0 flex items-center z-0"><div class="w-full border-t border-premium-700/50"></div></div>
-                        </h2>
-                        <div class="flex gap-2 self-center md:self-auto relative z-10 bg-premium-900 px-2">
-                            <button onclick="prevSponsor()" class="w-10 h-10 bg-premium-800 hover:bg-spl-gold text-white hover:text-premium-950 transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-chevron-left"></i></button>
-                            <button onclick="nextSponsor()" class="w-10 h-10 bg-premium-800 hover:bg-spl-gold text-white hover:text-premium-950 transition rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-chevron-right"></i></button>
-                        </div>
-                    </div>
-                    <div class="overflow-hidden py-4 px-1" id="sponsors-slider-wrapper">
-                        <div id="sponsors-track" class="flex transition-transform duration-500 ease-out gap-6 items-stretch">
-                            ${officialSponsorsHTML}
-                        </div>
-                    </div>
-                `;
+        // --- EDITABLE SPL-6 RULES LOGIC ---
+        const initialDefaultRulesHtml = document.getElementById('rules-modal-body')?.innerHTML.trim() || '';
+
+        function applyRulesHtmlToUI(htmlContent) {
+            const modalBody = document.getElementById('rules-modal-body');
+            const editor = document.getElementById('rules-editor-content');
+            const finalHtml = (htmlContent && htmlContent.trim()) ? htmlContent : initialDefaultRulesHtml;
+            if (modalBody) modalBody.innerHTML = finalHtml;
+            if (editor && !editor.matches(':focus')) editor.value = finalHtml;
+        }
+
+        window.handleRulesUpdateSubmit = async function(e) {
+            e.preventDefault();
+            if (!window.isAdmin) return;
+            const editor = document.getElementById('rules-editor-content');
+            const updatedHtml = editor ? editor.value.trim() : '';
+            if (!updatedHtml) {
+                showNotice('Rulebook content cannot be empty.', 'Required');
+                return;
             }
+            localStorage.setItem('spl_rules_html_backup', updatedHtml);
+            applyRulesHtmlToUI(updatedHtml);
+            try {
+                await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'settings', 'spl6_rules'), {
+                    html: updatedHtml,
+                    updatedAt: Date.now()
+                }, { merge: true });
+                showNotice('SPL Season 6 Rulebook updated successfully!', 'Saved');
+            } catch (err) {
+                showNotice('Rulebook saved locally on this browser! Publish Firebase Rules to sync across all devices.', 'Saved Locally');
+            }
+        };
+
+        window.resetRulesToDefault = function() {
+            showConfirmDialog('Reset the SPL Season 6 Rulebook back to its original default text?', async () => {
+                localStorage.removeItem('spl_rules_html_backup');
+                applyRulesHtmlToUI(initialDefaultRulesHtml);
+                try {
+                    await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'settings', 'spl6_rules'), {
+                        html: initialDefaultRulesHtml,
+                        updatedAt: Date.now()
+                    }, { merge: true });
+                } catch (e) {}
+                showNotice('Rulebook reset to default!', 'Reset Complete');
+            });
+        };
+
+        function loadRulesContent(local = false) {
+            const cachedRules = localStorage.getItem('spl_rules_html_backup');
+            applyRulesHtmlToUI(cachedRules || initialDefaultRulesHtml);
+            if (local || !db) return;
+
+            const rulesRef = doc(db, 'artifacts', myAppId, 'public', 'data', 'settings', 'spl6_rules');
+            onSnapshot(rulesRef, (docSnap) => {
+                if (docSnap.exists() && docSnap.data().html) {
+                    localStorage.setItem('spl_rules_html_backup', docSnap.data().html);
+                    applyRulesHtmlToUI(docSnap.data().html);
+                }
+            }, () => {
+                applyRulesHtmlToUI(cachedRules || initialDefaultRulesHtml);
+            });
+        }
 
             displayContainer.innerHTML = finalHTML;
             currSponsorIndex = 0;
