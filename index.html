@@ -191,12 +191,12 @@
                         Season 6 <span class="text-spl-gold">Auction Pool</span>
                         <div class="w-3/4 h-1 bg-spl-gold mx-auto mt-2 rounded"></div>
                     </h2>
-                    <p class="text-gray-300 font-medium mt-2">Officially registered players for the Mega Auction. <span class="text-spl-gold font-bold">Swipe sideways</span> to browse & tap any card for a full-screen <span class="text-white font-bold">FB / Insta Poster</span> screenshot!</p>
+                    <p class="text-gray-300 font-medium mt-2">Officially registered players listed in SR No order. Tap any player to open their full-screen <span class="text-spl-gold font-bold">FB / Insta Poster</span> screenshot!</p>
                 </div>
                 
-                <div id="public-auction-grid" class="space-y-10 max-w-7xl mx-auto">
-                    <!-- Approved Players injected dynamically in horizontal rows of 20 -->
-                    <div class="w-full text-center py-8">
+                <div id="public-auction-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-7xl mx-auto">
+                    <!-- Approved Players injected dynamically in SR No order -->
+                    <div class="w-full text-center py-8 col-span-full">
                         <p class="text-gray-500 font-bold tracking-widest uppercase text-sm">Registrations are opening soon...</p>
                     </div>
                 </div>
@@ -1378,15 +1378,6 @@ service cloud.firestore {
             window.closeMobileMenu();
         };
 
-        window.closeComingSoon = function() {
-            document.getElementById('coming-soon-modal').classList.add('hidden');
-        };
-
-        window.toggleAdminModal = function() {
-            document.getElementById('admin-modal').classList.toggle('hidden');
-            document.getElementById('mobile-menu')?.classList.add('hidden');
-        };
-
         window.logoutAdmin = function() {
             window.isAdmin = false;
             document.getElementById('admin-dashboard').classList.add('hidden');
@@ -1525,10 +1516,6 @@ service cloud.firestore {
             { id: 'S2', name: 'Sakambari Ispat & Power', type: 'official', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/Elegant.jpg?raw=true' }
         ];
         
-        const defaultPolls = [
-            { id: 'poll_demo1', question: 'Which team will lift the Season 6 Trophy?', opt0: 'JMK Sixers', val0: 45, opt1: 'Krishnapur United', val1: 30, opt2: 'Aman XI Bheti', val2: 15, opt3: 'Shri Ram XI', val3: 10, createdAt: Date.now() }
-        ];
-
         const defaultAboutText = {
             p1: "The Santuri Premier League (SPL) is proudly organized by the historic Lalgarh Village Club. Established in 1961, the club has a decades-long legacy of promoting sports, culture, and community spirit in the region.",
             p2: "The inaugural season kicked off in 2021 with 8 franchises. Deeply rooted in the local community, the league featured 104 gram (village) players selected from across six panchayats in the Santuri block, Purulia. The excitement was palpable from the start, with over 200 players registering for the very first mega auction! All the thrilling matches are hosted at our official venue, the Rangadanga High School Ground."
@@ -1810,8 +1797,10 @@ service cloud.firestore {
             const approvedContainer = document.getElementById('admin-registrations-approved');
             const publicAuctionGrid = document.getElementById('public-auction-grid');
 
-            const pending = regs.filter(r => r.status !== 'approved').sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
-            const approved = regs.filter(r => r.status === 'approved').sort((a,b) => {
+            const isApprovedStatus = (r) => String(r.status || '').trim().toLowerCase() === 'approved';
+
+            const pending = regs.filter(r => !isApprovedStatus(r)).sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+            const approved = regs.filter(r => isApprovedStatus(r)).sort((a,b) => {
                 const numA = parseInt(String(a.srNo || '0').replace(/\D/g, ''), 10) || 0;
                 const numB = parseInt(String(b.srNo || '0').replace(/\D/g, ''), 10) || 0;
                 return numA - numB;
@@ -1824,11 +1813,11 @@ service cloud.firestore {
                     pendingContainer.innerHTML = pending.map(r => `
                         <div class="bg-premium-800 border border-premium-700 rounded-xl p-4 shadow-lg flex flex-col gap-3">
                             <div class="flex items-center gap-3 border-b border-premium-700 pb-3">
-                                <img src="${r.photo || ''}" class="w-14 h-14 object-cover rounded-full border border-spl-gold">
+                                <img src="${r.photo || 'https://placehold.co/100x100/1C335E/F4B036?text=SPL'}" onerror="this.onerror=null;this.src='https://placehold.co/100x100/1C335E/F4B036?text=SPL';" class="w-14 h-14 object-cover rounded-full border border-spl-gold">
                                 <div>
                                     <h4 class="font-oswald font-bold text-white text-lg leading-tight">${r.name}</h4>
-                                    <p class="text-xs text-spl-gold font-semibold">${r.skill} • ${r.panchayat}</p>
-                                    <p class="text-xs text-gray-300">Village: ${r.village} | 📞 ${r.phone}</p>
+                                    <p class="text-xs text-spl-gold font-semibold">${r.skill || 'Player'} • ${r.panchayat || ''}</p>
+                                    <p class="text-xs text-gray-300">Village: ${r.village || ''} | 📞 ${r.phone || ''}</p>
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-2 text-center text-xs">
@@ -1836,7 +1825,7 @@ service cloud.firestore {
                                 <a href="${r.payment || '#'}" target="_blank" class="bg-premium-950 p-2 rounded border border-premium-700 hover:border-spl-gold text-gray-300">Payment SS</a>
                             </div>
                             <div class="flex gap-2 mt-auto pt-2 border-t border-premium-700">
-                                <button onclick="approveRegistration('${r.id}', '${(r.name||'').replace(/'/g, "\\'")}', '${r.phone}')" class="flex-1 bg-green-600 hover:bg-green-500 text-white font-bold py-1.5 rounded text-xs uppercase shadow"><i class="fa-solid fa-check mr-1"></i> Approve</button>
+                                <button onclick="approveRegistration('${r.id}', '${(r.name||'').replace(/'/g, "\\'")}', '${r.phone||''}')" class="flex-1 bg-green-600 hover:bg-green-500 text-white font-bold py-1.5 rounded text-xs uppercase shadow"><i class="fa-solid fa-check mr-1"></i> Approve</button>
                                 <button onclick="openAdminEditRegModal('${r.id}', '${(r.name||'').replace(/'/g, "\\'")}', '${r.dob||''}', '${r.panchayat||''}', '${(r.village||'').replace(/'/g, "\\'")}', '${r.phone||''}', '${r.skill||''}', '${r.status||''}', '${r.srNo||''}')" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded text-xs shadow" title="Edit"><i class="fa-solid fa-pen"></i></button>
                                 <button onclick="deleteRegistration('${r.id}')" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded text-xs shadow"><i class="fa-solid fa-trash"></i></button>
                             </div>
@@ -1852,11 +1841,11 @@ service cloud.firestore {
                     approvedContainer.innerHTML = approved.map(r => `
                         <div class="bg-premium-800 border border-green-600/50 rounded-xl p-4 shadow-lg flex items-center justify-between gap-3">
                             <div class="flex items-center gap-3">
-                                <img src="${r.photo || ''}" class="w-12 h-12 object-cover rounded-full border border-green-500 flex-shrink-0">
+                                <img src="${r.photo || 'https://placehold.co/100x100/1C335E/F4B036?text=SPL'}" onerror="this.onerror=null;this.src='https://placehold.co/100x100/1C335E/F4B036?text=SPL';" class="w-12 h-12 object-cover rounded-full border border-green-500 flex-shrink-0">
                                 <div>
                                     <span class="bg-spl-gold text-premium-950 text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase">${r.srNo || 'SR-001'}</span>
                                     <h4 class="font-oswald font-bold text-white text-base mt-0.5 break-words">${r.name}</h4>
-                                    <p class="text-xs text-gray-300">${r.skill} • ${r.village} (${r.panchayat})</p>
+                                    <p class="text-xs text-gray-300">${r.skill || 'Player'} • ${r.village || ''} (${r.panchayat || ''})</p>
                                 </div>
                             </div>
                             <div class="flex gap-1.5 flex-shrink-0">
@@ -1871,115 +1860,31 @@ service cloud.firestore {
             if (publicAuctionGrid) {
                 if (approved.length === 0) {
                     publicAuctionGrid.innerHTML = `
-                        <div class="w-full text-center py-12 bg-premium-900 rounded-2xl border border-premium-800">
+                        <div class="col-span-full w-full text-center py-12 bg-premium-900 rounded-2xl border border-premium-800">
                             <i class="fa-solid fa-users-viewfinder text-4xl text-spl-gold mb-3"></i>
-                            <p class="text-gray-400 font-bold tracking-widest uppercase text-sm">Auction Pool is filling up. Registrations are live!</p>
+                            <p class="text-gray-300 font-bold tracking-widest uppercase text-sm mb-1">No Approved Players Listed Yet</p>
+                            <p class="text-gray-400 text-xs">Once players register and are approved in the Admin Dashboard, they appear here in SR No order.</p>
                         </div>
                     `;
                 } else {
-                    const chunkSize = 20;
-                    let rowsHtml = '';
-                    const spl6LogoUrl = window.customCardLogo || localStorage.getItem('spl_card_logo_backup') || "https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/SPL-6%20logo.jpeg?raw=true";
-                    const fallbackSplLogo = "https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/main/ChatGPT%20Image%20Sep%205%2C%202026%2C%2003_22_40%20PM.png";
-
-                    for (let i = 0; i < approved.length; i += chunkSize) {
-                        const chunk = approved.slice(i, i + chunkSize);
-                        const startNum = i + 1;
-                        const endNum = i + chunk.length;
-                        const rowId = `auction-row-track-${i}`;
-
-                        const cardsHtml = chunk.map(r => {
-                            let skillIcon = 'fa-baseball-bat-ball';
-                            if (r.skill === 'Bowler') skillIcon = 'fa-baseball';
-                            if (r.skill === 'All-Rounder') skillIcon = 'fa-bolt';
-
-                            return `
-                                <div onclick="openPlayerPosterModal('${r.id}')" class="w-[275px] sm:w-[295px] flex-shrink-0 snap-center bg-gradient-to-b from-premium-800 via-premium-950 to-[#070d19] border-2 border-spl-gold/80 hover:border-spl-gold rounded-2xl overflow-hidden shadow-[0_10px_25px_rgba(0,0,0,0.7)] flex flex-col cursor-pointer group transition-all duration-300 relative select-none">
-                                    <!-- Top Official Header Bar with Prominent SPL-6 Logo -->
-                                    <div class="bg-gradient-to-r from-premium-950 via-premium-900 to-premium-950 px-3 py-2.5 border-b-2 border-spl-gold/50 flex items-center justify-between gap-2">
-                                        <div class="flex items-center gap-2.5">
-                                            <img src="${spl6LogoUrl}" alt="SPL-6 Logo" class="w-12 h-12 rounded-lg bg-white p-0.5 object-contain border-2 border-spl-gold shadow-[0_0_12px_rgba(244,176,54,0.5)] flex-shrink-0" onerror="if(this.src!=='${fallbackSplLogo}'){this.src='${fallbackSplLogo}';}else{this.onerror=null;this.src='https://placehold.co/80/ffffff/0B1221?text=SPL-6';}">
-                                            <div class="text-left leading-tight">
-                                                <p class="font-oswald text-sm font-bold text-spl-gold tracking-wider uppercase">SPL SEASON 6</p>
-                                                <p class="text-[9px] text-white font-bold uppercase tracking-widest">Official Player Card</p>
-                                            </div>
-                                        </div>
-                                        <span class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-sm px-2.5 py-1 rounded-md shadow-md tracking-wider flex-shrink-0">${r.srNo || 'SR-001'}</span>
-                                    </div>
-
-                                    <!-- Big Portrait Photo Frame + Corner SPL-6 Badge -->
-                                    <div class="relative w-full h-60 sm:h-64 bg-premium-900 overflow-hidden border-b-2 border-spl-gold/60">
-                                        <img src="${r.photo || ''}" alt="${r.name}" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
-                                        <img src="${spl6LogoUrl}" alt="SPL-6 Official Logo" class="absolute top-2.5 right-2.5 w-14 h-14 rounded-xl bg-white p-0.5 object-contain border-2 border-spl-gold shadow-[0_4px_15px_rgba(0,0,0,0.85)] z-10" onerror="if(this.src!=='${fallbackSplLogo}'){this.src='${fallbackSplLogo}';}else{this.onerror=null;this.src='https://placehold.co/80/ffffff/0B1221?text=SPL-6';}">
-                                        <div class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#070d19] via-[#070d19]/60 to-transparent"></div>
-                                        <div class="absolute bottom-2.5 left-3 right-3 flex justify-between items-end">
-                                            <span class="bg-spl-red text-white font-oswald font-bold text-xs uppercase px-3 py-1 rounded-full shadow-lg border border-white/20 tracking-wider flex items-center gap-1.5">
-                                                <i class="fa-solid ${skillIcon} text-[10px]"></i> ${r.skill || 'Player'}
-                                            </span>
-                                            <span class="bg-black/70 backdrop-blur-sm text-spl-gold text-[10px] font-bold px-2.5 py-1 rounded-md border border-spl-gold/50 uppercase shadow">
-                                                <i class="fa-solid fa-expand mr-1"></i> FB/Insta Poster
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Full Name & Village Details (Never Truncated) -->
-                                    <div class="p-4 text-center flex-grow flex flex-col justify-between bg-gradient-to-b from-[#070d19] to-premium-950">
-                                        <div>
-                                            <h3 class="font-oswald font-bold text-white text-xl sm:text-2xl uppercase tracking-wide leading-snug break-words drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">${r.name}</h3>
-                                        </div>
-
-                                        <div class="mt-3 pt-3 border-t border-premium-800/90 space-y-1 text-xs">
-                                            <p class="text-gray-200 font-bold uppercase tracking-wide break-words">
-                                                <i class="fa-solid fa-location-dot text-spl-gold mr-1.5"></i> ${r.village || ''}
-                                            </p>
-                                            <p class="text-[10px] text-gray-400 font-semibold uppercase tracking-widest break-words">
-                                                GP: ${r.panchayat || ''}
-                                            </p>
-                                        </div>
-
-                                        <!-- Bottom Branding Strip -->
-                                        <div class="mt-3 pt-2 border-t border-premium-800/50 flex items-center justify-between text-[9px] text-spl-gold/90 font-bold uppercase tracking-widest">
-                                            <span><i class="fa-solid fa-trophy mr-1"></i> 25-27 Dec 2026</span>
-                                            <span>splsanturi.online</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                        }).join('');
-
-                        rowsHtml += `
-                            <div class="bg-premium-900/50 p-4 sm:p-6 rounded-2xl border border-premium-800 shadow-inner">
-                                <div class="flex justify-between items-center mb-4">
-                                    <div class="flex items-center gap-2.5">
-                                        <span class="w-2 h-7 bg-spl-gold rounded-full inline-block"></span>
-                                        <h3 class="font-oswald text-xl sm:text-2xl font-bold uppercase text-white tracking-wide">
-                                            Players <span class="text-spl-gold">${String(startNum).padStart(2, '0')} – ${String(endNum).padStart(2, '0')}</span>
-                                        </h3>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <span class="text-xs text-gray-400 hidden sm:inline mr-2"><i class="fa-solid fa-arrows-left-right mr-1 text-spl-gold"></i> Scroll sideways</span>
-                                        <button type="button" onclick="scrollAuctionRow('${rowId}', -1)" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-premium-800 hover:bg-spl-gold text-white hover:text-premium-950 border border-premium-700 transition flex items-center justify-center shadow-lg"><i class="fa-solid fa-chevron-left"></i></button>
-                                        <button type="button" onclick="scrollAuctionRow('${rowId}', 1)" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-premium-800 hover:bg-spl-gold text-white hover:text-premium-950 border border-premium-700 transition flex items-center justify-center shadow-lg"><i class="fa-solid fa-chevron-right"></i></button>
-                                    </div>
-                                </div>
-                                <div id="${rowId}" class="flex gap-5 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory scroll-smooth custom-scrollbar">
-                                    ${cardsHtml}
+                    publicAuctionGrid.innerHTML = approved.map(r => `
+                        <div onclick="openPlayerPosterModal('${r.id}')" class="bg-premium-800 border border-green-600/50 hover:border-spl-gold rounded-xl p-4 shadow-lg flex items-center justify-between gap-3 cursor-pointer transition-all duration-200 hover:bg-premium-800/80 group">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <img src="${r.photo || 'https://placehold.co/100x100/1C335E/F4B036?text=SPL'}" onerror="this.onerror=null;this.src='https://placehold.co/100x100/1C335E/F4B036?text=SPL';" alt="${r.name}" class="w-12 h-12 sm:w-14 sm:h-14 object-cover object-top rounded-full border-2 border-green-500 group-hover:border-spl-gold flex-shrink-0 transition-colors">
+                                <div class="min-w-0">
+                                    <span class="bg-spl-gold text-premium-950 text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider">${r.srNo || 'SR-001'}</span>
+                                    <h4 class="font-oswald font-bold text-white group-hover:text-spl-gold text-base sm:text-lg mt-0.5 break-words transition-colors">${r.name}</h4>
+                                    <p class="text-xs text-gray-300 break-words">${r.skill || 'Player'} • ${r.village || ''} (${r.panchayat || ''})</p>
                                 </div>
                             </div>
-                        `;
-                    }
-
-                    publicAuctionGrid.innerHTML = rowsHtml;
+                            <div class="flex-shrink-0 text-gray-400 group-hover:text-spl-gold transition-colors pl-2" title="View FB / Insta Poster">
+                                <i class="fa-solid fa-expand text-sm"></i>
+                            </div>
+                        </div>
+                    `).join('');
                 }
             }
         }
-
-        window.scrollAuctionRow = function(rowId, direction) {
-            const container = document.getElementById(rowId);
-            if (!container) return;
-            const scrollAmount = Math.max(300, container.clientWidth * 0.75);
-            container.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
-        };
 
         window.openPlayerPosterModal = function(playerId) {
             const r = (window.allRegistrations || []).find(x => x.id === playerId);
@@ -2271,8 +2176,11 @@ service cloud.firestore {
 
                 snap.forEach(d => {
                     const data = { id: d.id, ...d.data() };
-                    if(data.isRegistration) mergedMap.set(data.id, data);
-                    if(data.isOwnerRegistration) ownerMap.set(data.id, data);
+                    if(data.isOwnerRegistration) {
+                        ownerMap.set(data.id, data);
+                    } else if(data.isRegistration || data.name) {
+                        mergedMap.set(data.id, data);
+                    }
                 });
                 const combined = Array.from(mergedMap.values());
                 const combinedOwners = Array.from(ownerMap.values());
@@ -2366,14 +2274,14 @@ service cloud.firestore {
                 app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
                 db = getFirestore(app);
+
+                // Immediately attach Firestore listeners & render cached data without waiting on auth
+                loadAllData();
                 
                 onAuthStateChanged(auth, (user) => {
-                    if (user) {
-                        loadAllData();
-                    } else {
+                    if (!user) {
                         signInAnonymously(auth).catch(e => {
-                            console.warn("Auth failed", e);
-                            loadAllData(true);
+                            console.warn("Anonymous auth skipped:", e);
                         });
                     }
                 });
