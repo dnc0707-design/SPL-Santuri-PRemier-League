@@ -1241,15 +1241,24 @@ service cloud.firestore {
     <!-- Player Poster Spotlight Modal (For FB / Insta Screenshots) -->
     <div id="player-poster-modal" class="hidden fixed inset-0 z-[280] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-3 sm:p-6 overflow-y-auto" onclick="closePlayerPosterModal(event)">
         <div class="w-full max-w-sm relative my-auto" onclick="event.stopPropagation()">
-            <!-- Close Bar (Outside the card so screenshot is clean) -->
-            <div class="flex justify-between items-center mb-3 px-1">
-                <span class="text-xs font-bold uppercase tracking-widest text-spl-gold flex items-center gap-1.5"><i class="fa-solid fa-camera-retro"></i> Take Screenshot for FB / Insta</span>
-                <button type="button" onclick="closePlayerPosterModal()" class="bg-premium-800 hover:bg-spl-red text-white w-8 h-8 rounded-full flex items-center justify-center border border-premium-600 transition shadow-lg"><i class="fa-solid fa-xmark"></i></button>
+            <!-- Top Back & Close Bar (Outside the card so screenshot is clean) -->
+            <div class="flex justify-between items-center mb-3 px-1 gap-2">
+                <button type="button" onclick="closePlayerPosterModal()" class="bg-spl-gold hover:bg-spl-goldHover text-premium-950 font-oswald font-bold text-sm uppercase px-3.5 py-1.5 rounded-full flex items-center gap-1.5 transition shadow-lg">
+                    <i class="fa-solid fa-arrow-left"></i> Back
+                </button>
+                <span class="text-[11px] font-bold uppercase tracking-wider text-spl-gold flex items-center gap-1 text-right"><i class="fa-solid fa-camera-retro"></i> Screenshot for FB / Insta</span>
             </div>
 
             <!-- Screenshot-Ready Poster Card -->
             <div id="player-poster-card-content" class="bg-gradient-to-b from-premium-800 via-premium-950 to-[#060B16] border-2 border-spl-gold rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(244,176,54,0.35)] relative">
                 <!-- Populated dynamically when user taps any player card -->
+            </div>
+
+            <!-- Bottom Back Button for Easy One-Handed Mobile Tap -->
+            <div class="mt-4 text-center">
+                <button type="button" onclick="closePlayerPosterModal()" class="w-full bg-premium-800 hover:bg-premium-700 text-white font-oswald font-bold text-base uppercase tracking-wider py-2.5 px-6 rounded-xl border border-premium-600 transition shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-arrow-left text-spl-gold"></i> Back to Auction Pool
+                </button>
             </div>
         </div>
     </div>
@@ -1951,11 +1960,31 @@ service cloud.firestore {
             `;
 
             document.getElementById('player-poster-modal').classList.remove('hidden');
+            if (!window._posterHistoryActive) {
+                window._posterHistoryActive = true;
+                history.pushState({ playerPosterOpen: true }, '', '#player-poster');
+            }
         };
 
-        window.closePlayerPosterModal = function(e) {
-            document.getElementById('player-poster-modal').classList.add('hidden');
+        window.closePlayerPosterModal = function(e, fromPopState = false) {
+            const modal = document.getElementById('player-poster-modal');
+            if (modal && !modal.classList.contains('hidden')) {
+                modal.classList.add('hidden');
+            }
+            if (window._posterHistoryActive) {
+                window._posterHistoryActive = false;
+                if (!fromPopState && window.location.hash === '#player-poster') {
+                    history.back();
+                }
+            }
         };
+
+        window.addEventListener('popstate', () => {
+            const modal = document.getElementById('player-poster-modal');
+            if (modal && !modal.classList.contains('hidden')) {
+                window.closePlayerPosterModal(null, true);
+            }
+        });
 
         // --- OWNER REGISTRATION MANAGEMENT ---
         window.allOwnerRegistrations = [];
