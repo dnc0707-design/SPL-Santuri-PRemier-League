@@ -186,12 +186,85 @@
         <section id="auction-pool" class="py-20 bg-premium-950 border-b border-premium-700/50 scroll-mt-20 relative">
             <div class="absolute inset-0 bg-spl-gold/5 blur-3xl z-0 pointer-events-none"></div>
             <div class="container mx-auto px-4 relative z-10">
-                <div class="text-center mb-10">
+                <div class="text-center mb-8">
                     <h2 class="font-oswald text-4xl md:text-5xl font-bold uppercase tracking-wide mb-4 relative inline-block text-white">
                         Season 6 <span class="text-spl-gold">Auction Pool</span>
                         <div class="w-3/4 h-1 bg-spl-gold mx-auto mt-2 rounded"></div>
                     </h2>
                     <p class="text-gray-300 font-medium mt-2">Officially registered players listed in SR No order. Tap any player to open their full-screen <span class="text-spl-gold font-bold">FB / Insta Poster</span> screenshot!</p>
+                </div>
+
+                <!-- Auction Pool Filter Bar -->
+                <div class="max-w-7xl mx-auto mb-8 bg-premium-900/90 border border-premium-700 rounded-2xl p-4 sm:p-5 shadow-xl">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+                        <!-- Search by Name / SR No -->
+                        <div>
+                            <label for="pool-filter-search" class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
+                                <i class="fa-solid fa-magnifying-glass mr-1"></i> Name / SR No
+                            </label>
+                            <input type="text" id="pool-filter-search" oninput="applyAuctionPoolFilters()" placeholder="Search player or SR..." class="w-full bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-spl-gold">
+                        </div>
+
+                        <!-- Panchayat Filter -->
+                        <div>
+                            <label for="pool-filter-panchayat" class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
+                                <i class="fa-solid fa-landmark mr-1"></i> Gram Panchayat
+                            </label>
+                            <select id="pool-filter-panchayat" onchange="applyAuctionPoolFilters()" class="w-full bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-spl-gold">
+                                <option value="">All Panchayats</option>
+                                <option value="Kotladi-Ramchandrapur">Kotladi-Ramchandrapur</option>
+                                <option value="Muradi">Muradi</option>
+                                <option value="Balitora">Balitora</option>
+                                <option value="Santuri">Santuri</option>
+                                <option value="Tarabari">Tarabari</option>
+                                <option value="Garshika">Garshika</option>
+                            </select>
+                        </div>
+
+                        <!-- Village Filter -->
+                        <div>
+                            <label for="pool-filter-village" class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
+                                <i class="fa-solid fa-location-dot mr-1"></i> Village
+                            </label>
+                            <select id="pool-filter-village" onchange="applyAuctionPoolFilters()" class="w-full bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-spl-gold">
+                                <option value="">All Villages</option>
+                            </select>
+                        </div>
+
+                        <!-- Skill Category Filter -->
+                        <div>
+                            <label for="pool-filter-skill" class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
+                                <i class="fa-solid fa-baseball-bat-ball mr-1"></i> Skill Category
+                            </label>
+                            <select id="pool-filter-skill" onchange="applyAuctionPoolFilters()" class="w-full bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-spl-gold">
+                                <option value="">All Skills</option>
+                                <option value="Batsman">Batsman</option>
+                                <option value="Bowler">Bowler</option>
+                                <option value="All-Rounder">All-Rounder</option>
+                            </select>
+                        </div>
+
+                        <!-- DOB / U-19 Category Filter -->
+                        <div>
+                            <label for="pool-filter-dob" class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
+                                <i class="fa-solid fa-calendar-days mr-1"></i> DOB / Age Group
+                            </label>
+                            <select id="pool-filter-dob" onchange="applyAuctionPoolFilters()" class="w-full bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-spl-gold">
+                                <option value="">All Ages / DOB</option>
+                                <option value="U19">🔥 U-19 Players (2008 & Above)</option>
+                                <option value="2008">Born in 2008 (U-19)</option>
+                                <option value="SENIOR">Senior Players (Pre-2008)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Filter Status & Reset Row -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 mt-3 pt-3 border-t border-premium-800 text-xs">
+                        <span id="pool-filter-count" class="text-gray-300 font-semibold">Showing all approved players</span>
+                        <button type="button" onclick="resetAuctionPoolFilters()" class="text-spl-gold hover:text-white font-bold uppercase tracking-wider flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-rotate-left"></i> Reset Filters
+                        </button>
+                    </div>
                 </div>
                 
                 <div id="public-auction-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-7xl mx-auto">
@@ -1808,6 +1881,18 @@ service cloud.firestore {
 
             const isApprovedStatus = (r) => String(r.status || '').trim().toLowerCase() === 'approved';
 
+            // Helper to identify U-19 players (born in 2008 or later, specifically highlighting 2008)
+            window.getPlayerBirthYear = function(dobStr) {
+                if (!dobStr) return null;
+                const match = String(dobStr).match(/\b(19\d{2}|20\d{2})\b/);
+                return match ? parseInt(match[1], 10) : null;
+            };
+
+            window.isU19Player = function(r) {
+                const yr = window.getPlayerBirthYear(r.dob);
+                return yr !== null && yr >= 2008;
+            };
+
             const pending = regs.filter(r => !isApprovedStatus(r)).sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
             const approved = regs.filter(r => isApprovedStatus(r)).sort((a,b) => {
                 const numA = parseInt(String(a.srNo || '0').replace(/\D/g, ''), 10) || 0;
@@ -1819,14 +1904,18 @@ service cloud.firestore {
                 if (pending.length === 0) {
                     pendingContainer.innerHTML = `<p class="text-gray-500 text-sm col-span-full">No pending player registrations.</p>`;
                 } else {
-                    pendingContainer.innerHTML = pending.map(r => `
+                    pendingContainer.innerHTML = pending.map(r => {
+                        const u19Badge = window.isU19Player(r)
+                            ? `<span class="bg-gradient-to-r from-orange-500 to-spl-red text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase ml-1">U-19</span>`
+                            : '';
+                        return `
                         <div class="bg-premium-800 border border-premium-700 rounded-xl p-4 shadow-lg flex flex-col gap-3">
                             <div class="flex items-center gap-3 border-b border-premium-700 pb-3">
                                 <img src="${r.photo || 'https://placehold.co/100x100/1C335E/F4B036?text=SPL'}" onerror="this.onerror=null;this.src='https://placehold.co/100x100/1C335E/F4B036?text=SPL';" class="w-14 h-14 object-cover rounded-full border border-spl-gold">
                                 <div>
-                                    <h4 class="font-oswald font-bold text-white text-lg leading-tight">${r.name}</h4>
+                                    <h4 class="font-oswald font-bold text-white text-lg leading-tight">${r.name} ${u19Badge}</h4>
                                     <p class="text-xs text-spl-gold font-semibold">${r.skill || 'Player'} • ${r.panchayat || ''}</p>
-                                    <p class="text-xs text-gray-300">Village: ${r.village || ''} | 📞 ${r.phone || ''}</p>
+                                    <p class="text-xs text-gray-300">Village: ${r.village || ''} | DOB: ${r.dob || 'N/A'} | 📞 ${r.phone || ''}</p>
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 gap-2 text-center text-xs">
@@ -1839,7 +1928,7 @@ service cloud.firestore {
                                 <button onclick="deleteRegistration('${r.id}')" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded text-xs shadow"><i class="fa-solid fa-trash"></i></button>
                             </div>
                         </div>
-                    `).join('');
+                    `;}).join('');
                 }
             }
 
@@ -1847,12 +1936,16 @@ service cloud.firestore {
                 if (approved.length === 0) {
                     approvedContainer.innerHTML = `<p class="text-gray-500 text-sm col-span-full">No approved players yet.</p>`;
                 } else {
-                    approvedContainer.innerHTML = approved.map(r => `
+                    approvedContainer.innerHTML = approved.map(r => {
+                        const u19Badge = window.isU19Player(r)
+                            ? `<span class="bg-gradient-to-r from-orange-500 to-spl-red text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase ml-1">U-19</span>`
+                            : '';
+                        return `
                         <div class="bg-premium-800 border border-green-600/50 rounded-xl p-4 shadow-lg flex items-center justify-between gap-3">
                             <div class="flex items-center gap-3">
                                 <img src="${r.photo || 'https://placehold.co/100x100/1C335E/F4B036?text=SPL'}" onerror="this.onerror=null;this.src='https://placehold.co/100x100/1C335E/F4B036?text=SPL';" class="w-12 h-12 object-cover rounded-full border border-green-500 flex-shrink-0">
                                 <div>
-                                    <span class="bg-spl-gold text-premium-950 text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase">${r.srNo || 'SR-001'}</span>
+                                    <span class="bg-spl-gold text-premium-950 text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase">${r.srNo || 'SR-001'}</span>${u19Badge}
                                     <h4 class="font-oswald font-bold text-white text-base mt-0.5 break-words">${r.name}</h4>
                                     <p class="text-xs text-gray-300">${r.skill || 'Player'} • ${r.village || ''} (${r.panchayat || ''})</p>
                                 </div>
@@ -1862,38 +1955,177 @@ service cloud.firestore {
                                 <button onclick="deleteRegistration('${r.id}')" class="bg-red-600 hover:bg-red-500 text-white w-8 h-8 rounded text-xs shadow flex items-center justify-center"><i class="fa-solid fa-trash"></i></button>
                             </div>
                         </div>
-                    `).join('');
+                    `;}).join('');
                 }
             }
 
             if (publicAuctionGrid) {
-                if (approved.length === 0) {
-                    publicAuctionGrid.innerHTML = `
-                        <div class="col-span-full w-full text-center py-12 bg-premium-900 rounded-2xl border border-premium-800">
-                            <i class="fa-solid fa-users-viewfinder text-4xl text-spl-gold mb-3"></i>
-                            <p class="text-gray-300 font-bold tracking-widest uppercase text-sm mb-1">No Approved Players Listed Yet</p>
-                            <p class="text-gray-400 text-xs">Once players register and are approved in the Admin Dashboard, they appear here in SR No order.</p>
-                        </div>
-                    `;
-                } else {
-                    publicAuctionGrid.innerHTML = approved.map(r => `
-                        <div onclick="openPlayerPosterModal('${r.id}')" class="bg-premium-800 border border-green-600/50 hover:border-spl-gold rounded-xl p-4 shadow-lg flex items-center justify-between gap-3 cursor-pointer transition-all duration-200 hover:bg-premium-800/80 group">
-                            <div class="flex items-center gap-3 min-w-0">
-                                <img src="${r.photo || 'https://placehold.co/100x100/1C335E/F4B036?text=SPL'}" onerror="this.onerror=null;this.src='https://placehold.co/100x100/1C335E/F4B036?text=SPL';" alt="${r.name}" class="w-12 h-12 sm:w-14 sm:h-14 object-cover object-top rounded-full border-2 border-green-500 group-hover:border-spl-gold flex-shrink-0 transition-colors">
-                                <div class="min-w-0">
-                                    <span class="bg-spl-gold text-premium-950 text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider">${r.srNo || 'SR-001'}</span>
-                                    <h4 class="font-oswald font-bold text-white group-hover:text-spl-gold text-base sm:text-lg mt-0.5 break-words transition-colors">${r.name}</h4>
-                                    <p class="text-xs text-gray-300 break-words">${r.skill || 'Player'} • ${r.village || ''} (${r.panchayat || ''})</p>
-                                </div>
-                            </div>
-                            <div class="flex-shrink-0 text-gray-400 group-hover:text-spl-gold transition-colors pl-2" title="View FB / Insta Poster">
-                                <i class="fa-solid fa-expand text-sm"></i>
-                            </div>
-                        </div>
-                    `).join('');
-                }
+                window.approvedAuctionPlayers = approved;
+                populateAuctionFilterOptions(approved);
+                window.applyAuctionPoolFilters();
             }
         }
+
+        function populateAuctionFilterOptions(approvedPlayers) {
+            const villageSelect = document.getElementById('pool-filter-village');
+            const dobSelect = document.getElementById('pool-filter-dob');
+            if (!villageSelect || !dobSelect) return;
+
+            const prevVillage = villageSelect.value;
+            const prevDob = dobSelect.value;
+
+            // Populate unique villages
+            const villagesMap = new Map();
+            approvedPlayers.forEach(p => {
+                const raw = (p.village || '').trim();
+                if (raw) {
+                    const key = raw.toLowerCase();
+                    if (!villagesMap.has(key)) villagesMap.set(key, raw);
+                }
+            });
+            const sortedVillages = Array.from(villagesMap.values()).sort((a, b) => a.localeCompare(b));
+            villageSelect.innerHTML = `<option value="">All Villages</option>` +
+                sortedVillages.map(v => `<option value="${v.toLowerCase()}">${v}</option>`).join('');
+            if (prevVillage && villagesMap.has(prevVillage)) {
+                villageSelect.value = prevVillage;
+            }
+
+            // Populate unique birth years dynamically alongside U-19 options
+            const yearsSet = new Set();
+            approvedPlayers.forEach(p => {
+                const yr = window.getPlayerBirthYear(p.dob);
+                if (yr) yearsSet.add(yr);
+            });
+            const sortedYears = Array.from(yearsSet).sort((a, b) => b - a);
+            let dobOptionsHtml = `
+                <option value="">All Ages / DOB</option>
+                <option value="U19">🔥 U-19 Players (2008 & Above)</option>
+                <option value="2008">Born in 2008 (U-19)</option>
+                <option value="SENIOR">Senior Players (Pre-2008)</option>
+            `;
+            sortedYears.forEach(yr => {
+                if (yr !== 2008) {
+                    dobOptionsHtml += `<option value="YEAR_${yr}">DOB Year: ${yr}${yr >= 2008 ? ' (U-19)' : ''}</option>`;
+                }
+            });
+            dobSelect.innerHTML = dobOptionsHtml;
+            if (prevDob) dobSelect.value = prevDob;
+        }
+
+        window.resetAuctionPoolFilters = function() {
+            const searchEl = document.getElementById('pool-filter-search');
+            const panchayatEl = document.getElementById('pool-filter-panchayat');
+            const villageEl = document.getElementById('pool-filter-village');
+            const skillEl = document.getElementById('pool-filter-skill');
+            const dobEl = document.getElementById('pool-filter-dob');
+            if (searchEl) searchEl.value = '';
+            if (panchayatEl) panchayatEl.value = '';
+            if (villageEl) villageEl.value = '';
+            if (skillEl) skillEl.value = '';
+            if (dobEl) dobEl.value = '';
+            window.applyAuctionPoolFilters();
+        };
+
+        window.applyAuctionPoolFilters = function() {
+            const publicAuctionGrid = document.getElementById('public-auction-grid');
+            const countEl = document.getElementById('pool-filter-count');
+            if (!publicAuctionGrid) return;
+
+            const approved = window.approvedAuctionPlayers || [];
+            if (approved.length === 0) {
+                if (countEl) countEl.innerText = '0 approved players';
+                publicAuctionGrid.innerHTML = `
+                    <div class="col-span-full w-full text-center py-12 bg-premium-900 rounded-2xl border border-premium-800">
+                        <i class="fa-solid fa-users-viewfinder text-4xl text-spl-gold mb-3"></i>
+                        <p class="text-gray-300 font-bold tracking-widest uppercase text-sm mb-1">No Approved Players Listed Yet</p>
+                        <p class="text-gray-400 text-xs">Once players register and are approved in the Admin Dashboard, they appear here in SR No order.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const searchVal = (document.getElementById('pool-filter-search')?.value || '').trim().toLowerCase();
+            const panchayatVal = (document.getElementById('pool-filter-panchayat')?.value || '').trim().toLowerCase();
+            const villageVal = (document.getElementById('pool-filter-village')?.value || '').trim().toLowerCase();
+            const skillVal = (document.getElementById('pool-filter-skill')?.value || '').trim().toLowerCase();
+            const dobVal = (document.getElementById('pool-filter-dob')?.value || '').trim();
+
+            const filtered = approved.filter(r => {
+                if (searchVal) {
+                    const nameMatch = String(r.name || '').toLowerCase().includes(searchVal);
+                    const srMatch = String(r.srNo || '').toLowerCase().includes(searchVal);
+                    if (!nameMatch && !srMatch) return false;
+                }
+                if (panchayatVal && String(r.panchayat || '').trim().toLowerCase() !== panchayatVal) {
+                    return false;
+                }
+                if (villageVal && String(r.village || '').trim().toLowerCase() !== villageVal) {
+                    return false;
+                }
+                if (skillVal && String(r.skill || '').trim().toLowerCase() !== skillVal) {
+                    return false;
+                }
+                if (dobVal) {
+                    const yr = window.getPlayerBirthYear(r.dob);
+                    if (dobVal === 'U19' && !(yr !== null && yr >= 2008)) return false;
+                    if (dobVal === '2008' && yr !== 2008) return false;
+                    if (dobVal === 'SENIOR' && !(yr !== null && yr < 2008)) return false;
+                    if (dobVal.startsWith('YEAR_')) {
+                        const targetYr = parseInt(dobVal.replace('YEAR_', ''), 10);
+                        if (yr !== targetYr) return false;
+                    }
+                }
+                return true;
+            });
+
+            if (countEl) {
+                countEl.innerHTML = `Showing <span class="text-spl-gold font-bold">${filtered.length}</span> of <span class="text-white font-bold">${approved.length}</span> approved players`;
+            }
+
+            if (filtered.length === 0) {
+                publicAuctionGrid.innerHTML = `
+                    <div class="col-span-full w-full text-center py-10 bg-premium-900 rounded-2xl border border-premium-800">
+                        <i class="fa-solid fa-filter-circle-xmark text-3xl text-spl-gold mb-2"></i>
+                        <p class="text-gray-200 font-bold uppercase text-sm mb-1">No Players Match Your Selected Filter</p>
+                        <button type="button" onclick="resetAuctionPoolFilters()" class="mt-2 bg-spl-gold text-premium-950 font-bold text-xs uppercase px-4 py-1.5 rounded-lg hover:bg-spl-goldHover transition">Clear All Filters</button>
+                    </div>
+                `;
+                return;
+            }
+
+            publicAuctionGrid.innerHTML = filtered.map(r => {
+                const isU19 = window.isU19Player(r);
+                const birthYear = window.getPlayerBirthYear(r.dob);
+                const u19BadgeHtml = isU19
+                    ? `<span class="bg-gradient-to-r from-orange-500 to-spl-red text-white text-[10px] font-extrabold px-2 py-0.5 rounded uppercase tracking-wider shadow border border-white/20 ml-1.5"><i class="fa-solid fa-star text-[8px] mr-0.5"></i> U-19</span>`
+                    : '';
+                const dobLabelHtml = birthYear
+                    ? `<span class="text-[11px] text-gray-400 block mt-0.5"><i class="fa-regular fa-calendar text-spl-gold mr-1"></i>DOB: ${r.dob}${birthYear === 2008 ? ' <span class="text-orange-400 font-bold">(2008 • U-19)</span>' : ''}</span>`
+                    : '';
+
+                return `
+                    <div onclick="openPlayerPosterModal('${r.id}')" class="bg-premium-800 border ${isU19 ? 'border-orange-500/70' : 'border-green-600/50'} hover:border-spl-gold rounded-xl p-4 shadow-lg flex items-center justify-between gap-3 cursor-pointer transition-all duration-200 hover:bg-premium-800/80 group relative">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="relative flex-shrink-0">
+                                <img src="${r.photo || 'https://placehold.co/100x100/1C335E/F4B036?text=SPL'}" onerror="this.onerror=null;this.src='https://placehold.co/100x100/1C335E/F4B036?text=SPL';" alt="${r.name}" class="w-12 h-12 sm:w-14 sm:h-14 object-cover object-top rounded-full border-2 ${isU19 ? 'border-orange-500' : 'border-green-500'} group-hover:border-spl-gold transition-colors">
+                            </div>
+                            <div class="min-w-0">
+                                <div class="flex flex-wrap items-center gap-1">
+                                    <span class="bg-spl-gold text-premium-950 text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider">${r.srNo || 'SR-001'}</span>
+                                    ${u19BadgeHtml}
+                                </div>
+                                <h4 class="font-oswald font-bold text-white group-hover:text-spl-gold text-base sm:text-lg mt-0.5 break-words transition-colors">${r.name}</h4>
+                                <p class="text-xs text-gray-300 break-words">${r.skill || 'Player'} • ${r.village || ''} (${r.panchayat || ''})</p>
+                                ${dobLabelHtml}
+                            </div>
+                        </div>
+                        <div class="flex-shrink-0 text-gray-400 group-hover:text-spl-gold transition-colors pl-2" title="View FB / Insta Poster">
+                            <i class="fa-solid fa-expand text-sm"></i>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        };
 
         window.openPlayerPosterModal = function(playerId) {
             const r = (window.allRegistrations || []).find(x => x.id === playerId);
@@ -1902,6 +2134,12 @@ service cloud.firestore {
             let skillIcon = 'fa-baseball-bat-ball';
             if (r.skill === 'Bowler') skillIcon = 'fa-baseball';
             if (r.skill === 'All-Rounder') skillIcon = 'fa-bolt';
+
+            const isU19 = window.isU19Player ? window.isU19Player(r) : false;
+            const birthYear = window.getPlayerBirthYear ? window.getPlayerBirthYear(r.dob) : null;
+            const posterU19Badge = isU19
+                ? `<span class="bg-gradient-to-r from-orange-500 to-spl-red text-white font-oswald text-xs font-extrabold uppercase px-3 py-1 rounded-full border border-white/40 shadow-lg tracking-wider"><i class="fa-solid fa-star mr-1"></i> U-19 PLAYER</span>`
+                : `<span class="bg-premium-950/90 text-spl-gold font-oswald text-xs font-bold uppercase px-3 py-1 rounded-full border border-spl-gold/50 shadow"><i class="fa-solid fa-circle-check mr-1"></i> Verified Player</span>`;
 
             const spl6LogoUrl = window.customCardLogo || localStorage.getItem('spl_card_logo_backup') || "https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/SPL-6%20logo.jpeg?raw=true";
             const fallbackSplLogo = "https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/main/ChatGPT%20Image%20Sep%205%2C%202026%2C%2003_22_40%20PM.png";
@@ -1933,9 +2171,7 @@ service cloud.firestore {
                         <span class="bg-spl-red text-white font-oswald font-bold text-sm uppercase px-4 py-1 rounded-full shadow-lg border border-white/30 tracking-wider flex items-center gap-1.5">
                             <i class="fa-solid ${skillIcon} text-xs"></i> ${r.skill || 'Player'}
                         </span>
-                        <span class="bg-premium-950/90 text-spl-gold font-oswald text-xs font-bold uppercase px-3 py-1 rounded-full border border-spl-gold/50 shadow">
-                            <i class="fa-solid fa-circle-check mr-1"></i> Verified Player
-                        </span>
+                        ${posterU19Badge}
                     </div>
                 </div>
 
@@ -1950,6 +2186,7 @@ service cloud.firestore {
                         <p class="text-xs text-gray-300 font-semibold uppercase tracking-widest break-words">
                             Gram Panchayat: ${r.panchayat || ''}
                         </p>
+                        ${r.dob ? `<p class="text-xs text-gray-300 font-semibold uppercase tracking-widest pt-0.5"><i class="fa-regular fa-calendar text-spl-gold mr-1"></i> DOB: ${r.dob}${birthYear === 2008 ? ' <span class="text-orange-400 font-extrabold">(U-19)</span>' : ''}</p>` : ''}
                     </div>
 
                     <div class="flex items-center justify-between text-[10px] text-gray-300 font-bold uppercase tracking-widest border-t border-premium-800 pt-3">
