@@ -2918,12 +2918,23 @@ service cloud.firestore {
             ];
 
             const fakeSnap = [];
+            let lastHttpError = null;
             for (const colPath of candidatePaths) {
                 let pageToken = '';
                 do {
                     const url = `${baseProjectUrl}/${colPath}?pageSize=300${pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : ''}`;
-                    const res = await fetch(url);
-                    if (!res.ok) break;
+                    const controller = new AbortController();
+                    const fetchTimer = setTimeout(() => controller.abort(), 8000);
+                    let res;
+                    try {
+                        res = await fetch(url, { signal: controller.signal, cache: 'no-store' });
+                    } finally {
+                        clearTimeout(fetchTimer);
+                    }
+                    if (!res.ok) {
+                        lastHttpError = `HTTP ${res.status}`;
+                        break;
+                    }
                     const json = await res.json();
                     const docs = json.documents || [];
                     docs.forEach(docItem => {
@@ -2941,7 +2952,12 @@ service cloud.firestore {
 
             if (fakeSnap.length > 0) {
                 processPlayersSnapshot(fakeSnap);
+                return true;
             }
+            if (lastHttpError) {
+                throw new Error(lastHttpError);
+            }
+            return false;
         }
 
         window.refreshAuctionPool = function() {
@@ -2957,38 +2973,61 @@ service cloud.firestore {
                 renderRegistrationsList(localRegs);
                 renderOwnerRegistrationsList(localOwners);
             }
-            if(local || !db) return;
+            if (local) return;
+
+            let resolved = false;
+            const markResolved = () => { resolved = true; };
+
+            // 1. Fire REST API immediately in parallel so desktop browsers never hang on WebChannel
+            fetchPlayersViaRestFallback()
+                .then((found) => {
+                    if (found) markResolved();
+                })
+                .catch(err => console.warn('REST immediate fetch warning:', err));
+
+            // 2. Hard safety fallback timer: never leave "Loading Auction Pool..." stuck on screen
+            const safetyTimer = setTimeout(() => {
+                if (!resolved && (window.allRegistrations || []).length === 0) {
+                    renderRegistrationsList(getLocalList('registrations', []));
+                    renderOwnerRegistrationsList(getLocalList('owner_registrations', []));
+                }
+            }, 6000);
+
+            if (!db) {
+                clearTimeout(safetyTimer);
+                renderRegistrationsList(localRegs);
+                renderOwnerRegistrationsList(localOwners);
+                return;
+            }
 
             const playersCol = collection(db, 'artifacts', myAppId, 'public', 'data', 'players');
             let sdkDocCount = 0;
 
-            // Always run paginated REST fetch in parallel after a short delay if SDK returns incomplete or slow results
-            const restTimer = setTimeout(() => {
-                fetchPlayersViaRestFallback().catch(err => console.warn('REST fallback error:', err));
-            }, 1500);
-
             try {
-                const initialSnap = await getDocs(playersCol);
+                const sdkPromise = getDocs(playersCol);
+                const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('GETDOCS_TIMEOUT')), 5000));
+                const initialSnap = await Promise.race([sdkPromise, timeoutPromise]);
                 sdkDocCount = initialSnap.size || 0;
-                if (sdkDocCount > 0) {
-                    clearTimeout(restTimer);
-                    processPlayersSnapshot(initialSnap);
-                }
+                markResolved();
+                clearTimeout(safetyTimer);
+                processPlayersSnapshot(initialSnap);
             } catch (e) {
-                console.warn("Initial getDocs fallback, trying REST:", e);
-                fetchPlayersViaRestFallback().catch(() => {});
+                console.warn("Initial getDocs timeout/fallback:", e);
             }
 
             onSnapshot(playersCol, (snap) => {
                 if ((snap.size || 0) >= sdkDocCount) {
-                    clearTimeout(restTimer);
+                    markResolved();
+                    clearTimeout(safetyTimer);
                     processPlayersSnapshot(snap);
                 }
             }, (error) => {
                 console.warn("Registrations cloud sync fallback active:", error);
                 fetchPlayersViaRestFallback().catch(() => {
-                    renderRegistrationsList(getLocalList('registrations', []));
-                    renderOwnerRegistrationsList(getLocalList('owner_registrations', []));
+                    if (!resolved) {
+                        renderRegistrationsList(getLocalList('registrations', []));
+                        renderOwnerRegistrationsList(getLocalList('owner_registrations', []));
+                    }
                 });
             });
         }
@@ -3072,7 +3111,9 @@ service cloud.firestore {
 
                 app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
-                db = getFirestore(app);
+                // Force long-polling on desktop networks/proxies where WebChannel streams stall
+                const { initializeFirestore } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
+                db = initializeFirestore(app, { experimentalForceLongPolling: true });
 
                 // Load cached & public Firestore collections immediately without waiting on anonymous auth
                 loadAllData(false);
