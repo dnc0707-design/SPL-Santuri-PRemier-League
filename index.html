@@ -195,7 +195,7 @@
                 </div>
 
                 <!-- Auction Pool Filter Bar -->
-                <div class="max-w-7xl mx-auto mb-8 bg-premium-900/90 border border-premium-700 rounded-2xl p-4 sm:p-5 shadow-xl">
+                <div class="max-w-7xl mx-auto mb-8 bg-premium-900/90 border border-premium-700 rounded-2xl p-4 sm:p-5 shadow-xl relative z-30">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
                         <!-- Search by Name / SR No -->
                         <div>
@@ -205,55 +205,101 @@
                             <input type="text" id="pool-filter-search" oninput="applyAuctionPoolFilters()" placeholder="Search player or SR..." class="w-full bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-spl-gold">
                         </div>
 
-                        <!-- Panchayat Filter -->
-                        <div>
-                            <label for="pool-filter-panchayat" class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
+                        <!-- Panchayat Multi-Select Checkbox Dropdown -->
+                        <div class="relative pool-checkbox-dropdown" id="dropdown-wrap-panchayat">
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
                                 <i class="fa-solid fa-landmark mr-1"></i> Gram Panchayat
                             </label>
-                            <select id="pool-filter-panchayat" onchange="applyAuctionPoolFilters()" class="w-full bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-spl-gold">
-                                <option value="">All Panchayats</option>
-                                <option value="Kotladi-Ramchandrapur">Kotladi-Ramchandrapur</option>
-                                <option value="Muradi">Muradi</option>
-                                <option value="Balitora">Balitora</option>
-                                <option value="Santuri">Santuri</option>
-                                <option value="Tarabari">Tarabari</option>
-                                <option value="Garshika">Garshika</option>
-                            </select>
+                            <button type="button" onclick="togglePoolFilterDropdown('panchayat', event)" class="w-full bg-premium-950 border border-premium-700 hover:border-spl-gold rounded-lg px-3 py-2 text-sm text-white flex items-center justify-between gap-2 focus:outline-none">
+                                <span id="pool-label-panchayat" class="truncate text-left">All Panchayats</span>
+                                <i class="fa-solid fa-chevron-down text-xs text-spl-gold flex-shrink-0"></i>
+                            </button>
+                            <div id="pool-menu-panchayat" onclick="event.stopPropagation()" class="hidden absolute left-0 right-0 mt-1.5 bg-premium-950 border border-spl-gold/70 rounded-xl shadow-2xl p-2 z-50 max-h-60 overflow-y-auto space-y-1">
+                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                    <input type="checkbox" name="filter-panchayat" value="Ramchandrapur-Kotaldi" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                    <span>Ramchandrapur-Kotaldi</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                    <input type="checkbox" name="filter-panchayat" value="Muradi" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                    <span>Muradi</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                    <input type="checkbox" name="filter-panchayat" value="Balitora" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                    <span>Balitora</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                    <input type="checkbox" name="filter-panchayat" value="Santuri" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                    <span>Santuri</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                    <input type="checkbox" name="filter-panchayat" value="Tarabari" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                    <span>Tarabari</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                    <input type="checkbox" name="filter-panchayat" value="Garshika" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                    <span>Garshika</span>
+                                </label>
+                            </div>
                         </div>
 
-                        <!-- Village Filter -->
-                        <div>
-                            <label for="pool-filter-village" class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
+                        <!-- Village Multi-Select Checkbox Dropdown -->
+                        <div class="relative pool-checkbox-dropdown" id="dropdown-wrap-village">
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
                                 <i class="fa-solid fa-location-dot mr-1"></i> Village
                             </label>
-                            <select id="pool-filter-village" onchange="applyAuctionPoolFilters()" class="w-full bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-spl-gold">
-                                <option value="">All Villages</option>
-                            </select>
+                            <button type="button" onclick="togglePoolFilterDropdown('village', event)" class="w-full bg-premium-950 border border-premium-700 hover:border-spl-gold rounded-lg px-3 py-2 text-sm text-white flex items-center justify-between gap-2 focus:outline-none">
+                                <span id="pool-label-village" class="truncate text-left">All Villages</span>
+                                <i class="fa-solid fa-chevron-down text-xs text-spl-gold flex-shrink-0"></i>
+                            </button>
+                            <div id="pool-menu-village" onclick="event.stopPropagation()" class="hidden absolute left-0 right-0 mt-1.5 bg-premium-950 border border-spl-gold/70 rounded-xl shadow-2xl p-2 z-50 max-h-60 overflow-y-auto space-y-1">
+                                <p class="text-xs text-gray-400 px-2 py-1">Loading villages...</p>
+                            </div>
                         </div>
 
-                        <!-- Skill Category Filter -->
-                        <div>
-                            <label for="pool-filter-skill" class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
+                        <!-- Skill Category Multi-Select Checkbox Dropdown -->
+                        <div class="relative pool-checkbox-dropdown" id="dropdown-wrap-skill">
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
                                 <i class="fa-solid fa-baseball-bat-ball mr-1"></i> Skill Category
                             </label>
-                            <select id="pool-filter-skill" onchange="applyAuctionPoolFilters()" class="w-full bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-spl-gold">
-                                <option value="">All Skills</option>
-                                <option value="Batsman">Batsman</option>
-                                <option value="Bowler">Bowler</option>
-                                <option value="All-Rounder">All-Rounder</option>
-                            </select>
+                            <button type="button" onclick="togglePoolFilterDropdown('skill', event)" class="w-full bg-premium-950 border border-premium-700 hover:border-spl-gold rounded-lg px-3 py-2 text-sm text-white flex items-center justify-between gap-2 focus:outline-none">
+                                <span id="pool-label-skill" class="truncate text-left">All Skills</span>
+                                <i class="fa-solid fa-chevron-down text-xs text-spl-gold flex-shrink-0"></i>
+                            </button>
+                            <div id="pool-menu-skill" onclick="event.stopPropagation()" class="hidden absolute left-0 right-0 mt-1.5 bg-premium-950 border border-spl-gold/70 rounded-xl shadow-2xl p-2 z-50 max-h-60 overflow-y-auto space-y-1">
+                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                    <input type="checkbox" name="filter-skill" value="Batsman" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                    <span>Batsman</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                    <input type="checkbox" name="filter-skill" value="Bowler" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                    <span>Bowler</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                    <input type="checkbox" name="filter-skill" value="All-Rounder" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                    <span>All-Rounder</span>
+                                </label>
+                            </div>
                         </div>
 
-                        <!-- DOB / U-19 Category Filter -->
-                        <div>
-                            <label for="pool-filter-dob" class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
+                        <!-- DOB / U-19 Multi-Select Checkbox Dropdown -->
+                        <div class="relative pool-checkbox-dropdown" id="dropdown-wrap-dob">
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
                                 <i class="fa-solid fa-calendar-days mr-1"></i> DOB / Age Group
                             </label>
-                            <select id="pool-filter-dob" onchange="applyAuctionPoolFilters()" class="w-full bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-spl-gold">
-                                <option value="">All Ages / DOB</option>
-                                <option value="U19">U-19 (2008 & Above)</option>
-                                <option value="NORMAL">Normal</option>
-                            </select>
+                            <button type="button" onclick="togglePoolFilterDropdown('dob', event)" class="w-full bg-premium-950 border border-premium-700 hover:border-spl-gold rounded-lg px-3 py-2 text-sm text-white flex items-center justify-between gap-2 focus:outline-none">
+                                <span id="pool-label-dob" class="truncate text-left">All Ages / DOB</span>
+                                <i class="fa-solid fa-chevron-down text-xs text-spl-gold flex-shrink-0"></i>
+                            </button>
+                            <div id="pool-menu-dob" onclick="event.stopPropagation()" class="hidden absolute left-0 right-0 mt-1.5 bg-premium-950 border border-spl-gold/70 rounded-xl shadow-2xl p-2 z-50 max-h-60 overflow-y-auto space-y-1">
+                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                    <input type="checkbox" name="filter-dob" value="U19" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                    <span>U-19 (2008 & Above)</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                    <input type="checkbox" name="filter-dob" value="NORMAL" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                    <span>Normal</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
 
@@ -908,7 +954,7 @@ service cloud.firestore {
                             <label class="block text-gray-300 text-sm font-bold mb-2">Gram Panchayat <span class="text-red-500">*</span></label>
                             <select id="reg-panchayat" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" required>
                                 <option value="" disabled selected>Select Panchayat...</option>
-                                <option value="Kotladi-Ramchandrapur">Kotladi-Ramchandrapur</option>
+                                <option value="Ramchandrapur-Kotaldi">Ramchandrapur-Kotaldi</option>
                                 <option value="Muradi">Muradi</option>
                                 <option value="Balitora">Balitora</option>
                                 <option value="Santuri">Santuri</option>
@@ -1299,7 +1345,7 @@ service cloud.firestore {
                         <div>
                             <label class="block text-gray-300 text-sm font-bold mb-2">Panchayat</label>
                             <select id="edit-reg-panchayat" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" required>
-                                <option value="Kotladi-Ramchandrapur">Kotladi-Ramchandrapur</option>
+                                <option value="Ramchandrapur-Kotaldi">Ramchandrapur-Kotaldi</option>
                                 <option value="Muradi">Muradi</option>
                                 <option value="Balitora">Balitora</option>
                                 <option value="Santuri">Santuri</option>
@@ -2115,11 +2161,21 @@ service cloud.firestore {
         };
 
         // --- ADMIN EDIT REGISTRATION ---
+        window.normalizePanchayatName = function(val) {
+            const raw = String(val || '').trim();
+            if (!raw) return '';
+            const lower = raw.toLowerCase();
+            if (lower === 'kotladi-ramchandrapur' || lower === 'kotaldi-ramchandrapur' || lower === 'ramchandrapur-kotaldi' || lower === 'ramchandrapur-kotladi') {
+                return 'Ramchandrapur-Kotaldi';
+            }
+            return raw;
+        };
+
         window.openAdminEditRegModal = function(id, name, dob, panchayat, village, phone, skill, status, srNo) {
             document.getElementById('edit-reg-id').value = id;
             document.getElementById('edit-reg-name').value = name || '';
             document.getElementById('edit-reg-dob').value = dob || '';
-            document.getElementById('edit-reg-panchayat').value = panchayat || 'Muradi';
+            document.getElementById('edit-reg-panchayat').value = window.normalizePanchayatName(panchayat) || 'Muradi';
             document.getElementById('edit-reg-village').value = village || '';
             document.getElementById('edit-reg-phone').value = phone || '';
             document.getElementById('edit-reg-skill').value = skill || 'Batsman';
@@ -2182,11 +2238,50 @@ service cloud.firestore {
             return yr !== null && yr >= 2008;
         };
 
-        function populateAuctionPoolFilterOptions(approved) {
-            const villageSelect = document.getElementById('pool-filter-village');
+        window.togglePoolFilterDropdown = function(type, e) {
+            if (e) e.stopPropagation();
+            const targetMenu = document.getElementById(`pool-menu-${type}`);
+            if (!targetMenu) return;
+            const willOpen = targetMenu.classList.contains('hidden');
+            ['panchayat', 'village', 'skill', 'dob'].forEach(k => {
+                document.getElementById(`pool-menu-${k}`)?.classList.add('hidden');
+            });
+            if (willOpen) {
+                targetMenu.classList.remove('hidden');
+            }
+        };
 
-            if (villageSelect) {
-                const currentVillage = villageSelect.value;
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.pool-checkbox-dropdown')) {
+                ['panchayat', 'village', 'skill', 'dob'].forEach(k => {
+                    document.getElementById(`pool-menu-${k}`)?.classList.add('hidden');
+                });
+            }
+        });
+
+        function updatePoolFilterLabels(panchayats, villages, skills, dobs) {
+            const pLbl = document.getElementById('pool-label-panchayat');
+            const vLbl = document.getElementById('pool-label-village');
+            const sLbl = document.getElementById('pool-label-skill');
+            const dLbl = document.getElementById('pool-label-dob');
+
+            if (pLbl) pLbl.textContent = panchayats.length === 0 ? 'All Panchayats' : (panchayats.length === 1 ? panchayats[0] : `${panchayats.length} Selected`);
+            if (vLbl) vLbl.textContent = villages.length === 0 ? 'All Villages' : (villages.length === 1 ? villages[0] : `${villages.length} Selected`);
+            if (sLbl) sLbl.textContent = skills.length === 0 ? 'All Skills' : (skills.length === 1 ? skills[0] : `${skills.length} Selected`);
+            if (dLbl) {
+                if (dobs.length === 0) dLbl.textContent = 'All Ages / DOB';
+                else if (dobs.length === 1) dLbl.textContent = dobs[0] === 'U19' ? 'U-19 (2008 & Above)' : 'Normal';
+                else dLbl.textContent = `${dobs.length} Selected`;
+            }
+        }
+
+        function populateAuctionPoolFilterOptions(approved) {
+            const villageMenu = document.getElementById('pool-menu-village');
+
+            if (villageMenu) {
+                const prevChecked = new Set(
+                    Array.from(document.querySelectorAll('input[name="filter-village"]:checked')).map(cb => cb.value)
+                );
                 const villages = Array.from(
                     new Set(
                         approved
@@ -2195,10 +2290,19 @@ service cloud.firestore {
                     )
                 ).sort((a, b) => a.localeCompare(b));
 
-                villageSelect.innerHTML = `<option value="">All Villages</option>` +
-                    villages.map(v => `<option value="${v.replace(/"/g, '&quot;')}">${v}</option>`).join('');
-                if (villages.includes(currentVillage)) {
-                    villageSelect.value = currentVillage;
+                if (villages.length === 0) {
+                    villageMenu.innerHTML = `<p class="text-xs text-gray-400 px-2 py-1">No villages found</p>`;
+                } else {
+                    villageMenu.innerHTML = villages.map(v => {
+                        const safeVal = window.escapeHtml(v);
+                        const checkedAttr = prevChecked.has(v) ? 'checked' : '';
+                        return `
+                            <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                <input type="checkbox" name="filter-village" value="${safeVal}" ${checkedAttr} onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                <span class="truncate">${safeVal}</span>
+                            </label>
+                        `;
+                    }).join('');
                 }
             }
         }
@@ -2207,6 +2311,13 @@ service cloud.firestore {
             const publicAuctionGrid = document.getElementById('public-auction-grid');
             const countEl = document.getElementById('pool-filter-count');
             if (!publicAuctionGrid) return;
+
+            const selectedPanchayats = Array.from(document.querySelectorAll('input[name="filter-panchayat"]:checked')).map(cb => cb.value);
+            const selectedVillages = Array.from(document.querySelectorAll('input[name="filter-village"]:checked')).map(cb => cb.value);
+            const selectedSkills = Array.from(document.querySelectorAll('input[name="filter-skill"]:checked')).map(cb => cb.value);
+            const selectedDobs = Array.from(document.querySelectorAll('input[name="filter-dob"]:checked')).map(cb => cb.value);
+
+            updatePoolFilterLabels(selectedPanchayats, selectedVillages, selectedSkills, selectedDobs);
 
             const approved = window.approvedPoolPlayers || [];
             if (approved.length === 0) {
@@ -2221,29 +2332,29 @@ service cloud.firestore {
             }
 
             const searchVal = (document.getElementById('pool-filter-search')?.value || '').trim().toLowerCase();
-            const panchayatVal = (document.getElementById('pool-filter-panchayat')?.value || '').trim().toLowerCase();
-            const villageVal = (document.getElementById('pool-filter-village')?.value || '').trim().toLowerCase();
-            const skillVal = (document.getElementById('pool-filter-skill')?.value || '').trim().toLowerCase();
-            const dobVal = (document.getElementById('pool-filter-dob')?.value || '').trim();
+            const panchayatSet = new Set(selectedPanchayats.map(v => v.toLowerCase()));
+            const villageSet = new Set(selectedVillages.map(v => v.toLowerCase()));
+            const skillSet = new Set(selectedSkills.map(v => v.toLowerCase()));
 
             const filtered = approved.filter(r => {
+                const displayPanchayat = window.normalizePanchayatName(r.panchayat);
                 if (searchVal) {
-                    const hay = `${r.name || ''} ${r.srNo || ''} ${r.village || ''} ${r.panchayat || ''}`.toLowerCase();
+                    const hay = `${r.name || ''} ${r.srNo || ''} ${r.village || ''} ${displayPanchayat}`.toLowerCase();
                     if (!hay.includes(searchVal)) return false;
                 }
-                if (panchayatVal && String(r.panchayat || '').trim().toLowerCase() !== panchayatVal) {
+                if (panchayatSet.size > 0 && !panchayatSet.has(displayPanchayat.toLowerCase())) {
                     return false;
                 }
-                if (villageVal && String(r.village || '').trim().toLowerCase() !== villageVal) {
+                if (villageSet.size > 0 && !villageSet.has(String(r.village || '').trim().toLowerCase())) {
                     return false;
                 }
-                if (skillVal && String(r.skill || '').trim().toLowerCase() !== skillVal) {
+                if (skillSet.size > 0 && !skillSet.has(String(r.skill || '').trim().toLowerCase())) {
                     return false;
                 }
-                if (dobVal) {
+                if (selectedDobs.length > 0) {
                     const isU19 = window.isU19Player(r);
-                    if (dobVal === 'U19' && !isU19) return false;
-                    if (dobVal === 'NORMAL' && isU19) return false;
+                    const matchesDob = (selectedDobs.includes('U19') && isU19) || (selectedDobs.includes('NORMAL') && !isU19);
+                    if (!matchesDob) return false;
                 }
                 return true;
             });
@@ -2268,19 +2379,24 @@ service cloud.firestore {
                 const u19Badge = u19
                     ? `<span class="bg-gradient-to-r from-orange-500 to-spl-red text-white text-[10px] font-extrabold px-2 py-0.5 rounded uppercase shadow-sm border border-white/20 tracking-wider">U-19</span>`
                     : '';
+                const u19DobHtml = (u19 && r.dob)
+                    ? `<p class="text-[11px] text-orange-300 font-semibold mt-0.5"><i class="fa-solid fa-cake-candles mr-1"></i> DOB: ${window.escapeHtml(r.dob)}</p>`
+                    : '';
+                const displayPanchayat = window.normalizePanchayatName(r.panchayat);
 
                 return `
                 <div onclick="openPlayerPosterModal('${r.id}')" class="bg-premium-800 border ${u19 ? 'border-orange-500/80' : 'border-green-600/50'} hover:border-spl-gold rounded-xl p-4 shadow-lg flex items-center justify-between gap-3 cursor-pointer group transition-all duration-200 hover:bg-premium-800/80">
                     <div class="flex items-center gap-3 min-w-0">
-                        <img src="${r.photo || 'https://placehold.co/100x100/1C335E/F4B036?text=SPL'}" alt="${r.name}" onerror="this.onerror=null;this.src='https://placehold.co/100x100/1C335E/F4B036?text=SPL';" class="w-14 h-14 object-cover rounded-full border-2 ${u19 ? 'border-orange-400' : 'border-green-500'} group-hover:border-spl-gold flex-shrink-0 transition-colors">
+                        <img src="${r.photo || 'https://placehold.co/100x100/1C335E/F4B036?text=SPL'}" alt="${window.escapeHtml(r.name)}" onerror="this.onerror=null;this.src='https://placehold.co/100x100/1C335E/F4B036?text=SPL';" class="w-14 h-14 object-cover rounded-full border-2 ${u19 ? 'border-orange-400' : 'border-green-500'} group-hover:border-spl-gold flex-shrink-0 transition-colors">
                         <div class="min-w-0">
                             <div class="flex flex-wrap items-center gap-1.5">
-                                <span class="bg-spl-gold text-premium-950 text-[10px] font-extrabold px-2 py-0.5 rounded uppercase">${r.srNo || 'SR-001'}</span>
+                                <span class="bg-spl-gold text-premium-950 text-[10px] font-extrabold px-2 py-0.5 rounded uppercase">${window.escapeHtml(r.srNo || 'SR-001')}</span>
                                 ${u19Badge}
                             </div>
-                            <h4 class="font-oswald font-bold text-white group-hover:text-spl-gold text-lg mt-1 break-words transition-colors">${r.name}</h4>
-                            <p class="text-xs text-spl-gold font-bold mt-0.5"><i class="fa-solid fa-baseball-bat-ball mr-1"></i> ${r.skill || 'Player'}</p>
-                            <p class="text-[11px] text-gray-300 break-words mt-0.5"><i class="fa-solid fa-location-dot text-gray-400 mr-1"></i> ${r.village || ''} (${r.panchayat || ''})</p>
+                            <h4 class="font-oswald font-bold text-white group-hover:text-spl-gold text-lg mt-1 break-words transition-colors">${window.escapeHtml(r.name)}</h4>
+                            <p class="text-xs text-spl-gold font-bold mt-0.5"><i class="fa-solid fa-baseball-bat-ball mr-1"></i> ${window.escapeHtml(r.skill || 'Player')}</p>
+                            ${u19DobHtml}
+                            <p class="text-[11px] text-gray-300 break-words mt-0.5"><i class="fa-solid fa-location-dot text-gray-400 mr-1"></i> ${window.escapeHtml(r.village || '')} (${window.escapeHtml(displayPanchayat)})</p>
                         </div>
                     </div>
                     <div class="flex-shrink-0 text-spl-gold/80 group-hover:text-spl-gold text-xs font-bold uppercase flex flex-col items-center gap-1 pl-2">
@@ -2294,15 +2410,10 @@ service cloud.firestore {
 
         window.resetAuctionPoolFilters = function() {
             const s = document.getElementById('pool-filter-search');
-            const p = document.getElementById('pool-filter-panchayat');
-            const v = document.getElementById('pool-filter-village');
-            const k = document.getElementById('pool-filter-skill');
-            const d = document.getElementById('pool-filter-dob');
             if (s) s.value = '';
-            if (p) p.value = '';
-            if (v) v.value = '';
-            if (k) k.value = '';
-            if (d) d.value = '';
+            document.querySelectorAll('input[name="filter-panchayat"], input[name="filter-village"], input[name="filter-skill"], input[name="filter-dob"]').forEach(cb => {
+                cb.checked = false;
+            });
             window.applyAuctionPoolFilters();
         };
 
@@ -2327,7 +2438,7 @@ service cloud.firestore {
                         const safeId = window.escapeHtml(r.id);
                         const safeName = window.escapeHtml(r.name);
                         const safeSkill = window.escapeHtml(r.skill || '');
-                        const safePanchayat = window.escapeHtml(r.panchayat || '');
+                        const safePanchayat = window.escapeHtml(window.normalizePanchayatName(r.panchayat || ''));
                         const safeVillage = window.escapeHtml(r.village || '');
                         const safePhone = window.escapeHtml(r.phone || '');
                         return `
@@ -2365,7 +2476,7 @@ service cloud.firestore {
                         const safeSr = window.escapeHtml(r.srNo || 'SR-001');
                         const safeSkill = window.escapeHtml(r.skill || 'Player');
                         const safeVillage = window.escapeHtml(r.village || '');
-                        const safePanchayat = window.escapeHtml(r.panchayat || '');
+                        const safePanchayat = window.escapeHtml(window.normalizePanchayatName(r.panchayat || ''));
                         const u19Badge = window.isU19Player(r)
                             ? `<span class="bg-gradient-to-r from-orange-500 to-spl-red text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase ml-1">U-19</span>`
                             : '';
@@ -2405,6 +2516,10 @@ service cloud.firestore {
             const u19PosterBadge = isU19
                 ? `<span class="bg-gradient-to-r from-orange-500 to-spl-red text-white font-oswald text-xs font-extrabold uppercase px-3 py-1 rounded-full border border-white/40 shadow-lg tracking-wider">U-19 PLAYER</span>`
                 : `<span class="bg-premium-950/90 text-spl-gold font-oswald text-xs font-bold uppercase px-3 py-1 rounded-full border border-spl-gold/50 shadow"><i class="fa-solid fa-circle-check mr-1"></i> Verified Player</span>`;
+            const u19PosterDob = (isU19 && r.dob)
+                ? `<p class="text-xs text-orange-300 font-bold uppercase tracking-wider"><i class="fa-solid fa-cake-candles mr-1.5"></i> DOB: ${window.escapeHtml(r.dob)}</p>`
+                : '';
+            const displayPanchayat = window.normalizePanchayatName(r.panchayat);
 
             const spl6LogoUrl = window.customCardLogo || localStorage.getItem('spl_card_logo_backup') || "https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/SPL-6%20logo.jpeg?raw=true";
             const fallbackSplLogo = "https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/main/ChatGPT%20Image%20Sep%205%2C%202026%2C%2003_22_40%20PM.png";
@@ -2449,8 +2564,9 @@ service cloud.firestore {
                             <i class="fa-solid fa-location-dot text-spl-gold mr-1.5"></i> Village: <span class="text-spl-gold">${r.village || ''}</span>
                         </p>
                         <p class="text-xs text-gray-300 font-semibold uppercase tracking-widest break-words">
-                            Gram Panchayat: ${r.panchayat || ''}
+                            Gram Panchayat: ${displayPanchayat}
                         </p>
+                        ${u19PosterDob}
                     </div>
 
                     <div class="flex items-center justify-between text-[10px] text-gray-300 font-bold uppercase tracking-widest border-t border-premium-800 pt-3">
