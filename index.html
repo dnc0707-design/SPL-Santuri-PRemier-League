@@ -1008,7 +1008,7 @@ service cloud.firestore {
                     </div>
 
                     <div class="mt-8 pb-4">
-                        <button type="submit" id="reg-submit-btn" onclick="handleRegSubmit(event)" class="w-full bg-spl-gold text-premium-950 font-oswald font-bold text-2xl uppercase tracking-wide py-4 rounded hover:bg-spl-goldHover transition-colors shadow-lg cursor-pointer"><i class="fa-solid fa-paper-plane mr-2"></i> Submit Registration</button>
+                        <button type="submit" id="reg-submit-btn" class="w-full bg-spl-gold text-premium-950 font-oswald font-bold text-2xl uppercase tracking-wide py-4 rounded hover:bg-spl-goldHover transition-colors shadow-lg cursor-pointer"><i class="fa-solid fa-paper-plane mr-2"></i> Submit Registration</button>
                     </div>
                 </form>
             </div>
@@ -1099,7 +1099,7 @@ service cloud.firestore {
                     </div>
 
                     <div class="mt-8 pb-4">
-                        <button type="submit" id="owner-reg-submit-btn" onclick="handleOwnerRegSubmit(event)" class="w-full bg-spl-gold text-premium-950 font-oswald font-bold text-2xl uppercase tracking-wide py-4 rounded hover:bg-spl-goldHover transition-colors shadow-lg cursor-pointer"><i class="fa-solid fa-paper-plane mr-2"></i> Submit Owner Registration</button>
+                        <button type="submit" id="owner-reg-submit-btn" class="w-full bg-spl-gold text-premium-950 font-oswald font-bold text-2xl uppercase tracking-wide py-4 rounded hover:bg-spl-goldHover transition-colors shadow-lg cursor-pointer"><i class="fa-solid fa-paper-plane mr-2"></i> Submit Owner Registration</button>
                     </div>
                 </form>
             </div>
@@ -1867,8 +1867,12 @@ service cloud.firestore {
         }
 
         async function savePlayerDocWithRestFallback(dataObj) {
+            // Use a single deterministic doc ID so SDK + REST fallback can NEVER create duplicate records
+            const docId = dataObj.id || ('REG_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7).toUpperCase());
+            dataObj.id = docId;
+
             const colPath = `artifacts/${myAppId}/public/data/players`;
-            const restUrl = `https://firestore.googleapis.com/v1/projects/spl-santuri-premier-league/databases/(default)/documents/${colPath}`;
+            const restPatchUrl = `https://firestore.googleapis.com/v1/projects/spl-santuri-premier-league/databases/(default)/documents/${colPath}/${docId}`;
             const fields = {};
             for (const k in dataObj) {
                 fields[k] = encodeFirestoreRestValue(dataObj[k]);
@@ -1876,17 +1880,17 @@ service cloud.firestore {
 
             if (db) {
                 try {
-                    const sdkPromise = addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), dataObj);
-                    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('SDK_TIMEOUT')), 5500));
-                    const docRef = await Promise.race([sdkPromise, timeoutPromise]);
-                    return docRef.id;
+                    const sdkPromise = setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'players', docId), dataObj);
+                    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('SDK_TIMEOUT')), 4500));
+                    await Promise.race([sdkPromise, timeoutPromise]);
+                    return docId;
                 } catch (sdkErr) {
-                    console.warn('Firestore SDK write slow/blocked on desktop, using REST POST:', sdkErr);
+                    console.warn('Firestore SDK write slow/blocked, using idempotent REST PATCH:', sdkErr);
                 }
             }
 
-            const res = await fetch(restUrl, {
-                method: 'POST',
+            const res = await fetch(restPatchUrl, {
+                method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ fields })
             });
@@ -1894,13 +1898,18 @@ service cloud.firestore {
                 const errText = await res.text();
                 throw new Error(`REST save failed (${res.status}): ${errText}`);
             }
-            const json = await res.json();
-            return json.name ? json.name.split('/').pop() : ('REST_' + Date.now());
+            return docId;
         }
 
         let isSubmittingPlayerReg = false;
+        let lastPlayerRegSignature = '';
+        let lastPlayerRegTimestamp = 0;
+
         window.handleRegSubmit = async function(e) {
-            if (e) e.preventDefault();
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
             if (isSubmittingPlayerReg) return;
 
             const name = (document.getElementById('reg-name')?.value || '').trim();
@@ -1945,6 +1954,14 @@ service cloud.firestore {
                 return;
             }
 
+            // Prevent accidental double-submission of the exact same player within 30 seconds
+            const submissionSig = `${name.toLowerCase()}|${dob}|${cleanPhone}`;
+            if (submissionSig === lastPlayerRegSignature && (Date.now() - lastPlayerRegTimestamp) < 30000) {
+                closeRegModal();
+                showNotice(`Your registration for ${name} is already submitted and Pending for Approval!`, "Pending for Approval");
+                return;
+            }
+
             const btn = document.getElementById('reg-submit-btn');
             isSubmittingPlayerReg = true;
             if (btn) {
@@ -1971,13 +1988,21 @@ service cloud.firestore {
             try {
                 const savedId = await savePlayerDocWithRestFallback(regData);
                 regData.id = savedId;
+                lastPlayerRegSignature = submissionSig;
+                lastPlayerRegTimestamp = Date.now();
+
                 const localList = getLocalList('registrations', []).filter(x => x.id !== savedId);
                 localList.push(regData);
                 setLocalList('registrations', localList);
                 renderRegistrationsList([...(window.allRegistrations || []).filter(x => x.id !== savedId), regData]);
 
+                document.getElementById('player-reg-form')?.reset();
+                ['reg_photo', 'reg_aadhaar', 'reg_payment'].forEach(t => window.clearCropPreview(t));
                 closeRegModal();
-                showNotice("Registration Submitted Successfully! Your details and ₹50 payment are pending admin verification. You will receive a WhatsApp confirmation with your SR No once approved.", "Success");
+                showNotice(
+                    `✅ Registration Submitted Successfully!\n\nPlayer: ${name}\nStatus: PENDING FOR APPROVAL\n\nOur admin team is verifying your details and ₹50 payment screenshot. Once approved, your official SR Number will appear in the Season 6 Auction Pool and you will receive a WhatsApp confirmation.`,
+                    "Submitted — Pending for Approval"
+                );
             } catch (error) {
                 console.error("Reg Error:", error);
                 const localList = getLocalList('registrations', []);
@@ -1985,8 +2010,12 @@ service cloud.firestore {
                 localList.push(regData);
                 setLocalList('registrations', localList);
                 renderRegistrationsList(localList);
+                document.getElementById('player-reg-form')?.reset();
                 closeRegModal();
-                showNotice("Registration saved locally! Pending admin verification.", "Submitted");
+                showNotice(
+                    `✅ Registration Saved!\n\nPlayer: ${name}\nStatus: PENDING FOR APPROVAL\n\nYour form has been recorded and is awaiting admin verification.`,
+                    "Submitted — Pending for Approval"
+                );
             } finally {
                 isSubmittingPlayerReg = false;
                 if (btn) {
@@ -2608,9 +2637,14 @@ service cloud.firestore {
         // --- OWNER REGISTRATION MANAGEMENT ---
         window.allOwnerRegistrations = [];
         let isSubmittingOwnerReg = false;
+        let lastOwnerRegSignature = '';
+        let lastOwnerRegTimestamp = 0;
 
         window.handleOwnerRegSubmit = async function(e) {
-            if (e) e.preventDefault();
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
             if (isSubmittingOwnerReg) return;
 
             const franchiseName = (document.getElementById('owner-franchise-name')?.value || '').trim();
@@ -2648,6 +2682,13 @@ service cloud.firestore {
                 return;
             }
 
+            const ownerSig = `${franchiseName.toLowerCase()}|${cleanPhone}`;
+            if (ownerSig === lastOwnerRegSignature && (Date.now() - lastOwnerRegTimestamp) < 30000) {
+                closeOwnerRegModal();
+                showNotice(`Franchise registration for "${franchiseName}" is already submitted and Pending for Approval!`, "Pending for Approval");
+                return;
+            }
+
             const btn = document.getElementById('owner-reg-submit-btn');
             isSubmittingOwnerReg = true;
             if (btn) {
@@ -2670,13 +2711,21 @@ service cloud.firestore {
             try {
                 const savedId = await savePlayerDocWithRestFallback(regData);
                 regData.id = savedId;
+                lastOwnerRegSignature = ownerSig;
+                lastOwnerRegTimestamp = Date.now();
+
                 const localList = getLocalList('owner_registrations', []).filter(x => x.id !== savedId);
                 localList.push(regData);
                 setLocalList('owner_registrations', localList);
                 renderOwnerRegistrationsList([...(window.allOwnerRegistrations || []).filter(x => x.id !== savedId), regData]);
 
+                document.getElementById('owner-reg-form')?.reset();
+                window.clearCropPreview('owner_payment');
                 closeOwnerRegModal();
-                showNotice("Owner Registration Submitted Successfully! Your details and ₹2,000 advance payment are pending admin verification. You will receive a WhatsApp confirmation once approved.", "Success");
+                showNotice(
+                    `✅ Owner Registration Submitted Successfully!\n\nFranchise: ${franchiseName}\nStatus: PENDING FOR APPROVAL\n\nOur admin team is verifying your details and ₹2,000 advance payment screenshot. You will receive a WhatsApp confirmation once approved.`,
+                    "Submitted — Pending for Approval"
+                );
             } catch (error) {
                 console.error("Owner Reg Error:", error);
                 const localList = getLocalList('owner_registrations', []);
@@ -2684,8 +2733,12 @@ service cloud.firestore {
                 localList.push(regData);
                 setLocalList('owner_registrations', localList);
                 renderOwnerRegistrationsList(localList);
+                document.getElementById('owner-reg-form')?.reset();
                 closeOwnerRegModal();
-                showNotice("Owner Registration saved locally! Pending admin verification.", "Submitted");
+                showNotice(
+                    `✅ Owner Registration Saved!\n\nFranchise: ${franchiseName}\nStatus: PENDING FOR APPROVAL\n\nYour application has been recorded and is awaiting admin verification.`,
+                    "Submitted — Pending for Approval"
+                );
             } finally {
                 isSubmittingOwnerReg = false;
                 if (btn) {
