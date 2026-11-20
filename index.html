@@ -893,11 +893,11 @@ service cloud.firestore {
                     </div>
                 </div>
 
-                <form id="player-reg-form" onsubmit="handleRegSubmit(event)" class="space-y-4 sm:space-y-6">
+                <form id="player-reg-form" novalidate onsubmit="handleRegSubmit(event)" class="space-y-4 sm:space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-gray-300 text-sm font-bold mb-2">Full Name <span class="text-red-500">*</span></label>
-                            <input type="text" id="reg-name" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" required>
+                            <input type="text" id="reg-name" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="Enter your full name" required>
                         </div>
                         <div>
                             <label class="block text-gray-300 text-sm font-bold mb-2">Date of Birth <span class="text-red-500">*</span></label>
@@ -918,12 +918,12 @@ service cloud.firestore {
                         </div>
                         <div>
                             <label class="block text-gray-300 text-sm font-bold mb-2">Village Name <span class="text-red-500">*</span></label>
-                            <input type="text" id="reg-village" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" required>
+                            <input type="text" id="reg-village" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="Enter village name" required>
                         </div>
 
                         <div>
                             <label class="block text-gray-300 text-sm font-bold mb-2">Phone / WhatsApp No <span class="text-red-500">*</span></label>
-                            <input type="tel" id="reg-phone" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="10-digit number" pattern="[0-9]{10}" required>
+                            <input type="tel" id="reg-phone" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="10-digit WhatsApp number" maxlength="15" required>
                         </div>
 
                         <div>
@@ -942,27 +942,27 @@ service cloud.firestore {
                         <!-- Player Photo -->
                         <div class="bg-premium-800 p-4 rounded border border-premium-700 flex flex-col items-center text-center">
                             <label class="block text-spl-gold text-sm font-bold mb-2 uppercase w-full border-b border-premium-700 pb-2">1. Player Photo <span class="text-red-500">*</span></label>
-                            <input type="file" id="file-reg-photo" accept="image/*" onchange="openCropper(event, 'reg_photo', 1)" class="w-full text-xs text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-premium-700 file:text-white hover:file:bg-premium-600 mb-3" required>
+                            <input type="file" id="file-reg-photo" accept="image/*" onchange="openCropper(event, 'reg_photo', 1)" class="w-full text-xs text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-premium-700 file:text-white hover:file:bg-premium-600 mb-3">
                             <img id="preview-reg_photo" class="hidden h-24 w-24 object-cover rounded-full border-2 border-spl-gold shadow-lg mt-auto">
                         </div>
 
                         <!-- Aadhaar Card -->
                         <div class="bg-premium-800 p-4 rounded border border-premium-700 flex flex-col items-center text-center">
                             <label class="block text-spl-gold text-sm font-bold mb-2 uppercase w-full border-b border-premium-700 pb-2">2. Aadhaar Card <span class="text-red-500">*</span></label>
-                            <input type="file" id="file-reg-aadhaar" accept="image/*" onchange="openCropper(event, 'reg_aadhaar', NaN)" class="w-full text-xs text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-premium-700 file:text-white hover:file:bg-premium-600 mb-3" required>
+                            <input type="file" id="file-reg-aadhaar" accept="image/*" onchange="openCropper(event, 'reg_aadhaar', NaN)" class="w-full text-xs text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-premium-700 file:text-white hover:file:bg-premium-600 mb-3">
                             <img id="preview-reg_aadhaar" class="hidden h-24 w-full object-contain rounded border border-gray-600 shadow-lg mt-auto">
                         </div>
 
                         <!-- Payment Screenshot -->
                         <div class="bg-premium-800 p-4 rounded border border-premium-700 flex flex-col items-center text-center">
                             <label class="block text-spl-gold text-sm font-bold mb-2 uppercase w-full border-b border-premium-700 pb-2">3. Payment SS <span class="text-red-500">*</span></label>
-                            <input type="file" id="file-reg-payment" accept="image/*" onchange="openCropper(event, 'reg_payment', NaN)" class="w-full text-xs text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-premium-700 file:text-white hover:file:bg-premium-600 mb-3" required>
+                            <input type="file" id="file-reg-payment" accept="image/*" onchange="openCropper(event, 'reg_payment', NaN)" class="w-full text-xs text-gray-400 file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:bg-premium-700 file:text-white hover:file:bg-premium-600 mb-3">
                             <img id="preview-reg_payment" class="hidden h-24 w-full object-contain rounded border border-gray-600 shadow-lg mt-auto">
                         </div>
                     </div>
 
                     <div class="mt-8 pb-4">
-                        <button type="submit" id="reg-submit-btn" class="w-full bg-spl-gold text-premium-950 font-oswald font-bold text-2xl uppercase tracking-wide py-4 rounded hover:bg-spl-goldHover transition-colors shadow-lg"><i class="fa-solid fa-paper-plane mr-2"></i> Submit Registration</button>
+                        <button type="submit" id="reg-submit-btn" onclick="handleRegSubmit(event)" class="w-full bg-spl-gold text-premium-950 font-oswald font-bold text-2xl uppercase tracking-wide py-4 rounded hover:bg-spl-goldHover transition-colors shadow-lg cursor-pointer"><i class="fa-solid fa-paper-plane mr-2"></i> Submit Registration</button>
                     </div>
                 </form>
             </div>
@@ -1001,7 +1001,7 @@ service cloud.firestore {
                     </div>
                 </div>
 
-                <form id="owner-reg-form" onsubmit="handleOwnerRegSubmit(event)" class="space-y-4 sm:space-y-6">
+                <form id="owner-reg-form" novalidate onsubmit="handleOwnerRegSubmit(event)" class="space-y-4 sm:space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="md:col-span-2">
                             <label class="block text-gray-300 text-sm font-bold mb-2">Franchise / Team Name <span class="text-red-500">*</span></label>
@@ -1038,7 +1038,7 @@ service cloud.firestore {
                     <!-- Payment Screenshot Upload -->
                     <div class="bg-premium-800 p-4 rounded border border-premium-700 flex flex-col items-center text-center max-w-md mx-auto">
                         <label class="block text-spl-gold text-sm font-bold mb-2 uppercase w-full border-b border-premium-700 pb-2">Upload Advance Payment Screenshot (₹2,000) <span class="text-red-500">*</span></label>
-                        <input type="file" id="file-owner-payment" accept="image/*" onchange="openCropper(event, 'owner_payment', NaN)" class="w-full text-xs text-gray-400 file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-spl-gold file:text-premium-950 file:font-bold hover:file:bg-spl-goldHover mb-3 mt-1" required>
+                        <input type="file" id="file-owner-payment" accept="image/*" onchange="openCropper(event, 'owner_payment', NaN)" class="w-full text-xs text-gray-400 file:mr-2 file:py-1.5 file:px-3 file:rounded file:border-0 file:bg-spl-gold file:text-premium-950 file:font-bold hover:file:bg-spl-goldHover mb-3 mt-1">
                         <img id="preview-owner_payment" class="hidden h-28 w-full object-contain rounded border border-gray-600 shadow-lg mt-auto">
                     </div>
 
@@ -1053,7 +1053,7 @@ service cloud.firestore {
                     </div>
 
                     <div class="mt-8 pb-4">
-                        <button type="submit" id="owner-reg-submit-btn" class="w-full bg-spl-gold text-premium-950 font-oswald font-bold text-2xl uppercase tracking-wide py-4 rounded hover:bg-spl-goldHover transition-colors shadow-lg"><i class="fa-solid fa-paper-plane mr-2"></i> Submit Owner Registration</button>
+                        <button type="submit" id="owner-reg-submit-btn" onclick="handleOwnerRegSubmit(event)" class="w-full bg-spl-gold text-premium-950 font-oswald font-bold text-2xl uppercase tracking-wide py-4 rounded hover:bg-spl-goldHover transition-colors shadow-lg cursor-pointer"><i class="fa-solid fa-paper-plane mr-2"></i> Submit Owner Registration</button>
                     </div>
                 </form>
             </div>
@@ -1803,30 +1803,117 @@ service cloud.firestore {
             document.getElementById('rules-modal').classList.add('hidden');
         };
 
+        function encodeFirestoreRestValue(val) {
+            if (val === null || val === undefined) return { nullValue: null };
+            if (typeof val === 'boolean') return { booleanValue: val };
+            if (typeof val === 'number') {
+                return Number.isInteger(val) ? { integerValue: String(val) } : { doubleValue: val };
+            }
+            if (Array.isArray(val)) {
+                return { arrayValue: { values: val.map(encodeFirestoreRestValue) } };
+            }
+            if (typeof val === 'object') {
+                const fields = {};
+                for (const k in val) fields[k] = encodeFirestoreRestValue(val[k]);
+                return { mapValue: { fields } };
+            }
+            return { stringValue: String(val) };
+        }
+
+        async function savePlayerDocWithRestFallback(dataObj) {
+            const colPath = `artifacts/${myAppId}/public/data/players`;
+            const restUrl = `https://firestore.googleapis.com/v1/projects/spl-santuri-premier-league/databases/(default)/documents/${colPath}`;
+            const fields = {};
+            for (const k in dataObj) {
+                fields[k] = encodeFirestoreRestValue(dataObj[k]);
+            }
+
+            if (db) {
+                try {
+                    const sdkPromise = addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), dataObj);
+                    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('SDK_TIMEOUT')), 5500));
+                    const docRef = await Promise.race([sdkPromise, timeoutPromise]);
+                    return docRef.id;
+                } catch (sdkErr) {
+                    console.warn('Firestore SDK write slow/blocked on desktop, using REST POST:', sdkErr);
+                }
+            }
+
+            const res = await fetch(restUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fields })
+            });
+            if (!res.ok) {
+                const errText = await res.text();
+                throw new Error(`REST save failed (${res.status}): ${errText}`);
+            }
+            const json = await res.json();
+            return json.name ? json.name.split('/').pop() : ('REST_' + Date.now());
+        }
+
+        let isSubmittingPlayerReg = false;
         window.handleRegSubmit = async function(e) {
-            e.preventDefault();
+            if (e) e.preventDefault();
+            if (isSubmittingPlayerReg) return;
+
+            const name = (document.getElementById('reg-name')?.value || '').trim();
+            const dob = (document.getElementById('reg-dob')?.value || '').trim();
+            const panchayat = (document.getElementById('reg-panchayat')?.value || '').trim();
+            const village = (document.getElementById('reg-village')?.value || '').trim();
+            const rawPhone = (document.getElementById('reg-phone')?.value || '').trim();
+            const cleanPhone = rawPhone.replace(/\D/g, '').slice(-10);
+            const skillEl = document.querySelector('input[name="reg-skill"]:checked');
+
+            if (!name) {
+                showNotice("Please enter your Full Name.", "Missing Field");
+                return;
+            }
+            if (!dob) {
+                showNotice("Please select your Date of Birth.", "Missing Field");
+                return;
+            }
+            if (!panchayat) {
+                showNotice("Please select your Gram Panchayat.", "Missing Field");
+                return;
+            }
+            if (!village) {
+                showNotice("Please enter your Village Name.", "Missing Field");
+                return;
+            }
+            if (cleanPhone.length !== 10) {
+                showNotice("Please enter a valid 10-digit Phone / WhatsApp number.", "Invalid Phone Number");
+                return;
+            }
+            if (!skillEl) {
+                showNotice("Please select your Primary Skill (Batsman, Bowler, or All-Rounder).", "Missing Skill");
+                return;
+            }
+
             const photo = window.croppedImages['reg_photo'];
             const aadhaar = window.croppedImages['reg_aadhaar'];
             const payment = window.croppedImages['reg_payment'];
 
             if (!photo || !aadhaar || !payment) {
-                showNotice("Please upload and crop all three required attachments (Photo, Aadhaar, and Payment SS).", "Missing Attachments");
+                showNotice("Please upload and click 'Apply Crop & Save' for all three attachments (1. Player Photo, 2. Aadhaar Card, and 3. Payment SS).", "Missing Attachments");
                 return;
             }
 
             const btn = document.getElementById('reg-submit-btn');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Submitting...';
-            btn.disabled = true;
+            isSubmittingPlayerReg = true;
+            if (btn) {
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Submitting...';
+                btn.disabled = true;
+            }
 
-            const skillEl = document.querySelector('input[name="reg-skill"]:checked');
             const regData = {
                 isRegistration: true,
-                name: document.getElementById('reg-name').value.trim(),
-                dob: document.getElementById('reg-dob').value,
-                panchayat: document.getElementById('reg-panchayat').value,
-                village: document.getElementById('reg-village').value.trim(),
-                phone: document.getElementById('reg-phone').value.trim(),
-                skill: skillEl ? skillEl.value : 'Batsman',
+                name: name,
+                dob: dob,
+                panchayat: panchayat,
+                village: village,
+                phone: cleanPhone,
+                skill: skillEl.value,
                 photo: photo,
                 aadhaar: aadhaar,
                 payment: payment,
@@ -1836,7 +1923,13 @@ service cloud.firestore {
             };
 
             try {
-                await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), regData);
+                const savedId = await savePlayerDocWithRestFallback(regData);
+                regData.id = savedId;
+                const localList = getLocalList('registrations', []).filter(x => x.id !== savedId);
+                localList.push(regData);
+                setLocalList('registrations', localList);
+                renderRegistrationsList([...(window.allRegistrations || []).filter(x => x.id !== savedId), regData]);
+
                 closeRegModal();
                 showNotice("Registration Submitted Successfully! Your details and ₹50 payment are pending admin verification. You will receive a WhatsApp confirmation with your SR No once approved.", "Success");
             } catch (error) {
@@ -1849,8 +1942,11 @@ service cloud.firestore {
                 closeRegModal();
                 showNotice("Registration saved locally! Pending admin verification.", "Submitted");
             } finally {
-                btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i> Submit Registration';
-                btn.disabled = false;
+                isSubmittingPlayerReg = false;
+                if (btn) {
+                    btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i> Submit Registration';
+                    btn.disabled = false;
+                }
             }
         };
 
@@ -2395,35 +2491,60 @@ service cloud.firestore {
 
         // --- OWNER REGISTRATION MANAGEMENT ---
         window.allOwnerRegistrations = [];
+        let isSubmittingOwnerReg = false;
 
         window.handleOwnerRegSubmit = async function(e) {
-            e.preventDefault();
+            if (e) e.preventDefault();
+            if (isSubmittingOwnerReg) return;
+
+            const franchiseName = (document.getElementById('owner-franchise-name')?.value || '').trim();
+            const nameInputs = document.querySelectorAll('input[name="owner_name[]"]');
+            const ownerNames = Array.from(nameInputs).map(i => i.value.trim()).filter(v => v !== '');
+            const rawPhone = (document.getElementById('owner-phone')?.value || '').trim();
+            const cleanPhone = rawPhone.replace(/\D/g, '').slice(-10);
+            const address = (document.getElementById('owner-address')?.value || '').trim();
             const payment = window.croppedImages['owner_payment'];
-            
+
+            if (!franchiseName) {
+                showNotice("Please enter your Franchise / Team Name.", "Missing Field");
+                return;
+            }
+            if (ownerNames.length === 0) {
+                showNotice("Please enter at least one Owner Name.", "Missing Field");
+                return;
+            }
+            if (cleanPhone.length !== 10) {
+                showNotice("Please enter a valid 10-digit WhatsApp number.", "Invalid Phone Number");
+                return;
+            }
+            if (!address) {
+                showNotice("Please enter your Full Address.", "Missing Field");
+                return;
+            }
             if (!payment) {
-                showNotice("Please upload and crop your ₹2,000 Advance Payment Screenshot.", "Missing Payment Proof");
+                showNotice("Please upload and click 'Apply Crop & Save' for your ₹2,000 Advance Payment Screenshot.", "Missing Payment Proof");
                 return;
             }
             
             const decl = document.getElementById('owner-declaration');
-            if(!decl.checked) {
+            if(!decl || !decl.checked) {
                 showNotice("You must check the declaration box to agree to the rules.", "Declaration Required");
                 return;
             }
 
             const btn = document.getElementById('owner-reg-submit-btn');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Submitting...';
-            btn.disabled = true;
-
-            const nameInputs = document.querySelectorAll('input[name="owner_name[]"]');
-            const ownerNames = Array.from(nameInputs).map(i => i.value.trim()).filter(v => v !== '');
+            isSubmittingOwnerReg = true;
+            if (btn) {
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Submitting...';
+                btn.disabled = true;
+            }
 
             const regData = {
                 isOwnerRegistration: true,
-                franchiseName: document.getElementById('owner-franchise-name').value.trim(),
+                franchiseName: franchiseName,
                 owners: ownerNames,
-                phone: document.getElementById('owner-phone').value.trim(),
-                address: document.getElementById('owner-address').value.trim(),
+                phone: cleanPhone,
+                address: address,
                 payment: payment,
                 status: 'pending',
                 franchiseId: null,
@@ -2431,7 +2552,13 @@ service cloud.firestore {
             };
 
             try {
-                await addDoc(collection(db, 'artifacts', myAppId, 'public', 'data', 'players'), regData);
+                const savedId = await savePlayerDocWithRestFallback(regData);
+                regData.id = savedId;
+                const localList = getLocalList('owner_registrations', []).filter(x => x.id !== savedId);
+                localList.push(regData);
+                setLocalList('owner_registrations', localList);
+                renderOwnerRegistrationsList([...(window.allOwnerRegistrations || []).filter(x => x.id !== savedId), regData]);
+
                 closeOwnerRegModal();
                 showNotice("Owner Registration Submitted Successfully! Your details and ₹2,000 advance payment are pending admin verification. You will receive a WhatsApp confirmation once approved.", "Success");
             } catch (error) {
@@ -2444,8 +2571,11 @@ service cloud.firestore {
                 closeOwnerRegModal();
                 showNotice("Owner Registration saved locally! Pending admin verification.", "Submitted");
             } finally {
-                btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i> Submit Owner Registration';
-                btn.disabled = false;
+                isSubmittingOwnerReg = false;
+                if (btn) {
+                    btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-2"></i> Submit Owner Registration';
+                    btn.disabled = false;
+                }
             }
         };
 
