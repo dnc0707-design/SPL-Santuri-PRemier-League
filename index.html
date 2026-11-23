@@ -1730,16 +1730,27 @@ service cloud.firestore {
             
             let isReg = currentCropType.startsWith('reg_') || currentCropType === 'owner_payment';
             let isQR = currentCropType === 'payment_qr' || currentCropType === 'card_logo';
-            let maxDim = isReg ? 600 : (isQR ? 450 : 1000);
-            let quality = isReg ? 0.6 : (isQR ? 0.8 : 0.85);
             let isPng = (currentCropType === 'team' || currentCropType === 'sponsor' || currentCropType === 'partner');
+            let maxDim = isReg ? 600 : (isQR ? 450 : (isPng ? 420 : 1000));
+            let quality = isReg ? 0.6 : (isQR ? 0.8 : 0.82);
 
             const canvas = cropperInstance.getCroppedCanvas({
                 maxWidth: maxDim, maxHeight: maxDim,
                 imageSmoothingEnabled: true, imageSmoothingQuality: 'medium', fillColor: isPng ? 'transparent' : '#ffffff',
             });
             
-            let base64Url = isPng ? canvas.toDataURL('image/png') : canvas.toDataURL('image/jpeg', quality); 
+            let base64Url = isPng ? canvas.toDataURL('image/png') : canvas.toDataURL('image/jpeg', quality);
+            // Guarantee logo stays well under Firestore's 1MB (1,048,487 bytes) document limit
+            if (base64Url.length > 750000) {
+                const compactCanvas = cropperInstance.getCroppedCanvas({
+                    maxWidth: 320, maxHeight: 320,
+                    imageSmoothingEnabled: true, imageSmoothingQuality: 'medium', fillColor: isPng ? 'transparent' : '#ffffff',
+                });
+                base64Url = compactCanvas.toDataURL('image/webp', 0.78);
+                if (base64Url.length > 750000) {
+                    base64Url = compactCanvas.toDataURL('image/jpeg', 0.72);
+                }
+            }
             
             window.croppedImages[currentCropType] = base64Url;
             const previewImg = document.getElementById('preview-' + currentCropType);
@@ -3606,6 +3617,25 @@ service cloud.firestore {
         async function saveTeamDocToDatabase(teamId, teamObj) {
             const colPath = `artifacts/${myAppId}/public/data/teams`;
             const restPatchUrl = `https://firestore.googleapis.com/v1/projects/spl-santuri-premier-league/databases/(default)/documents/${colPath}/${encodeURIComponent(teamId)}`;
+
+            // Safety check: if an existing or uploaded logo exceeds 900KB, downscale via canvas before Firestore write
+            if (teamObj.logo && teamObj.logo.startsWith('data:image') && teamObj.logo.length > 900000) {
+                teamObj.logo = await new Promise((resolve) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const scale = Math.min(1, 360 / Math.max(img.width, img.height));
+                        const c = document.createElement('canvas');
+                        c.width = Math.round(img.width * scale);
+                        c.height = Math.round(img.height * scale);
+                        const ctx = c.getContext('2d');
+                        ctx.drawImage(img, 0, 0, c.width, c.height);
+                        resolve(c.toDataURL('image/webp', 0.78));
+                    };
+                    img.onerror = () => resolve(teamObj.logo);
+                    img.src = teamObj.logo;
+                });
+            }
+
             const fields = {};
             for (const k in teamObj) {
                 fields[k] = encodeFirestoreRestValue(teamObj[k]);
