@@ -91,15 +91,15 @@
 
                 <!-- Desktop Nav -->
                 <nav class="hidden lg:flex items-center gap-2.5 xl:gap-4 font-oswald text-xs xl:text-sm tracking-wide uppercase whitespace-nowrap">
-                    <a href="#" class="nav-link active text-spl-gold">Home</a>
-                    <a href="#auction-pool" class="nav-link hover:text-spl-gold transition-colors">Auction Pool</a>
-                    <a href="#rules-banner-section" class="nav-link hover:text-spl-gold transition-colors">Rules</a>
-                    <a href="#teams" class="nav-link hover:text-spl-gold transition-colors">Franchises</a>
-                    <a href="#gallery" class="nav-link hover:text-spl-gold transition-colors">Gallery</a>
-                    <a href="#about" class="nav-link hover:text-spl-gold transition-colors">About</a>
-                    <a href="#seasons" class="nav-link hover:text-spl-gold transition-colors">Seasons</a>
-                    <a href="#sponsors" class="nav-link hover:text-spl-gold transition-colors">Sponsors</a>
-                    <a href="#partners" class="nav-link hover:text-spl-gold transition-colors">Partners</a>
+                    <a href="#" onclick="closeAuctionPoolPage()" class="nav-link active text-spl-gold">Home</a>
+                    <button type="button" onclick="openAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors uppercase">Auction Pool</button>
+                    <a href="#rules-banner-section" onclick="closeAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors">Rules</a>
+                    <a href="#teams" onclick="closeAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors">Franchises</a>
+                    <a href="#gallery" onclick="closeAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors">Gallery</a>
+                    <a href="#about" onclick="closeAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors">About</a>
+                    <a href="#seasons" onclick="closeAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors">Seasons</a>
+                    <a href="#sponsors" onclick="closeAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors">Sponsors</a>
+                    <a href="#partners" onclick="closeAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors">Partners</a>
                     <button type="button" onclick="openRegModal(event)" class="bg-spl-gold/15 text-spl-gold border border-spl-gold/40 font-bold px-2.5 py-1 rounded hover:bg-spl-gold hover:text-premium-950 transition-colors">Player Reg.</button>
                     <button type="button" onclick="openOwnerRegModal(event)" class="bg-spl-red/15 text-spl-red border border-spl-red/40 font-bold px-2.5 py-1 rounded hover:bg-spl-red hover:text-white transition-colors">Owner Reg.</button>
                 </nav>
@@ -119,15 +119,15 @@
         <!-- Mobile Nav (Dropdown Menu) -->
         <div id="mobile-menu" class="hidden lg:hidden bg-premium-950/95 border-t border-premium-700 shadow-2xl backdrop-blur-xl max-h-[82vh] overflow-y-auto">
             <nav class="flex flex-col px-6 py-6 font-oswald text-lg uppercase tracking-wide space-y-3">
-                <a href="#" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 text-spl-gold flex items-center"><i class="fa-solid fa-house w-6 mr-2 text-spl-gold"></i> Home</a>
-                <a href="#auction-pool" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-users w-6 mr-2 text-spl-gold"></i> Auction Pool</a>
-                <a href="#rules-banner-section" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-scale-balanced w-6 mr-2 text-spl-gold"></i> SPL-6 Rules</a>
-                <a href="#teams" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-shield-halved w-6 mr-2 text-spl-gold"></i> Franchises</a>
-                <a href="#gallery" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-images w-6 mr-2 text-spl-gold"></i> Gallery</a>
-                <a href="#about" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-circle-info w-6 mr-2 text-spl-gold"></i> About Us</a>
-                <a href="#seasons" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-book-open w-6 mr-2 text-spl-gold"></i> Seasons</a>
-                <a href="#sponsors" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-handshake w-6 mr-2 text-spl-gold"></i> Sponsors</a>
-                <a href="#partners" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-handshake-angle w-6 mr-2 text-spl-gold"></i> Partners</a>
+                <a href="#" onclick="closeAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 text-spl-gold flex items-center"><i class="fa-solid fa-house w-6 mr-2 text-spl-gold"></i> Home</a>
+                <button type="button" onclick="openAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center uppercase text-left"><i class="fa-solid fa-users w-6 mr-2 text-spl-gold"></i> Auction Pool</button>
+                <a href="#rules-banner-section" onclick="closeAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-scale-balanced w-6 mr-2 text-spl-gold"></i> SPL-6 Rules</a>
+                <a href="#teams" onclick="closeAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-shield-halved w-6 mr-2 text-spl-gold"></i> Franchises</a>
+                <a href="#gallery" onclick="closeAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-images w-6 mr-2 text-spl-gold"></i> Gallery</a>
+                <a href="#about" onclick="closeAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-circle-info w-6 mr-2 text-spl-gold"></i> About Us</a>
+                <a href="#seasons" onclick="closeAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-book-open w-6 mr-2 text-spl-gold"></i> Seasons</a>
+                <a href="#sponsors" onclick="closeAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-handshake w-6 mr-2 text-spl-gold"></i> Sponsors</a>
+                <a href="#partners" onclick="closeAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-handshake-angle w-6 mr-2 text-spl-gold"></i> Partners</a>
                 
                 <div class="pt-2 flex flex-col gap-3">
                     <button type="button" onclick="openRegModal(event)" class="w-full bg-spl-gold text-premium-950 font-bold px-4 py-3 rounded text-center uppercase text-base shadow-md flex items-center justify-center"><i class="fa-solid fa-user-plus mr-2"></i> Player Registration</button>
@@ -139,7 +139,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="flex-grow">
+    <main id="main-home-view" class="flex-grow">
         <!-- Hero Section (Premium Depth Gradient) -->
         <section class="relative bg-gradient-to-b from-premium-800 via-premium-900 to-premium-950 pt-16 pb-24 overflow-hidden border-b border-premium-700/50">
             <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0 opacity-30">
@@ -176,152 +176,35 @@
                     </div>
                 </div>
 
-                <div class="mt-12">
-                    <a href="#seasons" class="inline-block bg-transparent border border-premium-600 hover:border-spl-gold text-gray-400 hover:text-spl-gold font-oswald font-bold px-6 py-2 uppercase tracking-wider rounded transition-colors text-sm"><i class="fa-solid fa-book-open mr-2"></i> View Season History</a>
+                <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+                    <button type="button" onclick="openAuctionPoolPage()" class="inline-flex items-center bg-premium-800 hover:bg-spl-gold text-spl-gold hover:text-premium-950 border-2 border-spl-gold font-oswald font-bold px-7 py-2.5 uppercase tracking-wider rounded-lg transition-all text-base shadow-lg cursor-pointer">
+                        <i class="fa-solid fa-users-viewfinder mr-2.5"></i> Season 6 Auction Pool <span id="hero-pool-badge" class="ml-2 bg-spl-red text-white text-xs px-2 py-0.5 rounded-full">View All</span>
+                    </button>
+                    <a href="#seasons" class="inline-block bg-transparent border border-premium-600 hover:border-spl-gold text-gray-300 hover:text-spl-gold font-oswald font-bold px-6 py-2.5 uppercase tracking-wider rounded-lg transition-colors text-base"><i class="fa-solid fa-book-open mr-2"></i> View Season History</a>
                 </div>
             </div>
         </section>
 
-        <!-- Registered Players / Auction Pool Section (First Section Below Hero Buttons) -->
-        <section id="auction-pool" class="py-20 bg-premium-950 border-b border-premium-700/50 scroll-mt-20 relative">
-            <div class="absolute inset-0 bg-spl-gold/5 blur-3xl z-0 pointer-events-none"></div>
-            <div class="container mx-auto px-4 relative z-10">
-                <div class="text-center mb-8">
-                    <h2 class="font-oswald text-4xl md:text-5xl font-bold uppercase tracking-wide mb-4 relative inline-block text-white">
-                        Season 6 <span class="text-spl-gold">Auction Pool</span>
-                        <div class="w-3/4 h-1 bg-spl-gold mx-auto mt-2 rounded"></div>
-                    </h2>
-                    <p class="text-gray-300 font-medium mt-2">Officially registered players listed in SR No order. Tap any player to open their full-screen <span class="text-spl-gold font-bold">FB / Insta Poster</span> screenshot!</p>
-                </div>
-
-                <!-- Auction Pool Filter Bar -->
-                <div class="max-w-7xl mx-auto mb-8 bg-premium-900/90 border border-premium-700 rounded-2xl p-4 sm:p-5 shadow-xl relative z-30">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
-                        <!-- Search by Name / SR No -->
-                        <div>
-                            <label for="pool-filter-search" class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
-                                <i class="fa-solid fa-magnifying-glass mr-1"></i> Name / SR No
-                            </label>
-                            <input type="text" id="pool-filter-search" oninput="applyAuctionPoolFilters()" placeholder="Search player or SR..." class="w-full bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-spl-gold">
+        <!-- Compact Auction Pool Callout Banner (Keeps Home Page Short & Clean) -->
+        <section id="auction-pool-banner" class="py-12 bg-premium-950 border-b border-premium-700/50 relative">
+            <div class="container mx-auto px-4 max-w-5xl">
+                <div class="bg-gradient-to-r from-premium-900 via-premium-800 to-premium-900 border-2 border-spl-gold/70 rounded-2xl p-6 sm:p-8 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="text-center md:text-left">
+                        <div class="inline-flex items-center gap-2 bg-spl-gold/15 text-spl-gold border border-spl-gold/40 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-2">
+                            <i class="fa-solid fa-users"></i> Official Auction Roster
                         </div>
-
-                        <!-- Panchayat Multi-Select Checkbox Dropdown -->
-                        <div class="relative pool-checkbox-dropdown" id="dropdown-wrap-panchayat">
-                            <label class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
-                                <i class="fa-solid fa-landmark mr-1"></i> Gram Panchayat
-                            </label>
-                            <button type="button" onclick="togglePoolFilterDropdown('panchayat', event)" class="w-full bg-premium-950 border border-premium-700 hover:border-spl-gold rounded-lg px-3 py-2 text-sm text-white flex items-center justify-between gap-2 focus:outline-none">
-                                <span id="pool-label-panchayat" class="truncate text-left">All Panchayats</span>
-                                <i class="fa-solid fa-chevron-down text-xs text-spl-gold flex-shrink-0"></i>
-                            </button>
-                            <div id="pool-menu-panchayat" onclick="event.stopPropagation()" class="hidden absolute left-0 right-0 mt-1.5 bg-premium-950 border border-spl-gold/70 rounded-xl shadow-2xl p-2 z-50 max-h-60 overflow-y-auto space-y-1">
-                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
-                                    <input type="checkbox" name="filter-panchayat" value="Ramchandrapur-Kotaldi" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
-                                    <span>Ramchandrapur-Kotaldi</span>
-                                </label>
-                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
-                                    <input type="checkbox" name="filter-panchayat" value="Muradi" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
-                                    <span>Muradi</span>
-                                </label>
-                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
-                                    <input type="checkbox" name="filter-panchayat" value="Balitora" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
-                                    <span>Balitora</span>
-                                </label>
-                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
-                                    <input type="checkbox" name="filter-panchayat" value="Santuri" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
-                                    <span>Santuri</span>
-                                </label>
-                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
-                                    <input type="checkbox" name="filter-panchayat" value="Tarabari" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
-                                    <span>Tarabari</span>
-                                </label>
-                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
-                                    <input type="checkbox" name="filter-panchayat" value="Garshika" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
-                                    <span>Garshika</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- Village Multi-Select Checkbox Dropdown -->
-                        <div class="relative pool-checkbox-dropdown" id="dropdown-wrap-village">
-                            <label class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
-                                <i class="fa-solid fa-location-dot mr-1"></i> Village
-                            </label>
-                            <button type="button" onclick="togglePoolFilterDropdown('village', event)" class="w-full bg-premium-950 border border-premium-700 hover:border-spl-gold rounded-lg px-3 py-2 text-sm text-white flex items-center justify-between gap-2 focus:outline-none">
-                                <span id="pool-label-village" class="truncate text-left">All Villages</span>
-                                <i class="fa-solid fa-chevron-down text-xs text-spl-gold flex-shrink-0"></i>
-                            </button>
-                            <div id="pool-menu-village" onclick="event.stopPropagation()" class="hidden absolute left-0 right-0 mt-1.5 bg-premium-950 border border-spl-gold/70 rounded-xl shadow-2xl p-2 z-50 max-h-60 overflow-y-auto space-y-1">
-                                <p class="text-xs text-gray-400 px-2 py-1">Loading villages...</p>
-                            </div>
-                        </div>
-
-                        <!-- Skill Category Multi-Select Checkbox Dropdown -->
-                        <div class="relative pool-checkbox-dropdown" id="dropdown-wrap-skill">
-                            <label class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
-                                <i class="fa-solid fa-baseball-bat-ball mr-1"></i> Skill Category
-                            </label>
-                            <button type="button" onclick="togglePoolFilterDropdown('skill', event)" class="w-full bg-premium-950 border border-premium-700 hover:border-spl-gold rounded-lg px-3 py-2 text-sm text-white flex items-center justify-between gap-2 focus:outline-none">
-                                <span id="pool-label-skill" class="truncate text-left">All Skills</span>
-                                <i class="fa-solid fa-chevron-down text-xs text-spl-gold flex-shrink-0"></i>
-                            </button>
-                            <div id="pool-menu-skill" onclick="event.stopPropagation()" class="hidden absolute left-0 right-0 mt-1.5 bg-premium-950 border border-spl-gold/70 rounded-xl shadow-2xl p-2 z-50 max-h-60 overflow-y-auto space-y-1">
-                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
-                                    <input type="checkbox" name="filter-skill" value="Batsman" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
-                                    <span>Batsman</span>
-                                </label>
-                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
-                                    <input type="checkbox" name="filter-skill" value="Bowler" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
-                                    <span>Bowler</span>
-                                </label>
-                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
-                                    <input type="checkbox" name="filter-skill" value="All-Rounder" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
-                                    <span>All-Rounder</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- DOB / U-19 Multi-Select Checkbox Dropdown -->
-                        <div class="relative pool-checkbox-dropdown" id="dropdown-wrap-dob">
-                            <label class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
-                                <i class="fa-solid fa-calendar-days mr-1"></i> DOB / Age Group
-                            </label>
-                            <button type="button" onclick="togglePoolFilterDropdown('dob', event)" class="w-full bg-premium-950 border border-premium-700 hover:border-spl-gold rounded-lg px-3 py-2 text-sm text-white flex items-center justify-between gap-2 focus:outline-none">
-                                <span id="pool-label-dob" class="truncate text-left">All Ages / DOB</span>
-                                <i class="fa-solid fa-chevron-down text-xs text-spl-gold flex-shrink-0"></i>
-                            </button>
-                            <div id="pool-menu-dob" onclick="event.stopPropagation()" class="hidden absolute left-0 right-0 mt-1.5 bg-premium-950 border border-spl-gold/70 rounded-xl shadow-2xl p-2 z-50 max-h-60 overflow-y-auto space-y-1">
-                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
-                                    <input type="checkbox" name="filter-dob" value="U19" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
-                                    <span>U-19 (2008 & Above)</span>
-                                </label>
-                                <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
-                                    <input type="checkbox" name="filter-dob" value="NORMAL" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
-                                    <span>Normal</span>
-                                </label>
-                            </div>
-                        </div>
+                        <h2 class="font-oswald text-3xl sm:text-4xl font-bold uppercase tracking-wide text-white">
+                            Season 6 <span class="text-spl-gold">Auction Pool</span>
+                        </h2>
+                        <p id="home-pool-summary" class="text-gray-300 text-sm sm:text-base mt-1 font-medium">
+                            Browse all officially approved players in SR No order, filter by Village, Panchayat, Skill, or U-19, and download FB/Insta Posters.
+                        </p>
                     </div>
-
-                    <!-- Filter Status & Reset Row -->
-                    <div class="flex flex-wrap items-center justify-between gap-2 mt-3 pt-3 border-t border-premium-800 text-xs">
-                        <span id="pool-filter-count" class="text-gray-300 font-semibold">Loading approved players...</span>
-                        <div class="flex items-center gap-4">
-                            <button type="button" onclick="refreshAuctionPool()" class="text-blue-300 hover:text-white font-bold uppercase tracking-wider flex items-center gap-1.5 transition">
-                                <i class="fa-solid fa-arrows-rotate"></i> Refresh
-                            </button>
-                            <button type="button" onclick="resetAuctionPoolFilters()" class="text-spl-gold hover:text-white font-bold uppercase tracking-wider flex items-center gap-1.5 transition">
-                                <i class="fa-solid fa-rotate-left"></i> Reset Filters
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="public-auction-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-7xl mx-auto">
-                    <!-- Approved Players injected dynamically in SR No order -->
-                    <div class="w-full text-center py-8 col-span-full">
-                        <i class="fa-solid fa-spinner fa-spin text-3xl text-spl-gold mb-2"></i>
-                        <p class="text-gray-400 font-bold tracking-widest uppercase text-sm">Loading Auction Pool...</p>
+                    <div class="flex-shrink-0 w-full md:w-auto">
+                        <button type="button" onclick="openAuctionPoolPage()" class="w-full md:w-auto bg-spl-gold hover:bg-spl-goldHover text-premium-950 font-oswald font-bold px-8 py-4 uppercase tracking-wider rounded-xl transition-all text-xl shadow-[0_0_25px_rgba(244,176,54,0.45)] flex items-center justify-center gap-3 cursor-pointer">
+                            <span>Open Auction Pool</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -472,7 +355,7 @@ service cloud.firestore {
                         </div>
                     </div>
 
-                    <!-- TAB 0: PLAYER REGISTRATIONS (NEW) -->
+                    <!-- TAB 0: PLAYER REGISTRATIONS -->
                     <div id="admin-tab-registrations" class="admin-tab-content">
                         <!-- Open / Close Registrations Control Panel -->
                         <div class="mb-8 bg-premium-800/80 p-6 rounded-lg border border-spl-gold/50 shadow-inner">
@@ -567,7 +450,7 @@ service cloud.firestore {
                         </div>
                     </div>
 
-                    <!-- TAB 0B: OWNER REGISTRATIONS (NEW) -->
+                    <!-- TAB 0B: OWNER REGISTRATIONS -->
                     <div id="admin-tab-owner_regs" class="admin-tab-content hidden">
                         <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-orange-500 pl-3">Pending Franchise / Owner Registrations</h3>
                         <p class="text-gray-400 text-sm mb-6">Review franchise owner details and ₹2,000 confirmation payment screenshots. Approving an owner generates an official Franchise Reg ID and opens WhatsApp confirmation.</p>
@@ -620,7 +503,7 @@ service cloud.firestore {
                             <input type="hidden" id="team-edit-id" value="">
                             <div>
                                 <label class="block text-gray-400 text-sm font-bold mb-2">Team Code / Abbr</label>
-                                <input type="text" id="team-id" class="w-full bg-premium-800 border border-premium-700 rounded px-4 py-2 text-white uppercase focus:outline-none focus:border-spl-gold" placeholder="e.g. SS" maxlength="3" required>
+                                <input type="text" id="team-id" class="w-full bg-premium-800 border border-premium-700 rounded px-4 py-2 text-white uppercase focus:outline-none focus:border-spl-gold" placeholder="e.g. SS" maxlength="5" required>
                             </div>
                             <div>
                                 <label class="block text-gray-400 text-sm font-bold mb-2">Team Full Name</label>
@@ -640,7 +523,7 @@ service cloud.firestore {
                                 </select>
                             </div>
                             <div class="md:col-span-3">
-                                <label class="block text-gray-400 text-sm font-bold mb-2">Upload Team Logo (Local Storage)</label>
+                                <label class="block text-gray-400 text-sm font-bold mb-2">Upload Team Logo (Database Synced)</label>
                                 <input type="file" id="team-logo-file" accept="image/*" onchange="openCropper(event, 'team', 1)" class="w-full bg-premium-800 border border-premium-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-spl-gold file:text-premium-950 hover:file:bg-spl-goldHover">
                                 <img id="preview-team" class="hidden mt-4 h-24 object-contain rounded border border-premium-600 shadow-lg">
                                 <input type="hidden" id="team-existing-logo" value="">
@@ -896,9 +779,9 @@ service cloud.firestore {
                 <div>
                     <h3 class="font-oswald text-2xl font-bold uppercase mb-4 text-spl-gold">Quick Links</h3>
                     <ul class="space-y-3 text-sm text-gray-400 font-medium">
-                        <li><a href="#" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> About SPL</a></li>
-                        <li><a href="#" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> Rules & Regulations</a></li>
-                        <li><a href="#" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> Anti-Corruption Policy</a></li>
+                        <li><a href="#" onclick="closeAuctionPoolPage()" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> About SPL</a></li>
+                        <li><button type="button" onclick="openAuctionPoolPage()" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> Season 6 Auction Pool</button></li>
+                        <li><a href="#" onclick="openRulesModal(); return false;" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> Rules & Regulations</a></li>
                         <li><a href="#" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> Contact Us</a></li>
                     </ul>
                 </div>
@@ -913,6 +796,164 @@ service cloud.firestore {
             </div>
         </div>
     </footer>
+
+    <!-- Dedicated Auction Pool Page View (Separate Page from Main Landing Page) -->
+    <section id="auction-pool-page" class="hidden flex-grow bg-premium-950 min-h-screen pb-20 relative">
+        <div class="absolute inset-0 bg-spl-gold/5 blur-3xl z-0 pointer-events-none"></div>
+        <!-- Sticky Sub-Header Bar with Back to Home -->
+        <div class="bg-premium-900/95 backdrop-blur-md border-b border-premium-700 sticky top-20 z-40 shadow-lg">
+            <div class="container mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3 max-w-7xl">
+                <button type="button" onclick="closeAuctionPoolPage()" class="bg-premium-800 hover:bg-spl-gold text-white hover:text-premium-950 font-oswald font-bold uppercase text-sm tracking-wider px-4 py-2 rounded-lg border border-spl-gold/60 transition flex items-center gap-2 shadow cursor-pointer">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Home
+                </button>
+                <div class="text-center">
+                    <h2 class="font-oswald text-xl sm:text-2xl font-bold uppercase tracking-wide text-white">
+                        SPL Season 6 <span class="text-spl-gold">Auction Pool</span>
+                    </h2>
+                </div>
+                <button type="button" onclick="openRegModal(event)" class="bg-spl-gold hover:bg-spl-goldHover text-premium-950 font-oswald font-bold uppercase text-xs sm:text-sm tracking-wider px-4 py-2 rounded-lg transition shadow cursor-pointer">
+                    <i class="fa-solid fa-user-plus mr-1"></i> Register Player
+                </button>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4 pt-8 relative z-10">
+            <div class="text-center mb-8">
+                <p class="text-gray-300 font-medium text-sm sm:text-base">Officially registered players listed in SR No order. Tap any player card to open their full-screen <span class="text-spl-gold font-bold">FB / Insta Poster</span> screenshot!</p>
+            </div>
+
+            <!-- Auction Pool Filter Bar -->
+            <div class="max-w-7xl mx-auto mb-8 bg-premium-900/90 border border-premium-700 rounded-2xl p-4 sm:p-5 shadow-xl relative z-30">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+                    <!-- Search by Name / SR No -->
+                    <div>
+                        <label for="pool-filter-search" class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
+                            <i class="fa-solid fa-magnifying-glass mr-1"></i> Name / SR No
+                        </label>
+                        <input type="text" id="pool-filter-search" oninput="applyAuctionPoolFilters()" placeholder="Search player or SR..." class="w-full bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-spl-gold">
+                    </div>
+
+                    <!-- Panchayat Multi-Select Checkbox Dropdown -->
+                    <div class="relative pool-checkbox-dropdown" id="dropdown-wrap-panchayat">
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
+                            <i class="fa-solid fa-landmark mr-1"></i> Gram Panchayat
+                        </label>
+                        <button type="button" onclick="togglePoolFilterDropdown('panchayat', event)" class="w-full bg-premium-950 border border-premium-700 hover:border-spl-gold rounded-lg px-3 py-2 text-sm text-white flex items-center justify-between gap-2 focus:outline-none">
+                            <span id="pool-label-panchayat" class="truncate text-left">All Panchayats</span>
+                            <i class="fa-solid fa-chevron-down text-xs text-spl-gold flex-shrink-0"></i>
+                        </button>
+                        <div id="pool-menu-panchayat" onclick="event.stopPropagation()" class="hidden absolute left-0 right-0 mt-1.5 bg-premium-950 border border-spl-gold/70 rounded-xl shadow-2xl p-2 z-50 max-h-60 overflow-y-auto space-y-1">
+                            <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                <input type="checkbox" name="filter-panchayat" value="Ramchandrapur-Kotaldi" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                <span>Ramchandrapur-Kotaldi</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                <input type="checkbox" name="filter-panchayat" value="Muradi" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                <span>Muradi</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                <input type="checkbox" name="filter-panchayat" value="Balitora" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                <span>Balitora</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                <input type="checkbox" name="filter-panchayat" value="Santuri" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                <span>Santuri</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                <input type="checkbox" name="filter-panchayat" value="Tarabari" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                <span>Tarabari</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                <input type="checkbox" name="filter-panchayat" value="Garshika" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                <span>Garshika</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Village Multi-Select Checkbox Dropdown -->
+                    <div class="relative pool-checkbox-dropdown" id="dropdown-wrap-village">
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
+                            <i class="fa-solid fa-location-dot mr-1"></i> Village
+                        </label>
+                        <button type="button" onclick="togglePoolFilterDropdown('village', event)" class="w-full bg-premium-950 border border-premium-700 hover:border-spl-gold rounded-lg px-3 py-2 text-sm text-white flex items-center justify-between gap-2 focus:outline-none">
+                            <span id="pool-label-village" class="truncate text-left">All Villages</span>
+                            <i class="fa-solid fa-chevron-down text-xs text-spl-gold flex-shrink-0"></i>
+                        </button>
+                        <div id="pool-menu-village" onclick="event.stopPropagation()" class="hidden absolute left-0 right-0 mt-1.5 bg-premium-950 border border-spl-gold/70 rounded-xl shadow-2xl p-2 z-50 max-h-60 overflow-y-auto space-y-1">
+                            <p class="text-xs text-gray-400 px-2 py-1">Loading villages...</p>
+                        </div>
+                    </div>
+
+                    <!-- Skill Category Multi-Select Checkbox Dropdown -->
+                    <div class="relative pool-checkbox-dropdown" id="dropdown-wrap-skill">
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
+                            <i class="fa-solid fa-baseball-bat-ball mr-1"></i> Skill Category
+                        </label>
+                        <button type="button" onclick="togglePoolFilterDropdown('skill', event)" class="w-full bg-premium-950 border border-premium-700 hover:border-spl-gold rounded-lg px-3 py-2 text-sm text-white flex items-center justify-between gap-2 focus:outline-none">
+                            <span id="pool-label-skill" class="truncate text-left">All Skills</span>
+                            <i class="fa-solid fa-chevron-down text-xs text-spl-gold flex-shrink-0"></i>
+                        </button>
+                        <div id="pool-menu-skill" onclick="event.stopPropagation()" class="hidden absolute left-0 right-0 mt-1.5 bg-premium-950 border border-spl-gold/70 rounded-xl shadow-2xl p-2 z-50 max-h-60 overflow-y-auto space-y-1">
+                            <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                <input type="checkbox" name="filter-skill" value="Batsman" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                <span>Batsman</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                <input type="checkbox" name="filter-skill" value="Bowler" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                <span>Bowler</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                <input type="checkbox" name="filter-skill" value="All-Rounder" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                <span>All-Rounder</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- DOB / U-19 Multi-Select Checkbox Dropdown -->
+                    <div class="relative pool-checkbox-dropdown" id="dropdown-wrap-dob">
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-spl-gold mb-1">
+                            <i class="fa-solid fa-calendar-days mr-1"></i> DOB / Age Group
+                        </label>
+                        <button type="button" onclick="togglePoolFilterDropdown('dob', event)" class="w-full bg-premium-950 border border-premium-700 hover:border-spl-gold rounded-lg px-3 py-2 text-sm text-white flex items-center justify-between gap-2 focus:outline-none">
+                            <span id="pool-label-dob" class="truncate text-left">All Ages / DOB</span>
+                            <i class="fa-solid fa-chevron-down text-xs text-spl-gold flex-shrink-0"></i>
+                        </button>
+                        <div id="pool-menu-dob" onclick="event.stopPropagation()" class="hidden absolute left-0 right-0 mt-1.5 bg-premium-950 border border-spl-gold/70 rounded-xl shadow-2xl p-2 z-50 max-h-60 overflow-y-auto space-y-1">
+                            <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                <input type="checkbox" name="filter-dob" value="U19" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                <span>U-19 (2008 & Above)</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
+                                <input type="checkbox" name="filter-dob" value="NORMAL" onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
+                                <span>Normal</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Status & Reset Row -->
+                <div class="flex flex-wrap items-center justify-between gap-2 mt-3 pt-3 border-t border-premium-800 text-xs">
+                    <span id="pool-filter-count" class="text-gray-300 font-semibold">Loading approved players...</span>
+                    <div class="flex items-center gap-4">
+                        <button type="button" onclick="refreshAuctionPool()" class="text-blue-300 hover:text-white font-bold uppercase tracking-wider flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-arrows-rotate"></i> Refresh
+                        </button>
+                        <button type="button" onclick="resetAuctionPoolFilters()" class="text-spl-gold hover:text-white font-bold uppercase tracking-wider flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-rotate-left"></i> Reset Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="public-auction-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-7xl mx-auto">
+                <!-- Approved Players injected dynamically in SR No order -->
+                <div class="w-full text-center py-8 col-span-full">
+                    <i class="fa-solid fa-spinner fa-spin text-3xl text-spl-gold mb-2"></i>
+                    <p class="text-gray-400 font-bold tracking-widest uppercase text-sm">Loading Auction Pool...</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Player Registration Modal -->
     <div id="reg-modal" class="hidden fixed inset-0 z-[150] bg-premium-950/90 backdrop-blur-md flex items-center justify-center p-2 sm:p-4">
@@ -1070,7 +1111,7 @@ service cloud.firestore {
 
                         <div>
                             <label class="block text-gray-300 text-sm font-bold mb-2">Primary Phone / WhatsApp No <span class="text-red-500">*</span></label>
-                            <input type="tel" id="owner-phone" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="10-digit WhatsApp number" pattern="[0-9]{10}" required>
+                            <input type="tel" id="owner-phone" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2.5 text-white focus:outline-none focus:border-spl-gold shadow-inner" placeholder="10-digit WhatsApp number" maxlength="15" required>
                         </div>
 
                         <div>
@@ -1124,7 +1165,7 @@ service cloud.firestore {
         </div>
     </div>
 
-    <!-- Rules Modal (Replaces YouTube Section) -->
+    <!-- Rules Modal -->
     <div id="rules-modal" class="hidden fixed inset-0 z-[250] bg-premium-950/90 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-premium-900 border border-spl-gold rounded-xl max-w-4xl w-full shadow-2xl relative my-4 flex flex-col max-h-[90vh]">
             <div class="flex-shrink-0 bg-premium-900 border-b border-premium-700 p-4 rounded-t-xl flex justify-between items-center z-10">
@@ -1580,6 +1621,7 @@ service cloud.firestore {
             
             if (user === 'admin' && pass === '1234') {
                 window.isAdmin = true;
+                window.closeAuctionPoolPage(true);
                 document.getElementById('admin-dashboard').classList.remove('hidden');
                 window.switchAdminTab('registrations');
                 window.toggleAdminModal();
@@ -1593,6 +1635,47 @@ service cloud.firestore {
                 showNotice('Invalid Username or Password. Please try again.', 'Login Failed');
             }
         };
+
+        // --- DEDICATED AUCTION POOL PAGE NAVIGATION ---
+        window.openAuctionPoolPage = function(fromPopState = false) {
+            const homeView = document.getElementById('main-home-view');
+            const poolPage = document.getElementById('auction-pool-page');
+            if (!homeView || !poolPage) return;
+
+            homeView.classList.add('hidden');
+            poolPage.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (!fromPopState) {
+                try {
+                    if (!history.state || !history.state.splAuctionPoolOpen) {
+                        history.pushState({ splAuctionPoolOpen: true }, '', '#auction-pool');
+                    }
+                } catch (err) {}
+            }
+        };
+
+        window.closeAuctionPoolPage = function(fromPopState = false) {
+            const homeView = document.getElementById('main-home-view');
+            const poolPage = document.getElementById('auction-pool-page');
+            if (!homeView || !poolPage || poolPage.classList.contains('hidden')) return;
+
+            poolPage.classList.add('hidden');
+            homeView.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (!fromPopState) {
+                try {
+                    if (history.state && history.state.splAuctionPoolOpen) {
+                        history.back();
+                    }
+                } catch (err) {}
+            }
+        };
+
+        if (window.location.hash === '#auction-pool') {
+            setTimeout(() => window.openAuctionPoolPage(true), 50);
+        }
 
         // --- CROPPER STATE & LOGIC ---
         window.croppedImages = { season: null, team: null, gallery: null, sponsor: null, partner: null, reg_photo: null, reg_aadhaar: null, reg_payment: null, owner_payment: null, payment_qr: null, card_logo: null };
@@ -1954,7 +2037,6 @@ service cloud.firestore {
                 return;
             }
 
-            // Prevent accidental double-submission of the exact same player within 30 seconds
             const submissionSig = `${name.toLowerCase()}|${dob}|${cleanPhone}`;
             if (submissionSig === lastPlayerRegSignature && (Date.now() - lastPlayerRegTimestamp) < 30000) {
                 closeRegModal();
@@ -2096,7 +2178,6 @@ service cloud.firestore {
                     const nextSrNum = maxNum + 1;
                     const newSrNo = "SR-" + String(nextSrNum).padStart(3, '0');
 
-                    // Optimistic update in local cache & UI immediately
                     const localList = getLocalList('registrations', []);
                     const idx = localList.findIndex(x => String(x.id) === String(docId));
                     if (idx > -1) {
@@ -2529,6 +2610,16 @@ service cloud.firestore {
             }
 
             window.approvedPoolPlayers = approved;
+            const heroBadge = document.getElementById('hero-pool-badge');
+            const homeSummary = document.getElementById('home-pool-summary');
+            if (heroBadge) {
+                heroBadge.textContent = approved.length > 0 ? `${approved.length} Players` : 'View All';
+            }
+            if (homeSummary) {
+                homeSummary.innerHTML = approved.length > 0
+                    ? `Currently <span class="text-spl-gold font-bold">${approved.length} approved players</span> registered in SR No order. Filter by Village, Panchayat, Skill, or U-19 and view FB/Insta Posters.`
+                    : `Browse all officially approved players in SR No order, filter by Village, Panchayat, Skill, or U-19, and download FB/Insta Posters.`;
+            }
             populateAuctionPoolFilterOptions(approved);
             window.applyAuctionPoolFilters();
         }
@@ -2628,9 +2719,14 @@ service cloud.firestore {
         };
 
         window.addEventListener('popstate', () => {
-            const modal = document.getElementById('player-poster-modal');
-            if (modal && !modal.classList.contains('hidden')) {
+            const posterModal = document.getElementById('player-poster-modal');
+            if (posterModal && !posterModal.classList.contains('hidden')) {
                 window.closePlayerPosterModal(null, true);
+                return;
+            }
+            const poolPage = document.getElementById('auction-pool-page');
+            if (poolPage && !poolPage.classList.contains('hidden')) {
+                window.closeAuctionPoolPage(true);
             }
         });
 
@@ -3031,14 +3127,12 @@ service cloud.firestore {
             let resolved = false;
             const markResolved = () => { resolved = true; };
 
-            // 1. Fire REST API immediately in parallel so desktop browsers never hang on WebChannel
             fetchPlayersViaRestFallback()
                 .then((found) => {
                     if (found) markResolved();
                 })
                 .catch(err => console.warn('REST immediate fetch warning:', err));
 
-            // 2. Hard safety fallback timer: never leave "Loading Auction Pool..." stuck on screen
             const safetyTimer = setTimeout(() => {
                 if (!resolved && (window.allRegistrations || []).length === 0) {
                     renderRegistrationsList(getLocalList('registrations', []));
@@ -3164,11 +3258,9 @@ service cloud.firestore {
 
                 app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
-                // Force long-polling on desktop networks/proxies where WebChannel streams stall
                 const { initializeFirestore } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
                 db = initializeFirestore(app, { experimentalForceLongPolling: true });
 
-                // Load cached & public Firestore collections immediately without waiting on anonymous auth
                 loadAllData(false);
                 
                 onAuthStateChanged(auth, (user) => {
@@ -3378,7 +3470,7 @@ service cloud.firestore {
 
         async function saveSeasonPost(imgUrl) {
             const post = {
-                season: parseInt(document.getElementById('post-season').value),
+                season: parseInt(document.getElementById('post-season').value, 10),
                 year: document.getElementById('post-year').value,
                 title: document.getElementById('post-title').value,
                 image: imgUrl,
@@ -3390,7 +3482,9 @@ service cloud.firestore {
                 document.getElementById('add-post-form').reset();
                 window.clearCropPreview('season');
                 showNotice('Season archive saved successfully!', 'Success');
-            } catch(err) { showNotice('Error saving post', 'Error'); }
+            } catch(err) {
+                showNotice('Error saving season archive: ' + err.message, 'Error');
+            }
         }
 
         window.deletePost = function(id) {
@@ -3502,7 +3596,77 @@ service cloud.firestore {
             startSeasonAutoScroll();
         }
 
-        // --- TEAMS LOGIC (File Upload & Logo Only View) ---
+        // --- TEAMS LOGIC (Cloud Firestore + REST API Sync) ---
+        window.currentTeamsList = [];
+
+        async function saveTeamDocToDatabase(teamId, teamObj) {
+            const colPath = `artifacts/${myAppId}/public/data/teams`;
+            const restPatchUrl = `https://firestore.googleapis.com/v1/projects/spl-santuri-premier-league/databases/(default)/documents/${colPath}/${encodeURIComponent(teamId)}`;
+            const fields = {};
+            for (const k in teamObj) {
+                fields[k] = encodeFirestoreRestValue(teamObj[k]);
+            }
+
+            if (db) {
+                try {
+                    const sdkPromise = setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', teamId), teamObj);
+                    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('SDK_TIMEOUT')), 4500));
+                    await Promise.race([sdkPromise, timeoutPromise]);
+                    return true;
+                } catch (sdkErr) {
+                    console.warn('Team SDK save slow/blocked, falling back to REST PATCH:', sdkErr);
+                }
+            }
+
+            const res = await fetch(restPatchUrl, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fields })
+            });
+            if (!res.ok) {
+                const errText = await res.text();
+                throw new Error(`Database save failed (${res.status}): ${errText}`);
+            }
+            return true;
+        }
+
+        async function deleteTeamDocFromDatabase(teamId) {
+            const colPath = `artifacts/${myAppId}/public/data/teams`;
+            const restDeleteUrl = `https://firestore.googleapis.com/v1/projects/spl-santuri-premier-league/databases/(default)/documents/${colPath}/${encodeURIComponent(teamId)}`;
+
+            if (db) {
+                try {
+                    const sdkPromise = deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', teamId));
+                    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('SDK_TIMEOUT')), 4500));
+                    await Promise.race([sdkPromise, timeoutPromise]);
+                    return true;
+                } catch (sdkErr) {
+                    console.warn('Team SDK delete slow/blocked, falling back to REST DELETE:', sdkErr);
+                }
+            }
+
+            const res = await fetch(restDeleteUrl, { method: 'DELETE' });
+            if (!res.ok && res.status !== 404) {
+                throw new Error(`Database delete failed (${res.status})`);
+            }
+            return true;
+        }
+
+        async function fetchTeamsViaRestFallback() {
+            const url = `https://firestore.googleapis.com/v1/projects/spl-santuri-premier-league/databases/(default)/documents/artifacts/${myAppId}/public/data/teams?pageSize=100`;
+            const res = await fetch(url, { cache: 'no-store' });
+            if (!res.ok) return null;
+            const json = await res.json();
+            const docs = json.documents || [];
+            return docs.map(docItem => {
+                const id = docItem.name.split('/').pop();
+                const fields = docItem.fields || {};
+                const obj = { id };
+                for (const k in fields) obj[k] = decodeFirestoreRestValue(fields[k]);
+                return obj;
+            });
+        }
+
         window.resetTeamForm = function() {
             document.getElementById('add-team-form').reset();
             document.getElementById('team-edit-id').value = '';
@@ -3516,42 +3680,66 @@ service cloud.firestore {
             e.preventDefault();
             if(!window.isAdmin) return;
             
-            const teamId = document.getElementById('team-id').value.trim().toUpperCase();
+            const teamId = document.getElementById('team-id').value.trim().toUpperCase().replace(/[^A-Z0-9_-]/g, '');
             const name = document.getElementById('team-name').value.trim();
             const color = document.getElementById('team-color').value;
             const existingLogo = document.getElementById('team-existing-logo').value;
             const newLogo = window.croppedImages['team'];
+
+            if (!teamId || !name) {
+                showNotice('Please enter both Team Code and Team Full Name.', 'Missing Details');
+                return;
+            }
             
             const logoData = newLogo ? newLogo : (existingLogo ? existingLogo : '');
+            const team = { id: teamId, name: name, color: color, logo: logoData, updatedAt: Date.now() };
 
-            const team = { id: teamId, name: name, color: color, logo: logoData };
-            localStorage.setItem('spl_init_teams', 'true');
-            const localTeams = getLocalList('teams', []).filter(t => t.id !== teamId);
-            localTeams.push(team);
-            setLocalList('teams', localTeams);
-            renderTeams(localTeams);
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const origHtml = submitBtn ? submitBtn.innerHTML : '';
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Saving to Database...';
+            }
 
             try {
-                await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', teamId), team);
+                await saveTeamDocToDatabase(teamId, team);
+                localStorage.setItem('spl_init_teams', 'true');
+                const localTeams = getLocalList('teams', []).filter(t => t.id !== teamId);
+                localTeams.push(team);
+                setLocalList('teams', localTeams);
+                renderTeams(localTeams);
                 resetTeamForm();
-                showNotice('Franchise saved successfully!', 'Success');
-            } catch(e) {
-                resetTeamForm();
-                showNotice('Franchise saved locally!', 'Saved');
+                showNotice(`Franchise "${name}" (${teamId}) saved to the cloud database!`, 'Saved to Database');
+            } catch(err) {
+                console.error('Team DB save error:', err);
+                showNotice(`Could not save franchise to database: ${err.message}\n\nPlease verify your internet connection and Firebase Firestore rules.`, 'Database Save Error');
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = origHtml;
+                }
             }
         };
 
         window.deleteTeam = function(id) {
-            showConfirmDialog(`Delete franchise ${id}?`, async () => {
-                localStorage.setItem('spl_init_teams', 'true');
-                const updatedLocal = getLocalList('teams', []).filter(t => t.id !== id);
-                setLocalList('teams', updatedLocal);
-                renderTeams(updatedLocal);
+            showConfirmDialog(`Delete franchise ${id} from database?`, async () => {
                 try {
-                    await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', id));
-                    showNotice(`Franchise ${id} deleted successfully.`, 'Deleted');
-                } catch(e) {}
+                    await deleteTeamDocFromDatabase(id);
+                    localStorage.setItem('spl_init_teams', 'true');
+                    const updatedLocal = getLocalList('teams', []).filter(t => t.id !== id);
+                    setLocalList('teams', updatedLocal);
+                    renderTeams(updatedLocal);
+                    showNotice(`Franchise ${id} deleted from database.`, 'Deleted');
+                } catch(err) {
+                    showNotice(`Failed to delete franchise from database: ${err.message}`, 'Delete Error');
+                }
             });
+        };
+
+        window.editTeamById = function(id) {
+            const t = (window.currentTeamsList || []).find(item => String(item.id) === String(id));
+            if (!t) return;
+            window.editTeam(t.id, t.name || '', t.color || 'from-blue-600 to-blue-900', t.logo || '');
         };
 
         window.editTeam = function(id, name, color, logo) {
@@ -3564,20 +3752,41 @@ service cloud.firestore {
             document.getElementById('team-logo-file').value = '';
             document.getElementById('team-cancel-btn').classList.remove('hidden');
             window.clearCropPreview('team');
+            if (logo) {
+                const prev = document.getElementById('preview-team');
+                if (prev) {
+                    prev.src = logo;
+                    prev.classList.remove('hidden');
+                }
+            }
             document.getElementById('admin-dashboard').scrollIntoView({ behavior: 'smooth' });
         };
 
         function loadTeams(local = false) {
             const track = document.getElementById('teams-track');
             if(!track) return;
-            if(local) { renderTeams(getLocalList('teams', defaultTeams)); return; }
+            const cached = getLocalList('teams', []);
+            if (cached.length > 0 || local) {
+                renderTeams(cached.length > 0 ? cached : defaultTeams);
+            }
+            if(local) return;
 
-            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'teams'), (snap) => {
+            fetchTeamsViaRestFallback().then(restTeams => {
+                if (restTeams && restTeams.length > 0) {
+                    localStorage.setItem('spl_init_teams', 'true');
+                    setLocalList('teams', restTeams);
+                    renderTeams(restTeams);
+                }
+            }).catch(() => {});
+
+            onSnapshot(collection(db, 'artifacts', myAppId, 'public', 'data', 'teams'), async (snap) => {
                 let teams = [];
                 snap.forEach(d => teams.push({ ...d.data(), id: d.id }));
                 if(teams.length === 0 && !localStorage.getItem('spl_init_teams')) {
                     localStorage.setItem('spl_init_teams', 'true');
-                    defaultTeams.forEach(t => setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', t.id), t).catch(()=>{}));
+                    for (const t of defaultTeams) {
+                        await saveTeamDocToDatabase(t.id, t).catch(()=>{});
+                    }
                     renderTeams(defaultTeams);
                     return;
                 }
@@ -3588,6 +3797,7 @@ service cloud.firestore {
         }
 
         function renderTeams(teams) {
+            window.currentTeamsList = teams || [];
             const track = document.getElementById('teams-track');
             const adminGrid = document.getElementById('admin-teams-grid');
             
@@ -3597,16 +3807,18 @@ service cloud.firestore {
                     adminGrid.innerHTML = `<p class="text-gray-500 text-sm col-span-full">No franchises added yet.</p>`;
                 } else {
                     teams.forEach(t => {
+                        const safeId = window.escapeHtml(t.id);
+                        const safeName = window.escapeHtml(t.name);
                         const logoHtml = t.logo ? `<img src="${t.logo}" class="max-w-full max-h-full object-contain">` : `<span class="text-xs text-gray-500 font-bold">NO LOGO</span>`;
                         adminGrid.innerHTML += `
                             <div class="bg-premium-800 border border-premium-700 rounded p-4 flex flex-col items-center text-center relative shadow-lg">
                                 <div class="w-16 h-16 bg-white p-1 rounded-full border-2 border-premium-600 mb-2 flex items-center justify-center overflow-hidden shadow-inner">
                                     ${logoHtml}
                                 </div>
-                                <span class="font-bold text-white text-sm leading-tight mb-3">${t.name}</span>
+                                <span class="font-bold text-white text-sm leading-tight mb-3 break-words">${safeName}</span>
                                 <div class="flex gap-2 w-full mt-auto">
-                                    <button onclick="editTeam('${t.id}', '${(t.name||'').replace(/'/g, "\\'")}', '${t.color}', '${t.logo || ''}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-pen"></i></button>
-                                    <button onclick="deleteTeam('${t.id}')" class="flex-1 bg-red-600 hover:bg-red-700 text-white text-xs py-1.5 rounded transition shadow"><i class="fa-solid fa-trash"></i></button>
+                                    <button type="button" onclick="editTeamById('${safeId}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-1.5 rounded transition shadow cursor-pointer"><i class="fa-solid fa-pen"></i></button>
+                                    <button type="button" onclick="deleteTeam('${safeId}')" class="flex-1 bg-red-600 hover:bg-red-700 text-white text-xs py-1.5 rounded transition shadow cursor-pointer"><i class="fa-solid fa-trash"></i></button>
                                 </div>
                             </div>
                         `;
