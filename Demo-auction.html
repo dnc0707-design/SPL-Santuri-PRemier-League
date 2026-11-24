@@ -110,6 +110,47 @@
             </div>
         </section>
 
+        <!-- VIEW 1B: MANDATORY FIRST-TIME PASSWORD CHANGE CARD -->
+        <section id="demo-force-password-view" class="hidden max-w-lg mx-auto my-8 sm:my-14">
+            <div class="bg-gradient-to-b from-premium-800 to-premium-900 border-2 border-spl-red rounded-2xl p-6 sm:p-8 shadow-[0_0_40px_rgba(225,45,57,0.35)]">
+                <div class="w-16 h-16 bg-premium-950 rounded-2xl border-2 border-spl-gold flex items-center justify-center mx-auto mb-4 shadow-lg text-spl-gold text-3xl">
+                    <i class="fa-solid fa-key"></i>
+                </div>
+                <div class="text-center mb-2">
+                    <span class="bg-spl-red/20 text-red-300 border border-spl-red/50 text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full">Security Action Required</span>
+                </div>
+                <h2 class="font-oswald text-3xl font-bold uppercase text-center text-white tracking-wide mt-2">Change Your <span class="text-spl-gold">Password</span></h2>
+                <p class="text-gray-300 text-xs sm:text-sm text-center mt-2 mb-6 leading-relaxed">
+                    Welcome, <strong id="force-pass-team-name" class="text-spl-gold">Franchise</strong>! Because this is your first login using the admin-issued password, you must set a new private password before entering the Demo Auction Room.
+                </p>
+
+                <form id="force-password-change-form" onsubmit="handleForcePasswordChange(event)" class="space-y-4">
+                    <div>
+                        <label for="new-franchise-pass" class="block text-gray-300 text-xs font-bold uppercase tracking-wider mb-1.5">New Password <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-spl-gold"><i class="fa-solid fa-lock"></i></span>
+                            <input type="password" id="new-franchise-pass" minlength="4" class="w-full bg-premium-950 border border-premium-700 rounded-xl pl-10 pr-4 py-3 text-white font-medium focus:outline-none focus:border-spl-gold" placeholder="Enter new password (min 4 characters)" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="confirm-franchise-pass" class="block text-gray-300 text-xs font-bold uppercase tracking-wider mb-1.5">Confirm New Password <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-spl-gold"><i class="fa-solid fa-shield-check"></i></span>
+                            <input type="password" id="confirm-franchise-pass" minlength="4" class="w-full bg-premium-950 border border-premium-700 rounded-xl pl-10 pr-4 py-3 text-white font-medium focus:outline-none focus:border-spl-gold" placeholder="Re-enter your new password" required>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                        <button type="button" onclick="cancelForcePasswordChange()" class="sm:w-1/3 bg-premium-700 hover:bg-premium-600 text-white font-oswald font-bold text-base uppercase tracking-wider py-3 rounded-xl transition cursor-pointer">
+                            Cancel
+                        </button>
+                        <button type="submit" id="force-pass-submit-btn" class="sm:w-2/3 bg-spl-gold hover:bg-spl-goldHover text-premium-950 font-oswald font-bold text-lg uppercase tracking-wider py-3 rounded-xl transition shadow-[0_0_20px_rgba(244,176,54,0.4)] cursor-pointer">
+                            <i class="fa-solid fa-floppy-disk mr-1.5"></i> Update & Enter Room
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
         <!-- VIEW 2: FRANCHISE AUCTION WORKSPACE (Shown when logged in) -->
         <section id="demo-workspace-view" class="hidden space-y-6">
 
@@ -412,6 +453,34 @@
             } catch (e) {}
 
             try {
+                const url = `https://firestore.googleapis.com/v1/projects/spl-santuri-premier-league/databases/(default)/documents/artifacts/${myAppId}/public/data/teams?pageSize=100`;
+                const res = await fetch(url, { cache: 'no-store' });
+                if (res.ok) {
+                    const json = await res.json();
+                    const docs = json.documents || [];
+                    if (docs.length > 0) {
+                        allTeams = docs.map(docItem => {
+                            const id = docItem.name.split('/').pop();
+                            const fields = docItem.fields || {};
+                            const obj = { id };
+                            for (const k in fields) obj[k] = decodeFirestoreRestValue(fields[k]);
+                            return obj;
+                        });
+                        try { localStorage.setItem('spl_local_teams', JSON.stringify(allTeams)); } catch (e) {}
+                    }
+                }
+            } catch (err) {
+                if (db) {
+                    try {
+                        const snap = await getDocs(collection(db, 'artifacts', myAppId, 'public', 'data', 'teams'));
+                        const fetched = [];
+                        snap.forEach(d => fetched.push({ id: d.id, ...d.data() }));
+                        if (fetched.length > 0) allTeams = fetched;
+                    } catch (e) {}
+                }
+            }
+        }
+
         // --- LOAD ALL REGISTERED PLAYERS (APPROVED + PENDING) ---
         function sortRegisteredPlayers(list) {
             return [...list].sort((a, b) => {
@@ -645,6 +714,108 @@
             }
         };
 
+        let pendingPasswordChangeTeam = null;
+
+        async function persistUpdatedFranchisePassword(teamObj, newPassword) {
+            const updatedTeam = {
+                ...teamObj,
+                loginPass: newPassword,
+                passwordChanged: true,
+                passwordUpdatedAt: Date.now()
+            };
+
+            const idx = allTeams.findIndex(t => String(t.id) === String(teamObj.id));
+            if (idx > -1) allTeams[idx] = updatedTeam;
+            try {
+                localStorage.setItem('spl_local_teams', JSON.stringify(allTeams));
+            } catch (e) {}
+
+            let cloudUpdated = false;
+            if (db) {
+                try {
+                    await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', teamObj.id), updatedTeam, { merge: true });
+                    cloudUpdated = true;
+                } catch (e) {}
+            }
+
+            if (!cloudUpdated) {
+                const restUrl = `https://firestore.googleapis.com/v1/projects/spl-santuri-premier-league/databases/(default)/documents/artifacts/${myAppId}/public/data/teams/${encodeURIComponent(teamObj.id)}?updateMask.fieldPaths=loginPass&updateMask.fieldPaths=passwordChanged&updateMask.fieldPaths=passwordUpdatedAt`;
+                const fields = {
+                    loginPass: encodeFirestoreRestValue(newPassword),
+                    passwordChanged: encodeFirestoreRestValue(true),
+                    passwordUpdatedAt: encodeFirestoreRestValue(Date.now())
+                };
+                const res = await fetch(restUrl, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ fields })
+                });
+                if (!res.ok) {
+                    throw new Error(`Could not save new password to database (${res.status})`);
+                }
+            }
+            return updatedTeam;
+        }
+
+        window.cancelForcePasswordChange = function() {
+            pendingPasswordChangeTeam = null;
+            document.getElementById('force-password-change-form')?.reset();
+            document.getElementById('demo-force-password-view').classList.add('hidden');
+            document.getElementById('demo-login-view').classList.remove('hidden');
+        };
+
+        window.handleForcePasswordChange = async function(e) {
+            e.preventDefault();
+            if (!pendingPasswordChangeTeam) return;
+
+            const newPass = (document.getElementById('new-franchise-pass')?.value || '').trim();
+            const confirmPass = (document.getElementById('confirm-franchise-pass')?.value || '').trim();
+            const btn = document.getElementById('force-pass-submit-btn');
+
+            if (newPass.length < 4) {
+                showNotice('Your new password must be at least 4 characters long.', 'Weak Password');
+                return;
+            }
+            if (newPass === String(pendingPasswordChangeTeam.loginPass || '').trim()) {
+                showNotice('Please choose a NEW password that is different from your initial admin password.', 'Same Password');
+                return;
+            }
+            if (newPass !== confirmPass) {
+                showNotice('New Password and Confirm Password do not match. Please re-enter.', 'Password Mismatch');
+                return;
+            }
+
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> Updating Password...';
+            }
+
+            try {
+                const updatedTeam = await persistUpdatedFranchisePassword(pendingPasswordChangeTeam, newPass);
+                pendingPasswordChangeTeam = null;
+                document.getElementById('force-password-change-form')?.reset();
+                document.getElementById('demo-force-password-view').classList.add('hidden');
+
+                activeFranchise = updatedTeam;
+                localStorage.setItem(SESSION_KEY, JSON.stringify({
+                    teamId: updatedTeam.id,
+                    loginId: updatedTeam.loginId,
+                    loggedInAt: Date.now()
+                }));
+
+                await loadFranchiseWorkspaceData(updatedTeam.id);
+                enterWorkspaceUI();
+                showNotice('Your new franchise password has been saved! Welcome to the Demo Auction Room.', 'Password Updated');
+            } catch (err) {
+                showNotice(`Failed to update password: ${err.message}`, 'Update Error');
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-floppy-disk mr-1.5"></i> Update & Enter Room';
+                }
+            }
+        };
+
         window.handleFranchiseDemoLogin = async function(e) {
             e.preventDefault();
             const loginIdInput = (document.getElementById('demo-login-id')?.value || '').trim();
@@ -677,6 +848,15 @@
                     return;
                 }
 
+                // Force mandatory password change on first login (until passwordChanged === true)
+                if (matched.passwordChanged !== true) {
+                    pendingPasswordChangeTeam = matched;
+                    document.getElementById('force-pass-team-name').textContent = matched.name || matched.id;
+                    document.getElementById('demo-login-view').classList.add('hidden');
+                    document.getElementById('demo-force-password-view').classList.remove('hidden');
+                    return;
+                }
+
                 activeFranchise = matched;
                 localStorage.setItem(SESSION_KEY, JSON.stringify({
                     teamId: matched.id,
@@ -698,7 +878,9 @@
             await saveFranchiseWorkspaceData(false);
             localStorage.removeItem(SESSION_KEY);
             activeFranchise = null;
+            pendingPasswordChangeTeam = null;
             document.getElementById('demo-workspace-view').classList.add('hidden');
+            document.getElementById('demo-force-password-view').classList.add('hidden');
             document.getElementById('header-logout-btn').classList.add('hidden');
             document.getElementById('demo-login-view').classList.remove('hidden');
             document.getElementById('franchise-demo-login-form').reset();
@@ -1121,8 +1303,17 @@
                         const foundTeam = allTeams.find(t => String(t.id) === String(session.teamId)) || {
                             id: session.teamId,
                             name: session.teamId,
-                            purse: 8000
+                            purse: 8000,
+                            passwordChanged: true
                         };
+                        if (foundTeam.passwordChanged !== true) {
+                            localStorage.removeItem(SESSION_KEY);
+                            pendingPasswordChangeTeam = foundTeam;
+                            document.getElementById('force-pass-team-name').textContent = foundTeam.name || foundTeam.id;
+                            document.getElementById('demo-login-view').classList.add('hidden');
+                            document.getElementById('demo-force-password-view').classList.remove('hidden');
+                            return;
+                        }
                         activeFranchise = foundTeam;
                         await loadFranchiseWorkspaceData(foundTeam.id);
                         enterWorkspaceUI();
