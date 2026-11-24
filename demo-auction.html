@@ -59,7 +59,7 @@
             </a>
 
             <div class="flex items-center gap-2 sm:gap-3">
-                <a href="live-auction.html" class="bg-spl-red/20 hover:bg-spl-red text-red-300 hover:text-white font-oswald font-bold uppercase text-xs sm:text-sm tracking-wider px-3.5 sm:px-4 py-2 rounded-lg border border-spl-red/60 transition flex items-center gap-2 shadow">
+                <a href="live-auction.html" onclick="openLiveAuctionFromDemo(event)" class="bg-spl-red/20 hover:bg-spl-red text-red-300 hover:text-white font-oswald font-bold uppercase text-xs sm:text-sm tracking-wider px-3.5 sm:px-4 py-2 rounded-lg border border-spl-red/60 transition flex items-center gap-2 shadow">
                     <i class="fa-solid fa-tower-broadcast"></i> <span class="hidden sm:inline">Live Auction</span>
                 </a>
                 <button type="button" onclick="openDemoAdminCredsModal()" class="bg-spl-gold/15 hover:bg-spl-gold text-spl-gold hover:text-premium-950 font-oswald font-bold uppercase text-xs sm:text-sm tracking-wider px-3.5 sm:px-4 py-2 rounded-lg border border-spl-gold/60 transition flex items-center gap-2 shadow cursor-pointer">
@@ -579,18 +579,16 @@
             document.getElementById('demo-admin-creds-modal').classList.add('hidden');
         };
 
-        window.verifyDemoAdminGate = function(e) {
-            e.preventDefault();
-            const u = (document.getElementById('demo-admin-user-input')?.value || '').trim();
-            const p = (document.getElementById('demo-admin-pass-input')?.value || '').trim();
-            if (u === 'admin' && p === '1234') {
-                isDemoAdminUnlocked = true;
-                document.getElementById('demo-admin-gate-form').classList.add('hidden');
-                document.getElementById('demo-admin-creds-panel').classList.remove('hidden');
-                renderDemoAdminTeamsList();
-            } else {
-                showNotice('Invalid Admin Username or Password.', 'Access Denied');
-            }
+        window.openLiveAuctionFromDemo = async function(e) {
+            if (e) e.preventDefault();
+            try {
+                const res = await fetch('live-auction.html', { method: 'HEAD', cache: 'no-store' });
+                if (res.ok) {
+                    window.location.href = 'live-auction.html';
+                    return;
+                }
+            } catch (err) {}
+            window.location.href = 'index.html#live-auction';
         };
 
         window.fillDemoAdminTeamForm = function(teamId) {
