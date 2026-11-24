@@ -183,7 +183,7 @@
                         <i class="fa-solid fa-users-viewfinder mr-2.5"></i> Season 6 Auction Pool <span id="hero-pool-badge" class="ml-2 bg-spl-red text-white text-xs px-2 py-0.5 rounded-full">View All</span>
                     </button>
                     <a href="demo-auction.html" class="inline-flex items-center bg-blue-600/25 hover:bg-blue-500 text-blue-200 hover:text-white border-2 border-blue-400 font-oswald font-bold px-7 py-2.5 uppercase tracking-wider rounded-lg transition-all text-base shadow-lg cursor-pointer">
-                        <i class="fa-solid fa-gavel mr-2.5"></i> Demo Auction Room
+                        <i class="fa-solid fa-gavel mr-2.5"></i> Demo Auction Room <span id="hero-all-reg-badge" class="ml-2 bg-spl-gold text-premium-950 text-xs px-2 py-0.5 rounded-full hidden">0 Players</span>
                     </a>
                     <a href="#seasons" class="inline-block bg-transparent border border-premium-600 hover:border-spl-gold text-gray-300 hover:text-spl-gold font-oswald font-bold px-6 py-2.5 uppercase tracking-wider rounded-lg transition-colors text-base"><i class="fa-solid fa-book-open mr-2"></i> View Season History</a>
                 </div>
@@ -2648,9 +2648,14 @@ service cloud.firestore {
 
             window.approvedPoolPlayers = approved;
             const heroBadge = document.getElementById('hero-pool-badge');
+            const heroAllRegBadge = document.getElementById('hero-all-reg-badge');
             const homeSummary = document.getElementById('home-pool-summary');
             if (heroBadge) {
                 heroBadge.textContent = approved.length > 0 ? `${approved.length} Players` : 'View All';
+            }
+            if (heroAllRegBadge && regs.length > 0) {
+                heroAllRegBadge.textContent = `${regs.length} Players`;
+                heroAllRegBadge.classList.remove('hidden');
             }
             if (homeSummary) {
                 homeSummary.innerHTML = approved.length > 0
