@@ -93,6 +93,7 @@
                 <nav class="hidden lg:flex items-center gap-2 xl:gap-3.5 font-oswald text-xs xl:text-sm tracking-wide uppercase whitespace-nowrap">
                     <a href="#" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="nav-link active text-spl-gold">Home</a>
                     <button type="button" onclick="openAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors uppercase">Auction Pool</button>
+                    <a href="live-auction.html" class="bg-spl-red/20 text-red-300 border border-spl-red/60 font-bold px-2.5 py-1 rounded hover:bg-spl-red hover:text-white transition-colors"><i class="fa-solid fa-tower-broadcast mr-1"></i>Live Auction</a>
                     <a href="demo-auction.html" onclick="openDemoAuctionSmart(event)" class="bg-blue-600/20 text-blue-300 border border-blue-400/50 font-bold px-2.5 py-1 rounded hover:bg-blue-500 hover:text-white transition-colors"><i class="fa-solid fa-gavel mr-1"></i>Demo Auction</a>
                     <a href="#rules-banner-section" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">Rules</a>
                     <a href="#teams" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">Franchises</a>
@@ -122,6 +123,7 @@
             <nav class="flex flex-col px-6 py-6 font-oswald text-lg uppercase tracking-wide space-y-3">
                 <a href="#" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 text-spl-gold flex items-center"><i class="fa-solid fa-house w-6 mr-2 text-spl-gold"></i> Home</a>
                 <button type="button" onclick="openAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center uppercase text-left"><i class="fa-solid fa-users w-6 mr-2 text-spl-gold"></i> Auction Pool</button>
+                <a href="live-auction.html" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 text-red-300 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-tower-broadcast w-6 mr-2 text-spl-red"></i> Live Mega Auction Arena</a>
                 <a href="demo-auction.html" onclick="openDemoAuctionSmart(event); closeMobileMenu()" class="py-2 border-b border-premium-800 text-blue-300 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-gavel w-6 mr-2 text-blue-400"></i> Demo Auction (Franchise Login)</a>
                 <a href="#rules-banner-section" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-scale-balanced w-6 mr-2 text-spl-gold"></i> SPL-6 Rules</a>
                 <a href="#teams" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-shield-halved w-6 mr-2 text-spl-gold"></i> Franchises</a>
@@ -182,6 +184,9 @@
                     <button type="button" onclick="openAuctionPoolPage()" class="inline-flex items-center bg-premium-800 hover:bg-spl-gold text-spl-gold hover:text-premium-950 border-2 border-spl-gold font-oswald font-bold px-7 py-2.5 uppercase tracking-wider rounded-lg transition-all text-base shadow-lg cursor-pointer">
                         <i class="fa-solid fa-users-viewfinder mr-2.5"></i> Season 6 Auction Pool <span id="hero-pool-badge" class="ml-2 bg-spl-red text-white text-xs px-2 py-0.5 rounded-full">View All</span>
                     </button>
+                    <a href="live-auction.html" class="inline-flex items-center bg-spl-red/25 hover:bg-spl-red text-red-200 hover:text-white border-2 border-spl-red font-oswald font-bold px-7 py-2.5 uppercase tracking-wider rounded-lg transition-all text-base shadow-lg cursor-pointer">
+                        <i class="fa-solid fa-tower-broadcast mr-2.5"></i> Live Mega Auction
+                    </a>
                     <a href="demo-auction.html" onclick="openDemoAuctionSmart(event)" class="inline-flex items-center bg-blue-600/25 hover:bg-blue-500 text-blue-200 hover:text-white border-2 border-blue-400 font-oswald font-bold px-7 py-2.5 uppercase tracking-wider rounded-lg transition-all text-base shadow-lg cursor-pointer">
                         <i class="fa-solid fa-gavel mr-2.5"></i> Demo Auction Room <span id="hero-all-reg-badge" class="ml-2 bg-spl-gold text-premium-950 text-xs px-2 py-0.5 rounded-full hidden">0 Players</span>
                     </a>
@@ -1089,6 +1094,7 @@ service cloud.firestore {
                     <ul class="space-y-3 text-sm text-gray-400 font-medium">
                         <li><a href="#" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> About SPL</a></li>
                         <li><button type="button" onclick="openAuctionPoolPage()" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> Season 6 Auction Pool</button></li>
+                        <li><a href="live-auction.html" class="hover:text-white transition flex items-center text-red-300"><i class="fa-solid fa-chevron-right text-spl-red text-[10px] mr-2"></i> Live Mega Auction Arena</a></li>
                         <li><a href="demo-auction.html" onclick="openDemoAuctionSmart(event)" class="hover:text-white transition flex items-center text-blue-300"><i class="fa-solid fa-chevron-right text-blue-400 text-[10px] mr-2"></i> Franchise Demo Auction</a></li>
                         <li><a href="#" onclick="openRulesModal(); return false;" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> Rules & Regulations</a></li>
                         <li><a href="#" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> Contact Us</a></li>
