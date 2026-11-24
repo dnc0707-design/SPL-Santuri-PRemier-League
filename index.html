@@ -91,16 +91,16 @@
 
                 <!-- Desktop Nav -->
                 <nav class="hidden lg:flex items-center gap-2 xl:gap-3.5 font-oswald text-xs xl:text-sm tracking-wide uppercase whitespace-nowrap">
-                    <a href="#" onclick="closeAuctionPoolPage()" class="nav-link active text-spl-gold">Home</a>
+                    <a href="#" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="nav-link active text-spl-gold">Home</a>
                     <button type="button" onclick="openAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors uppercase">Auction Pool</button>
-                    <a href="demo-auction.html" class="bg-blue-600/20 text-blue-300 border border-blue-400/50 font-bold px-2.5 py-1 rounded hover:bg-blue-500 hover:text-white transition-colors"><i class="fa-solid fa-gavel mr-1"></i>Demo Auction</a>
-                    <a href="#rules-banner-section" onclick="closeAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors">Rules</a>
-                    <a href="#teams" onclick="closeAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors">Franchises</a>
-                    <a href="#gallery" onclick="closeAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors">Gallery</a>
-                    <a href="#about" onclick="closeAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors">About</a>
-                    <a href="#seasons" onclick="closeAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors">Seasons</a>
-                    <a href="#sponsors" onclick="closeAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors">Sponsors</a>
-                    <a href="#partners" onclick="closeAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors">Partners</a>
+                    <a href="demo-auction.html" onclick="openDemoAuctionSmart(event)" class="bg-blue-600/20 text-blue-300 border border-blue-400/50 font-bold px-2.5 py-1 rounded hover:bg-blue-500 hover:text-white transition-colors"><i class="fa-solid fa-gavel mr-1"></i>Demo Auction</a>
+                    <a href="#rules-banner-section" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">Rules</a>
+                    <a href="#teams" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">Franchises</a>
+                    <a href="#gallery" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">Gallery</a>
+                    <a href="#about" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">About</a>
+                    <a href="#seasons" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">Seasons</a>
+                    <a href="#sponsors" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">Sponsors</a>
+                    <a href="#partners" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">Partners</a>
                     <button type="button" onclick="openRegModal(event)" class="bg-spl-gold/15 text-spl-gold border border-spl-gold/40 font-bold px-2.5 py-1 rounded hover:bg-spl-gold hover:text-premium-950 transition-colors">Player Reg.</button>
                     <button type="button" onclick="openOwnerRegModal(event)" class="bg-spl-red/15 text-spl-red border border-spl-red/40 font-bold px-2.5 py-1 rounded hover:bg-spl-red hover:text-white transition-colors">Owner Reg.</button>
                 </nav>
@@ -120,16 +120,16 @@
         <!-- Mobile Nav (Dropdown Menu) -->
         <div id="mobile-menu" class="hidden lg:hidden bg-premium-950/95 border-t border-premium-700 shadow-2xl backdrop-blur-xl max-h-[82vh] overflow-y-auto">
             <nav class="flex flex-col px-6 py-6 font-oswald text-lg uppercase tracking-wide space-y-3">
-                <a href="#" onclick="closeAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 text-spl-gold flex items-center"><i class="fa-solid fa-house w-6 mr-2 text-spl-gold"></i> Home</a>
+                <a href="#" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 text-spl-gold flex items-center"><i class="fa-solid fa-house w-6 mr-2 text-spl-gold"></i> Home</a>
                 <button type="button" onclick="openAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center uppercase text-left"><i class="fa-solid fa-users w-6 mr-2 text-spl-gold"></i> Auction Pool</button>
-                <a href="demo-auction.html" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 text-blue-300 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-gavel w-6 mr-2 text-blue-400"></i> Demo Auction (Franchise Login)</a>
-                <a href="#rules-banner-section" onclick="closeAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-scale-balanced w-6 mr-2 text-spl-gold"></i> SPL-6 Rules</a>
-                <a href="#teams" onclick="closeAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-shield-halved w-6 mr-2 text-spl-gold"></i> Franchises</a>
-                <a href="#gallery" onclick="closeAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-images w-6 mr-2 text-spl-gold"></i> Gallery</a>
-                <a href="#about" onclick="closeAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-circle-info w-6 mr-2 text-spl-gold"></i> About Us</a>
-                <a href="#seasons" onclick="closeAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-book-open w-6 mr-2 text-spl-gold"></i> Seasons</a>
-                <a href="#sponsors" onclick="closeAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-handshake w-6 mr-2 text-spl-gold"></i> Sponsors</a>
-                <a href="#partners" onclick="closeAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-handshake-angle w-6 mr-2 text-spl-gold"></i> Partners</a>
+                <a href="demo-auction.html" onclick="openDemoAuctionSmart(event); closeMobileMenu()" class="py-2 border-b border-premium-800 text-blue-300 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-gavel w-6 mr-2 text-blue-400"></i> Demo Auction (Franchise Login)</a>
+                <a href="#rules-banner-section" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-scale-balanced w-6 mr-2 text-spl-gold"></i> SPL-6 Rules</a>
+                <a href="#teams" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-shield-halved w-6 mr-2 text-spl-gold"></i> Franchises</a>
+                <a href="#gallery" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-images w-6 mr-2 text-spl-gold"></i> Gallery</a>
+                <a href="#about" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-circle-info w-6 mr-2 text-spl-gold"></i> About Us</a>
+                <a href="#seasons" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-book-open w-6 mr-2 text-spl-gold"></i> Seasons</a>
+                <a href="#sponsors" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-handshake w-6 mr-2 text-spl-gold"></i> Sponsors</a>
+                <a href="#partners" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-handshake-angle w-6 mr-2 text-spl-gold"></i> Partners</a>
                 
                 <div class="pt-2 flex flex-col gap-3">
                     <button type="button" onclick="openRegModal(event)" class="w-full bg-spl-gold text-premium-950 font-bold px-4 py-3 rounded text-center uppercase text-base shadow-md flex items-center justify-center"><i class="fa-solid fa-user-plus mr-2"></i> Player Registration</button>
@@ -182,7 +182,7 @@
                     <button type="button" onclick="openAuctionPoolPage()" class="inline-flex items-center bg-premium-800 hover:bg-spl-gold text-spl-gold hover:text-premium-950 border-2 border-spl-gold font-oswald font-bold px-7 py-2.5 uppercase tracking-wider rounded-lg transition-all text-base shadow-lg cursor-pointer">
                         <i class="fa-solid fa-users-viewfinder mr-2.5"></i> Season 6 Auction Pool <span id="hero-pool-badge" class="ml-2 bg-spl-red text-white text-xs px-2 py-0.5 rounded-full">View All</span>
                     </button>
-                    <a href="demo-auction.html" class="inline-flex items-center bg-blue-600/25 hover:bg-blue-500 text-blue-200 hover:text-white border-2 border-blue-400 font-oswald font-bold px-7 py-2.5 uppercase tracking-wider rounded-lg transition-all text-base shadow-lg cursor-pointer">
+                    <a href="demo-auction.html" onclick="openDemoAuctionSmart(event)" class="inline-flex items-center bg-blue-600/25 hover:bg-blue-500 text-blue-200 hover:text-white border-2 border-blue-400 font-oswald font-bold px-7 py-2.5 uppercase tracking-wider rounded-lg transition-all text-base shadow-lg cursor-pointer">
                         <i class="fa-solid fa-gavel mr-2.5"></i> Demo Auction Room <span id="hero-all-reg-badge" class="ml-2 bg-spl-gold text-premium-950 text-xs px-2 py-0.5 rounded-full hidden">0 Players</span>
                     </a>
                     <a href="#seasons" class="inline-block bg-transparent border border-premium-600 hover:border-spl-gold text-gray-300 hover:text-spl-gold font-oswald font-bold px-6 py-2.5 uppercase tracking-wider rounded-lg transition-colors text-base"><i class="fa-solid fa-book-open mr-2"></i> View Season History</a>
@@ -504,7 +504,7 @@ service cloud.firestore {
                     <!-- TAB 2: TEAMS / FRANCHISES & DEMO AUCTION CREDENTIALS -->
                     <div id="admin-tab-teams" class="admin-tab-content hidden">
                         <h3 class="font-bold text-white mb-2 text-xl border-l-4 border-spl-gold pl-3">Add / Manage Franchises & Demo Auction Login</h3>
-                        <p class="text-gray-400 text-xs sm:text-sm mb-4">Create or edit each franchise's logo, theme, and <strong>Demo Auction Login ID & Password</strong> (used on <a href="demo-auction.html" class="text-spl-gold underline font-bold">demo-auction.html</a>).</p>
+                        <p class="text-gray-400 text-xs sm:text-sm mb-4">Create or edit each franchise's logo, theme, and <strong>Demo Auction Login ID & Password</strong> (used in <a href="demo-auction.html" onclick="openDemoAuctionSmart(event)" class="text-spl-gold underline font-bold">Demo Auction Room</a>).</p>
                         <form id="add-team-form" onsubmit="handleTeamSubmit(event)" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 bg-premium-800/40 p-6 rounded-lg border border-premium-700/60 shadow-inner">
                             <input type="hidden" id="team-edit-id" value="">
                             <div>
@@ -919,6 +919,135 @@ service cloud.firestore {
         </div>
     </section>
 
+    <!-- Built-In Franchise Demo Auction Room (Fallback when demo-auction.html is not yet on GitHub Pages) -->
+    <section id="demo-auction-builtin-page" class="hidden flex-grow bg-premium-950 min-h-screen pb-20 relative">
+        <div class="bg-premium-900/95 backdrop-blur-md border-b border-premium-700 sticky top-20 z-40 shadow-lg">
+            <div class="container mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3 max-w-7xl">
+                <button type="button" onclick="closeDemoAuctionPage()" class="bg-premium-800 hover:bg-spl-gold text-white hover:text-premium-950 font-oswald font-bold uppercase text-sm tracking-wider px-4 py-2 rounded-lg border border-spl-gold/60 transition flex items-center gap-2 shadow cursor-pointer">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Home
+                </button>
+                <div class="text-center">
+                    <h2 class="font-oswald text-xl sm:text-2xl font-bold uppercase tracking-wide text-white">
+                        Franchise <span class="text-spl-gold">Demo Auction</span> Room
+                    </h2>
+                </div>
+                <button type="button" id="builtin-demo-logout-btn" onclick="logoutBuiltinDemoFranchise()" class="hidden bg-spl-red hover:bg-red-700 text-white font-oswald font-bold uppercase text-xs sm:text-sm tracking-wider px-4 py-2 rounded-lg transition shadow cursor-pointer">
+                    <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout Franchise
+                </button>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4 pt-8 max-w-7xl">
+            <!-- Step 1: Franchise Login -->
+            <div id="builtin-demo-login-box" class="max-w-lg mx-auto my-6">
+                <div class="bg-gradient-to-b from-premium-800 to-premium-900 border-2 border-spl-gold rounded-2xl p-6 sm:p-8 shadow-2xl">
+                    <div class="w-16 h-16 bg-premium-950 rounded-2xl border-2 border-spl-gold flex items-center justify-center mx-auto mb-4 text-spl-gold text-3xl">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h3 class="font-oswald text-3xl font-bold uppercase text-center text-white">Franchise <span class="text-spl-gold">Demo Auction</span> Login</h3>
+                    <p class="text-gray-300 text-xs sm:text-sm text-center mt-2 mb-6">Log in using the Login ID & Password created by the SPL Admin in <strong>Manage Franchises</strong>.</p>
+                    <form onsubmit="handleBuiltinDemoLogin(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-gray-300 text-xs font-bold uppercase mb-1">Franchise Login ID <span class="text-red-500">*</span></label>
+                            <input type="text" id="builtin-login-id" class="w-full bg-premium-950 border border-premium-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-spl-gold" placeholder="Enter franchise login ID" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 text-xs font-bold uppercase mb-1">Password <span class="text-red-500">*</span></label>
+                            <input type="password" id="builtin-login-pass" class="w-full bg-premium-950 border border-premium-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-spl-gold" placeholder="Enter password" required>
+                        </div>
+                        <button type="submit" id="builtin-login-btn" class="w-full bg-spl-gold hover:bg-spl-goldHover text-premium-950 font-oswald font-bold text-xl uppercase tracking-wider py-3.5 rounded-xl transition shadow-lg cursor-pointer">
+                            <i class="fa-solid fa-right-to-bracket mr-2"></i> Enter Demo Auction Room
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Step 1B: Mandatory First-Time Password Change -->
+            <div id="builtin-demo-force-pass-box" class="hidden max-w-lg mx-auto my-6">
+                <div class="bg-gradient-to-b from-premium-800 to-premium-900 border-2 border-spl-red rounded-2xl p-6 sm:p-8 shadow-2xl">
+                    <div class="text-center mb-2">
+                        <span class="bg-spl-red/20 text-red-300 border border-spl-red/50 text-[10px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full">First-Time Login Security</span>
+                    </div>
+                    <h3 class="font-oswald text-3xl font-bold uppercase text-center text-white mt-2">Change Your <span class="text-spl-gold">Password</span></h3>
+                    <p class="text-gray-300 text-xs sm:text-sm text-center mt-2 mb-6">Welcome, <strong id="builtin-force-team-name" class="text-spl-gold">Franchise</strong>! Please set a new private password before entering the Demo Auction Room.</p>
+                    <form onsubmit="handleBuiltinForcePassChange(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-gray-300 text-xs font-bold uppercase mb-1">New Password <span class="text-red-500">*</span></label>
+                            <input type="password" id="builtin-new-pass" minlength="4" class="w-full bg-premium-950 border border-premium-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-spl-gold" placeholder="Enter new password (min 4 chars)" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-300 text-xs font-bold uppercase mb-1">Confirm New Password <span class="text-red-500">*</span></label>
+                            <input type="password" id="builtin-confirm-pass" minlength="4" class="w-full bg-premium-950 border border-premium-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-spl-gold" placeholder="Confirm new password" required>
+                        </div>
+                        <div class="flex gap-3 pt-2">
+                            <button type="button" onclick="cancelBuiltinForcePass()" class="w-1/3 bg-premium-700 hover:bg-premium-600 text-white font-oswald font-bold uppercase py-3 rounded-xl">Cancel</button>
+                            <button type="submit" id="builtin-force-pass-btn" class="w-2/3 bg-spl-gold hover:bg-spl-goldHover text-premium-950 font-oswald font-bold uppercase py-3 rounded-xl shadow-lg">Update & Enter Room</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Step 2: Logged-In Franchise Workspace -->
+            <div id="builtin-demo-workspace-box" class="hidden space-y-6">
+                <div class="bg-gradient-to-r from-premium-900 via-premium-800 to-premium-900 border-2 border-spl-gold/70 rounded-2xl p-4 sm:p-6 shadow-2xl">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                        <div class="flex items-center gap-4">
+                            <div id="builtin-ws-logo" class="w-14 h-14 rounded-2xl bg-white p-1.5 border-2 border-spl-gold flex items-center justify-center overflow-hidden flex-shrink-0"></div>
+                            <div>
+                                <span id="builtin-ws-code" class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-xs px-2.5 py-0.5 rounded uppercase">TEAM</span>
+                                <h3 id="builtin-ws-name" class="font-oswald text-2xl sm:text-3xl font-bold uppercase text-white mt-0.5">Franchise</h3>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
+                            <div class="bg-premium-950/90 border border-premium-700 rounded-xl px-3 py-2">
+                                <p class="text-[10px] text-gray-400 font-bold uppercase">Total Purse</p>
+                                <p id="builtin-ws-total" class="font-oswald text-lg sm:text-xl font-bold text-white">₹8,000</p>
+                            </div>
+                            <div class="bg-premium-950/90 border border-premium-700 rounded-xl px-3 py-2">
+                                <p class="text-[10px] text-gray-400 font-bold uppercase">Spent</p>
+                                <p id="builtin-ws-spent" class="font-oswald text-lg sm:text-xl font-bold text-spl-gold">₹0</p>
+                            </div>
+                            <div class="bg-premium-950/90 border border-premium-700 rounded-xl px-3 py-2">
+                                <p class="text-[10px] text-gray-400 font-bold uppercase">Remaining</p>
+                                <p id="builtin-ws-rem" class="font-oswald text-lg sm:text-xl font-bold text-green-400">₹8,000</p>
+                            </div>
+                            <div class="bg-premium-950/90 border border-premium-700 rounded-xl px-3 py-2">
+                                <p class="text-[10px] text-gray-400 font-bold uppercase">Squad Size</p>
+                                <p id="builtin-ws-count" class="font-oswald text-lg sm:text-xl font-bold text-blue-300">0 / 13</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-premium-700/70 flex flex-wrap items-center justify-between gap-2 text-xs">
+                        <span id="builtin-ws-u19" class="bg-red-950/80 px-3 py-1 rounded-lg border border-red-500/50 text-red-200 font-bold">U-19 Players: 0 (Min 1 Required)</span>
+                        <button type="button" onclick="saveBuiltinWorkspace(true)" class="bg-green-600 hover:bg-green-500 text-white font-bold px-4 py-1.5 rounded-lg transition shadow"><i class="fa-solid fa-cloud-arrow-up mr-1"></i> Save Squad</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                    <div class="lg:col-span-7 bg-premium-900 border border-premium-700 rounded-2xl p-4 sm:p-5 shadow-xl">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-3 pb-2.5 border-b border-premium-800">
+                            <h4 class="font-oswald text-xl font-bold uppercase text-white"><i class="fa-solid fa-users text-spl-gold mr-2"></i> All Registered Players</h4>
+                            <input type="text" id="builtin-pool-search" oninput="renderBuiltinDemoWorkspace()" placeholder="Search Name / SR / Village..." class="bg-premium-950 border border-premium-700 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-spl-gold">
+                        </div>
+                        <div id="builtin-demo-pool-list" class="space-y-2.5 max-h-[600px] overflow-y-auto pr-1"></div>
+                    </div>
+
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="bg-premium-900 border-2 border-spl-gold/60 rounded-2xl p-4 sm:p-5 shadow-xl">
+                            <h4 class="font-oswald text-xl font-bold uppercase text-spl-gold mb-3 pb-2 border-b border-premium-800"><i class="fa-solid fa-trophy mr-2"></i> My Squad (<span id="builtin-squad-hdr">0</span>/13)</h4>
+                            <div id="builtin-demo-squad-list" class="space-y-2 max-h-[340px] overflow-y-auto pr-1"></div>
+                        </div>
+
+                        <div class="bg-premium-900 border border-blue-500/50 rounded-2xl p-4 sm:p-5 shadow-xl">
+                            <h4 class="font-oswald text-xl font-bold uppercase text-blue-300 mb-3 pb-2 border-b border-premium-800"><i class="fa-solid fa-cart-shopping mr-2"></i> Prospect Cart (<span id="builtin-cart-hdr">0</span>)</h4>
+                            <div id="builtin-demo-cart-list" class="space-y-2 max-h-[260px] overflow-y-auto pr-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="bg-premium-950 border-t-4 border-spl-gold pt-16 pb-8 mt-auto">
         <div class="container mx-auto px-4">
@@ -958,9 +1087,9 @@ service cloud.firestore {
                 <div>
                     <h3 class="font-oswald text-2xl font-bold uppercase mb-4 text-spl-gold">Quick Links</h3>
                     <ul class="space-y-3 text-sm text-gray-400 font-medium">
-                        <li><a href="#" onclick="closeAuctionPoolPage()" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> About SPL</a></li>
+                        <li><a href="#" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> About SPL</a></li>
                         <li><button type="button" onclick="openAuctionPoolPage()" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> Season 6 Auction Pool</button></li>
-                        <li><a href="demo-auction.html" class="hover:text-white transition flex items-center text-blue-300"><i class="fa-solid fa-chevron-right text-blue-400 text-[10px] mr-2"></i> Franchise Demo Auction</a></li>
+                        <li><a href="demo-auction.html" onclick="openDemoAuctionSmart(event)" class="hover:text-white transition flex items-center text-blue-300"><i class="fa-solid fa-chevron-right text-blue-400 text-[10px] mr-2"></i> Franchise Demo Auction</a></li>
                         <li><a href="#" onclick="openRulesModal(); return false;" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> Rules & Regulations</a></li>
                         <li><a href="#" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> Contact Us</a></li>
                     </ul>
@@ -1662,9 +1791,11 @@ service cloud.firestore {
         window.openAuctionPoolPage = function(fromPopState = false) {
             const homeView = document.getElementById('main-home-view');
             const poolPage = document.getElementById('auction-pool-page');
+            const demoPage = document.getElementById('demo-auction-builtin-page');
             if (!homeView || !poolPage) return;
 
             homeView.classList.add('hidden');
+            if (demoPage) demoPage.classList.add('hidden');
             poolPage.classList.remove('hidden');
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
@@ -1677,6 +1808,296 @@ service cloud.firestore {
                     }
                 } catch (err) {}
             }
+        };
+
+        window.closeAuctionPoolPage = function(fromPopState = false) {
+            const homeView = document.getElementById('main-home-view');
+            const poolPage = document.getElementById('auction-pool-page');
+            if (!homeView || !poolPage || poolPage.classList.contains('hidden')) return;
+
+            poolPage.classList.add('hidden');
+            homeView.classList.remove('hidden');
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+            window.scrollTo({ top: 0, behavior: 'instant' });
+
+            if (!fromPopState) {
+                try {
+                    if (history.state && history.state.splAuctionPoolOpen) {
+                        history.back();
+                    }
+                } catch (err) {}
+            }
+        };
+
+        // --- SMART DEMO AUCTION ROUTER (Avoids 404 when demo-auction.html is not yet uploaded on GitHub Pages) ---
+        window.openDemoAuctionSmart = async function(e) {
+            if (e) e.preventDefault();
+            try {
+                const checkRes = await fetch('demo-auction.html', { method: 'HEAD', cache: 'no-store' });
+                if (checkRes.ok) {
+                    window.location.href = 'demo-auction.html';
+                    return;
+                }
+            } catch (err) {}
+            window.openBuiltinDemoAuctionPage();
+        };
+
+        let builtinActiveTeam = null;
+        let builtinPendingPassTeam = null;
+        let builtinWsState = { squad: [], prospects: [] };
+        const BUILTIN_SESSION_KEY = 'spl_demo_auction_active_franchise_v1';
+
+        window.openBuiltinDemoAuctionPage = async function() {
+            const homeView = document.getElementById('main-home-view');
+            const poolPage = document.getElementById('auction-pool-page');
+            const demoPage = document.getElementById('demo-auction-builtin-page');
+            if (!demoPage) return;
+            if (homeView) homeView.classList.add('hidden');
+            if (poolPage) poolPage.classList.add('hidden');
+            demoPage.classList.remove('hidden');
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+            window.scrollTo({ top: 0, behavior: 'instant' });
+
+            try {
+                const rawSess = localStorage.getItem(BUILTIN_SESSION_KEY);
+                if (rawSess) {
+                    const sess = JSON.parse(rawSess);
+                    const found = (window.currentTeamsList || []).find(t => String(t.id) === String(sess.teamId));
+                    if (found && found.passwordChanged === true) {
+                        builtinActiveTeam = found;
+                        await loadBuiltinWorkspaceData(found.id);
+                        showBuiltinWorkspace();
+                    }
+                }
+            } catch (err) {}
+        };
+
+        window.closeDemoAuctionPage = function() {
+            const homeView = document.getElementById('main-home-view');
+            const demoPage = document.getElementById('demo-auction-builtin-page');
+            if (!demoPage || demoPage.classList.contains('hidden')) return;
+            demoPage.classList.add('hidden');
+            if (homeView) homeView.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        };
+
+        async function loadBuiltinWorkspaceData(teamId) {
+            const key = `spl_demo_auction_data_${teamId}`;
+            try {
+                const raw = localStorage.getItem(key);
+                builtinWsState = raw ? JSON.parse(raw) : { squad: [], prospects: [] };
+            } catch (e) {
+                builtinWsState = { squad: [], prospects: [] };
+            }
+            try {
+                const restUrl = `https://firestore.googleapis.com/v1/projects/spl-santuri-premier-league/databases/(default)/documents/artifacts/${myAppId}/public/data/demo_auctions/${encodeURIComponent(teamId)}`;
+                const res = await fetch(restUrl, { cache: 'no-store' });
+                if (res.ok) {
+                    const json = await res.json();
+                    const f = json.fields || {};
+                    if (f.squad || f.prospects) {
+                        builtinWsState = {
+                            squad: f.squad ? decodeFirestoreRestValue(f.squad) : [],
+                            prospects: f.prospects ? decodeFirestoreRestValue(f.prospects) : []
+                        };
+                        localStorage.setItem(key, JSON.stringify(builtinWsState));
+                    }
+                }
+            } catch (e) {}
+        }
+
+        window.saveBuiltinWorkspace = async function(notify = false) {
+            if (!builtinActiveTeam) return;
+            const teamId = builtinActiveTeam.id;
+            localStorage.setItem(`spl_demo_auction_data_${teamId}`, JSON.stringify(builtinWsState));
+            const payload = {
+                teamId,
+                teamName: builtinActiveTeam.name || teamId,
+                squad: (builtinWsState.squad || []).map(p => ({ ...p, photo: (p.photo && p.photo.length > 80000) ? '' : (p.photo || '') })),
+                prospects: (builtinWsState.prospects || []).map(p => ({ ...p, photo: (p.photo && p.photo.length > 80000) ? '' : (p.photo || '') })),
+                updatedAt: Date.now()
+            };
+            try {
+                const restUrl = `https://firestore.googleapis.com/v1/projects/spl-santuri-premier-league/databases/(default)/documents/artifacts/${myAppId}/public/data/demo_auctions/${encodeURIComponent(teamId)}`;
+                const fields = {};
+                for (const k in payload) fields[k] = encodeFirestoreRestValue(payload[k]);
+                await fetch(restUrl, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fields }) });
+            } catch (e) {}
+            if (notify) showNotice('Squad and Prospect Cart saved to database!', 'Saved');
+        };
+
+        window.handleBuiltinDemoLogin = async function(e) {
+            e.preventDefault();
+            const idVal = (document.getElementById('builtin-login-id')?.value || '').trim();
+            const passVal = (document.getElementById('builtin-login-pass')?.value || '').trim();
+            const teams = (window.currentTeamsList && window.currentTeamsList.length > 0) ? window.currentTeamsList : getLocalList('teams', defaultTeams);
+            const matched = teams.find(t => t.loginId && t.loginPass && String(t.loginId).trim().toLowerCase() === idVal.toLowerCase() && String(t.loginPass).trim() === passVal);
+            if (!matched) {
+                showNotice('Invalid Franchise Login ID or Password. Please check the credentials created in Admin -> Manage Franchises.', 'Login Failed');
+                return;
+            }
+            if (matched.passwordChanged !== true) {
+                builtinPendingPassTeam = matched;
+                document.getElementById('builtin-force-team-name').textContent = matched.name || matched.id;
+                document.getElementById('builtin-demo-login-box').classList.add('hidden');
+                document.getElementById('builtin-demo-force-pass-box').classList.remove('hidden');
+                return;
+            }
+            builtinActiveTeam = matched;
+            localStorage.setItem(BUILTIN_SESSION_KEY, JSON.stringify({ teamId: matched.id, loginId: matched.loginId, loggedInAt: Date.now() }));
+            await loadBuiltinWorkspaceData(matched.id);
+            showBuiltinWorkspace();
+        };
+
+        window.cancelBuiltinForcePass = function() {
+            builtinPendingPassTeam = null;
+            document.getElementById('builtin-demo-force-pass-box').classList.add('hidden');
+            document.getElementById('builtin-demo-login-box').classList.remove('hidden');
+        };
+
+        window.handleBuiltinForcePassChange = async function(e) {
+            e.preventDefault();
+            if (!builtinPendingPassTeam) return;
+            const np = (document.getElementById('builtin-new-pass')?.value || '').trim();
+            const cp = (document.getElementById('builtin-confirm-pass')?.value || '').trim();
+            if (np.length < 4 || np === String(builtinPendingPassTeam.loginPass || '').trim() || np !== cp) {
+                showNotice('Please enter a new password (at least 4 characters, different from your initial password) and confirm it accurately.', 'Password Error');
+                return;
+            }
+            const updatedTeam = { ...builtinPendingPassTeam, loginPass: np, passwordChanged: true, updatedAt: Date.now() };
+            await saveTeamDocToDatabase(updatedTeam.id, updatedTeam);
+            const updatedTeams = (window.currentTeamsList || []).map(t => t.id === updatedTeam.id ? updatedTeam : t);
+            setLocalList('teams', updatedTeams);
+            renderTeams(updatedTeams);
+
+            builtinActiveTeam = updatedTeam;
+            builtinPendingPassTeam = null;
+            document.getElementById('builtin-demo-force-pass-box').classList.add('hidden');
+            localStorage.setItem(BUILTIN_SESSION_KEY, JSON.stringify({ teamId: updatedTeam.id, loginId: updatedTeam.loginId, loggedInAt: Date.now() }));
+            await loadBuiltinWorkspaceData(updatedTeam.id);
+            showBuiltinWorkspace();
+            showNotice('Password updated! Welcome to the Franchise Demo Auction Room.', 'Password Changed');
+        };
+
+        window.logoutBuiltinDemoFranchise = async function() {
+            await saveBuiltinWorkspace(false);
+            localStorage.removeItem(BUILTIN_SESSION_KEY);
+            builtinActiveTeam = null;
+            document.getElementById('builtin-demo-workspace-box').classList.add('hidden');
+            document.getElementById('builtin-demo-logout-btn').classList.add('hidden');
+            document.getElementById('builtin-demo-login-box').classList.remove('hidden');
+            showNotice('Logged out safely. Your squad and cart remain saved.', 'Logged Out');
+        };
+
+        function showBuiltinWorkspace() {
+            if (!builtinActiveTeam) return;
+            document.getElementById('builtin-demo-login-box').classList.add('hidden');
+            document.getElementById('builtin-demo-workspace-box').classList.remove('hidden');
+            document.getElementById('builtin-demo-logout-btn').classList.remove('hidden');
+            document.getElementById('builtin-ws-code').textContent = builtinActiveTeam.id;
+            document.getElementById('builtin-ws-name').textContent = builtinActiveTeam.name || builtinActiveTeam.id;
+            document.getElementById('builtin-ws-logo').innerHTML = builtinActiveTeam.logo
+                ? `<img src="${builtinActiveTeam.logo}" class="w-full h-full object-contain">`
+                : `<span class="font-oswald font-bold text-xl text-premium-950">${window.escapeHtml(builtinActiveTeam.id)}</span>`;
+            renderBuiltinDemoWorkspace();
+        }
+
+        window.builtinAddSquad = function(playerId) {
+            const p = (window.allRegistrations || []).find(x => String(x.id) === String(playerId));
+            if (!p || !builtinActiveTeam) return;
+            if (builtinWsState.squad.some(s => String(s.id) === String(p.id))) return;
+            if (builtinWsState.squad.length >= 13) { showNotice('Maximum 13 players allowed in squad.', 'Squad Full'); return; }
+            const amt = Math.max(0, parseInt(document.getElementById(`bi-bid-${p.id}`)?.value || '200', 10) || 0);
+            const total = Number(builtinActiveTeam.purse || 8000);
+            const spent = builtinWsState.squad.reduce((s, item) => s + (Number(item.amount) || 0), 0);
+            if (spent + amt > total) { showNotice('Exceeds remaining purse!', 'Purse Limit'); return; }
+            builtinWsState.squad.push({ id: p.id, srNo: p.srNo || 'PENDING', name: p.name, skill: p.skill || 'Player', village: p.village || '', dob: p.dob || '', photo: p.photo || '', amount: amt });
+            renderBuiltinDemoWorkspace();
+            saveBuiltinWorkspace(false);
+        };
+
+        window.builtinAddCart = function(playerId) {
+            const p = (window.allRegistrations || []).find(x => String(x.id) === String(playerId));
+            if (!p || !builtinActiveTeam) return;
+            if (builtinWsState.prospects.some(pr => String(pr.playerId) === String(p.id))) return;
+            const amt = Math.max(0, parseInt(document.getElementById(`bi-bid-${p.id}`)?.value || '200', 10) || 0);
+            builtinWsState.prospects.push({ uid: 'PR_' + Date.now(), playerId: p.id, srNo: p.srNo || 'PENDING', name: p.name, skill: p.skill || 'Player', village: p.village || '', dob: p.dob || '', targetAmount: amt });
+            renderBuiltinDemoWorkspace();
+            saveBuiltinWorkspace(false);
+        };
+
+        window.builtinRemoveSquad = function(id) {
+            builtinWsState.squad = builtinWsState.squad.filter(s => String(s.id) !== String(id));
+            renderBuiltinDemoWorkspace();
+            saveBuiltinWorkspace(false);
+        };
+
+        window.builtinRemoveCart = function(uid) {
+            builtinWsState.prospects = builtinWsState.prospects.filter(pr => String(pr.uid) !== String(uid));
+            renderBuiltinDemoWorkspace();
+            saveBuiltinWorkspace(false);
+        };
+
+        window.renderBuiltinDemoWorkspace = function() {
+            if (!builtinActiveTeam) return;
+            const total = Number(builtinActiveTeam.purse || 8000);
+            const spent = (builtinWsState.squad || []).reduce((s, p) => s + (Number(p.amount) || 0), 0);
+            const rem = total - spent;
+            const u19Cnt = (builtinWsState.squad || []).filter(p => window.isU19Player(p)).length;
+
+            document.getElementById('builtin-ws-total').textContent = `₹${total.toLocaleString('en-IN')}`;
+            document.getElementById('builtin-ws-spent').textContent = `₹${spent.toLocaleString('en-IN')}`;
+            document.getElementById('builtin-ws-rem').textContent = `₹${rem.toLocaleString('en-IN')}`;
+            document.getElementById('builtin-ws-count').textContent = `${builtinWsState.squad.length} / 13`;
+            document.getElementById('builtin-squad-hdr').textContent = builtinWsState.squad.length;
+            document.getElementById('builtin-cart-hdr').textContent = builtinWsState.prospects.length;
+            document.getElementById('builtin-ws-u19').textContent = u19Cnt > 0 ? `U-19 Players: ${u19Cnt} (Rule Met)` : 'U-19 Players: 0 (Min 1 Required)';
+
+            const q = (document.getElementById('builtin-pool-search')?.value || '').trim().toLowerCase();
+            const squadSet = new Set(builtinWsState.squad.map(s => String(s.id)));
+            const cartSet = new Set(builtinWsState.prospects.map(pr => String(pr.playerId)));
+
+            const regs = (window.allRegistrations || []).filter(r => {
+                if (!q) return true;
+                return `${r.name || ''} ${r.srNo || ''} ${r.village || ''}`.toLowerCase().includes(q);
+            });
+
+            document.getElementById('builtin-demo-pool-list').innerHTML = regs.map(p => {
+                const safeId = window.escapeHtml(p.id);
+                const inSq = squadSet.has(String(p.id));
+                const inCt = cartSet.has(String(p.id));
+                return `
+                    <div class="bg-premium-950 border border-premium-700 rounded-xl p-3 flex items-center justify-between gap-2">
+                        <div class="min-w-0">
+                            <span class="bg-spl-gold text-premium-950 text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase">${window.escapeHtml(p.srNo || 'PENDING')}</span>
+                            ${window.isU19Player(p) ? '<span class="bg-spl-red text-white text-[10px] font-bold px-1.5 py-0.5 rounded uppercase ml-1">U-19</span>' : ''}
+                            <p class="font-oswald font-bold text-white text-sm sm:text-base truncate mt-0.5">${window.escapeHtml(p.name)}</p>
+                            <p class="text-[11px] text-gray-400 truncate">${window.escapeHtml(p.skill || '')} • ${window.escapeHtml(p.village || '')}</p>
+                        </div>
+                        <div class="flex items-center gap-1.5 flex-shrink-0">
+                            <input type="number" id="bi-bid-${safeId}" value="200" min="0" step="50" class="w-16 bg-premium-900 border border-premium-600 rounded px-2 py-1 text-xs text-white text-right">
+                            <button type="button" onclick="builtinAddSquad('${safeId}')" ${inSq ? 'disabled' : ''} class="${inSq ? 'bg-green-900 text-green-300' : 'bg-spl-gold text-premium-950'} font-bold text-[11px] uppercase px-2.5 py-1.5 rounded">+Squad</button>
+                            <button type="button" onclick="builtinAddCart('${safeId}')" ${inCt ? 'disabled' : ''} class="${inCt ? 'bg-blue-900 text-blue-300' : 'bg-blue-600 text-white'} font-bold text-[11px] uppercase px-2.5 py-1.5 rounded">+Cart</button>
+                        </div>
+                    </div>
+                `;
+            }).join('') || '<p class="text-xs text-gray-400 text-center py-6">No registered players found.</p>';
+
+            document.getElementById('builtin-demo-squad-list').innerHTML = builtinWsState.squad.map((s, i) => `
+                <div class="bg-premium-950 border border-premium-700 rounded-lg p-2.5 flex items-center justify-between gap-2 text-xs">
+                    <span class="truncate font-bold text-white">${i + 1}. ${window.escapeHtml(s.name)} <span class="text-spl-gold">(₹${s.amount})</span></span>
+                    <button type="button" onclick="builtinRemoveSquad('${window.escapeHtml(s.id)}')" class="text-red-400 hover:text-red-300 px-1.5"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('') || '<p class="text-xs text-gray-400 text-center py-4">No players in squad yet.</p>';
+
+            document.getElementById('builtin-demo-cart-list').innerHTML = builtinWsState.prospects.map(pr => `
+                <div class="bg-premium-950 border border-blue-500/40 rounded-lg p-2.5 flex items-center justify-between gap-2 text-xs">
+                    <span class="truncate font-bold text-blue-200">${window.escapeHtml(pr.name)} <span class="text-spl-gold">(Est ₹${pr.targetAmount || 0})</span></span>
+                    <button type="button" onclick="builtinRemoveCart('${window.escapeHtml(pr.uid)}')" class="text-red-400 hover:text-red-300 px-1.5"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            `).join('') || '<p class="text-xs text-gray-400 text-center py-4">Prospect cart is empty.</p>';
         };
 
         window.closeAuctionPoolPage = function(fromPopState = false) {
