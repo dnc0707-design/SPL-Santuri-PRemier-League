@@ -3758,6 +3758,9 @@ service cloud.firestore {
             }
             
             const logoData = newLogo ? newLogo : (existingLogo ? existingLogo : '');
+            const existingTeamObj = (window.currentTeamsList || []).find(t => String(t.id) === String(teamId));
+            // If admin sets/changes the password (or creates a new franchise), require franchise to change password on next first login
+            const passwordWasReset = !existingTeamObj || String(existingTeamObj.loginPass || '') !== String(loginPass || '');
             const team = {
                 id: teamId,
                 name: name,
@@ -3765,6 +3768,7 @@ service cloud.firestore {
                 logo: logoData,
                 loginId: loginId,
                 loginPass: loginPass,
+                passwordChanged: passwordWasReset ? false : Boolean(existingTeamObj.passwordChanged),
                 purse: purse,
                 updatedAt: Date.now()
             };
