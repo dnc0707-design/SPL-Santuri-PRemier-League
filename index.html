@@ -91,17 +91,17 @@
 
                 <!-- Desktop Nav -->
                 <nav class="hidden lg:flex items-center gap-2 xl:gap-3.5 font-oswald text-xs xl:text-sm tracking-wide uppercase whitespace-nowrap">
-                    <a href="#" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="nav-link active text-spl-gold">Home</a>
+                    <a href="#" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeLiveAuctionPage();" class="nav-link active text-spl-gold">Home</a>
                     <button type="button" onclick="openAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors uppercase">Auction Pool</button>
-                    <a href="live-auction.html" class="bg-spl-red/20 text-red-300 border border-spl-red/60 font-bold px-2.5 py-1 rounded hover:bg-spl-red hover:text-white transition-colors"><i class="fa-solid fa-tower-broadcast mr-1"></i>Live Auction</a>
+                    <a href="live-auction.html" onclick="openLiveAuctionSmart(event)" class="bg-spl-red/20 text-red-300 border border-spl-red/60 font-bold px-2.5 py-1 rounded hover:bg-spl-red hover:text-white transition-colors"><i class="fa-solid fa-tower-broadcast mr-1"></i>Live Auction</a>
                     <a href="demo-auction.html" onclick="openDemoAuctionSmart(event)" class="bg-blue-600/20 text-blue-300 border border-blue-400/50 font-bold px-2.5 py-1 rounded hover:bg-blue-500 hover:text-white transition-colors"><i class="fa-solid fa-gavel mr-1"></i>Demo Auction</a>
-                    <a href="#rules-banner-section" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">Rules</a>
-                    <a href="#teams" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">Franchises</a>
-                    <a href="#gallery" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">Gallery</a>
-                    <a href="#about" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">About</a>
-                    <a href="#seasons" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">Seasons</a>
-                    <a href="#sponsors" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">Sponsors</a>
-                    <a href="#partners" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">Partners</a>
+                    <a href="#rules-banner-section" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeLiveAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">Rules</a>
+                    <a href="#teams" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeLiveAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">Franchises</a>
+                    <a href="#gallery" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeLiveAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">Gallery</a>
+                    <a href="#about" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeLiveAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">About</a>
+                    <a href="#seasons" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeLiveAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">Seasons</a>
+                    <a href="#sponsors" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeLiveAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">Sponsors</a>
+                    <a href="#partners" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeLiveAuctionPage();" class="nav-link hover:text-spl-gold transition-colors">Partners</a>
                     <button type="button" onclick="openRegModal(event)" class="bg-spl-gold/15 text-spl-gold border border-spl-gold/40 font-bold px-2.5 py-1 rounded hover:bg-spl-gold hover:text-premium-950 transition-colors">Player Reg.</button>
                     <button type="button" onclick="openOwnerRegModal(event)" class="bg-spl-red/15 text-spl-red border border-spl-red/40 font-bold px-2.5 py-1 rounded hover:bg-spl-red hover:text-white transition-colors">Owner Reg.</button>
                 </nav>
@@ -121,11 +121,11 @@
         <!-- Mobile Nav (Dropdown Menu) -->
         <div id="mobile-menu" class="hidden lg:hidden bg-premium-950/95 border-t border-premium-700 shadow-2xl backdrop-blur-xl max-h-[82vh] overflow-y-auto">
             <nav class="flex flex-col px-6 py-6 font-oswald text-lg uppercase tracking-wide space-y-3">
-                <a href="#" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 text-spl-gold flex items-center"><i class="fa-solid fa-house w-6 mr-2 text-spl-gold"></i> Home</a>
+                <a href="#" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeLiveAuctionPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 text-spl-gold flex items-center"><i class="fa-solid fa-house w-6 mr-2 text-spl-gold"></i> Home</a>
                 <button type="button" onclick="openAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center uppercase text-left"><i class="fa-solid fa-users w-6 mr-2 text-spl-gold"></i> Auction Pool</button>
-                <a href="live-auction.html" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 text-red-300 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-tower-broadcast w-6 mr-2 text-spl-red"></i> Live Mega Auction Arena</a>
+                <a href="live-auction.html" onclick="openLiveAuctionSmart(event); closeMobileMenu()" class="py-2 border-b border-premium-800 text-red-300 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-tower-broadcast w-6 mr-2 text-spl-red"></i> Live Mega Auction Arena</a>
                 <a href="demo-auction.html" onclick="openDemoAuctionSmart(event); closeMobileMenu()" class="py-2 border-b border-premium-800 text-blue-300 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-gavel w-6 mr-2 text-blue-400"></i> Demo Auction (Franchise Login)</a>
-                <a href="#rules-banner-section" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-scale-balanced w-6 mr-2 text-spl-gold"></i> SPL-6 Rules</a>
+                <a href="#rules-banner-section" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeLiveAuctionPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-scale-balanced w-6 mr-2 text-spl-gold"></i> SPL-6 Rules</a>
                 <a href="#teams" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-shield-halved w-6 mr-2 text-spl-gold"></i> Franchises</a>
                 <a href="#gallery" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-images w-6 mr-2 text-spl-gold"></i> Gallery</a>
                 <a href="#about" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-circle-info w-6 mr-2 text-spl-gold"></i> About Us</a>
@@ -184,7 +184,7 @@
                     <button type="button" onclick="openAuctionPoolPage()" class="inline-flex items-center bg-premium-800 hover:bg-spl-gold text-spl-gold hover:text-premium-950 border-2 border-spl-gold font-oswald font-bold px-7 py-2.5 uppercase tracking-wider rounded-lg transition-all text-base shadow-lg cursor-pointer">
                         <i class="fa-solid fa-users-viewfinder mr-2.5"></i> Season 6 Auction Pool <span id="hero-pool-badge" class="ml-2 bg-spl-red text-white text-xs px-2 py-0.5 rounded-full">View All</span>
                     </button>
-                    <a href="live-auction.html" class="inline-flex items-center bg-spl-red/25 hover:bg-spl-red text-red-200 hover:text-white border-2 border-spl-red font-oswald font-bold px-7 py-2.5 uppercase tracking-wider rounded-lg transition-all text-base shadow-lg cursor-pointer">
+                    <a href="live-auction.html" onclick="openLiveAuctionSmart(event)" class="inline-flex items-center bg-spl-red/25 hover:bg-spl-red text-red-200 hover:text-white border-2 border-spl-red font-oswald font-bold px-7 py-2.5 uppercase tracking-wider rounded-lg transition-all text-base shadow-lg cursor-pointer">
                         <i class="fa-solid fa-tower-broadcast mr-2.5"></i> Live Mega Auction
                     </a>
                     <a href="demo-auction.html" onclick="openDemoAuctionSmart(event)" class="inline-flex items-center bg-blue-600/25 hover:bg-blue-500 text-blue-200 hover:text-white border-2 border-blue-400 font-oswald font-bold px-7 py-2.5 uppercase tracking-wider rounded-lg transition-all text-base shadow-lg cursor-pointer">
@@ -1053,6 +1053,151 @@ service cloud.firestore {
         </div>
     </section>
 
+    <!-- Built-In Live Mega Auction Arena (Fallback when live-auction.html is not yet uploaded to GitHub Pages) -->
+    <section id="live-auction-builtin-page" class="hidden flex-grow bg-premium-950 min-h-screen pb-20 relative">
+        <div class="bg-premium-900/95 backdrop-blur-md border-b border-spl-gold/60 sticky top-20 z-40 shadow-lg">
+            <div class="container mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3 max-w-7xl">
+                <button type="button" onclick="closeLiveAuctionPage()" class="bg-premium-800 hover:bg-spl-gold text-white hover:text-premium-950 font-oswald font-bold uppercase text-sm tracking-wider px-4 py-2 rounded-lg border border-spl-gold/60 transition flex items-center gap-2 shadow cursor-pointer">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Home
+                </button>
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center gap-1.5 text-[10px] text-white bg-spl-red px-2.5 py-0.5 rounded font-extrabold uppercase tracking-widest">
+                        <span class="w-2 h-2 rounded-full bg-white animate-ping"></span> LIVE
+                    </span>
+                    <h2 class="font-oswald text-xl sm:text-2xl font-bold uppercase tracking-wide text-white">
+                        SPL Season 6 <span class="text-spl-gold">Mega Auction</span>
+                    </h2>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button type="button" id="bi-live-fr-login-btn" onclick="openBiLiveFranchiseLogin()" class="bg-blue-600 hover:bg-blue-500 text-white font-oswald font-bold uppercase text-xs sm:text-sm tracking-wider px-3.5 py-2 rounded-lg shadow cursor-pointer">
+                        <i class="fa-solid fa-shield-halved mr-1"></i> Franchise Bid Login
+                    </button>
+                    <button type="button" id="bi-live-fr-logout-btn" onclick="logoutBiLiveFranchise()" class="hidden bg-spl-red hover:bg-red-700 text-white font-oswald font-bold uppercase text-xs tracking-wider px-3 py-2 rounded-lg shadow cursor-pointer">
+                        Logout Bid ID
+                    </button>
+                    <button type="button" id="bi-live-adm-btn" onclick="toggleBiLiveAdminDeck()" class="bg-spl-gold/20 hover:bg-spl-gold text-spl-gold hover:text-premium-950 font-oswald font-bold uppercase text-xs sm:text-sm tracking-wider px-3.5 py-2 rounded-lg border border-spl-gold/60 transition cursor-pointer">
+                        <i class="fa-solid fa-gavel mr-1"></i> Auctioneer
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4 pt-6 max-w-7xl space-y-6">
+            <!-- Top Stage: Player Card + Real-Time Bid Monitor -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+                <!-- Player Card (5 cols) -->
+                <div class="lg:col-span-5 bg-gradient-to-b from-premium-800 via-premium-900 to-premium-950 border-2 border-spl-gold rounded-2xl overflow-hidden shadow-2xl flex flex-col justify-between relative">
+                    <div class="bg-premium-950/90 px-4 py-3 border-b border-spl-gold/50 flex items-center justify-between">
+                        <span id="bi-stage-round" class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-xs px-2.5 py-0.5 rounded uppercase">ROUND 1</span>
+                        <span id="bi-stage-sr" class="font-oswald font-extrabold text-spl-gold text-lg">READY</span>
+                    </div>
+                    <div id="bi-stage-player-box" class="p-6 flex-grow flex flex-col items-center justify-center text-center">
+                        <p class="text-gray-400 text-sm">Waiting for Auctioneer to bring a player onto the stage...</p>
+                    </div>
+                    <div id="bi-stage-stamp-overlay" class="hidden absolute inset-0 z-20 bg-premium-950/85 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
+                        <div id="bi-stage-stamp-text" class="border-4 border-green-400 text-green-400 font-oswald text-5xl font-extrabold uppercase px-8 py-3 rounded-2xl transform -rotate-6 shadow-2xl">SOLD!</div>
+                        <p id="bi-stage-stamp-sub" class="font-oswald text-xl text-white uppercase mt-4"></p>
+                    </div>
+                </div>
+
+                <!-- Live Bid Board & Consoles (7 cols) -->
+                <div class="lg:col-span-7 flex flex-col gap-5">
+                    <div class="bg-gradient-to-r from-premium-900 via-premium-800 to-premium-900 border-2 border-spl-gold/80 rounded-2xl p-5 shadow-2xl">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+                            <div class="bg-premium-950 border border-premium-700 rounded-xl p-4 text-center sm:text-left">
+                                <p class="text-xs text-gray-400 font-bold uppercase tracking-widest">Current Live Bid</p>
+                                <p id="bi-live-bid-amount" class="font-oswald text-4xl sm:text-5xl font-extrabold text-spl-gold mt-1">₹0</p>
+                                <p id="bi-live-base-note" class="text-xs text-gray-400 mt-0.5">Base Price: ₹200</p>
+                            </div>
+                            <div class="bg-premium-950 border border-blue-500/50 rounded-xl p-4 flex items-center gap-3">
+                                <div id="bi-live-leader-logo" class="w-14 h-14 rounded-xl bg-white p-1 border-2 border-spl-gold flex items-center justify-center overflow-hidden flex-shrink-0">
+                                    <i class="fa-solid fa-shield-halved text-premium-950 text-2xl"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <span class="text-[10px] font-extrabold uppercase tracking-widest text-green-400"><i class="fa-solid fa-crown mr-1"></i> Highest Bidder</span>
+                                    <h3 id="bi-live-leader-name" class="font-oswald text-xl sm:text-2xl font-bold uppercase text-white truncate">No Bids Yet</h3>
+                                    <p id="bi-live-leader-sub" class="text-xs text-blue-300 truncate">Stage Ready</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-premium-700/70">
+                            <p class="text-[11px] font-bold uppercase text-gray-300 mb-2"><i class="fa-solid fa-bolt text-spl-gold mr-1"></i> Live Bid Feed</p>
+                            <div id="bi-live-bid-feed" class="flex gap-2 overflow-x-auto pb-1">
+                                <span class="text-xs text-gray-500 italic">Waiting for opening bid...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Franchise Inline Login Box (Shown when Franchise Bid Login is clicked) -->
+                    <form id="bi-live-fr-login-form" onsubmit="handleBiLiveFranchiseLogin(event)" class="hidden bg-premium-900 border-2 border-blue-400 rounded-2xl p-4 grid grid-cols-1 sm:grid-cols-3 gap-3 items-end shadow-xl">
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase text-blue-300 mb-1">Franchise Login ID</label>
+                            <input type="text" id="bi-live-fr-id" class="w-full bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-sm text-white" placeholder="e.g. jmk_owner" required>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase text-blue-300 mb-1">Password</label>
+                            <input type="password" id="bi-live-fr-pass" class="w-full bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-sm text-white" placeholder="Password" required>
+                        </div>
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-oswald font-bold uppercase py-2 px-4 rounded-lg shadow cursor-pointer">Connect &amp; Bid</button>
+                    </form>
+
+                    <!-- Franchise Live Bidding Console -->
+                    <div id="bi-live-fr-console" class="hidden bg-gradient-to-br from-blue-950 via-premium-900 to-premium-950 border-2 border-blue-400 rounded-2xl p-5 shadow-2xl space-y-3">
+                        <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-blue-800">
+                            <div>
+                                <span id="bi-con-code" class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-xs px-2 py-0.5 rounded uppercase">TEAM</span>
+                                <h4 id="bi-con-name" class="font-oswald text-xl font-bold text-white uppercase inline-block ml-2">Franchise</h4>
+                            </div>
+                            <div class="flex gap-3 text-xs font-bold">
+                                <span class="bg-premium-950 px-3 py-1 rounded border border-premium-700 text-green-400">Purse Left: <strong id="bi-con-purse">₹8,000</strong></span>
+                                <span class="bg-premium-950 px-3 py-1 rounded border border-premium-700 text-blue-300">Squad: <strong id="bi-con-squad">0/13</strong></span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                            <button type="button" id="bi-btn-base" onclick="placeBiLiveBid('BASE')" class="bg-green-600 hover:bg-green-500 text-white font-oswald font-bold uppercase py-3 px-2 rounded-xl shadow cursor-pointer">Base ₹200</button>
+                            <button type="button" id="bi-btn-50" onclick="placeBiLiveBid(50)" class="bg-spl-gold hover:bg-spl-goldHover text-premium-950 font-oswald font-bold uppercase py-3 px-2 rounded-xl shadow cursor-pointer">+₹50</button>
+                            <button type="button" id="bi-btn-100" onclick="placeBiLiveBid(100)" class="bg-spl-gold hover:bg-spl-goldHover text-premium-950 font-oswald font-bold uppercase py-3 px-2 rounded-xl shadow cursor-pointer">+₹100</button>
+                            <button type="button" id="bi-btn-200" onclick="placeBiLiveBid(200)" class="bg-orange-500 hover:bg-orange-400 text-premium-950 font-oswald font-bold uppercase py-3 px-2 rounded-xl shadow cursor-pointer">+₹200</button>
+                        </div>
+                        <p id="bi-con-note" class="text-xs text-center text-blue-200"></p>
+                    </div>
+
+                    <!-- Admin Auctioneer Control Deck -->
+                    <div id="bi-live-admin-deck" class="hidden bg-premium-900 border-2 border-spl-gold rounded-2xl p-5 shadow-2xl space-y-3">
+                        <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-premium-700">
+                            <h4 class="font-oswald text-lg font-bold uppercase text-spl-gold"><i class="fa-solid fa-gavel mr-1.5"></i> Auctioneer Controls</h4>
+                            <div class="flex items-center gap-2 text-xs">
+                                <span class="text-gray-300 font-bold">Base ₹:</span>
+                                <input type="number" id="bi-adm-base" value="200" min="50" step="50" class="w-20 bg-premium-950 border border-premium-600 rounded px-2 py-1 text-white font-bold text-right">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                            <button type="button" onclick="biAdminSold()" class="bg-green-600 hover:bg-green-500 text-white font-oswald font-bold uppercase py-2.5 rounded-xl shadow cursor-pointer"><i class="fa-solid fa-hammer mr-1"></i> SOLD!</button>
+                            <button type="button" onclick="biAdminUnsold()" class="bg-spl-red hover:bg-red-700 text-white font-oswald font-bold uppercase py-2.5 rounded-xl shadow cursor-pointer"><i class="fa-solid fa-ban mr-1"></i> UNSOLD</button>
+                            <button type="button" onclick="biAdminUndo()" class="bg-amber-600 hover:bg-amber-500 text-white font-oswald font-bold uppercase py-2.5 rounded-xl shadow cursor-pointer"><i class="fa-solid fa-rotate-left mr-1"></i> Undo Bid</button>
+                            <button type="button" onclick="biAdminNextPlayer()" class="bg-spl-gold hover:bg-spl-goldHover text-premium-950 font-oswald font-bold uppercase py-2.5 rounded-xl shadow cursor-pointer"><i class="fa-solid fa-forward-step mr-1"></i> Next SR</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Franchise Purse Standings -->
+            <div class="bg-premium-900 border border-premium-700 rounded-2xl p-4 sm:p-6 shadow-xl">
+                <h3 class="font-oswald text-2xl font-bold uppercase text-white mb-4 pb-2 border-b border-premium-800"><i class="fa-solid fa-ranking-star text-spl-gold mr-2"></i> Franchise Purse &amp; Squad Standings</h3>
+                <div id="bi-live-standings-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+            </div>
+
+            <!-- Auction Pool Queue -->
+            <div class="bg-premium-900 border border-premium-700 rounded-2xl p-4 sm:p-6 shadow-xl">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4 pb-2 border-b border-premium-800">
+                    <h3 class="font-oswald text-xl font-bold uppercase text-white"><i class="fa-solid fa-users text-spl-gold mr-2"></i> Approved Auction Pool</h3>
+                    <input type="text" id="bi-live-pool-search" oninput="renderBiLiveArena()" placeholder="Search Name / SR..." class="bg-premium-950 border border-premium-700 rounded-lg px-3 py-1.5 text-xs text-white">
+                </div>
+                <div id="bi-live-pool-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[460px] overflow-y-auto pr-1"></div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="bg-premium-950 border-t-4 border-spl-gold pt-16 pb-8 mt-auto">
         <div class="container mx-auto px-4">
@@ -1092,9 +1237,9 @@ service cloud.firestore {
                 <div>
                     <h3 class="font-oswald text-2xl font-bold uppercase mb-4 text-spl-gold">Quick Links</h3>
                     <ul class="space-y-3 text-sm text-gray-400 font-medium">
-                        <li><a href="#" onclick="closeAuctionPoolPage(); closeDemoAuctionPage();" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> About SPL</a></li>
+                        <li><a href="#" onclick="closeAuctionPoolPage(); closeDemoAuctionPage(); closeLiveAuctionPage();" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> About SPL</a></li>
                         <li><button type="button" onclick="openAuctionPoolPage()" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> Season 6 Auction Pool</button></li>
-                        <li><a href="live-auction.html" class="hover:text-white transition flex items-center text-red-300"><i class="fa-solid fa-chevron-right text-spl-red text-[10px] mr-2"></i> Live Mega Auction Arena</a></li>
+                        <li><a href="live-auction.html" onclick="openLiveAuctionSmart(event)" class="hover:text-white transition flex items-center text-red-300"><i class="fa-solid fa-chevron-right text-spl-red text-[10px] mr-2"></i> Live Mega Auction Arena</a></li>
                         <li><a href="demo-auction.html" onclick="openDemoAuctionSmart(event)" class="hover:text-white transition flex items-center text-blue-300"><i class="fa-solid fa-chevron-right text-blue-400 text-[10px] mr-2"></i> Franchise Demo Auction</a></li>
                         <li><a href="#" onclick="openRulesModal(); return false;" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> Rules & Regulations</a></li>
                         <li><a href="#" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> Contact Us</a></li>
@@ -1798,10 +1943,12 @@ service cloud.firestore {
             const homeView = document.getElementById('main-home-view');
             const poolPage = document.getElementById('auction-pool-page');
             const demoPage = document.getElementById('demo-auction-builtin-page');
+            const livePage = document.getElementById('live-auction-builtin-page');
             if (!homeView || !poolPage) return;
 
             homeView.classList.add('hidden');
             if (demoPage) demoPage.classList.add('hidden');
+            if (livePage) livePage.classList.add('hidden');
             poolPage.classList.remove('hidden');
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
@@ -1813,6 +1960,314 @@ service cloud.firestore {
                         history.pushState({ splAuctionPoolOpen: true }, '', '#auction-pool');
                     }
                 } catch (err) {}
+            }
+        };
+
+        // --- SMART LIVE AUCTION ROUTER (Avoids 404 when live-auction.html is not yet on GitHub Pages) ---
+        let biLiveState = {
+            currentPlayerId: null,
+            round: 1,
+            basePrice: 200,
+            currentBid: 0,
+            highestBidderId: null,
+            highestBidderName: null,
+            status: 'IDLE',
+            bidHistory: [],
+            soldPlayers: {},
+            unsoldPlayerIds: [],
+            updatedAt: 0
+        };
+        let biLiveFranchise = null;
+        let biLivePollTimer = null;
+
+        window.openLiveAuctionSmart = async function(e) {
+            if (e) e.preventDefault();
+            try {
+                const res = await fetch('live-auction.html', { method: 'HEAD', cache: 'no-store' });
+                if (res.ok) {
+                    window.location.href = 'live-auction.html';
+                    return;
+                }
+            } catch (err) {}
+            window.openBuiltinLiveAuctionPage();
+        };
+
+        window.openBuiltinLiveAuctionPage = async function() {
+            const homeView = document.getElementById('main-home-view');
+            const poolPage = document.getElementById('auction-pool-page');
+            const demoPage = document.getElementById('demo-auction-builtin-page');
+            const livePage = document.getElementById('live-auction-builtin-page');
+            if (!livePage) return;
+
+            if (homeView) homeView.classList.add('hidden');
+            if (poolPage) poolPage.classList.add('hidden');
+            if (demoPage) demoPage.classList.add('hidden');
+            livePage.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'instant' });
+
+            try {
+                const savedFr = localStorage.getItem('spl_live_auction_franchise_v1');
+                if (savedFr) {
+                    const parsed = JSON.parse(savedFr);
+                    const found = (window.currentTeamsList || []).find(t => String(t.id) === String(parsed.teamId));
+                    if (found) biLiveFranchise = found;
+                }
+            } catch (err) {}
+
+            await fetchBiLiveState();
+            renderBiLiveArena();
+            if (biLivePollTimer) clearInterval(biLivePollTimer);
+            biLivePollTimer = setInterval(async () => {
+                if (!livePage.classList.contains('hidden')) {
+                    await fetchBiLiveState();
+                    renderBiLiveArena();
+                }
+            }, 1800);
+        };
+
+        window.closeLiveAuctionPage = function() {
+            const homeView = document.getElementById('main-home-view');
+            const livePage = document.getElementById('live-auction-builtin-page');
+            if (!livePage || livePage.classList.contains('hidden')) return;
+            livePage.classList.add('hidden');
+            if (homeView) homeView.classList.remove('hidden');
+            if (biLivePollTimer) clearInterval(biLivePollTimer);
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        };
+
+        async function fetchBiLiveState() {
+            const restUrl = `https://firestore.googleapis.com/v1/projects/spl-santuri-premier-league/databases/(default)/documents/artifacts/${myAppId}/public/data/live_auction/state`;
+            try {
+                const res = await fetch(restUrl, { cache: 'no-store' });
+                if (res.ok) {
+                    const json = await res.json();
+                    const f = json.fields || {};
+                    const incoming = {};
+                    for (const k in f) incoming[k] = decodeFirestoreRestValue(f[k]);
+                    if (incoming.updatedAt && incoming.updatedAt >= (biLiveState.updatedAt || 0)) {
+                        biLiveState = {
+                            ...biLiveState,
+                            ...incoming,
+                            bidHistory: Array.isArray(incoming.bidHistory) ? incoming.bidHistory : [],
+                            soldPlayers: incoming.soldPlayers && typeof incoming.soldPlayers === 'object' ? incoming.soldPlayers : {},
+                            unsoldPlayerIds: Array.isArray(incoming.unsoldPlayerIds) ? incoming.unsoldPlayerIds : []
+                        };
+                    }
+                }
+            } catch (err) {}
+        }
+
+        async function saveBiLiveState(nextState) {
+            nextState.updatedAt = Date.now();
+            biLiveState = nextState;
+            renderBiLiveArena();
+            const restUrl = `https://firestore.googleapis.com/v1/projects/spl-santuri-premier-league/databases/(default)/documents/artifacts/${myAppId}/public/data/live_auction/state`;
+            const fields = {};
+            for (const k in biLiveState) fields[k] = encodeFirestoreRestValue(biLiveState[k]);
+            await fetch(restUrl, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fields })
+            }).catch(() => {});
+        }
+
+        function getBiTeamStats(teamId) {
+            const teams = window.currentTeamsList || [];
+            const team = teams.find(t => String(t.id) === String(teamId)) || { id: teamId, name: teamId, purse: 8000 };
+            const totalPurse = Number(team.purse || 8000);
+            const entries = Object.entries(biLiveState.soldPlayers || {}).filter(([, v]) => String(v.teamId) === String(teamId));
+            const spent = entries.reduce((s, [, v]) => s + (Number(v.amount) || 0), 0);
+            return { team, totalPurse, spent, remaining: Math.max(0, totalPurse - spent), count: entries.length };
+        }
+
+        window.openBiLiveFranchiseLogin = function() {
+            document.getElementById('bi-live-fr-login-form')?.classList.toggle('hidden');
+        };
+
+        window.handleBiLiveFranchiseLogin = function(e) {
+            e.preventDefault();
+            const idVal = (document.getElementById('bi-live-fr-id')?.value || '').trim();
+            const passVal = (document.getElementById('bi-live-fr-pass')?.value || '').trim();
+            const matched = (window.currentTeamsList || []).find(t => t.loginId && t.loginPass && String(t.loginId).trim().toLowerCase() === idVal.toLowerCase() && String(t.loginPass).trim() === passVal);
+            if (!matched) {
+                showNotice('Invalid Franchise Login ID or Password.', 'Login Failed');
+                return;
+            }
+            biLiveFranchise = matched;
+            localStorage.setItem('spl_live_auction_franchise_v1', JSON.stringify({ teamId: matched.id }));
+            document.getElementById('bi-live-fr-login-form')?.classList.add('hidden');
+            renderBiLiveArena();
+        };
+
+        window.logoutBiLiveFranchise = function() {
+            biLiveFranchise = null;
+            localStorage.removeItem('spl_live_auction_franchise_v1');
+            renderBiLiveArena();
+        };
+
+        window.toggleBiLiveAdminDeck = function() {
+            if (window.isAdmin) {
+                document.getElementById('bi-live-admin-deck')?.classList.toggle('hidden');
+            } else {
+                window.toggleAdminModal();
+            }
+        };
+
+        window.placeBiLiveBid = async function(incOrBase) {
+            if (!biLiveFranchise || biLiveState.status !== 'BIDDING' || !biLiveState.currentPlayerId) return;
+            if (String(biLiveState.highestBidderId) === String(biLiveFranchise.id)) return;
+            const stats = getBiTeamStats(biLiveFranchise.id);
+            if (stats.count >= 13) { showNotice('Squad already full (13/13)!', 'Squad Full'); return; }
+            const hasBid = (biLiveState.bidHistory || []).length > 0 && biLiveState.highestBidderId;
+            const nextAmt = (!hasBid || incOrBase === 'BASE') ? Number(biLiveState.basePrice || 200) : Number(biLiveState.currentBid || 0) + Number(incOrBase);
+            if (nextAmt > stats.remaining) { showNotice('Exceeds remaining purse!', 'Purse Limit'); return; }
+            const entry = { teamId: biLiveFranchise.id, teamName: biLiveFranchise.name || biLiveFranchise.id, amount: nextAmt, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) };
+            await saveBiLiveState({
+                ...biLiveState,
+                currentBid: nextAmt,
+                highestBidderId: biLiveFranchise.id,
+                highestBidderName: biLiveFranchise.name || biLiveFranchise.id,
+                bidHistory: [entry, ...(biLiveState.bidHistory || [])].slice(0, 20)
+            });
+        };
+
+        window.biBringPlayerToStage = async function(playerId) {
+            if (!window.isAdmin) return;
+            const base = Math.max(50, parseInt(document.getElementById('bi-adm-base')?.value || '200', 10) || 200);
+            await saveBiLiveState({
+                ...biLiveState,
+                currentPlayerId: playerId,
+                basePrice: base,
+                currentBid: base,
+                highestBidderId: null,
+                highestBidderName: null,
+                status: 'BIDDING',
+                bidHistory: []
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.biAdminNextPlayer = async function() {
+            if (!window.isAdmin) return;
+            const sold = biLiveState.soldPlayers || {};
+            const unsold = new Set(biLiveState.unsoldPlayerIds || []);
+            const next = (window.approvedPoolPlayers || []).find(p => !sold[p.id] && !unsold.has(p.id) && String(p.id) !== String(biLiveState.currentPlayerId));
+            if (next) await biBringPlayerToStage(next.id);
+        };
+
+        window.biAdminUndo = async function() {
+            if (!window.isAdmin || biLiveState.status !== 'BIDDING') return;
+            const hist = [...(biLiveState.bidHistory || [])];
+            if (!hist.length) return;
+            hist.shift();
+            const prev = hist[0] || null;
+            await saveBiLiveState({ ...biLiveState, currentBid: prev ? prev.amount : biLiveState.basePrice, highestBidderId: prev ? prev.teamId : null, highestBidderName: prev ? prev.teamName : null, bidHistory: hist });
+        };
+
+        window.biAdminSold = async function() {
+            if (!window.isAdmin || !biLiveState.currentPlayerId || !biLiveState.highestBidderId) return;
+            const p = (window.approvedPoolPlayers || []).find(x => String(x.id) === String(biLiveState.currentPlayerId)) || {};
+            const sold = { ...(biLiveState.soldPlayers || {}) };
+            sold[biLiveState.currentPlayerId] = { teamId: biLiveState.highestBidderId, teamName: biLiveState.highestBidderName, amount: biLiveState.currentBid, srNo: p.srNo || '', playerName: p.name || '' };
+            await saveBiLiveState({ ...biLiveState, status: 'SOLD', soldPlayers: sold });
+        };
+
+        window.biAdminUnsold = async function() {
+            if (!window.isAdmin || !biLiveState.currentPlayerId) return;
+            const set = new Set(biLiveState.unsoldPlayerIds || []);
+            set.add(biLiveState.currentPlayerId);
+            await saveBiLiveState({ ...biLiveState, status: 'UNSOLD', highestBidderId: null, highestBidderName: null, unsoldPlayerIds: Array.from(set) });
+        };
+
+        window.renderBiLiveArena = function() {
+            const admDeck = document.getElementById('bi-live-admin-deck');
+            if (admDeck) admDeck.classList.toggle('hidden', !window.isAdmin);
+
+            const frLoginBtn = document.getElementById('bi-live-fr-login-btn');
+            const frLogoutBtn = document.getElementById('bi-live-fr-logout-btn');
+            const frConsole = document.getElementById('bi-live-fr-console');
+            if (biLiveFranchise) {
+                frLoginBtn?.classList.add('hidden');
+                frLogoutBtn?.classList.remove('hidden');
+                frConsole?.classList.remove('hidden');
+                const st = getBiTeamStats(biLiveFranchise.id);
+                document.getElementById('bi-con-code').textContent = st.team.id;
+                document.getElementById('bi-con-name').textContent = st.team.name;
+                document.getElementById('bi-con-purse').textContent = `₹${st.remaining.toLocaleString('en-IN')}`;
+                document.getElementById('bi-con-squad').textContent = `${st.count}/13`;
+            } else {
+                frLoginBtn?.classList.remove('hidden');
+                frLogoutBtn?.classList.add('hidden');
+                frConsole?.classList.add('hidden');
+            }
+
+            const p = (window.approvedPoolPlayers || []).find(x => String(x.id) === String(biLiveState.currentPlayerId));
+            const stageBox = document.getElementById('bi-stage-player-box');
+            const stampOverlay = document.getElementById('bi-stage-stamp-overlay');
+            document.getElementById('bi-stage-sr').textContent = p ? (p.srNo || 'SR-001') : 'READY';
+
+            if (!p) {
+                stageBox.innerHTML = `<p class="text-gray-400 text-sm py-10">Waiting for Auctioneer to bring a player onto the stage...</p>`;
+                stampOverlay?.classList.add('hidden');
+            } else {
+                stageBox.innerHTML = `
+                    <img src="${p.photo || 'https://placehold.co/200x200/1C335E/F4B036?text=SPL'}" class="w-36 h-36 rounded-2xl object-cover border-4 border-spl-gold mx-auto mb-3">
+                    <h3 class="font-oswald text-3xl font-bold uppercase text-white">${window.escapeHtml(p.name)}</h3>
+                    <p class="text-sm text-spl-gold font-bold uppercase mt-1">${window.escapeHtml(p.skill || '')}</p>
+                    <p class="text-xs text-gray-300 mt-1">${window.escapeHtml(p.village || '')} (${window.escapeHtml(p.panchayat || '')})</p>
+                `;
+                if (biLiveState.status === 'SOLD' || biLiveState.status === 'UNSOLD') {
+                    stampOverlay?.classList.remove('hidden');
+                    document.getElementById('bi-stage-stamp-text').textContent = biLiveState.status + '!';
+                    document.getElementById('bi-stage-stamp-sub').textContent = biLiveState.status === 'SOLD' ? `${biLiveState.highestBidderName} • ₹${biLiveState.currentBid}` : 'Queued for Round 2';
+                } else {
+                    stampOverlay?.classList.add('hidden');
+                }
+            }
+
+            document.getElementById('bi-live-bid-amount').textContent = `₹${Number(biLiveState.currentBid || 0).toLocaleString('en-IN')}`;
+            document.getElementById('bi-live-base-note').textContent = `Base Price: ₹${Number(biLiveState.basePrice || 200).toLocaleString('en-IN')}`;
+            document.getElementById('bi-live-leader-name').textContent = biLiveState.highestBidderName || (p ? 'Awaiting Opening Bid' : 'No Bids Yet');
+
+            const feed = document.getElementById('bi-live-bid-feed');
+            if (feed) {
+                feed.innerHTML = (biLiveState.bidHistory || []).map(b => `<span class="flex-shrink-0 bg-premium-950 border border-spl-gold/50 px-2.5 py-1 rounded text-xs font-bold text-spl-gold">${window.escapeHtml(b.teamId)}: ₹${b.amount}</span>`).join('') || '<span class="text-xs text-gray-500 italic">Waiting for opening bid...</span>';
+            }
+
+            const standings = document.getElementById('bi-live-standings-grid');
+            if (standings) {
+                standings.innerHTML = (window.currentTeamsList || []).map(t => {
+                    const st = getBiTeamStats(t.id);
+                    return `
+                        <div class="bg-premium-950 border border-premium-700 rounded-xl p-3.5">
+                            <p class="font-oswald font-bold text-white text-base">${window.escapeHtml(t.name)} <span class="text-spl-gold">(${window.escapeHtml(t.id)})</span></p>
+                            <p class="text-xs text-green-400 font-bold mt-1">Purse Left: ₹${st.remaining.toLocaleString('en-IN')}</p>
+                            <p class="text-[11px] text-gray-400">Players Bought: ${st.count}/13</p>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            const poolGrid = document.getElementById('bi-live-pool-grid');
+            if (poolGrid) {
+                const q = (document.getElementById('bi-live-pool-search')?.value || '').trim().toLowerCase();
+                const sold = biLiveState.soldPlayers || {};
+                const list = (window.approvedPoolPlayers || []).filter(pl => !q || `${pl.name} ${pl.srNo} ${pl.village}`.toLowerCase().includes(q));
+                poolGrid.innerHTML = list.map(pl => {
+                    const sInfo = sold[pl.id];
+                    const action = sInfo
+                        ? `<span class="text-[11px] font-bold text-green-400">${window.escapeHtml(sInfo.teamId)} • ₹${sInfo.amount}</span>`
+                        : (window.isAdmin ? `<button type="button" onclick="biBringPlayerToStage('${window.escapeHtml(pl.id)}')" class="bg-spl-gold text-premium-950 font-oswald font-bold text-xs uppercase px-2.5 py-1 rounded cursor-pointer">Stage</button>` : '');
+                    return `
+                        <div class="bg-premium-950 border border-premium-700 rounded-xl p-2.5 flex items-center justify-between gap-2">
+                            <div class="min-w-0">
+                                <span class="text-[10px] font-bold text-spl-gold uppercase">${window.escapeHtml(pl.srNo || '')}</span>
+                                <p class="font-oswald font-bold text-white text-sm truncate">${window.escapeHtml(pl.name)}</p>
+                            </div>
+                            ${action}
+                        </div>
+                    `;
+                }).join('');
             }
         };
 
