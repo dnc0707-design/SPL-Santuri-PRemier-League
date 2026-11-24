@@ -90,9 +90,10 @@
                 </div>
 
                 <!-- Desktop Nav -->
-                <nav class="hidden lg:flex items-center gap-2.5 xl:gap-4 font-oswald text-xs xl:text-sm tracking-wide uppercase whitespace-nowrap">
+                <nav class="hidden lg:flex items-center gap-2 xl:gap-3.5 font-oswald text-xs xl:text-sm tracking-wide uppercase whitespace-nowrap">
                     <a href="#" onclick="closeAuctionPoolPage()" class="nav-link active text-spl-gold">Home</a>
                     <button type="button" onclick="openAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors uppercase">Auction Pool</button>
+                    <a href="demo-auction.html" class="bg-blue-600/20 text-blue-300 border border-blue-400/50 font-bold px-2.5 py-1 rounded hover:bg-blue-500 hover:text-white transition-colors"><i class="fa-solid fa-gavel mr-1"></i>Demo Auction</a>
                     <a href="#rules-banner-section" onclick="closeAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors">Rules</a>
                     <a href="#teams" onclick="closeAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors">Franchises</a>
                     <a href="#gallery" onclick="closeAuctionPoolPage()" class="nav-link hover:text-spl-gold transition-colors">Gallery</a>
@@ -121,6 +122,7 @@
             <nav class="flex flex-col px-6 py-6 font-oswald text-lg uppercase tracking-wide space-y-3">
                 <a href="#" onclick="closeAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 text-spl-gold flex items-center"><i class="fa-solid fa-house w-6 mr-2 text-spl-gold"></i> Home</a>
                 <button type="button" onclick="openAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center uppercase text-left"><i class="fa-solid fa-users w-6 mr-2 text-spl-gold"></i> Auction Pool</button>
+                <a href="demo-auction.html" onclick="closeMobileMenu()" class="py-2 border-b border-premium-800 text-blue-300 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-gavel w-6 mr-2 text-blue-400"></i> Demo Auction (Franchise Login)</a>
                 <a href="#rules-banner-section" onclick="closeAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-scale-balanced w-6 mr-2 text-spl-gold"></i> SPL-6 Rules</a>
                 <a href="#teams" onclick="closeAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-shield-halved w-6 mr-2 text-spl-gold"></i> Franchises</a>
                 <a href="#gallery" onclick="closeAuctionPoolPage(); closeMobileMenu()" class="py-2 border-b border-premium-800 hover:text-spl-gold transition-colors flex items-center"><i class="fa-solid fa-images w-6 mr-2 text-spl-gold"></i> Gallery</a>
@@ -180,6 +182,9 @@
                     <button type="button" onclick="openAuctionPoolPage()" class="inline-flex items-center bg-premium-800 hover:bg-spl-gold text-spl-gold hover:text-premium-950 border-2 border-spl-gold font-oswald font-bold px-7 py-2.5 uppercase tracking-wider rounded-lg transition-all text-base shadow-lg cursor-pointer">
                         <i class="fa-solid fa-users-viewfinder mr-2.5"></i> Season 6 Auction Pool <span id="hero-pool-badge" class="ml-2 bg-spl-red text-white text-xs px-2 py-0.5 rounded-full">View All</span>
                     </button>
+                    <a href="demo-auction.html" class="inline-flex items-center bg-blue-600/25 hover:bg-blue-500 text-blue-200 hover:text-white border-2 border-blue-400 font-oswald font-bold px-7 py-2.5 uppercase tracking-wider rounded-lg transition-all text-base shadow-lg cursor-pointer">
+                        <i class="fa-solid fa-gavel mr-2.5"></i> Demo Auction Room
+                    </a>
                     <a href="#seasons" class="inline-block bg-transparent border border-premium-600 hover:border-spl-gold text-gray-300 hover:text-spl-gold font-oswald font-bold px-6 py-2.5 uppercase tracking-wider rounded-lg transition-colors text-base"><i class="fa-solid fa-book-open mr-2"></i> View Season History</a>
                 </div>
             </div>
@@ -496,14 +501,15 @@ service cloud.firestore {
                         </form>
                     </div>
 
-                    <!-- TAB 2: TEAMS / FRANCHISES -->
+                    <!-- TAB 2: TEAMS / FRANCHISES & DEMO AUCTION CREDENTIALS -->
                     <div id="admin-tab-teams" class="admin-tab-content hidden">
-                        <h3 class="font-bold text-white mb-4 text-xl border-l-4 border-spl-gold pl-3">Add / Manage Franchises</h3>
+                        <h3 class="font-bold text-white mb-2 text-xl border-l-4 border-spl-gold pl-3">Add / Manage Franchises & Demo Auction Login</h3>
+                        <p class="text-gray-400 text-xs sm:text-sm mb-4">Create or edit each franchise's logo, theme, and <strong>Demo Auction Login ID & Password</strong> (used on <a href="demo-auction.html" class="text-spl-gold underline font-bold">demo-auction.html</a>).</p>
                         <form id="add-team-form" onsubmit="handleTeamSubmit(event)" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 bg-premium-800/40 p-6 rounded-lg border border-premium-700/60 shadow-inner">
                             <input type="hidden" id="team-edit-id" value="">
                             <div>
                                 <label class="block text-gray-400 text-sm font-bold mb-2">Team Code / Abbr</label>
-                                <input type="text" id="team-id" class="w-full bg-premium-800 border border-premium-700 rounded px-4 py-2 text-white uppercase focus:outline-none focus:border-spl-gold" placeholder="e.g. SS" maxlength="5" required>
+                                <input type="text" id="team-id" class="w-full bg-premium-800 border border-premium-700 rounded px-4 py-2 text-white uppercase focus:outline-none focus:border-spl-gold" placeholder="e.g. JMK" maxlength="5" required>
                             </div>
                             <div>
                                 <label class="block text-gray-400 text-sm font-bold mb-2">Team Full Name</label>
@@ -522,6 +528,21 @@ service cloud.firestore {
                                     <option value="from-gray-600 to-gray-900">Dark Gray</option>
                                 </select>
                             </div>
+
+                            <!-- Demo Auction Credentials for Franchise -->
+                            <div>
+                                <label class="block text-blue-300 text-sm font-bold mb-2"><i class="fa-solid fa-user-lock mr-1"></i> Demo Auction Login ID</label>
+                                <input type="text" id="team-login-id" class="w-full bg-premium-950 border border-blue-500/50 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="e.g. jmk_owner">
+                            </div>
+                            <div>
+                                <label class="block text-blue-300 text-sm font-bold mb-2"><i class="fa-solid fa-key mr-1"></i> Demo Auction Password</label>
+                                <input type="text" id="team-login-pass" class="w-full bg-premium-950 border border-blue-500/50 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" placeholder="e.g. jmk@2026">
+                            </div>
+                            <div>
+                                <label class="block text-spl-gold text-sm font-bold mb-2"><i class="fa-solid fa-coins mr-1"></i> Auction Purse Budget (₹)</label>
+                                <input type="number" id="team-purse" class="w-full bg-premium-950 border border-spl-gold/50 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold" value="8000" min="1000" step="500">
+                            </div>
+
                             <div class="md:col-span-3">
                                 <label class="block text-gray-400 text-sm font-bold mb-2">Upload Team Logo (Database Synced)</label>
                                 <input type="file" id="team-logo-file" accept="image/*" onchange="openCropper(event, 'team', 1)" class="w-full bg-premium-800 border border-premium-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-spl-gold file:text-premium-950 hover:file:bg-spl-goldHover">
@@ -535,8 +556,8 @@ service cloud.firestore {
                         </form>
 
                         <div class="border-t border-premium-700/60 pt-6 mt-4">
-                            <h4 class="font-bold text-gray-300 mb-4 text-sm uppercase"><i class="fa-solid fa-list mr-2"></i> Current Franchises (Click Edit or Delete):</h4>
-                            <div id="admin-teams-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+                            <h4 class="font-bold text-gray-300 mb-4 text-sm uppercase"><i class="fa-solid fa-list mr-2"></i> Current Franchises (Click Edit to Set/View Login & Password):</h4>
+                            <div id="admin-teams-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4"></div>
                         </div>
                     </div>
 
@@ -939,6 +960,7 @@ service cloud.firestore {
                     <ul class="space-y-3 text-sm text-gray-400 font-medium">
                         <li><a href="#" onclick="closeAuctionPoolPage()" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> About SPL</a></li>
                         <li><button type="button" onclick="openAuctionPoolPage()" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> Season 6 Auction Pool</button></li>
+                        <li><a href="demo-auction.html" class="hover:text-white transition flex items-center text-blue-300"><i class="fa-solid fa-chevron-right text-blue-400 text-[10px] mr-2"></i> Franchise Demo Auction</a></li>
                         <li><a href="#" onclick="openRulesModal(); return false;" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> Rules & Regulations</a></li>
                         <li><a href="#" class="hover:text-white transition flex items-center"><i class="fa-solid fa-chevron-right text-spl-gold text-[10px] mr-2"></i> Contact Us</a></li>
                     </ul>
@@ -1787,9 +1809,9 @@ service cloud.firestore {
         ];
 
         const defaultTeams = [
-            { id: 'KU', name: 'Krishnapur United', color: 'from-blue-600 to-blue-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/KRISHANPUR%20UNITED.jpg?raw=true' },
-            { id: 'AXI', name: 'Aman XI Bheti', color: 'from-orange-500 to-red-600', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/aman%20XI%20bheti.png?raw=true' },
-            { id: 'JMK', name: 'JMK Sixers', color: 'from-red-600 to-red-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/JMK%20SIXER.jpg?raw=true' }
+            { id: 'KU', name: 'Krishnapur United', color: 'from-blue-600 to-blue-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/KRISHANPUR%20UNITED.jpg?raw=true', loginId: 'ku_owner', loginPass: 'ku@2026', purse: 8000 },
+            { id: 'AXI', name: 'Aman XI Bheti', color: 'from-orange-500 to-red-600', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/aman%20XI%20bheti.png?raw=true', loginId: 'axi_owner', loginPass: 'axi@2026', purse: 8000 },
+            { id: 'JMK', name: 'JMK Sixers', color: 'from-red-600 to-red-900', logo: 'https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/JMK%20SIXER.jpg?raw=true', loginId: 'jmk_owner', loginPass: 'jmk@2026', purse: 8000 }
         ];
 
         const defaultGalleryPics = [
@@ -3611,7 +3633,7 @@ service cloud.firestore {
             startSeasonAutoScroll();
         }
 
-        // --- TEAMS LOGIC (Cloud Firestore + REST API Sync) ---
+        // --- TEAMS LOGIC (Cloud Firestore + REST API Sync & Demo Auction Credentials) ---
         window.currentTeamsList = [];
 
         async function saveTeamDocToDatabase(teamId, teamObj) {
@@ -3706,6 +3728,8 @@ service cloud.firestore {
             document.getElementById('team-edit-id').value = '';
             document.getElementById('team-id').removeAttribute('readonly');
             document.getElementById('team-existing-logo').value = '';
+            const purseEl = document.getElementById('team-purse');
+            if (purseEl) purseEl.value = 8000;
             document.getElementById('team-cancel-btn').classList.add('hidden');
             window.clearCropPreview('team');
         };
@@ -3717,6 +3741,9 @@ service cloud.firestore {
             const teamId = document.getElementById('team-id').value.trim().toUpperCase().replace(/[^A-Z0-9_-]/g, '');
             const name = document.getElementById('team-name').value.trim();
             const color = document.getElementById('team-color').value;
+            const loginId = (document.getElementById('team-login-id')?.value || '').trim();
+            const loginPass = (document.getElementById('team-login-pass')?.value || '').trim();
+            const purse = Math.max(0, parseInt(document.getElementById('team-purse')?.value || '8000', 10) || 8000);
             const existingLogo = document.getElementById('team-existing-logo').value;
             const newLogo = window.croppedImages['team'];
 
@@ -3726,7 +3753,16 @@ service cloud.firestore {
             }
             
             const logoData = newLogo ? newLogo : (existingLogo ? existingLogo : '');
-            const team = { id: teamId, name: name, color: color, logo: logoData, updatedAt: Date.now() };
+            const team = {
+                id: teamId,
+                name: name,
+                color: color,
+                logo: logoData,
+                loginId: loginId,
+                loginPass: loginPass,
+                purse: purse,
+                updatedAt: Date.now()
+            };
 
             const submitBtn = e.target.querySelector('button[type="submit"]');
             const origHtml = submitBtn ? submitBtn.innerHTML : '';
@@ -3743,7 +3779,7 @@ service cloud.firestore {
                 setLocalList('teams', localTeams);
                 renderTeams(localTeams);
                 resetTeamForm();
-                showNotice(`Franchise "${name}" (${teamId}) saved to the cloud database!`, 'Saved to Database');
+                showNotice(`Franchise "${name}" (${teamId}) saved to the cloud database!${loginId ? `\nDemo Auction Login ID: ${loginId}` : ''}`, 'Saved to Database');
             } catch(err) {
                 console.error('Team DB save error:', err);
                 showNotice(`Could not save franchise to database: ${err.message}\n\nPlease verify your internet connection and Firebase Firestore rules.`, 'Database Save Error');
@@ -3773,15 +3809,18 @@ service cloud.firestore {
         window.editTeamById = function(id) {
             const t = (window.currentTeamsList || []).find(item => String(item.id) === String(id));
             if (!t) return;
-            window.editTeam(t.id, t.name || '', t.color || 'from-blue-600 to-blue-900', t.logo || '');
+            window.editTeam(t.id, t.name || '', t.color || 'from-blue-600 to-blue-900', t.logo || '', t.loginId || '', t.loginPass || '', t.purse || 8000);
         };
 
-        window.editTeam = function(id, name, color, logo) {
+        window.editTeam = function(id, name, color, logo, loginId = '', loginPass = '', purse = 8000) {
             document.getElementById('team-edit-id').value = id;
             document.getElementById('team-id').value = id;
             document.getElementById('team-id').setAttribute('readonly', 'true');
             document.getElementById('team-name').value = name;
             document.getElementById('team-color').value = color;
+            if (document.getElementById('team-login-id')) document.getElementById('team-login-id').value = loginId;
+            if (document.getElementById('team-login-pass')) document.getElementById('team-login-pass').value = loginPass;
+            if (document.getElementById('team-purse')) document.getElementById('team-purse').value = purse || 8000;
             document.getElementById('team-existing-logo').value = logo || '';
             document.getElementById('team-logo-file').value = '';
             document.getElementById('team-cancel-btn').classList.remove('hidden');
@@ -3843,13 +3882,20 @@ service cloud.firestore {
                     teams.forEach(t => {
                         const safeId = window.escapeHtml(t.id);
                         const safeName = window.escapeHtml(t.name);
+                        const safeLoginId = window.escapeHtml(t.loginId || 'Not set');
+                        const safeLoginPass = window.escapeHtml(t.loginPass || 'Not set');
                         const logoHtml = t.logo ? `<img src="${t.logo}" class="max-w-full max-h-full object-contain">` : `<span class="text-xs text-gray-500 font-bold">NO LOGO</span>`;
                         adminGrid.innerHTML += `
-                            <div class="bg-premium-800 border border-premium-700 rounded p-4 flex flex-col items-center text-center relative shadow-lg">
+                            <div class="bg-premium-800 border border-premium-700 rounded-xl p-4 flex flex-col items-center text-center relative shadow-lg">
                                 <div class="w-16 h-16 bg-white p-1 rounded-full border-2 border-premium-600 mb-2 flex items-center justify-center overflow-hidden shadow-inner">
                                     ${logoHtml}
                                 </div>
-                                <span class="font-bold text-white text-sm leading-tight mb-3 break-words">${safeName}</span>
+                                <span class="font-bold text-white text-sm leading-tight mb-2 break-words">${safeName}</span>
+                                <div class="w-full bg-premium-950/90 border border-premium-700 rounded-lg p-2 mb-3 text-left text-[11px] space-y-0.5">
+                                    <p class="text-blue-300 truncate"><strong>ID:</strong> <span class="text-white font-mono">${safeLoginId}</span></p>
+                                    <p class="text-blue-300 truncate"><strong>Pass:</strong> <span class="text-spl-gold font-mono">${safeLoginPass}</span></p>
+                                    <p class="text-gray-400"><strong>Purse:</strong> ₹${Number(t.purse || 8000).toLocaleString('en-IN')}</p>
+                                </div>
                                 <div class="flex gap-2 w-full mt-auto">
                                     <button type="button" onclick="editTeamById('${safeId}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs py-1.5 rounded transition shadow cursor-pointer"><i class="fa-solid fa-pen"></i></button>
                                     <button type="button" onclick="deleteTeam('${safeId}')" class="flex-1 bg-red-600 hover:bg-red-700 text-white text-xs py-1.5 rounded transition shadow cursor-pointer"><i class="fa-solid fa-trash"></i></button>
