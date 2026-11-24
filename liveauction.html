@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPL Season 6 | Live Mega Auction Arena</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Oswald & Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'oswald': ['Oswald', 'sans-serif'],
+                        'inter': ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        spl: {
+                            gold: '#F4B036',
+                            goldHover: '#d49626',
+                            red: '#E12D39'
+                        },
+                        premium: {
+                            950: '#070D19',
+                            900: '#0F1C36',
+                            800: '#182C52',
+                            700: '#26437A',
+                            600: '#355CA6',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 7px; height: 7px; }
+        ::-webkit-scrollbar-track { background: #070D19; }
+        ::-webkit-scrollbar-thumb { background: #F4B036; border-radius: 4px; }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 25px rgba(244, 176, 54, 0.35); }
+            50% { box-shadow: 0 0 45px rgba(244, 176, 54, 0.75); }
+        }
+        .broadcast-glow { animation: pulseGlow 2.4s infinite ease-in-out; }
+    </style>
+</head>
+<body class="font-inter bg-premium-950 text-white min-h-screen flex flex-col selection:bg-spl-gold selection:text-premium-950">
+
+    <!-- Broadcast Top Navigation Bar -->
+    <header class="bg-premium-950/95 backdrop-blur-md sticky top-0 z-50 border-b-2 border-spl-gold/60 shadow-[0_6px_30px_rgba(0,0,0,0.75)]">
+        <div class="container mx-auto px-4 lg:px-8 h-20 flex items-center justify-between gap-3">
+            <a href="index.html" class="flex items-center gap-3 group min-w-0">
+                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-white p-1 shadow-[0_0_18px_rgba(244,176,54,0.45)] overflow-hidden flex-shrink-0">
+                    <img src="https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/main/ChatGPT%20Image%20Sep%205%2C%202026%2C%2003_22_40%20PM.png" alt="SPL Logo" class="w-full h-full object-contain" onerror="this.onerror=null; this.src='https://placehold.co/150/ffffff/0B1221?text=SPL';">
+                </div>
+                <div class="min-w-0">
+                    <h1 class="font-oswald text-base sm:text-xl font-bold uppercase tracking-wide leading-tight truncate">Santuri <span class="text-spl-gold">Premier League</span></h1>
+                    <div class="flex items-center gap-2 mt-0.5">
+                        <span class="inline-flex items-center gap-1.5 text-[10px] text-white bg-spl-red px-2 py-0.5 rounded font-extrabold uppercase tracking-widest shadow">
+                            <span class="w-2 h-2 rounded-full bg-white animate-ping"></span> LIVE MEGA AUCTION
+                        </span>
+                        <span id="live-sync-status" class="hidden sm:inline-flex items-center gap-1 text-[10px] text-green-400 font-bold uppercase tracking-wider">
+                            <i class="fa-solid fa-satellite-dish"></i> Real-Time Sync
+                        </span>
+                    </div>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                <!-- Sound Toggle -->
+                <button type="button" id="sound-toggle-btn" onclick="toggleAuctionSound()" class="bg-premium-800 hover:bg-premium-700 text-spl-gold px-3 py-2 rounded-lg border border-premium-600 text-xs font-bold uppercase transition cursor-pointer" title="Toggle Gavel & Bid Chimes">
+                    <i id="sound-toggle-icon" class="fa-solid fa-volume-high"></i>
+                </button>
+
+                <!-- Franchise Login / Active Badge -->
+                <button type="button" id="nav-franchise-login-btn" onclick="openFranchiseLoginModal()" class="bg-blue-600 hover:bg-blue-500 text-white font-oswald font-bold uppercase text-xs sm:text-sm tracking-wider px-3.5 sm:px-4 py-2 rounded-lg shadow-lg transition flex items-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-shield-halved"></i> <span>Franchise Bid Login</span>
+                </button>
+                <div id="nav-franchise-active-pill" class="hidden items-center gap-2 bg-blue-950/90 border border-blue-400/60 px-3 py-1.5 rounded-lg">
+                    <span id="nav-franchise-code" class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-xs px-2 py-0.5 rounded uppercase">TEAM</span>
+                    <button type="button" onclick="logoutLiveFranchise()" class="text-red-400 hover:text-red-300 text-xs font-bold uppercase ml-1 cursor-pointer" title="Logout Franchise"><i class="fa-solid fa-right-from-bracket"></i></button>
+                </div>
+
+                <!-- Admin Auctioneer Login / Active Badge -->
+                <button type="button" id="nav-admin-login-btn" onclick="openAuctioneerLoginModal()" class="bg-spl-gold/15 hover:bg-spl-gold text-spl-gold hover:text-premium-950 font-oswald font-bold uppercase text-xs sm:text-sm tracking-wider px-3.5 sm:px-4 py-2 rounded-lg border border-spl-gold/60 transition flex items-center gap-2 shadow cursor-pointer">
+                    <i class="fa-solid fa-gavel"></i> <span class="hidden sm:inline">Auctioneer Admin</span><span class="sm:hidden">Admin</span>
+                </button>
+                <button type="button" id="nav-admin-logout-btn" onclick="logoutAuctioneerAdmin()" class="hidden bg-spl-red hover:bg-red-700 text-white font-oswald font-bold uppercase text-xs sm:text-sm tracking-wider px-3 py-2 rounded-lg transition shadow cursor-pointer">
+                    <i class="fa-solid fa-lock-open mr-1"></i> Exit Admin
+                </button>
+
+                <a href="index.html" class="hidden md:inline-flex items-center gap-1.5 bg-premium-800 hover:bg-premium-700 text-gray-200 font-oswald font-bold uppercase text-xs tracking-wider px-3.5 py-2 rounded-lg border border-premium-600 transition">
+                    <i class="fa-solid fa-house"></i> Home
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Arena Container -->
+    <main class="flex-grow container mx-auto px-4 py-6 max-w-7xl space-y-6">
+
+        <!-- TOP BROADCAST STAGE: ON THE BLOCK PLAYER + REAL-TIME BID MONITOR -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+
+            <!-- Left 5 Cols: Official Player Broadcast Card -->
+            <div class="lg:col-span-5 bg-gradient-to-b from-premium-800 via-premium-900 to-premium-950 border-2 border-spl-gold rounded-2xl overflow-hidden shadow-2xl broadcast-glow flex flex-col justify-between relative">
+                <!-- Card Top Ribbon -->
+                <div class="bg-premium-950/90 px-4 py-3 border-b border-spl-gold/50 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span id="stage-round-badge" class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-xs px-2.5 py-0.5 rounded uppercase tracking-wider">ROUND 1</span>
+                        <span id="stage-status-badge" class="bg-green-600/20 text-green-300 border border-green-500/40 text-[10px] font-extrabold px-2.5 py-0.5 rounded uppercase tracking-widest">ON THE BLOCK</span>
+                    </div>
+                    <span id="stage-sr-badge" class="font-oswald font-extrabold text-spl-gold text-lg tracking-wider">SR-000</span>
+                </div>
+
+                <!-- Player Card Body -->
+                <div id="stage-player-card" class="p-5 flex-grow flex flex-col items-center justify-center text-center">
+                    <div class="py-12 space-y-3">
+                        <div class="w-20 h-20 rounded-full bg-premium-800 border-2 border-spl-gold/50 flex items-center justify-center mx-auto text-spl-gold text-3xl">
+                            <i class="fa-solid fa-gavel"></i>
+                        </div>
+                        <h2 class="font-oswald text-2xl sm:text-3xl font-bold uppercase text-white">Waiting for Next Player</h2>
+                        <p class="text-xs sm:text-sm text-gray-400 max-w-xs mx-auto">The Auctioneer Admin will bring the next player from the Santuri Auction Pool onto the live stage shortly.</p>
+                    </div>
+                </div>
+
+                <!-- Sold / Unsold Stamp Overlay -->
+                <div id="stage-hammer-overlay" class="hidden absolute inset-0 z-20 bg-premium-950/85 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
+                    <div id="stage-hammer-stamp" class="border-4 border-spl-gold text-spl-gold font-oswald text-5xl sm:text-6xl font-extrabold uppercase px-8 py-3 rounded-2xl transform -rotate-6 shadow-2xl tracking-widest">
+                        SOLD!
+                    </div>
+                    <p id="stage-hammer-subtext" class="font-oswald text-xl sm:text-2xl text-white uppercase mt-4 tracking-wide"></p>
+                </div>
+            </div>
+
+            <!-- Right 7 Cols: Live Bidding Ticker + Franchise Bidding Console + Admin Auctioneer Controls -->
+            <div class="lg:col-span-7 flex flex-col gap-5">
+
+                <!-- Live Current Bid & Highest Bidder Banner -->
+                <div class="bg-gradient-to-r from-premium-900 via-premium-800 to-premium-900 border-2 border-spl-gold/80 rounded-2xl p-5 sm:p-6 shadow-2xl">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+                        <!-- Current Bid Box -->
+                        <div class="bg-premium-950/95 border border-premium-700 rounded-xl p-4 text-center sm:text-left">
+                            <p class="text-xs text-gray-400 font-bold uppercase tracking-widest">Current Live Bid</p>
+                            <div class="flex items-baseline justify-center sm:justify-start gap-2 mt-1">
+                                <span id="live-current-bid" class="font-oswald text-4xl sm:text-5xl font-extrabold text-spl-gold tracking-tight">₹0</span>
+                                <span id="live-base-price-label" class="text-xs text-gray-400 font-semibold">(Base: ₹200)</span>
+                            </div>
+                        </div>
+
+                        <!-- Leading Franchise Box -->
+                        <div class="bg-premium-950/95 border border-blue-500/50 rounded-xl p-4 flex items-center gap-3.5">
+                            <div id="live-leader-logo" class="w-14 h-14 rounded-xl bg-white p-1 border-2 border-spl-gold flex items-center justify-center overflow-hidden flex-shrink-0">
+                                <i class="fa-solid fa-shield-halved text-premium-950 text-2xl"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <span class="text-[10px] font-extrabold uppercase tracking-widest text-green-400 flex items-center gap-1">
+                                    <i class="fa-solid fa-crown"></i> Highest Bidder
+                                </span>
+                                <h3 id="live-leader-name" class="font-oswald text-xl sm:text-2xl font-bold uppercase text-white truncate mt-0.5">No Bids Yet</h3>
+                                <p id="live-leader-purse" class="text-xs text-blue-300 font-semibold truncate">Opening Bid Ready</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Real-Time Bid History Ticker -->
+                    <div class="mt-4 pt-3.5 border-t border-premium-700/70">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[11px] font-bold uppercase tracking-wider text-gray-300"><i class="fa-solid fa-bolt text-spl-gold mr-1"></i> Live Bid Feed</span>
+                            <span id="live-bid-count" class="text-[11px] text-gray-400 font-semibold">0 bids</span>
+                        </div>
+                        <div id="live-bid-history" class="flex gap-2 overflow-x-auto pb-1">
+                            <span class="text-xs text-gray-500 italic">Waiting for opening bid...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FRANCHISE OFFICIAL BIDDING CONSOLE (Visible when a Franchise is logged in) -->
+                <div id="franchise-bid-console" class="hidden bg-gradient-to-br from-blue-950 via-premium-900 to-premium-950 border-2 border-blue-400 rounded-2xl p-5 shadow-2xl">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-blue-800/70">
+                        <div class="flex items-center gap-3">
+                            <div id="console-team-logo" class="w-11 h-11 rounded-xl bg-white p-1 border border-spl-gold flex items-center justify-center overflow-hidden"></div>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span id="console-team-code" class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-xs px-2 py-0.5 rounded uppercase">TEAM</span>
+                                    <span class="text-xs text-blue-300 font-bold uppercase">Official Bidding Console</span>
+                                </div>
+                                <h4 id="console-team-name" class="font-oswald text-xl font-bold text-white uppercase">Franchise Name</h4>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 text-right">
+                            <div class="bg-premium-950 px-3 py-1.5 rounded-lg border border-premium-700">
+                                <p class="text-[10px] text-gray-400 uppercase font-bold">Purse Left</p>
+                                <p id="console-purse-left" class="font-oswald text-lg font-bold text-green-400">₹8,000</p>
+                            </div>
+                            <div class="bg-premium-950 px-3 py-1.5 rounded-lg border border-premium-700">
+                                <p class="text-[10px] text-gray-400 uppercase font-bold">Max Bid</p>
+                                <p id="console-max-bid" class="font-oswald text-lg font-bold text-spl-gold">₹8,000</p>
+                            </div>
+                            <div class="bg-premium-950 px-3 py-1.5 rounded-lg border border-premium-700">
+                                <p class="text-[10px] text-gray-400 uppercase font-bold">Squad</p>
+                                <p id="console-squad-size" class="font-oswald text-lg font-bold text-blue-300">0/13</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- One-Tap Bid Buttons -->
+                    <div id="console-bid-buttons-area" class="space-y-3">
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                            <button type="button" id="btn-bid-base" onclick="placeFranchiseBid('BASE')" class="bg-green-600 hover:bg-green-500 text-white font-oswald font-bold text-base sm:text-lg uppercase py-3 px-3 rounded-xl shadow-lg transition cursor-pointer">
+                                Opening Bid
+                            </button>
+                            <button type="button" id="btn-bid-50" onclick="placeFranchiseBid(50)" class="bg-spl-gold hover:bg-spl-goldHover text-premium-950 font-oswald font-bold text-base sm:text-lg uppercase py-3 px-3 rounded-xl shadow-lg transition cursor-pointer">
+                                + ₹50
+                            </button>
+                            <button type="button" id="btn-bid-100" onclick="placeFranchiseBid(100)" class="bg-spl-gold hover:bg-spl-goldHover text-premium-950 font-oswald font-bold text-base sm:text-lg uppercase py-3 px-3 rounded-xl shadow-lg transition cursor-pointer">
+                                + ₹100
+                            </button>
+                            <button type="button" id="btn-bid-200" onclick="placeFranchiseBid(200)" class="bg-orange-500 hover:bg-orange-400 text-premium-950 font-oswald font-bold text-base sm:text-lg uppercase py-3 px-3 rounded-xl shadow-lg transition cursor-pointer">
+                                + ₹200
+                            </button>
+                        </div>
+                        <p id="console-bid-status-note" class="text-xs text-center text-blue-200 font-medium"></p>
+                    </div>
+                </div>
+
+                <!-- Spectator / Guest Prompt (Visible when neither Franchise nor Admin is logged in) -->
+                <div id="spectator-cta-box" class="bg-premium-900/90 border border-premium-700 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                        <h4 class="font-oswald text-lg font-bold uppercase text-white"><i class="fa-solid fa-hand-pointer text-spl-gold mr-2"></i> Are you a Franchise Owner?</h4>
+                        <p class="text-xs text-gray-300 mt-0.5">Sign in with your Official Franchise Login ID &amp; Password to place live bids in real time.</p>
+                    </div>
+                    <button type="button" onclick="openFranchiseLoginModal()" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-oswald font-bold uppercase text-sm tracking-wider px-5 py-2.5 rounded-xl shadow-lg transition cursor-pointer whitespace-nowrap">
+                        <i class="fa-solid fa-right-to-bracket mr-1.5"></i> Login to Bid
+                    </button>
+                </div>
+
+                <!-- AUCTIONEER / ADMIN CONTROL DECK (Visible when Admin is logged in) -->
+                <div id="admin-auctioneer-deck" class="hidden bg-gradient-to-b from-premium-900 to-premium-950 border-2 border-spl-gold rounded-2xl p-5 shadow-2xl space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-premium-700">
+                        <h4 class="font-oswald text-xl font-bold uppercase text-spl-gold flex items-center gap-2">
+                            <i class="fa-solid fa-gavel"></i> Auctioneer Control Deck
+                        </h4>
+                        <div class="flex items-center gap-2 text-xs">
+                            <label class="text-gray-300 font-bold">Round:</label>
+                            <select id="admin-round-select" class="bg-premium-950 border border-premium-600 rounded px-2 py-1 text-white font-bold">
+                                <option value="1">Round 1 (Regular)</option>
+                                <option value="2">Round 2 (Unsold +50% Penalty)</option>
+                            </select>
+                            <label class="text-gray-300 font-bold ml-1">Base ₹:</label>
+                            <input type="number" id="admin-base-price" value="200" min="50" step="50" class="w-20 bg-premium-950 border border-premium-600 rounded px-2 py-1 text-white font-bold text-right">
+                        </div>
+                    </div>
+
+                    <!-- Primary Hammer & Bid Controls -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                        <button type="button" onclick="adminHammerSold()" class="bg-green-600 hover:bg-green-500 text-white font-oswald font-bold text-base uppercase py-2.5 px-3 rounded-xl shadow-lg transition cursor-pointer">
+                            <i class="fa-solid fa-hammer mr-1"></i> SOLD!
+                        </button>
+                        <button type="button" onclick="adminMarkUnsold()" class="bg-spl-red hover:bg-red-700 text-white font-oswald font-bold text-base uppercase py-2.5 px-3 rounded-xl shadow-lg transition cursor-pointer">
+                            <i class="fa-solid fa-ban mr-1"></i> UNSOLD
+                        </button>
+                        <button type="button" onclick="adminUndoLastBid()" class="bg-amber-600 hover:bg-amber-500 text-white font-oswald font-bold text-sm uppercase py-2.5 px-3 rounded-xl shadow transition cursor-pointer">
+                            <i class="fa-solid fa-rotate-left mr-1"></i> Undo Bid
+                        </button>
+                        <button type="button" onclick="adminNextAvailablePlayer()" class="bg-spl-gold hover:bg-spl-goldHover text-premium-950 font-oswald font-bold text-sm uppercase py-2.5 px-3 rounded-xl shadow transition cursor-pointer">
+                            <i class="fa-solid fa-forward-step mr-1"></i> Next SR Player
+                        </button>
+                    </div>
+
+                    <!-- Admin Proxy Bid (In case a franchise bids verbally on stage) -->
+                    <div class="bg-premium-950/90 border border-premium-700 rounded-xl p-3 flex flex-wrap items-center gap-2 text-xs">
+                        <span class="font-bold text-gray-300 uppercase"><i class="fa-solid fa-microphone text-spl-gold mr-1"></i> Floor Bid Proxy:</span>
+                        <select id="admin-proxy-team" class="bg-premium-900 border border-premium-600 rounded px-2.5 py-1.5 text-white font-bold flex-grow sm:flex-grow-0"></select>
+                        <input type="number" id="admin-proxy-amount" placeholder="Bid ₹" step="50" class="w-24 bg-premium-900 border border-premium-600 rounded px-2.5 py-1.5 text-white font-bold text-right">
+                        <button type="button" onclick="adminPlaceProxyBid()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold uppercase px-3 py-1.5 rounded transition cursor-pointer">Place Bid</button>
+                        <button type="button" onclick="adminResetEntireAuction()" class="ml-auto text-red-400 hover:text-red-300 underline font-bold cursor-pointer">Reset Auction</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- FRANCHISE PURSE & SQUAD STANDINGS LEADERBOARD -->
+        <section class="bg-premium-900 border border-premium-700 rounded-2xl p-4 sm:p-6 shadow-xl">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-premium-800">
+                <div>
+                    <h3 class="font-oswald text-2xl font-bold uppercase text-white"><i class="fa-solid fa-ranking-star text-spl-gold mr-2"></i> Live Franchise Purse &amp; Squad Standings</h3>
+                    <p class="text-xs text-gray-400">Real-time remaining purse, players bought (out of 13), and U-19 compliance across all SPL franchises.</p>
+                </div>
+                <span id="auction-summary-counts" class="text-xs bg-premium-950 border border-premium-700 px-3 py-1.5 rounded-lg text-spl-gold font-bold uppercase">
+                    Sold: 0 • Unsold: 0 • Available: 0
+                </span>
+            </div>
+
+            <div id="franchise-standings-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Populated dynamically -->
+            </div>
+        </section>
+
+        <!-- AUCTION POOL QUEUE (AVAILABLE, SOLD & UNSOLD PLAYERS) -->
+        <section class="bg-premium-900 border border-premium-700 rounded-2xl p-4 sm:p-6 shadow-xl">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-premium-800">
+                <div class="flex flex-wrap items-center gap-2">
+                    <button type="button" onclick="setPoolTab('AVAILABLE')" id="pool-tab-AVAILABLE" class="px-4 py-2 rounded-lg font-oswald font-bold uppercase text-sm bg-spl-gold text-premium-950 shadow cursor-pointer">Available Pool</button>
+                    <button type="button" onclick="setPoolTab('SOLD')" id="pool-tab-SOLD" class="px-4 py-2 rounded-lg font-oswald font-bold uppercase text-sm bg-premium-800 text-gray-300 hover:text-white cursor-pointer">Sold Players</button>
+                    <button type="button" onclick="setPoolTab('UNSOLD')" id="pool-tab-UNSOLD" class="px-4 py-2 rounded-lg font-oswald font-bold uppercase text-sm bg-premium-800 text-gray-300 hover:text-white cursor-pointer">Unsold (Round 2)</button>
+                </div>
+                <input type="text" id="arena-pool-search" oninput="renderArenaPoolGrid()" placeholder="Search Name / SR / Village..." class="w-full sm:w-64 bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-spl-gold">
+            </div>
+
+            <div id="arena-pool-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[540px] overflow-y-auto pr-1">
+                <!-- Populated dynamically -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-premium-950 border-t-2 border-spl-gold/60 py-5 mt-10 text-center text-xs text-gray-400">
+        <p>&copy; 2026 Santuri Premier League (SPL) • Official Live Mega Auction Broadcast &amp; Bidding System</p>
+    </footer>
+
+    <!-- Franchise Login Modal -->
+    <div id="franchise-login-modal" class="hidden fixed inset-0 z-[250] bg-premium-950/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-premium-900 border-2 border-blue-400 rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative">
+            <button type="button" onclick="closeFranchiseLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-2xl"></i></button>
+            <div class="w-14 h-14 bg-premium-950 rounded-2xl border-2 border-blue-400 flex items-center justify-center mx-auto mb-3 text-blue-400 text-2xl">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h3 class="font-oswald text-2xl sm:text-3xl font-bold uppercase text-center text-white">Franchise <span class="text-spl-gold">Live Bid</span> Login</h3>
+            <p class="text-xs text-gray-300 text-center mt-1 mb-5">Enter your official Franchise Login ID &amp; Password to bid live.</p>
+            <form onsubmit="handleLiveFranchiseLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Franchise Login ID</label>
+                    <input type="text" id="live-fr-id" class="w-full bg-premium-950 border border-premium-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-spl-gold" placeholder="Enter official login ID" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Password</label>
+                    <input type="password" id="live-fr-pass" class="w-full bg-premium-950 border border-premium-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-spl-gold" placeholder="Enter password" required>
+                </div>
+                <button type="submit" id="live-fr-submit-btn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-oswald font-bold text-xl uppercase tracking-wider py-3 rounded-xl shadow-lg transition cursor-pointer">
+                    <i class="fa-solid fa-right-to-bracket mr-2"></i> Join Live Auction
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Auctioneer Admin Login Modal -->
+    <div id="auctioneer-login-modal" class="hidden fixed inset-0 z-[250] bg-premium-950/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-premium-900 border-2 border-spl-gold rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative">
+            <button type="button" onclick="closeAuctioneerLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-2xl"></i></button>
+            <div class="w-14 h-14 bg-premium-950 rounded-2xl border-2 border-spl-gold flex items-center justify-center mx-auto mb-3 text-spl-gold text-2xl">
+                <i class="fa-solid fa-gavel"></i>
+            </div>
+            <h3 class="font-oswald text-2xl sm:text-3xl font-bold uppercase text-center text-spl-gold">Auctioneer Admin</h3>
+            <p class="text-xs text-gray-300 text-center mt-1 mb-5">Sign in to conduct the live SPL Season 6 Mega Auction.</p>
+            <form onsubmit="handleAuctioneerLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Admin Username</label>
+                    <input type="text" id="auct-admin-user" class="w-full bg-premium-950 border border-premium-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-spl-gold" placeholder="Enter admin username" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Admin Password</label>
+                    <input type="password" id="auct-admin-pass" class="w-full bg-premium-950 border border-premium-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-spl-gold" placeholder="Enter admin password" required>
+                </div>
+                <button type="submit" class="w-full bg-spl-gold hover:bg-spl-goldHover text-premium-950 font-oswald font-bold text-xl uppercase tracking-wider py-3 rounded-xl shadow-lg transition cursor-pointer">
+                    <i class="fa-solid fa-unlock-keyhole mr-2"></i> Open Auctioneer Deck
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Franchise Squad Inspector Modal -->
+    <div id="team-squad-modal" class="hidden fixed inset-0 z-[260] bg-premium-950/90 backdrop-blur-md flex items-center justify-center p-4" onclick="closeTeamSquadModal()">
+        <div class="bg-premium-900 border-2 border-spl-gold rounded-2xl max-w-xl w-full p-5 sm:p-6 shadow-2xl max-h-[85vh] flex flex-col" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between pb-3 border-b border-premium-700">
+                <h3 id="squad-modal-title" class="font-oswald text-2xl font-bold uppercase text-spl-gold">Franchise Squad</h3>
+                <button type="button" onclick="closeTeamSquadModal()" class="text-gray-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-2xl"></i></button>
+            </div>
+            <div id="squad-modal-body" class="py-4 overflow-y-auto space-y-2.5 flex-grow"></div>
+        </div>
+    </div>
+
+    <!-- Custom Dialog Modal -->
+    <div id="ui-dialog-modal" class="hidden fixed inset-0 z-[300] bg-premium-950/90 backdrop-blur-sm flex items-center justify-center px-4">
+        <div class="bg-premium-900 border border-spl-gold rounded-xl p-6 max-w-md w-full shadow-2xl text-center">
+            <div class="w-12 h-12 bg-premium-800 rounded-full flex items-center justify-center mx-auto mb-3 border border-spl-gold text-spl-gold text-xl">
+                <i class="fa-solid fa-gavel"></i>
+            </div>
+            <h4 id="ui-dialog-title" class="font-oswald text-2xl font-bold uppercase text-white mb-2">Notice</h4>
+            <p id="ui-dialog-msg" class="text-gray-300 text-sm mb-5 whitespace-pre-line leading-relaxed"></p>
+            <div class="flex justify-center gap-3">
+                <button id="ui-dialog-cancel" class="hidden px-5 py-2 bg-premium-700 hover:bg-premium-600 text-white font-bold rounded transition cursor-pointer">Cancel</button>
+                <button id="ui-dialog-ok" class="px-6 py-2 bg-spl-gold hover:bg-spl-goldHover text-premium-950 font-oswald font-bold text-lg uppercase tracking-wide rounded transition shadow-lg cursor-pointer">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { initializeFirestore, collection, doc, getDocs, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const myAppId = 'spl-santuri-premier-league';
+        const FRANCHISE_SESSION_KEY = 'spl_live_auction_franchise_v1';
+        const ADMIN_SESSION_KEY = 'spl_live_auction_admin_v1';
+
+        let db = null;
+        let auth = null;
+        let soundEnabled = true;
+
+        let allTeams = [];
+        let approvedPlayers = [];
+        let activeFranchise = null;
+        let isAuctioneerAdmin = false;
+        let currentPoolTab = 'AVAILABLE';
+        let isPlacingBid = false;
+
+        // Shared Live Auction State synced across all screens
+        let liveState = {
+            currentPlayerId: null,
+            round: 1,
+            basePrice: 200,
+            currentBid: 0,
+            highestBidderId: null,
+            highestBidderName: null,
+            status: 'IDLE', // 'IDLE' | 'BIDDING' | 'SOLD' | 'UNSOLD'
+            bidHistory: [], // [{ teamId, teamName, amount, time }]
+            soldPlayers: {}, // { [playerId]: { teamId, teamName, amount, round } }
+            unsoldPlayerIds: [],
+            updatedAt: 0
+        };
+
+        window.escapeHtml = function(str) {
+            return String(str ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        };
+
+        window.showNotice = function(msg, title = 'Notice', onOk = null) {
+            const modal = document.getElementById('ui-dialog-modal');
+            document.getElementById('ui-dialog-title').innerText = title;
+            document.getElementById('ui-dialog-msg').innerText = msg;
+            document.getElementById('ui-dialog-cancel').classList.add('hidden');
+            const okBtn = document.getElementById('ui-dialog-ok');
+            okBtn.onclick = () => {
+                modal.classList.add('hidden');
+                if (onOk) onOk();
+            };
+            modal.classList.remove('hidden');
+        };
+
+        window.showConfirmDialog = function(msg, onConfirm, title = 'Confirm Action') {
+            const modal = document.getElementById('ui-dialog-modal');
+            document.getElementById('ui-dialog-title').innerText = title;
+            document.getElementById('ui-dialog-msg').innerText = msg;
+            const cancelBtn = document.getElementById('ui-dialog-cancel');
+            cancelBtn.classList.remove('hidden');
+            cancelBtn.onclick = () => modal.classList.add('hidden');
+            const okBtn = document.getElementById('ui-dialog-ok');
+            okBtn.onclick = () => {
+                modal.classList.add('hidden');
+                if (onConfirm) onConfirm();
+            };
+            modal.classList.remove('hidden');
+        };
+
+        // Web Audio Sound Effects for Live Bids & Hammer
+        function playTone(freq = 660, duration = 0.14, type = 'sine') {
+            if (!soundEnabled) return;
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + duration);
+            } catch (e) {}
+        }
+
+        window.toggleAuctionSound = function() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('sound-toggle-icon');
+            if (icon) icon.className = soundEnabled ? 'fa-solid fa-volume-high' : 'fa-solid fa-volume-xmark text-gray-500';
+        };
+
+        function getPlayerBirthYear(dobStr) {
+            if (!dobStr) return null;
+            const match = String(dobStr).trim().match(/\b(19\d{2}|20\d{2})\b/);
+            if (match) return parseInt(match[1], 10);
+            const d = new Date(dobStr);
+            return !isNaN(d.getTime()) ? d.getFullYear() : null;
+        }
+
+        function isU19Player(player) {
+            const yr = getPlayerBirthYear(player?.dob);
+            return yr !== null && yr >= 2008;
+        }
+
+        function encodeFirestoreRestValue(val) {
+            if (val === null || val === undefined) return { nullValue: null };
+            if (typeof val === 'boolean') return { booleanValue: val };
+            if (typeof val === 'number') {
+                return Number.isInteger(val) ? { integerValue: String(val) } : { doubleValue: val };
+            }
+            if (Array.isArray(val)) {
+                return { arrayValue: { values: val.map(encodeFirestoreRestValue) } };
+            }
+            if (typeof val === 'object') {
+                const fields = {};
+                for (const k in val) fields[k] = encodeFirestoreRestValue(val[k]);
+                return { mapValue: { fields } };
+            }
+            return { stringValue: String(val) };
+        }
+
+        function decodeFirestoreRestValue(valObj) {
+            if (!valObj || typeof valObj !== 'object') return null;
+            if ('stringValue' in valObj) return valObj.stringValue;
+            if ('integerValue' in valObj) return parseInt(valObj.integerValue, 10);
+            if ('doubleValue' in valObj) return parseFloat(valObj.doubleValue);
+            if ('booleanValue' in valObj) return Boolean(valObj.booleanValue);
+            if ('nullValue' in valObj) return null;
+            if ('arrayValue' in valObj) {
+                return (valObj.arrayValue.values || []).map(decodeFirestoreRestValue);
+            }
+            if ('mapValue' in valObj) {
+                const out = {};
+                const fields = valObj.mapValue.fields || {};
+                for (const k in fields) out[k] = decodeFirestoreRestValue(fields[k]);
+                return out;
+            }
+            return null;
+        }
+
+        // --- PERSIST & SYNC LIVE AUCTION STATE ---
+        async function pushLiveAuctionState(newState) {
+            newState.updatedAt = Date.now();
+            liveState = newState;
+            try { localStorage.setItem('spl_live_auction_state_backup', JSON.stringify(liveState)); } catch (e) {}
+            renderFullArena();
+
+            const restUrl = `https://firestore.googleapis.com/v1/projects/spl-santuri-premier-league/databases/(default)/documents/artifacts/${myAppId}/public/data/live_auction/state`;
+            const fields = {};
+            for (const k in liveState) fields[k] = encodeFirestoreRestValue(liveState[k]);
+
+            if (db) {
+                try {
+                    await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'live_auction', 'state'), liveState);
+                    return true;
+                } catch (e) {}
+            }
+
+            const res = await fetch(restUrl, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fields })
+            });
+            if (!res.ok) throw new Error(`Sync error (${res.status})`);
+            return true;
+        }
+
+        async function fetchLiveStateOnce() {
+            const restUrl = `https://firestore.googleapis.com/v1/projects/spl-santuri-premier-league/databases/(default)/documents/artifacts/${myAppId}/public/data/live_auction/state`;
+            try {
+                const res = await fetch(restUrl, { cache: 'no-store' });
+                if (res.ok) {
+                    const json = await res.json();
+                    const f = json.fields || {};
+                    const incoming = {};
+                    for (const k in f) incoming[k] = decodeFirestoreRestValue(f[k]);
+                    if (incoming.updatedAt && incoming.updatedAt > (liveState.updatedAt || 0)) {
+                        const bidIncreased = incoming.currentBid > liveState.currentBid;
+                        liveState = {
+                            ...liveState,
+                            ...incoming,
+                            bidHistory: Array.isArray(incoming.bidHistory) ? incoming.bidHistory : [],
+                            soldPlayers: incoming.soldPlayers && typeof incoming.soldPlayers === 'object' ? incoming.soldPlayers : {},
+                            unsoldPlayerIds: Array.isArray(incoming.unsoldPlayerIds) ? incoming.unsoldPlayerIds : []
+                        };
+                        try { localStorage.setItem('spl_live_auction_state_backup', JSON.stringify(liveState)); } catch (e) {}
+                        if (bidIncreased) playTone(780, 0.14, 'triangle');
+                        renderFullArena();
+                    }
+                }
+            } catch (e) {}
+        }
+
+        function subscribeLiveAuctionState() {
+            try {
+                const cached = localStorage.getItem('spl_live_auction_state_backup');
+                if (cached) liveState = { ...liveState, ...JSON.parse(cached) };
+            } catch (e) {}
+
+            fetchLiveStateOnce();
+            // 1.5s fast polling ensures instant updates even behind strict corporate firewalls
+            setInterval(fetchLiveStateOnce, 1500);
+
+            if (!db) return;
+            onSnapshot(doc(db, 'artifacts', myAppId, 'public', 'data', 'live_auction', 'state'), (snap) => {
+                if (!snap.exists()) return;
+                const data = snap.data();
+                if ((data.updatedAt || 0) >= (liveState.updatedAt || 0)) {
+                    const bidIncreased = (data.currentBid || 0) > (liveState.currentBid || 0);
+                    liveState = {
+                        ...liveState,
+                        ...data,
+                        bidHistory: Array.isArray(data.bidHistory) ? data.bidHistory : [],
+                        soldPlayers: data.soldPlayers && typeof data.soldPlayers === 'object' ? data.soldPlayers : {},
+                        unsoldPlayerIds: Array.isArray(data.unsoldPlayerIds) ? data.unsoldPlayerIds : []
+                    };
+                    try { localStorage.setItem('spl_live_auction_state_backup', JSON.stringify(liveState)); } catch (e) {}
+                    if (bidIncreased) playTone(780, 0.14, 'triangle');
+                    renderFullArena();
+                }
+            }, () => {});
+        }
+
+        // --- LOAD FRANCHISES & APPROVED PLAYERS ---
+        async function loadFranchises() {
+            try {
+                const local = localStorage.getItem('spl_local_teams');
+                if (local) {
+                    const parsed = JSON.parse(local);
+                    if (Array.isArray(parsed) && parsed.length > 0) allTeams = parsed;
+                }
+            } catch (e) {}
+
+            try {
+                const url = `https://firestore.googleapis.com/v1/projects/spl-santuri-premier-league/databases/(default)/documents/artifacts/${myAppId}/public/data/teams?pageSize=100`;
+                const res = await fetch(url, { cache: 'no-store' });
+                if (res.ok) {
+                    const json = await res.json();
+                    const docs = json.documents || [];
+                    if (docs.length > 0) {
+                        allTeams = docs.map(docItem => {
+                            const id = docItem.name.split('/').pop();
+                            const fields = docItem.fields || {};
+                            const obj = { id };
+                            for (const k in fields) obj[k] = decodeFirestoreRestValue(fields[k]);
+                            return obj;
+                        });
+                        try { localStorage.setItem('spl_local_teams', JSON.stringify(allTeams)); } catch (e) {}
+                    }
+                }
+            } catch (e) {}
+
+            populateProxyTeamDropdown();
+        }
+
+        async function loadApprovedPlayers() {
+            try {
+                const local = localStorage.getItem('spl_local_registrations');
+                if (local) {
+                    const parsed = JSON.parse(local);
+                    approvedPlayers = sortBySr(parsed.filter(p => !p.isOwnerRegistration && String(p.status || '').trim().toLowerCase() === 'approved'));
+                }
+            } catch (e) {}
+
+            const baseUrl = `https://firestore.googleapis.com/v1/projects/spl-santuri-premier-league/databases/(default)/documents/artifacts/${myAppId}/public/data/players`;
+            try {
+                let pageToken = '';
+                const fetched = [];
+                do {
+                    const url = `${baseUrl}?pageSize=300${pageToken ? `&pageToken=${encodeURIComponent(pageToken)}` : ''}`;
+                    const res = await fetch(url, { cache: 'no-store' });
+                    if (!res.ok) break;
+                    const json = await res.json();
+                    (json.documents || []).forEach(docItem => {
+                        const id = docItem.name.split('/').pop();
+                        const fields = docItem.fields || {};
+                        const obj = { id };
+                        for (const k in fields) obj[k] = decodeFirestoreRestValue(fields[k]);
+                        if (!obj.isOwnerRegistration && String(obj.status || '').trim().toLowerCase() === 'approved') {
+                            fetched.push(obj);
+                        }
+                    });
+                    pageToken = json.nextPageToken || '';
+                } while (pageToken);
+
+                if (fetched.length > 0) {
+                    approvedPlayers = sortBySr(fetched);
+                }
+            } catch (e) {}
+        }
+
+        function sortBySr(list) {
+            return [...list].sort((a, b) => {
+                const na = parseInt(String(a.srNo || '0').replace(/\D/g, ''), 10) || 0;
+                const nb = parseInt(String(b.srNo || '0').replace(/\D/g, ''), 10) || 0;
+                return na - nb;
+            });
+        }
+
+        // --- CALCULATE TEAM STATS FROM LIVE SOLD PLAYERS ---
+        function getTeamLiveStats(teamId) {
+            const team = allTeams.find(t => String(t.id) === String(teamId)) || { id: teamId, name: teamId, purse: 8000 };
+            const totalPurse = Number(team.purse || 8000);
+            const soldEntries = Object.entries(liveState.soldPlayers || {})
+                .filter(([, info]) => String(info.teamId) === String(teamId))
+                .map(([playerId, info]) => {
+                    const playerObj = approvedPlayers.find(p => String(p.id) === String(playerId)) || {};
+                    return {
+                        playerId,
+                        srNo: playerObj.srNo || info.srNo || 'SR-000',
+                        name: playerObj.name || info.playerName || 'Player',
+                        skill: playerObj.skill || info.skill || 'Player',
+                        village: playerObj.village || '',
+                        dob: playerObj.dob || info.dob || '',
+                        amount: Number(info.amount || 0),
+                        round: info.round || 1
+                    };
+                });
+
+            const spent = soldEntries.reduce((sum, item) => sum + item.amount, 0);
+            const remaining = Math.max(0, totalPurse - spent);
+            const count = soldEntries.length;
+            const slotsLeft = Math.max(0, 13 - count);
+            const u19Count = soldEntries.filter(p => isU19Player(p)).length;
+            // Reserve ₹100 per remaining slot after current bid so a franchise can complete 13 players
+            const reserveNeeded = slotsLeft > 1 ? (slotsLeft - 1) * 100 : 0;
+            const maxBid = slotsLeft === 0 ? 0 : Math.max(0, remaining - reserveNeeded);
+
+            return { team, totalPurse, spent, remaining, count, slotsLeft, u19Count, maxBid, roster: soldEntries };
+        }
+
+        // --- FRANCHISE OFFICIAL LOGIN & BIDDING ---
+        window.openFranchiseLoginModal = function() {
+            document.getElementById('franchise-login-modal').classList.remove('hidden');
+        };
+        window.closeFranchiseLoginModal = function() {
+            document.getElementById('franchise-login-modal').classList.add('hidden');
+        };
+
+        window.handleLiveFranchiseLogin = async function(e) {
+            e.preventDefault();
+            const loginId = (document.getElementById('live-fr-id')?.value || '').trim();
+            const loginPass = (document.getElementById('live-fr-pass')?.value || '').trim();
+            const btn = document.getElementById('live-fr-submit-btn');
+
+            if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Verifying...'; }
+            try {
+                await loadFranchises();
+                const matched = allTeams.find(t =>
+                    t.loginId && t.loginPass &&
+                    String(t.loginId).trim().toLowerCase() === loginId.toLowerCase() &&
+                    String(t.loginPass).trim() === loginPass
+                );
+                if (!matched) {
+                    showNotice('Invalid Franchise Login ID or Password. Please verify with SPL Admin.', 'Login Failed');
+                    return;
+                }
+                activeFranchise = matched;
+                localStorage.setItem(FRANCHISE_SESSION_KEY, JSON.stringify({ teamId: matched.id }));
+                closeFranchiseLoginModal();
+                renderFullArena();
+                showNotice(`Welcome, ${matched.name} (${matched.id})! Your official live bidding console is now active.`, 'Connected to Live Auction');
+            } finally {
+                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-right-to-bracket mr-2"></i> Join Live Auction'; }
+            }
+        };
+
+        window.logoutLiveFranchise = function() {
+            activeFranchise = null;
+            localStorage.removeItem(FRANCHISE_SESSION_KEY);
+            renderFullArena();
+        };
+
+        window.placeFranchiseBid = async function(incrementOrMode) {
+            if (!activeFranchise || isPlacingBid) return;
+            if (liveState.status !== 'BIDDING' || !liveState.currentPlayerId) {
+                showNotice('No player is currently open for bidding on the stage.', 'Auction Paused');
+                return;
+            }
+            if (String(liveState.highestBidderId) === String(activeFranchise.id)) {
+                showNotice('You already hold the highest bid for this player!', 'Highest Bidder');
+                return;
+            }
+
+            const stats = getTeamLiveStats(activeFranchise.id);
+            if (stats.count >= 13) {
+                showNotice('Your franchise has already completed its 13-player Santuri squad!', 'Squad Complete (13/13)');
+                return;
+            }
+
+            const hasAnyBid = (liveState.bidHistory || []).length > 0 && liveState.highestBidderId;
+            const nextBid = (!hasAnyBid || incrementOrMode === 'BASE')
+                ? Number(liveState.basePrice || 200)
+                : Number(liveState.currentBid || 0) + Number(incrementOrMode);
+
+            if (nextBid > stats.remaining) {
+                showNotice(`Insufficient Purse! You have ₹${stats.remaining.toLocaleString('en-IN')} remaining, which is less than ₹${nextBid.toLocaleString('en-IN')}.`, 'Purse Limit');
+                return;
+            }
+
+            isPlacingBid = true;
+            try {
+                // Re-fetch latest state right before writing to prevent simultaneous bid race conditions
+                await fetchLiveStateOnce();
+                const latestHasBid = (liveState.bidHistory || []).length > 0 && liveState.highestBidderId;
+                const verifiedBid = (!latestHasBid || incrementOrMode === 'BASE')
+                    ? Number(liveState.basePrice || 200)
+                    : Math.max(nextBid, Number(liveState.currentBid || 0) + Number(incrementOrMode));
+
+                if (verifiedBid > stats.remaining) {
+                    showNotice(`Another franchise just raised the bid to ₹${liveState.currentBid.toLocaleString('en-IN')}, exceeding your remaining purse.`, 'Outbid');
+                    return;
+                }
+
+                const newEntry = {
+                    teamId: activeFranchise.id,
+                    teamName: activeFranchise.name || activeFranchise.id,
+                    amount: verifiedBid,
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+                };
+
+                await pushLiveAuctionState({
+                    ...liveState,
+                    currentBid: verifiedBid,
+                    highestBidderId: activeFranchise.id,
+                    highestBidderName: activeFranchise.name || activeFranchise.id,
+                    bidHistory: [newEntry, ...(liveState.bidHistory || [])].slice(0, 25)
+                });
+                playTone(880, 0.16, 'triangle');
+            } catch (err) {
+                showNotice('Network delay while placing bid. Please tap again.', 'Bid Retry');
+            } finally {
+                isPlacingBid = false;
+            }
+        };
+
+        // --- AUCTIONEER ADMIN CONTROLS ---
+        window.openAuctioneerLoginModal = function() {
+            document.getElementById('auctioneer-login-modal').classList.remove('hidden');
+        };
+        window.closeAuctioneerLoginModal = function() {
+            document.getElementById('auctioneer-login-modal').classList.add('hidden');
+        };
+
+        window.handleAuctioneerLogin = function(e) {
+            e.preventDefault();
+            const u = (document.getElementById('auct-admin-user')?.value || '').trim();
+            const p = (document.getElementById('auct-admin-pass')?.value || '').trim();
+            if (u === 'admin' && p === '1234') {
+                isAuctioneerAdmin = true;
+                localStorage.setItem(ADMIN_SESSION_KEY, 'true');
+                closeAuctioneerLoginModal();
+                renderFullArena();
+                showNotice('Auctioneer Control Deck unlocked! You can bring players onto the stage, monitor live bids, and hammer SOLD / UNSOLD.', 'Auctioneer Active');
+            } else {
+                showNotice('Invalid Admin Username or Password.', 'Access Denied');
+            }
+        };
+
+        window.logoutAuctioneerAdmin = function() {
+            isAuctioneerAdmin = false;
+            localStorage.removeItem(ADMIN_SESSION_KEY);
+            renderFullArena();
+        };
+
+        window.adminPutPlayerOnStage = async function(playerId) {
+            if (!isAuctioneerAdmin) return;
+            const player = approvedPlayers.find(p => String(p.id) === String(playerId));
+            if (!player) return;
+
+            const basePrice = Math.max(50, parseInt(document.getElementById('admin-base-price')?.value || '200', 10) || 200);
+            const round = parseInt(document.getElementById('admin-round-select')?.value || '1', 10) || 1;
+
+            await pushLiveAuctionState({
+                ...liveState,
+                currentPlayerId: player.id,
+                round,
+                basePrice,
+                currentBid: basePrice,
+                highestBidderId: null,
+                highestBidderName: null,
+                status: 'BIDDING',
+                bidHistory: []
+            });
+            playTone(520, 0.2, 'sine');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.adminNextAvailablePlayer = async function() {
+            if (!isAuctioneerAdmin) return;
+            const soldMap = liveState.soldPlayers || {};
+            const unsoldSet = new Set(liveState.unsoldPlayerIds || []);
+            const nextPlayer = approvedPlayers.find(p => !soldMap[p.id] && !unsoldSet.has(p.id) && String(p.id) !== String(liveState.currentPlayerId));
+            if (!nextPlayer) {
+                showNotice('All Round 1 players have been presented! Switch to Round 2 or select an Unsold player from the Unsold tab below.', 'Pool Complete');
+                return;
+            }
+            await adminPutPlayerOnStage(nextPlayer.id);
+        };
+
+        window.adminUndoLastBid = async function() {
+            if (!isAuctioneerAdmin || liveState.status !== 'BIDDING') return;
+            const hist = [...(liveState.bidHistory || [])];
+            if (hist.length === 0) return;
+            hist.shift(); // Remove latest bid
+            const prev = hist[0] || null;
+            await pushLiveAuctionState({
+                ...liveState,
+                currentBid: prev ? prev.amount : liveState.basePrice,
+                highestBidderId: prev ? prev.teamId : null,
+                highestBidderName: prev ? prev.teamName : null,
+                bidHistory: hist
+            });
+        };
+
+        window.adminPlaceProxyBid = async function() {
+            if (!isAuctioneerAdmin || liveState.status !== 'BIDDING' || !liveState.currentPlayerId) return;
+            const teamId = document.getElementById('admin-proxy-team')?.value;
+            const amount = parseInt(document.getElementById('admin-proxy-amount')?.value || '0', 10);
+            if (!teamId || !amount || amount < liveState.basePrice) {
+                showNotice('Select a franchise and enter a valid bid amount.', 'Invalid Proxy Bid');
+                return;
+            }
+            const stats = getTeamLiveStats(teamId);
+            if (amount > stats.remaining) {
+                showNotice(`${stats.team.name} only has ₹${stats.remaining.toLocaleString('en-IN')} remaining.`, 'Purse Exceeded');
+                return;
+            }
+            const newEntry = {
+                teamId: stats.team.id,
+                teamName: stats.team.name,
+                amount,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+            };
+            await pushLiveAuctionState({
+                ...liveState,
+                currentBid: amount,
+                highestBidderId: stats.team.id,
+                highestBidderName: stats.team.name,
+                bidHistory: [newEntry, ...(liveState.bidHistory || [])].slice(0, 25)
+            });
+            playTone(880, 0.16, 'triangle');
+        };
+
+        window.adminHammerSold = async function() {
+            if (!isAuctioneerAdmin || !liveState.currentPlayerId) return;
+            if (!liveState.highestBidderId) {
+                showNotice('No franchise has placed a bid yet. Use "UNSOLD" if there are no bidders.', 'No Bids');
+                return;
+            }
+            const player = approvedPlayers.find(p => String(p.id) === String(liveState.currentPlayerId)) || {};
+            const updatedSold = { ...(liveState.soldPlayers || {}) };
+            updatedSold[liveState.currentPlayerId] = {
+                teamId: liveState.highestBidderId,
+                teamName: liveState.highestBidderName,
+                amount: liveState.currentBid,
+                round: liveState.round || 1,
+                srNo: player.srNo || 'SR-000',
+                playerName: player.name || 'Player',
+                skill: player.skill || 'Player',
+                dob: player.dob || ''
+            };
+            const updatedUnsold = (liveState.unsoldPlayerIds || []).filter(id => String(id) !== String(liveState.currentPlayerId));
+
+            await pushLiveAuctionState({
+                ...liveState,
+                status: 'SOLD',
+                soldPlayers: updatedSold,
+                unsoldPlayerIds: updatedUnsold
+            });
+            playTone(440, 0.35, 'sawtooth');
+        };
+
+        window.adminMarkUnsold = async function() {
+            if (!isAuctioneerAdmin || !liveState.currentPlayerId) return;
+            const unsoldSet = new Set(liveState.unsoldPlayerIds || []);
+            unsoldSet.add(liveState.currentPlayerId);
+            await pushLiveAuctionState({
+                ...liveState,
+                status: 'UNSOLD',
+                highestBidderId: null,
+                highestBidderName: null,
+                unsoldPlayerIds: Array.from(unsoldSet)
+            });
+            playTone(280, 0.3, 'sawtooth');
+        };
+
+        window.adminResetEntireAuction = function() {
+            if (!isAuctioneerAdmin) return;
+            showConfirmDialog('Reset ALL sold players, unsold tags, and live bids back to zero? This starts a brand new auction.', async () => {
+                await pushLiveAuctionState({
+                    currentPlayerId: null,
+                    round: 1,
+                    basePrice: 200,
+                    currentBid: 0,
+                    highestBidderId: null,
+                    highestBidderName: null,
+                    status: 'IDLE',
+                    bidHistory: [],
+                    soldPlayers: {},
+                    unsoldPlayerIds: []
+                });
+                showNotice('Live Auction has been reset cleanly.', 'Auction Reset');
+            }, 'Reset Live Auction');
+        };
+
+        // --- UI RENDERING ---
+        function populateProxyTeamDropdown() {
+            const sel = document.getElementById('admin-proxy-team');
+            if (!sel) return;
+            sel.innerHTML = allTeams.map(t => `<option value="${window.escapeHtml(t.id)}">${window.escapeHtml(t.id)} - ${window.escapeHtml(t.name)}</option>`).join('');
+        }
+
+        window.setPoolTab = function(tab) {
+            currentPoolTab = tab;
+            ['AVAILABLE', 'SOLD', 'UNSOLD'].forEach(t => {
+                const btn = document.getElementById(`pool-tab-${t}`);
+                if (!btn) return;
+                btn.className = (t === tab)
+                    ? 'px-4 py-2 rounded-lg font-oswald font-bold uppercase text-sm bg-spl-gold text-premium-950 shadow cursor-pointer'
+                    : 'px-4 py-2 rounded-lg font-oswald font-bold uppercase text-sm bg-premium-800 text-gray-300 hover:text-white cursor-pointer';
+            });
+            renderArenaPoolGrid();
+        };
+
+        window.openTeamSquadModal = function(teamId) {
+            const stats = getTeamLiveStats(teamId);
+            document.getElementById('squad-modal-title').textContent = `${stats.team.name} (${stats.team.id}) — ${stats.count}/13 Players`;
+            const body = document.getElementById('squad-modal-body');
+            if (stats.roster.length === 0) {
+                body.innerHTML = `<p class="text-xs text-gray-400 text-center py-8">No players bought yet in the live auction.</p>`;
+            } else {
+                body.innerHTML = stats.roster.map((p, idx) => `
+                    <div class="bg-premium-950 border border-premium-700 rounded-xl p-3 flex items-center justify-between gap-3">
+                        <div class="min-w-0">
+                            <span class="text-[10px] font-extrabold text-spl-gold uppercase">${idx + 1}. ${window.escapeHtml(p.srNo)}</span>
+                            ${isU19Player(p) ? '<span class="bg-spl-red text-white text-[9px] font-bold px-1.5 py-0.2 rounded uppercase ml-1">U-19</span>' : ''}
+                            <p class="font-oswald font-bold text-white text-base truncate">${window.escapeHtml(p.name)}</p>
+                            <p class="text-xs text-gray-400">${window.escapeHtml(p.skill)} ${p.village ? `• ${window.escapeHtml(p.village)}` : ''}</p>
+                        </div>
+                        <span class="bg-green-950 border border-green-500/40 text-green-300 font-oswald font-bold text-base px-3 py-1 rounded-lg flex-shrink-0">₹${p.amount.toLocaleString('en-IN')}</span>
+                    </div>
+                `).join('');
+            }
+            document.getElementById('team-squad-modal').classList.remove('hidden');
+        };
+
+        window.closeTeamSquadModal = function() {
+            document.getElementById('team-squad-modal').classList.add('hidden');
+        };
+
+        function renderFullArena() {
+            // 1. Top Nav Auth States
+            const frLoginBtn = document.getElementById('nav-franchise-login-btn');
+            const frActivePill = document.getElementById('nav-franchise-active-pill');
+            const frBidConsole = document.getElementById('franchise-bid-console');
+            const spectatorBox = document.getElementById('spectator-cta-box');
+
+            if (activeFranchise) {
+                frLoginBtn.classList.add('hidden');
+                frActivePill.classList.remove('hidden');
+                frActivePill.classList.add('flex');
+                document.getElementById('nav-franchise-code').textContent = activeFranchise.id;
+                frBidConsole.classList.remove('hidden');
+                spectatorBox.classList.add('hidden');
+                renderFranchiseBidConsole();
+            } else {
+                frLoginBtn.classList.remove('hidden');
+                frActivePill.classList.add('hidden');
+                frActivePill.classList.remove('flex');
+                frBidConsole.classList.add('hidden');
+                if (!isAuctioneerAdmin) spectatorBox.classList.remove('hidden');
+                else spectatorBox.classList.add('hidden');
+            }
+
+            const admLoginBtn = document.getElementById('nav-admin-login-btn');
+            const admLogoutBtn = document.getElementById('nav-admin-logout-btn');
+            const admDeck = document.getElementById('admin-auctioneer-deck');
+            if (isAuctioneerAdmin) {
+                admLoginBtn.classList.add('hidden');
+                admLogoutBtn.classList.remove('hidden');
+                admDeck.classList.remove('hidden');
+            } else {
+                admLoginBtn.classList.remove('hidden');
+                admLogoutBtn.classList.add('hidden');
+                admDeck.classList.add('hidden');
+            }
+
+            // 2. Stage Player Card
+            const stageCard = document.getElementById('stage-player-card');
+            const srBadge = document.getElementById('stage-sr-badge');
+            const roundBadge = document.getElementById('stage-round-badge');
+            const statusBadge = document.getElementById('stage-status-badge');
+            const hammerOverlay = document.getElementById('stage-hammer-overlay');
+            const hammerStamp = document.getElementById('stage-hammer-stamp');
+            const hammerSub = document.getElementById('stage-hammer-subtext');
+
+            roundBadge.textContent = `ROUND ${liveState.round || 1}`;
+            const currentPlayer = approvedPlayers.find(p => String(p.id) === String(liveState.currentPlayerId));
+
+            if (!currentPlayer) {
+                srBadge.textContent = 'READY';
+                statusBadge.textContent = 'STANDBY';
+                hammerOverlay.classList.add('hidden');
+                stageCard.innerHTML = `
+                    <div class="py-12 space-y-3">
+                        <div class="w-20 h-20 rounded-full bg-premium-800 border-2 border-spl-gold/50 flex items-center justify-center mx-auto text-spl-gold text-3xl">
+                            <i class="fa-solid fa-gavel"></i>
+                        </div>
+                        <h2 class="font-oswald text-2xl sm:text-3xl font-bold uppercase text-white">Waiting for Next Player</h2>
+                        <p class="text-xs sm:text-sm text-gray-400 max-w-xs mx-auto">The Auctioneer Admin will bring the next player onto the live stage shortly.</p>
+                    </div>
+                `;
+            } else {
+                const u19 = isU19Player(currentPlayer);
+                srBadge.textContent = currentPlayer.srNo || 'SR-001';
+                statusBadge.textContent = liveState.status || 'BIDDING';
+                stageCard.innerHTML = `
+                    <div class="relative mb-4">
+                        <img src="${currentPlayer.photo || 'https://placehold.co/240x240/1C335E/F4B036?text=SPL'}" onerror="this.onerror=null;this.src='https://placehold.co/240x240/1C335E/F4B036?text=SPL';" class="w-36 h-36 sm:w-44 sm:h-44 rounded-2xl object-cover object-top border-4 border-spl-gold shadow-[0_0_25px_rgba(244,176,54,0.45)] mx-auto">
+                        ${u19 ? '<span class="absolute -bottom-2.5 left-1/2 -translate-x-1/2 bg-spl-red text-white font-oswald text-xs font-extrabold uppercase px-3 py-0.5 rounded-full border border-white/40 shadow-lg">U-19 STAR</span>' : ''}
+                    </div>
+                    <h2 class="font-oswald text-3xl sm:text-4xl font-bold uppercase text-white tracking-wide leading-tight">${window.escapeHtml(currentPlayer.name)}</h2>
+                    <div class="mt-2 inline-flex items-center gap-2 bg-spl-gold/15 border border-spl-gold/50 text-spl-gold font-oswald font-bold uppercase text-sm px-4 py-1 rounded-full">
+                        <i class="fa-solid fa-baseball-bat-ball"></i> ${window.escapeHtml(currentPlayer.skill || 'Player')}
+                    </div>
+                    <div class="mt-4 w-full bg-premium-950/90 border border-premium-700 rounded-xl p-3 text-xs text-gray-300 space-y-1">
+                        <p><i class="fa-solid fa-location-dot text-spl-gold mr-1.5"></i> <strong>Village:</strong> ${window.escapeHtml(currentPlayer.village || 'N/A')}</p>
+                        <p><strong>Gram Panchayat:</strong> ${window.escapeHtml(currentPlayer.panchayat || 'N/A')}</p>
+                        ${(u19 && currentPlayer.dob) ? `<p class="text-orange-300 font-bold"><i class="fa-solid fa-cake-candles mr-1"></i> DOB: ${window.escapeHtml(currentPlayer.dob)}</p>` : ''}
+                    </div>
+                `;
+
+                if (liveState.status === 'SOLD') {
+                    hammerOverlay.classList.remove('hidden');
+                    hammerStamp.className = 'border-4 border-green-400 text-green-400 font-oswald text-5xl sm:text-6xl font-extrabold uppercase px-8 py-3 rounded-2xl transform -rotate-6 shadow-2xl tracking-widest';
+                    hammerStamp.textContent = 'SOLD!';
+                    hammerSub.innerHTML = `Sold to <span class="text-spl-gold font-bold">${window.escapeHtml(liveState.highestBidderName || '')}</span> for <span class="text-green-400 font-bold">₹${Number(liveState.currentBid || 0).toLocaleString('en-IN')}</span>`;
+                } else if (liveState.status === 'UNSOLD') {
+                    hammerOverlay.classList.remove('hidden');
+                    hammerStamp.className = 'border-4 border-spl-red text-spl-red font-oswald text-5xl sm:text-6xl font-extrabold uppercase px-8 py-3 rounded-2xl transform -rotate-6 shadow-2xl tracking-widest';
+                    hammerStamp.textContent = 'UNSOLD';
+                    hammerSub.textContent = 'Queued for Round 2 Unsold Auction';
+                } else {
+                    hammerOverlay.classList.add('hidden');
+                }
+            }
+
+            // 3. Live Bid & Leader Display
+            document.getElementById('live-current-bid').textContent = `₹${Number(liveState.currentBid || 0).toLocaleString('en-IN')}`;
+            document.getElementById('live-base-price-label').textContent = `(Base: ₹${Number(liveState.basePrice || 200).toLocaleString('en-IN')})`;
+
+            const leaderNameEl = document.getElementById('live-leader-name');
+            const leaderPurseEl = document.getElementById('live-leader-purse');
+            const leaderLogoEl = document.getElementById('live-leader-logo');
+
+            if (liveState.highestBidderId) {
+                const leaderStats = getTeamLiveStats(liveState.highestBidderId);
+                leaderNameEl.textContent = `${leaderStats.team.name} (${leaderStats.team.id})`;
+                leaderPurseEl.textContent = `Purse Left: ₹${leaderStats.remaining.toLocaleString('en-IN')} • Squad: ${leaderStats.count}/13`;
+                leaderLogoEl.innerHTML = leaderStats.team.logo
+                    ? `<img src="${leaderStats.team.logo}" class="w-full h-full object-contain">`
+                    : `<span class="font-oswald font-bold text-lg text-premium-950">${window.escapeHtml(leaderStats.team.id)}</span>`;
+            } else {
+                leaderNameEl.textContent = currentPlayer ? 'Awaiting Opening Bid' : 'No Active Bid';
+                leaderPurseEl.textContent = currentPlayer ? `Base Price: ₹${Number(liveState.basePrice || 200).toLocaleString('en-IN')}` : 'Stage Idle';
+                leaderLogoEl.innerHTML = `<i class="fa-solid fa-shield-halved text-premium-950 text-2xl"></i>`;
+            }
+
+            // 4. Bid History Feed
+            const hist = liveState.bidHistory || [];
+            document.getElementById('live-bid-count').textContent = `${hist.length} bid${hist.length === 1 ? '' : 's'}`;
+            const histContainer = document.getElementById('live-bid-history');
+            if (hist.length === 0) {
+                histContainer.innerHTML = `<span class="text-xs text-gray-500 italic">Waiting for opening bid...</span>`;
+            } else {
+                histContainer.innerHTML = hist.map((b, i) => `
+                    <div class="flex-shrink-0 px-3 py-1.5 rounded-lg border ${i === 0 ? 'bg-spl-gold/20 border-spl-gold text-white' : 'bg-premium-950 border-premium-700 text-gray-300'} text-xs flex items-center gap-2">
+                        <span class="font-oswald font-bold ${i === 0 ? 'text-spl-gold' : 'text-blue-300'} uppercase">${window.escapeHtml(b.teamId)}</span>
+                        <span class="font-bold">₹${Number(b.amount).toLocaleString('en-IN')}</span>
+                        <span class="text-[10px] text-gray-500">${window.escapeHtml(b.time || '')}</span>
+                    </div>
+                `).join('');
+            }
+
+            // 5. Franchise Standings & Pool Grid
+            renderFranchiseStandings();
+            renderArenaPoolGrid();
+        }
+
+        function renderFranchiseBidConsole() {
+            if (!activeFranchise) return;
+            const stats = getTeamLiveStats(activeFranchise.id);
+            document.getElementById('console-team-code').textContent = stats.team.id;
+            document.getElementById('console-team-name').textContent = stats.team.name;
+            document.getElementById('console-purse-left').textContent = `₹${stats.remaining.toLocaleString('en-IN')}`;
+            document.getElementById('console-max-bid').textContent = `₹${stats.maxBid.toLocaleString('en-IN')}`;
+            document.getElementById('console-squad-size').textContent = `${stats.count}/13`;
+            document.getElementById('console-team-logo').innerHTML = stats.team.logo
+                ? `<img src="${stats.team.logo}" class="w-full h-full object-contain">`
+                : `<span class="font-oswald font-bold text-base text-premium-950">${window.escapeHtml(stats.team.id)}</span>`;
+
+            const isBidding = liveState.status === 'BIDDING' && Boolean(liveState.currentPlayerId);
+            const isAlreadyLeader = String(liveState.highestBidderId) === String(stats.team.id);
+            const hasAnyBid = (liveState.bidHistory || []).length > 0 && liveState.highestBidderId;
+            const squadFull = stats.count >= 13;
+
+            const btnBase = document.getElementById('btn-bid-base');
+            const btn50 = document.getElementById('btn-bid-50');
+            const btn100 = document.getElementById('btn-bid-100');
+            const btn200 = document.getElementById('btn-bid-200');
+            const noteEl = document.getElementById('console-bid-status-note');
+
+            const baseAmt = Number(liveState.basePrice || 200);
+            const curAmt = Number(liveState.currentBid || baseAmt);
+
+            btnBase.textContent = `Base ₹${baseAmt}`;
+            btn50.textContent = `+₹50 (₹${curAmt + 50})`;
+            btn100.textContent = `+₹100 (₹${curAmt + 100})`;
+            btn200.textContent = `+₹200 (₹${curAmt + 200})`;
+
+            const disableAll = !isBidding || isAlreadyLeader || squadFull;
+            btnBase.disabled = disableAll || hasAnyBid || baseAmt > stats.remaining;
+            btn50.disabled = disableAll || !hasAnyBid || (curAmt + 50) > stats.remaining;
+            btn100.disabled = disableAll || !hasAnyBid || (curAmt + 100) > stats.remaining;
+            btn200.disabled = disableAll || !hasAnyBid || (curAmt + 200) > stats.remaining;
+
+            [btnBase, btn50, btn100, btn200].forEach(b => {
+                b.classList.toggle('opacity-40', b.disabled);
+                b.classList.toggle('cursor-not-allowed', b.disabled);
+            });
+
+            if (squadFull) {
+                noteEl.textContent = 'Your franchise has completed its 13-player Santuri squad!';
+            } else if (!isBidding) {
+                noteEl.textContent = 'Waiting for the Auctioneer to open bidding on the next player...';
+            } else if (isAlreadyLeader) {
+                noteEl.textContent = '✅ You currently hold the highest bid! Waiting for competing franchises...';
+            } else if (!hasAnyBid) {
+                noteEl.textContent = `Tap "Base ₹${baseAmt}" to place the opening bid!`;
+            } else {
+                noteEl.textContent = 'Tap any increment button above to outbid immediately.';
+            }
+        }
+
+        function renderFranchiseStandings() {
+            const grid = document.getElementById('franchise-standings-grid');
+            if (!grid) return;
+
+            if (!allTeams || allTeams.length === 0) {
+                grid.innerHTML = `<p class="text-xs text-gray-400 col-span-full">No franchises configured yet.</p>`;
+                return;
+            }
+
+            grid.innerHTML = allTeams.map(t => {
+                const st = getTeamLiveStats(t.id);
+                const isLeading = String(liveState.highestBidderId) === String(t.id);
+                return `
+                    <div onclick="openTeamSquadModal('${window.escapeHtml(t.id)}')" class="bg-premium-950 border ${isLeading ? 'border-spl-gold ring-2 ring-spl-gold/40' : 'border-premium-700 hover:border-spl-gold/60'} rounded-xl p-4 transition cursor-pointer flex flex-col justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-11 h-11 rounded-xl bg-white p-1 border border-spl-gold/60 flex items-center justify-center overflow-hidden flex-shrink-0">
+                                ${t.logo ? `<img src="${t.logo}" class="w-full h-full object-contain">` : `<span class="font-oswald font-bold text-base text-premium-950">${window.escapeHtml(t.id)}</span>`}
+                            </div>
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-[10px] px-1.5 py-0.2 rounded uppercase">${window.escapeHtml(t.id)}</span>
+                                    ${isLeading ? '<span class="text-[9px] bg-green-600 text-white font-bold px-1.5 py-0.2 rounded uppercase animate-pulse">Bidding</span>' : ''}
+                                </div>
+                                <h4 class="font-oswald font-bold text-white text-base truncate mt-0.5">${window.escapeHtml(t.name)}</h4>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-1.5 text-center bg-premium-900/90 p-2 rounded-lg border border-premium-800 text-xs">
+                            <div>
+                                <p class="text-[9px] text-gray-400 uppercase font-bold">Purse Left</p>
+                                <p class="font-oswald font-bold text-green-400 text-sm">₹${st.remaining.toLocaleString('en-IN')}</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-gray-400 uppercase font-bold">Squad</p>
+                                <p class="font-oswald font-bold text-blue-300 text-sm">${st.count}/13</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-gray-400 uppercase font-bold">U-19</p>
+                                <p class="font-oswald font-bold ${st.u19Count > 0 ? 'text-green-400' : 'text-red-400'} text-sm">${st.u19Count}</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between text-[11px] text-gray-400">
+                            <span>Spent: ₹${st.spent.toLocaleString('en-IN')}</span>
+                            <span class="text-spl-gold font-bold">View Squad <i class="fa-solid fa-chevron-right text-[9px]"></i></span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.renderArenaPoolGrid = function() {
+            const grid = document.getElementById('arena-pool-grid');
+            if (!grid) return;
+
+            const soldMap = liveState.soldPlayers || {};
+            const unsoldSet = new Set(liveState.unsoldPlayerIds || []);
+            const soldCount = Object.keys(soldMap).length;
+            const unsoldCount = Array.from(unsoldSet).filter(id => !soldMap[id]).length;
+            const availCount = Math.max(0, approvedPlayers.length - soldCount - unsoldCount);
+
+            const summaryEl = document.getElementById('auction-summary-counts');
+            if (summaryEl) {
+                summaryEl.textContent = `Sold: ${soldCount} • Unsold: ${unsoldCount} • Available: ${availCount}`;
+            }
+
+            const q = (document.getElementById('arena-pool-search')?.value || '').trim().toLowerCase();
+            const list = approvedPlayers.filter(p => {
+                const isSold = Boolean(soldMap[p.id]);
+                const isUnsold = !isSold && unsoldSet.has(p.id);
+                if (currentPoolTab === 'SOLD' && !isSold) return false;
+                if (currentPoolTab === 'UNSOLD' && !isUnsold) return false;
+                if (currentPoolTab === 'AVAILABLE' && (isSold || isUnsold)) return false;
+
+                if (q) {
+                    const hay = `${p.name || ''} ${p.srNo || ''} ${p.village || ''} ${p.skill || ''}`.toLowerCase();
+                    if (!hay.includes(q)) return false;
+                }
+                return true;
+            });
+
+            if (list.length === 0) {
+                grid.innerHTML = `<p class="text-xs text-gray-400 text-center py-8 col-span-full">No players in this category.</p>`;
+                return;
+            }
+
+            grid.innerHTML = list.map(p => {
+                const safeId = window.escapeHtml(p.id);
+                const soldInfo = soldMap[p.id];
+                const u19 = isU19Player(p);
+                const isOnStage = String(liveState.currentPlayerId) === String(p.id) && liveState.status === 'BIDDING';
+
+                const rightBadge = soldInfo
+                    ? `<span class="bg-green-950 border border-green-500/40 text-green-300 text-[11px] font-bold px-2.5 py-1 rounded-lg">${window.escapeHtml(soldInfo.teamId)} • ₹${Number(soldInfo.amount).toLocaleString('en-IN')}</span>`
+                    : (isAuctioneerAdmin
+                        ? `<button type="button" onclick="adminPutPlayerOnStage('${safeId}')" class="${isOnStage ? 'bg-green-600 text-white' : 'bg-spl-gold hover:bg-spl-goldHover text-premium-950'} font-oswald font-bold uppercase text-xs px-3 py-1.5 rounded-lg shadow transition cursor-pointer">${isOnStage ? 'On Stage' : 'Bring to Stage'}</button>`
+                        : `<span class="text-[10px] font-bold uppercase text-gray-400 bg-premium-900 px-2 py-1 rounded border border-premium-700">${isOnStage ? 'Live Now' : 'Queued'}</span>`);
+
+                return `
+                    <div class="bg-premium-950 border ${isOnStage ? 'border-spl-gold' : 'border-premium-700'} rounded-xl p-3 flex items-center justify-between gap-2.5">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <img src="${p.photo || 'https://placehold.co/96x96/1C335E/F4B036?text=SPL'}" onerror="this.onerror=null;this.src='https://placehold.co/96x96/1C335E/F4B036?text=SPL';" class="w-11 h-11 rounded-full object-cover border border-spl-gold flex-shrink-0">
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="bg-spl-gold text-premium-950 text-[10px] font-extrabold px-1.5 py-0.2 rounded uppercase">${window.escapeHtml(p.srNo || 'SR-001')}</span>
+                                    ${u19 ? '<span class="bg-spl-red text-white text-[9px] font-extrabold px-1.5 py-0.2 rounded uppercase">U-19</span>' : ''}
+                                </div>
+                                <h4 class="font-oswald font-bold text-white text-sm sm:text-base truncate mt-0.5">${window.escapeHtml(p.name)}</h4>
+                                <p class="text-[11px] text-gray-400 truncate">${window.escapeHtml(p.skill || '')} • ${window.escapeHtml(p.village || '')}</p>
+                            </div>
+                        </div>
+                        <div class="flex-shrink-0">${rightBadge}</div>
+                    </div>
+                `;
+            }).join('');
+        };
+
+        // --- INITIALIZATION ---
+        async function initLiveAuctionArena() {
+            try {
+                const firebaseConfig = {
+                    apiKey: "AIzaSyDub6J70tx5i9plbWrHWLuO1LVFkyxXMls",
+                    authDomain: "spl-santuri-premier-league.firebaseapp.com",
+                    projectId: "spl-santuri-premier-league",
+                    storageBucket: "spl-santuri-premier-league.firebasestorage.app",
+                    messagingSenderId: "82581808443",
+                    appId: "1:82581808443:web:82eca1ec7bf17577e1831e"
+                };
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = initializeFirestore(app, { experimentalForceLongPolling: true });
+                onAuthStateChanged(auth, (user) => {
+                    if (!user) signInAnonymously(auth).catch(() => {});
+                });
+            } catch (e) {}
+
+            await Promise.all([loadFranchises(), loadApprovedPlayers()]);
+
+            // Restore persisted Franchise or Admin sessions across refresh
+            try {
+                if (localStorage.getItem(ADMIN_SESSION_KEY) === 'true') {
+                    isAuctioneerAdmin = true;
+                }
+                const rawFr = localStorage.getItem(FRANCHISE_SESSION_KEY);
+                if (rawFr) {
+                    const parsed = JSON.parse(rawFr);
+                    if (parsed && parsed.teamId) {
+                        const found = allTeams.find(t => String(t.id) === String(parsed.teamId));
+                        if (found) activeFranchise = found;
+                    }
+                }
+            } catch (e) {}
+
+            subscribeLiveAuctionState();
+            renderFullArena();
+        }
+
+        initLiveAuctionArena();
+    </script>
+</body>
+</html>
