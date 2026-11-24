@@ -59,6 +59,9 @@
             </a>
 
             <div class="flex items-center gap-2 sm:gap-3">
+                <button type="button" onclick="openDemoAdminCredsModal()" class="bg-spl-gold/15 hover:bg-spl-gold text-spl-gold hover:text-premium-950 font-oswald font-bold uppercase text-xs sm:text-sm tracking-wider px-3.5 sm:px-4 py-2 rounded-lg border border-spl-gold/60 transition flex items-center gap-2 shadow cursor-pointer">
+                    <i class="fa-solid fa-user-shield"></i> <span class="hidden sm:inline">Admin: Set Logins</span><span class="sm:hidden">Admin</span>
+                </button>
                 <a href="index.html" class="bg-premium-800 hover:bg-spl-gold text-white hover:text-premium-950 font-oswald font-bold uppercase text-xs sm:text-sm tracking-wider px-3.5 sm:px-4 py-2 rounded-lg border border-spl-gold/60 transition flex items-center gap-2 shadow">
                     <i class="fa-solid fa-arrow-left"></i> <span>Back to Main Site</span>
                 </a>
@@ -103,9 +106,14 @@
                     </button>
                 </form>
 
-                <div class="mt-6 pt-4 border-t border-premium-700/70 text-center text-xs text-gray-400 space-y-1">
+                <div class="mt-6 pt-4 border-t border-premium-700/70 text-center text-xs text-gray-400 space-y-2">
                     <p><i class="fa-solid fa-circle-info text-spl-gold mr-1"></i> Your session stays active across page refreshes and auto-saves your squad.</p>
                     <p>Need credentials? Contact SPL Admin at <a href="tel:7980230656" class="text-spl-gold font-bold hover:underline">+91 7980230656</a></p>
+                    <div class="pt-1">
+                        <button type="button" onclick="openDemoAdminCredsModal()" class="inline-flex items-center gap-1.5 text-spl-gold hover:text-white font-bold uppercase tracking-wider text-[11px] bg-premium-950 px-3 py-1.5 rounded-lg border border-spl-gold/40 transition cursor-pointer">
+                            <i class="fa-solid fa-key"></i> SPL Admin? Create / Manage Franchise Login ID &amp; Password
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -154,7 +162,72 @@
         <!-- VIEW 2: FRANCHISE AUCTION WORKSPACE (Shown when logged in) -->
         <section id="demo-workspace-view" class="hidden space-y-6">
 
-                    <!-- Left Column (7 cols): All Registered Players Browser -->
+            <!-- Franchise Top Dashboard Strip -->
+            <div class="bg-gradient-to-r from-premium-900 via-premium-800 to-premium-900 border-2 border-spl-gold/70 rounded-2xl p-4 sm:p-6 shadow-2xl">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <div id="ws-team-logo-box" class="w-16 h-16 rounded-2xl bg-white p-1.5 border-2 border-spl-gold flex items-center justify-center overflow-hidden flex-shrink-0 shadow-lg"></div>
+                        <div>
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span id="ws-team-code" class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-xs px-2.5 py-0.5 rounded uppercase tracking-wider">TEAM</span>
+                                <span id="ws-save-indicator" class="text-[11px] font-bold text-green-400 flex items-center gap-1"><i class="fa-solid fa-cloud-check"></i> Auto-Saved</span>
+                            </div>
+                            <h2 id="ws-team-name" class="font-oswald text-2xl sm:text-3xl font-bold uppercase text-white mt-0.5">Franchise Name</h2>
+                        </div>
+                    </div>
+
+                    <!-- Purse & Squad Metrics -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 text-center">
+                        <div class="bg-premium-950/90 border border-premium-700 rounded-xl px-3 py-2.5">
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Total Purse</p>
+                            <p id="ws-total-purse" class="font-oswald text-xl sm:text-2xl font-bold text-white mt-0.5">₹8,000</p>
+                        </div>
+                        <div class="bg-premium-950/90 border border-premium-700 rounded-xl px-3 py-2.5">
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Purse Spent</p>
+                            <p id="ws-spent-purse" class="font-oswald text-xl sm:text-2xl font-bold text-spl-gold mt-0.5">₹0</p>
+                        </div>
+                        <div class="bg-premium-950/90 border border-premium-700 rounded-xl px-3 py-2.5">
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Remaining</p>
+                            <p id="ws-remaining-purse" class="font-oswald text-xl sm:text-2xl font-bold text-green-400 mt-0.5">₹8,000</p>
+                        </div>
+                        <div class="bg-premium-950/90 border border-premium-700 rounded-xl px-3 py-2.5">
+                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Auction Squad</p>
+                            <p id="ws-squad-count" class="font-oswald text-xl sm:text-2xl font-bold text-blue-300 mt-0.5">0 / 13</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Squad Composition & SPL-6 Rule Compliance Strip -->
+                <div class="mt-5 pt-4 border-t border-premium-700/70 flex flex-wrap items-center justify-between gap-3 text-xs">
+                    <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                        <span class="bg-premium-950 px-3 py-1.5 rounded-lg border border-premium-700 text-gray-200 font-semibold">
+                            <i class="fa-solid fa-baseball-bat-ball text-spl-gold mr-1"></i> Batsmen: <strong id="ws-count-bat" class="text-white">0</strong>
+                        </span>
+                        <span class="bg-premium-950 px-3 py-1.5 rounded-lg border border-premium-700 text-gray-200 font-semibold">
+                            <i class="fa-solid fa-baseball text-spl-gold mr-1"></i> Bowlers: <strong id="ws-count-bowl" class="text-white">0</strong>
+                        </span>
+                        <span class="bg-premium-950 px-3 py-1.5 rounded-lg border border-premium-700 text-gray-200 font-semibold">
+                            <i class="fa-solid fa-bolt text-spl-gold mr-1"></i> All-Rounders: <strong id="ws-count-ar" class="text-white">0</strong>
+                        </span>
+                        <span id="ws-u19-badge" class="bg-red-950/80 px-3 py-1.5 rounded-lg border border-red-500/50 text-red-200 font-bold">
+                            <i class="fa-solid fa-triangle-exclamation mr-1"></i> U-19 Player: 0 (Min 1 Required)
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="saveFranchiseWorkspaceData(true)" class="bg-green-600 hover:bg-green-500 text-white font-bold px-3.5 py-1.5 rounded-lg transition shadow cursor-pointer flex items-center gap-1.5">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Save Now
+                        </button>
+                        <button type="button" onclick="logoutFranchiseDemo()" class="bg-spl-red hover:bg-red-700 text-white font-bold px-3.5 py-1.5 rounded-lg transition shadow cursor-pointer flex items-center gap-1.5">
+                            <i class="fa-solid fa-right-from-bracket"></i> Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two-Column Auction Desk: Left = All Registered Players, Right = My 13-Player Squad & Prospect Cart -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+                <!-- Left Column (7 cols): All Registered Players Browser -->
                 <div class="lg:col-span-7 bg-premium-900 border border-premium-700 rounded-2xl p-4 sm:p-6 shadow-xl">
                     <div class="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-premium-800">
                         <div>
@@ -195,73 +268,7 @@
                     </div>
                 </div>
 
-                <!-- Squad Composition & SPL-6 Rule Compliance Strip -->
-                <div class="mt-5 pt-4 border-t border-premium-700/70 flex flex-wrap items-center justify-between gap-3 text-xs">
-                    <div class="flex flex-wrap items-center gap-2 sm:gap-3">
-                        <span class="bg-premium-950 px-3 py-1.5 rounded-lg border border-premium-700 text-gray-200 font-semibold">
-                            <i class="fa-solid fa-baseball-bat-ball text-spl-gold mr-1"></i> Batsmen: <strong id="ws-count-bat" class="text-white">0</strong>
-                        </span>
-                        <span class="bg-premium-950 px-3 py-1.5 rounded-lg border border-premium-700 text-gray-200 font-semibold">
-                            <i class="fa-solid fa-baseball text-spl-gold mr-1"></i> Bowlers: <strong id="ws-count-bowl" class="text-white">0</strong>
-                        </span>
-                        <span class="bg-premium-950 px-3 py-1.5 rounded-lg border border-premium-700 text-gray-200 font-semibold">
-                            <i class="fa-solid fa-bolt text-spl-gold mr-1"></i> All-Rounders: <strong id="ws-count-ar" class="text-white">0</strong>
-                        </span>
-                        <span id="ws-u19-badge" class="bg-red-950/80 px-3 py-1.5 rounded-lg border border-red-500/50 text-red-200 font-bold">
-                            <i class="fa-solid fa-triangle-exclamation mr-1"></i> U-19 Player: 0 (Min 1 Required)
-                        </span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button type="button" onclick="saveFranchiseWorkspaceData(true)" class="bg-green-600 hover:bg-green-500 text-white font-bold px-3.5 py-1.5 rounded-lg transition shadow cursor-pointer flex items-center gap-1.5">
-                            <i class="fa-solid fa-cloud-arrow-up"></i> Save Now
-                        </button>
-                        <button type="button" onclick="logoutFranchiseDemo()" class="bg-spl-red hover:bg-red-700 text-white font-bold px-3.5 py-1.5 rounded-lg transition shadow cursor-pointer flex items-center gap-1.5">
-                            <i class="fa-solid fa-right-from-bracket"></i> Logout
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Two-Column Auction Desk: Left = Official Auction Pool, Right = My 13-Player Squad & Prospects -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                    <!-- Panel B: Prospect Cart & Outside Player Targets -->
-                    <div class="bg-premium-900 border border-blue-500/50 rounded-2xl p-4 sm:p-5 shadow-xl">
-                        <div class="flex items-center justify-between mb-3 pb-2.5 border-b border-premium-800">
-                            <h3 class="font-oswald text-xl font-bold uppercase text-blue-300">
-                                <i class="fa-solid fa-cart-shopping mr-2"></i> Prospect Cart (<span id="prospect-header-count">0</span>)
-                            </h3>
-                            <span class="text-[10px] uppercase font-bold tracking-wider text-blue-300 bg-blue-950/60 px-2.5 py-1 rounded border border-blue-500/30">Shortlist / Outside</span>
-                        </div>
-                        <button type="button" onclick="loadPoolPlayers(false)" class="text-xs bg-premium-800 hover:bg-premium-700 text-spl-gold font-bold px-3 py-1.5 rounded-lg border border-premium-600 transition cursor-pointer">
-                            <i class="fa-solid fa-arrows-rotate mr-1"></i> Refresh Pool
-                        </button>
-                    </div>
-
-                    <!-- Pool Filters -->
-                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2.5 mb-4">
-                        <input type="text" id="demo-pool-search" oninput="renderDemoPoolList()" placeholder="Search Name / SR / Village..." class="sm:col-span-2 bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none focus:border-spl-gold">
-                        <select id="demo-pool-skill" onchange="renderDemoPoolList()" class="bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-spl-gold">
-                            <option value="">All Skills</option>
-                            <option value="Batsman">Batsman</option>
-                            <option value="Bowler">Bowler</option>
-                            <option value="All-Rounder">All-Rounder</option>
-                        </select>
-                        <select id="demo-pool-age" onchange="renderDemoPoolList()" class="bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-spl-gold">
-                            <option value="">All Ages</option>
-                            <option value="U19">U-19 (2008+)</option>
-                            <option value="NORMAL">Normal</option>
-                        </select>
-                    </div>
-
-                    <div id="demo-pool-list" class="space-y-3 max-h-[680px] overflow-y-auto pr-1">
-                        <div class="text-center py-12 text-gray-400">
-                            <i class="fa-solid fa-spinner fa-spin text-3xl text-spl-gold mb-2"></i>
-                            <p class="text-xs font-bold uppercase tracking-widest">Loading Approved Players...</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- RIGHT COLUMN (5 cols): My 13-Player Auction Squad & Prospect Watchlist -->
+                <!-- RIGHT COLUMN (5 cols): My 13-Player Auction Squad & Prospect Cart -->
                 <div class="lg:col-span-5 space-y-6">
 
                     <!-- Panel A: My 13-Player Auction Squad -->
@@ -274,17 +281,17 @@
                         </div>
 
                         <div id="demo-squad-list" class="space-y-2.5 max-h-[400px] overflow-y-auto pr-1">
-                            <p class="text-gray-400 text-xs text-center py-8">No players added yet. Select players from the Auction Pool on the left.</p>
+                            <p class="text-gray-400 text-xs text-center py-8">No players added yet. Select players from the list on the left.</p>
                         </div>
                     </div>
 
-                    <!-- Panel B: Prospect Watchlist & Outside Player Targets -->
+                    <!-- Panel B: Prospect Cart & Outside Player Targets -->
                     <div class="bg-premium-900 border border-blue-500/50 rounded-2xl p-4 sm:p-5 shadow-xl">
                         <div class="flex items-center justify-between mb-3 pb-2.5 border-b border-premium-800">
                             <h3 class="font-oswald text-xl font-bold uppercase text-blue-300">
-                                <i class="fa-solid fa-binoculars mr-2"></i> Prospect Watchlist (<span id="prospect-header-count">0</span>)
+                                <i class="fa-solid fa-cart-shopping mr-2"></i> Prospect Cart (<span id="prospect-header-count">0</span>)
                             </h3>
-                            <span class="text-[10px] uppercase font-bold tracking-wider text-blue-300 bg-blue-950/60 px-2.5 py-1 rounded border border-blue-500/30">Targets / Outside</span>
+                            <span class="text-[10px] uppercase font-bold tracking-wider text-blue-300 bg-blue-950/60 px-2.5 py-1 rounded border border-blue-500/30">Shortlist / Outside</span>
                         </div>
 
                         <!-- Quick Add Custom Prospect / Outside Player Form -->
@@ -322,6 +329,74 @@
     <footer class="bg-premium-950 border-t-2 border-spl-gold/60 py-6 mt-12 text-center text-xs text-gray-400">
         <p>&copy; 2026 Santuri Premier League (SPL) • Franchise Demo Auction Workspace • Organized by Lalgarh Village Club</p>
     </footer>
+
+    <!-- Admin Franchise Credentials Modal (Create / Edit Login ID & Password directly here) -->
+    <div id="demo-admin-creds-modal" class="hidden fixed inset-0 z-[260] bg-premium-950/90 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-premium-900 border-2 border-spl-gold rounded-2xl max-w-3xl w-full shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="p-4 bg-premium-950 border-b border-premium-700 rounded-t-2xl flex justify-between items-center">
+                <h3 class="font-oswald text-xl sm:text-2xl font-bold uppercase text-spl-gold flex items-center gap-2">
+                    <i class="fa-solid fa-user-shield"></i> Admin: Franchise Login &amp; Password Manager
+                </h3>
+                <button type="button" onclick="closeDemoAdminCredsModal()" class="text-gray-400 hover:text-white p-1.5 cursor-pointer">
+                    <i class="fa-solid fa-xmark text-2xl"></i>
+                </button>
+            </div>
+
+            <div class="p-4 sm:p-6 overflow-y-auto space-y-6">
+                <!-- Step 1: Admin Gate -->
+                <form id="demo-admin-gate-form" onsubmit="verifyDemoAdminGate(event)" class="max-w-sm mx-auto space-y-4 py-4">
+                    <p class="text-xs sm:text-sm text-gray-300 text-center">Enter SPL Master Admin credentials to create or reset Franchise Demo Auction Login IDs and Passwords.</p>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-gray-400 mb-1">Admin Username</label>
+                        <input type="text" id="demo-admin-user-input" class="w-full bg-premium-950 border border-premium-700 rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-spl-gold" placeholder="Enter admin username" required>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-gray-400 mb-1">Admin Password</label>
+                        <input type="password" id="demo-admin-pass-input" class="w-full bg-premium-950 border border-premium-700 rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-spl-gold" placeholder="Enter admin password" required>
+                    </div>
+                    <button type="submit" class="w-full bg-spl-gold hover:bg-spl-goldHover text-premium-950 font-oswald font-bold text-lg uppercase tracking-wider py-2.5 rounded-xl transition shadow-lg cursor-pointer">
+                        <i class="fa-solid fa-unlock-keyhole mr-1.5"></i> Unlock Franchise Credentials
+                    </button>
+                </form>
+
+                <!-- Step 2: Create / Edit Franchise Credentials -->
+                <div id="demo-admin-creds-panel" class="hidden space-y-6">
+                    <form id="demo-admin-save-team-form" onsubmit="handleDemoAdminSaveFranchise(event)" class="bg-premium-800/60 border border-premium-700 rounded-xl p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Team Code <span class="text-red-500">*</span></label>
+                            <input type="text" id="da-team-code" maxlength="6" class="w-full bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-white uppercase text-sm focus:outline-none focus:border-spl-gold" placeholder="e.g. JMK" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-gray-300 mb-1">Franchise Full Name <span class="text-red-500">*</span></label>
+                            <input type="text" id="da-team-name" class="w-full bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-spl-gold" placeholder="e.g. JMK Sixers" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-spl-gold mb-1">Auction Purse (₹) <span class="text-red-500">*</span></label>
+                            <input type="number" id="da-team-purse" value="8000" min="1000" step="500" class="w-full bg-premium-950 border border-spl-gold/50 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-spl-gold" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-blue-300 mb-1">Franchise Login ID <span class="text-red-500">*</span></label>
+                            <input type="text" id="da-team-login-id" class="w-full bg-premium-950 border border-blue-500/50 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-spl-gold" placeholder="e.g. jmk_owner" required>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-blue-300 mb-1">Initial Password <span class="text-red-500">*</span></label>
+                            <input type="text" id="da-team-login-pass" class="w-full bg-premium-950 border border-blue-500/50 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-spl-gold" placeholder="e.g. jmk@2026" required>
+                        </div>
+                        <div class="flex items-end">
+                            <button type="submit" id="da-save-team-btn" class="w-full bg-spl-gold hover:bg-spl-goldHover text-premium-950 font-oswald font-bold uppercase text-base py-2 px-4 rounded-lg transition shadow-lg cursor-pointer">
+                                <i class="fa-solid fa-floppy-disk mr-1"></i> Save Login
+                            </button>
+                        </div>
+                    </form>
+
+                    <div>
+                        <h4 class="font-oswald text-lg font-bold uppercase text-white mb-3 border-l-4 border-spl-gold pl-2.5">Existing Franchises &amp; Assigned Credentials</h4>
+                        <div id="demo-admin-teams-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Custom Dialog Modal -->
     <div id="ui-dialog-modal" class="hidden fixed inset-0 z-[300] bg-premium-950/90 backdrop-blur-sm flex items-center justify-center px-4">
@@ -481,7 +556,143 @@
             }
         }
 
-        // --- LOAD ALL REGISTERED PLAYERS (APPROVED + PENDING) ---
+        // --- ADMIN CREDENTIALS MANAGER INSIDE DEMO AUCTION ---
+        let isDemoAdminUnlocked = false;
+
+        window.openDemoAdminCredsModal = async function() {
+            await loadFranchises();
+            document.getElementById('demo-admin-creds-modal').classList.remove('hidden');
+            if (isDemoAdminUnlocked) {
+                document.getElementById('demo-admin-gate-form').classList.add('hidden');
+                document.getElementById('demo-admin-creds-panel').classList.remove('hidden');
+                renderDemoAdminTeamsList();
+            } else {
+                document.getElementById('demo-admin-gate-form').classList.remove('hidden');
+                document.getElementById('demo-admin-creds-panel').classList.add('hidden');
+            }
+        };
+
+        window.closeDemoAdminCredsModal = function() {
+            document.getElementById('demo-admin-creds-modal').classList.add('hidden');
+        };
+
+        window.verifyDemoAdminGate = function(e) {
+            e.preventDefault();
+            const u = (document.getElementById('demo-admin-user-input')?.value || '').trim();
+            const p = (document.getElementById('demo-admin-pass-input')?.value || '').trim();
+            if (u === 'admin' && p === '1234') {
+                isDemoAdminUnlocked = true;
+                document.getElementById('demo-admin-gate-form').classList.add('hidden');
+                document.getElementById('demo-admin-creds-panel').classList.remove('hidden');
+                renderDemoAdminTeamsList();
+            } else {
+                showNotice('Invalid Admin Username or Password.', 'Access Denied');
+            }
+        };
+
+        window.fillDemoAdminTeamForm = function(teamId) {
+            const t = allTeams.find(item => String(item.id) === String(teamId));
+            if (!t) return;
+            document.getElementById('da-team-code').value = t.id || '';
+            document.getElementById('da-team-name').value = t.name || '';
+            document.getElementById('da-team-purse').value = t.purse || 8000;
+            document.getElementById('da-team-login-id').value = t.loginId || '';
+            document.getElementById('da-team-login-pass').value = t.loginPass || '';
+        };
+
+        window.handleDemoAdminSaveFranchise = async function(e) {
+            e.preventDefault();
+            const code = (document.getElementById('da-team-code')?.value || '').trim().toUpperCase().replace(/[^A-Z0-9_-]/g, '');
+            const name = (document.getElementById('da-team-name')?.value || '').trim();
+            const purse = Math.max(1000, parseInt(document.getElementById('da-team-purse')?.value || '8000', 10) || 8000);
+            const loginId = (document.getElementById('da-team-login-id')?.value || '').trim();
+            const loginPass = (document.getElementById('da-team-login-pass')?.value || '').trim();
+
+            if (!code || !name || !loginId || !loginPass) return;
+
+            const btn = document.getElementById('da-save-team-btn');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Saving...';
+            }
+
+            try {
+                const existing = allTeams.find(t => String(t.id) === String(code)) || {};
+                const teamObj = {
+                    ...existing,
+                    id: code,
+                    name,
+                    color: existing.color || 'from-blue-600 to-blue-900',
+                    logo: existing.logo || '',
+                    purse,
+                    loginId,
+                    loginPass,
+                    passwordChanged: false,
+                    updatedAt: Date.now()
+                };
+
+                let savedToCloud = false;
+                if (db) {
+                    try {
+                        await setDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'teams', code), teamObj, { merge: true });
+                        savedToCloud = true;
+                    } catch (err) {}
+                }
+                if (!savedToCloud) {
+                    const restUrl = `https://firestore.googleapis.com/v1/projects/spl-santuri-premier-league/databases/(default)/documents/artifacts/${myAppId}/public/data/teams/${encodeURIComponent(code)}`;
+                    const fields = {};
+                    for (const k in teamObj) fields[k] = encodeFirestoreRestValue(teamObj[k]);
+                    const res = await fetch(restUrl, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ fields })
+                    });
+                    if (!res.ok) throw new Error(`Database error (${res.status})`);
+                }
+
+                allTeams = allTeams.filter(t => String(t.id) !== String(code));
+                allTeams.push(teamObj);
+                try { localStorage.setItem('spl_local_teams', JSON.stringify(allTeams)); } catch (err) {}
+
+                document.getElementById('demo-admin-save-team-form').reset();
+                document.getElementById('da-team-purse').value = 8000;
+                renderDemoAdminTeamsList();
+                showNotice(`Credentials saved for ${name} (${code})!\n\nLogin ID: ${loginId}\nInitial Password: ${loginPass}\n(Franchise will be prompted to set a new password on their first login.)`, 'Franchise Login Saved');
+            } catch (err) {
+                showNotice(`Failed to save credentials: ${err.message}`, 'Error');
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-floppy-disk mr-1"></i> Save Login';
+                }
+            }
+        };
+
+        function renderDemoAdminTeamsList() {
+            const container = document.getElementById('demo-admin-teams-list');
+            if (!container) return;
+            if (!allTeams || allTeams.length === 0) {
+                container.innerHTML = '<p class="text-xs text-gray-400 col-span-full">No franchises created yet. Use the form above to add a franchise and assign its Login ID &amp; Password.</p>';
+                return;
+            }
+            container.innerHTML = allTeams.map(t => {
+                const safeId = window.escapeHtml(t.id);
+                return `
+                    <div class="bg-premium-950 border border-premium-700 rounded-xl p-3.5 flex items-center justify-between gap-3">
+                        <div class="min-w-0 text-xs space-y-0.5">
+                            <p class="font-oswald text-base font-bold text-white uppercase truncate">${window.escapeHtml(t.name)} <span class="text-spl-gold">(${safeId})</span></p>
+                            <p class="text-blue-300">Login ID: <strong class="text-white font-mono">${window.escapeHtml(t.loginId || 'Not set')}</strong></p>
+                            <p class="text-blue-300">Password: <strong class="text-spl-gold font-mono">${window.escapeHtml(t.loginPass || 'Not set')}</strong> ${t.passwordChanged ? '<span class="text-[10px] text-green-400">(Changed by Owner)</span>' : '<span class="text-[10px] text-amber-300">(Initial)</span>'}</p>
+                            <p class="text-gray-400">Purse: ₹${Number(t.purse || 8000).toLocaleString('en-IN')}</p>
+                        </div>
+                        <button type="button" onclick="fillDemoAdminTeamForm('${safeId}')" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg flex-shrink-0 cursor-pointer">
+                            <i class="fa-solid fa-pen mr-1"></i> Edit
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
         function sortRegisteredPlayers(list) {
             return [...list].sort((a, b) => {
                 const aApproved = String(a.status || '').trim().toLowerCase() === 'approved';
