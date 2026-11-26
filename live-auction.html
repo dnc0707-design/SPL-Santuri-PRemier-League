@@ -6,8 +6,8 @@
     <title>SPL Season 6 | Official Live Manual Auction Software</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Oswald & Montserrat -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Oswald, Montserrat, Cinzel & Russo One (Unique Highest Sold Typography) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Montserrat:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -17,6 +17,8 @@
                     fontFamily: {
                         'oswald': ['Oswald', 'sans-serif'],
                         'inter': ['Montserrat', 'sans-serif'],
+                        'cinzel': ['Cinzel', 'serif'],
+                        'russo': ['Russo One', 'sans-serif'],
                     },
                     colors: {
                         spl: {
@@ -58,6 +60,11 @@
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
+        @keyframes goldShimmer {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
         .stage-broadcast-card { animation: stageGlow 3.2s infinite ease-in-out; }
         .stamp-animate { animation: stampSlam 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
         .fade-slide-up { animation: fadeSlideUp 0.38s ease-out forwards; }
@@ -67,6 +74,18 @@
             animation: marqueeScroll 26s linear infinite;
         }
         .marquee-track:hover { animation-play-state: paused; }
+        .highest-sold-card {
+            background: linear-gradient(115deg, #1b1203 0%, #3a2606 32%, #121c36 68%, #2b1a04 100%);
+            background-size: 220% 220%;
+            animation: goldShimmer 6s ease infinite;
+            box-shadow: 0 0 32px rgba(244, 176, 54, 0.35), inset 0 0 24px rgba(244, 176, 54, 0.16);
+        }
+        .highest-price-text {
+            background: linear-gradient(180deg, #FFF7CC 0%, #FFD54F 48%, #F4B036 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 10px rgba(244, 176, 54, 0.55));
+        }
         .spotlight-bg {
             background:
                 radial-gradient(circle at 22% 18%, rgba(244, 176, 54, 0.16), transparent 46%),
@@ -137,23 +156,51 @@
     <main class="flex-grow container mx-auto px-4 py-5 max-w-7xl space-y-6">
 
         <!-- ============================================================== -->
+        <!-- 0. TOP RUNNING MARQUEE (RECENTLY SOLD PLAYERS)                 -->
+        <!-- ============================================================== -->
+        <section id="sold-marquee-section" class="bg-premium-900 border-2 border-spl-gold/80 rounded-2xl overflow-hidden shadow-[0_0_24px_rgba(244,176,54,0.2)]">
+            <div class="flex items-center">
+                <div class="bg-gradient-to-r from-spl-gold to-amber-400 text-premium-950 font-oswald font-extrabold text-xs sm:text-sm uppercase tracking-wider px-3.5 sm:px-5 py-3 flex items-center gap-2 flex-shrink-0 z-10 shadow-lg">
+                    <i class="fa-solid fa-gavel"></i> <span>Recently Sold</span>
+                </div>
+                <div class="overflow-hidden flex-grow py-2 bg-premium-950/95">
+                    <div id="sold-marquee-track" class="marquee-track items-center gap-4 px-4">
+                        <span class="text-xs sm:text-sm text-gray-400 font-semibold uppercase tracking-wider">Waiting for first sold player in SPL Season 6 Mega Auction...</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- 0B. CURRENT HIGHEST SOLD PLAYER SPOTLIGHT (UNIQUE DESIGN)      -->
+        <!-- ============================================================== -->
+        <section id="highest-sold-spotlight" class="hidden highest-sold-card border-2 border-amber-300/90 rounded-2xl p-3.5 sm:p-4 relative overflow-hidden">
+            <div class="absolute -right-6 -top-6 text-amber-400/10 text-8xl pointer-events-none select-none">
+                <i class="fa-solid fa-crown"></i>
+            </div>
+            <div id="highest-sold-content" class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-5">
+                <!-- Populated dynamically with the current highest amount sold player -->
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
         <!-- 1. BIG SCREEN HERO PLAYER PRESENTATION STAGE                   -->
         <!-- ============================================================== -->
-        <section id="hero-presentation-stage" class="spotlight-bg border-2 border-spl-gold rounded-3xl overflow-hidden shadow-2xl stage-broadcast-card relative">
+        <section id="hero-presentation-stage" class="spotlight-bg border-2 border-spl-gold rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl stage-broadcast-card relative">
             <!-- Top Broadcast Ribbon -->
-            <div class="bg-premium-950/90 px-5 sm:px-8 py-3.5 border-b-2 border-spl-gold/60 flex flex-wrap items-center justify-between gap-3">
-                <div class="flex items-center gap-3">
-                    <span id="stage-round-badge" class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-sm sm:text-base px-3.5 py-0.5 rounded-md uppercase tracking-wider shadow">ROUND 1 • MAIN</span>
-                    <span id="stage-status-badge" class="bg-blue-600/25 text-blue-200 border border-blue-400/50 text-xs font-extrabold px-3 py-1 rounded-md uppercase tracking-widest">STANDBY</span>
+            <div class="bg-premium-950/90 px-3 sm:px-8 py-2 sm:py-3.5 border-b-2 border-spl-gold/60 flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+                <div class="flex items-center gap-1.5 sm:gap-3">
+                    <span id="stage-round-badge" class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-xs sm:text-base px-2.5 sm:px-3.5 py-0.5 rounded-md uppercase tracking-wider shadow">ROUND 1 • MAIN</span>
+                    <span id="stage-status-badge" class="bg-blue-600/25 text-blue-200 border border-blue-400/50 text-[10px] sm:text-xs font-extrabold px-2 sm:px-3 py-0.5 sm:py-1 rounded-md uppercase tracking-widest">STANDBY</span>
                 </div>
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 sm:gap-3">
                     <span class="hidden sm:inline text-xs text-gray-400 uppercase font-bold tracking-widest">Official Serial No:</span>
-                    <span id="stage-sr-badge" class="bg-premium-900 border-2 border-spl-gold text-spl-gold font-oswald font-extrabold text-xl sm:text-2xl px-4 py-0.5 rounded-lg tracking-wider shadow">READY</span>
+                    <span id="stage-sr-badge" class="bg-premium-900 border-2 border-spl-gold text-spl-gold font-oswald font-extrabold text-base sm:text-2xl px-2.5 sm:px-4 py-0.5 rounded-lg tracking-wider shadow">READY</span>
                 </div>
             </div>
 
             <!-- Big Center Stage Player Showcase -->
-            <div id="stage-player-display" class="p-6 sm:p-10 lg:p-12 min-h-[390px] sm:min-h-[450px] flex items-center justify-center relative">
+            <div id="stage-player-display" class="p-3 sm:p-8 lg:p-12 min-h-[260px] sm:min-h-[450px] flex items-center justify-center relative">
                 <!-- Populated Dynamically -->
                 <div class="text-center py-10 space-y-4">
                     <div class="w-24 h-24 rounded-full bg-premium-800 border-2 border-spl-gold/70 flex items-center justify-center mx-auto text-spl-gold text-4xl shadow-2xl">
@@ -324,22 +371,6 @@
 
             <div id="franchise-standings-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <!-- Populated dynamically -->
-            </div>
-        </section>
-
-        <!-- ============================================================== -->
-        <!-- 3B. LAST BIDDED / SOLD PLAYERS SCROLLING MARQUEE               -->
-        <!-- ============================================================== -->
-        <section id="sold-marquee-section" class="bg-premium-900 border-2 border-spl-gold/70 rounded-2xl overflow-hidden shadow-xl">
-            <div class="flex items-center">
-                <div class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-xs sm:text-sm uppercase tracking-wider px-3.5 sm:px-5 py-3.5 flex items-center gap-2 flex-shrink-0 z-10 shadow-lg">
-                    <i class="fa-solid fa-gavel"></i> <span>Last Sold</span>
-                </div>
-                <div class="overflow-hidden flex-grow py-2.5 bg-premium-950/90">
-                    <div id="sold-marquee-track" class="marquee-track items-center gap-4 px-4">
-                        <span class="text-xs sm:text-sm text-gray-400 font-semibold uppercase tracking-wider">Waiting for first sold player in SPL Season 6 Mega Auction...</span>
-                    </div>
-                </div>
             </div>
         </section>
 
@@ -1402,48 +1433,48 @@
             }
 
             display.innerHTML = `
-                <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center fade-slide-up">
-                    <!-- Left Portrait (5 cols) - Enlarged for Big TV / Projector Identification -->
+                <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-6 lg:gap-8 items-center fade-slide-up">
+                    <!-- Left Portrait (5 cols) - Compact on Mobile so Price fits on 1 screen, Enlarged on TV / Projector -->
                     <div class="lg:col-span-5 flex flex-col items-center">
-                        <div class="relative w-72 h-72 sm:w-96 sm:h-96 lg:w-[400px] lg:h-[400px] rounded-3xl overflow-hidden border-4 ${u19 ? 'border-orange-400' : 'border-spl-gold'} shadow-[0_0_55px_rgba(244,176,54,0.42)] bg-premium-900">
+                        <div class="relative w-44 h-44 sm:w-80 sm:h-80 lg:w-[400px] lg:h-[400px] rounded-2xl sm:rounded-3xl overflow-hidden border-4 ${u19 ? 'border-orange-400' : 'border-spl-gold'} shadow-[0_0_40px_rgba(244,176,54,0.42)] bg-premium-900">
                             <img src="${player.photo || 'https://placehold.co/500x500/16294D/F4B036?text=SPL'}" alt="${window.escapeHtml(player.name)}" onerror="this.onerror=null;this.src='https://placehold.co/500x500/16294D/F4B036?text=SPL';" class="w-full h-full object-cover object-top">
-                            ${u19 ? `<div class="absolute top-3 left-3 bg-gradient-to-r from-orange-500 to-spl-red text-white font-oswald font-extrabold text-base uppercase px-4 py-1.5 rounded-full shadow-xl border border-white/40 tracking-wider"><i class="fa-solid fa-star mr-1"></i> U-19 STAR</div>` : ''}
+                            ${u19 ? `<div class="absolute top-2 left-2 sm:top-3 sm:left-3 bg-gradient-to-r from-orange-500 to-spl-red text-white font-oswald font-extrabold text-xs sm:text-base uppercase px-2.5 sm:px-4 py-0.5 sm:py-1.5 rounded-full shadow-xl border border-white/40 tracking-wider"><i class="fa-solid fa-star mr-1"></i> U-19</div>` : ''}
                         </div>
                     </div>
 
                     <!-- Right Broadcast Bio & Details (7 cols) -->
-                    <div class="lg:col-span-7 text-center lg:text-left space-y-5">
-                        <div class="space-y-3">
-                            <div class="inline-flex flex-wrap items-center justify-center lg:justify-start gap-3">
-                                <span class="bg-gradient-to-r from-spl-red via-red-600 to-orange-500 text-white font-oswald font-extrabold text-2xl sm:text-4xl lg:text-[42px] uppercase px-6 py-2 rounded-2xl shadow-[0_0_28px_rgba(225,45,57,0.55)] border-2 border-spl-gold/75 tracking-wider leading-none">
-                                    <i class="fa-solid fa-baseball-bat-ball mr-2"></i> ${window.escapeHtml(player.skill || 'Player')}
+                    <div class="lg:col-span-7 text-center lg:text-left space-y-2.5 sm:space-y-4 lg:space-y-5">
+                        <div class="space-y-1.5 sm:space-y-3">
+                            <div class="inline-flex flex-wrap items-center justify-center lg:justify-start gap-2 sm:gap-3">
+                                <span class="bg-gradient-to-r from-spl-red via-red-600 to-orange-500 text-white font-oswald font-extrabold text-lg sm:text-4xl lg:text-[42px] uppercase px-4 sm:px-6 py-1 sm:py-2 rounded-xl sm:rounded-2xl shadow-[0_0_24px_rgba(225,45,57,0.55)] border-2 border-spl-gold/75 tracking-wider leading-none">
+                                    <i class="fa-solid fa-baseball-bat-ball mr-1.5 sm:mr-2"></i> ${window.escapeHtml(player.skill || 'Player')}
                                 </span>
-                                ${u19 && player.dob ? `<span class="bg-orange-500/20 text-orange-300 border border-orange-400/50 font-bold text-sm sm:text-base px-4 py-1.5 rounded-full"><i class="fa-solid fa-cake-candles mr-1"></i> DOB: ${window.escapeHtml(player.dob)}</span>` : ''}
+                                ${u19 && player.dob ? `<span class="bg-orange-500/20 text-orange-300 border border-orange-400/50 font-bold text-xs sm:text-base px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full"><i class="fa-solid fa-cake-candles mr-1"></i> ${window.escapeHtml(player.dob)}</span>` : ''}
                             </div>
-                            <h2 class="font-oswald text-4xl sm:text-6xl lg:text-7xl font-extrabold uppercase text-white tracking-wide leading-none break-words drop-shadow-lg">
+                            <h2 class="font-oswald text-2xl sm:text-5xl lg:text-7xl font-extrabold uppercase text-white tracking-wide leading-tight break-words drop-shadow-lg">
                                 ${window.escapeHtml(player.name)}
                             </h2>
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                            <div class="bg-premium-950/85 border border-premium-700 rounded-2xl p-4">
-                                <p class="text-[11px] font-bold uppercase tracking-widest text-gray-400"><i class="fa-solid fa-location-dot text-spl-gold mr-1"></i> Village</p>
-                                <p class="font-oswald text-2xl sm:text-3xl font-bold text-spl-gold uppercase mt-0.5 truncate">${window.escapeHtml(player.village || 'Santuri')}</p>
+                        <div class="grid grid-cols-2 gap-2 sm:gap-3.5">
+                            <div class="bg-premium-950/85 border border-premium-700 rounded-xl sm:rounded-2xl p-2 sm:p-4">
+                                <p class="text-[9px] sm:text-[11px] font-bold uppercase tracking-widest text-gray-400"><i class="fa-solid fa-location-dot text-spl-gold mr-1"></i> Village</p>
+                                <p class="font-oswald text-base sm:text-2xl lg:text-3xl font-bold text-spl-gold uppercase mt-0.5 truncate">${window.escapeHtml(player.village || 'Santuri')}</p>
                             </div>
-                            <div class="bg-premium-950/85 border border-premium-700 rounded-2xl p-4">
-                                <p class="text-[11px] font-bold uppercase tracking-widest text-gray-400"><i class="fa-solid fa-landmark text-spl-gold mr-1"></i> Gram Panchayat</p>
-                                <p class="font-oswald text-2xl sm:text-3xl font-bold text-white uppercase mt-0.5 truncate">${window.escapeHtml(panchayat || 'Santuri Block')}</p>
+                            <div class="bg-premium-950/85 border border-premium-700 rounded-xl sm:rounded-2xl p-2 sm:p-4">
+                                <p class="text-[9px] sm:text-[11px] font-bold uppercase tracking-widest text-gray-400"><i class="fa-solid fa-landmark text-spl-gold mr-1"></i> Gram Panchayat</p>
+                                <p class="font-oswald text-base sm:text-2xl lg:text-3xl font-bold text-white uppercase mt-0.5 truncate">${window.escapeHtml(panchayat || 'Santuri Block')}</p>
                             </div>
                         </div>
 
-                        <div class="bg-gradient-to-r from-premium-950 via-premium-900 to-premium-950 border-2 border-spl-gold/60 rounded-2xl p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4">
-                            <div>
-                                <p class="text-xs font-bold uppercase tracking-widest text-gray-400">Auction Base Price</p>
-                                <p class="font-oswald text-3xl sm:text-4xl font-extrabold text-spl-gold">₹${Number(liveState.basePrice || 200).toLocaleString('en-IN')}</p>
+                        <div class="bg-gradient-to-r from-premium-950 via-premium-900 to-premium-950 border-2 border-spl-gold/60 rounded-xl sm:rounded-2xl p-2.5 sm:p-5 flex items-center justify-between gap-2 sm:gap-4">
+                            <div class="text-left">
+                                <p class="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-gray-400">Auction Base Price</p>
+                                <p class="font-oswald text-2xl sm:text-4xl font-extrabold text-spl-gold leading-tight">₹${Number(liveState.basePrice || 200).toLocaleString('en-IN')}</p>
                             </div>
                             <div class="text-right">
-                                <p class="text-xs font-bold uppercase tracking-widest text-gray-400">Official Auction Rule</p>
-                                <p class="text-xs sm:text-sm font-bold text-blue-300">${liveState.round === 2 ? 'Round 2 • +50% Committee Penalty Applies' : 'Santuri Premier League • Season 6'}</p>
+                                <p class="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-gray-400">Official Auction</p>
+                                <p class="text-[11px] sm:text-sm font-bold text-blue-300">${liveState.round === 2 ? 'Round 2 • +50% Penalty' : 'SPL • Season 6'}</p>
                             </div>
                         </div>
                     </div>
@@ -1552,29 +1583,100 @@
 
         function renderSoldMarquee() {
             const track = document.getElementById('sold-marquee-track');
+            const highestSection = document.getElementById('highest-sold-spotlight');
+            const highestContent = document.getElementById('highest-sold-content');
             if (!track) return;
 
-            const soldList = Object.values(liveState.soldPlayers || {})
+            const soldEntries = Object.entries(liveState.soldPlayers || {})
+                .map(([pid, info]) => ({ pid, ...info }))
                 .sort((a, b) => (Number(b.soldAt) || 0) - (Number(a.soldAt) || 0));
 
-            if (soldList.length === 0) {
+            if (soldEntries.length === 0) {
                 track.style.animation = 'none';
                 track.innerHTML = `<span class="text-xs sm:text-sm text-gray-400 font-semibold uppercase tracking-wider px-2">Waiting for first sold player in SPL Season 6 Mega Auction...</span>`;
+                if (highestSection) highestSection.classList.add('hidden');
                 return;
             }
 
-            const itemsHtml = soldList.map(info => `
-                <div class="inline-flex items-center gap-2.5 bg-premium-900 border border-spl-gold/50 rounded-xl px-4 py-1.5 flex-shrink-0 shadow">
-                    <span class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-xs px-2 py-0.5 rounded uppercase">${window.escapeHtml(info.srNo || 'SOLD')}</span>
-                    <span class="font-oswald font-bold text-white text-sm sm:text-base uppercase tracking-wide">${window.escapeHtml(info.playerName || '')}</span>
-                    <span class="text-gray-400 text-xs">&rarr;</span>
-                    <span class="font-oswald font-bold text-blue-300 text-sm sm:text-base uppercase">${window.escapeHtml(info.teamName || '')}</span>
-                    <span class="bg-green-600/25 text-green-300 border border-green-500/50 font-oswald font-extrabold text-sm sm:text-base px-2.5 py-0.5 rounded-lg">₹${Number(info.amount || 0).toLocaleString('en-IN')}</span>
-                </div>
-            `).join('');
+            // Identify current highest amount sold player (tie-break by most recent)
+            const highestSold = soldEntries.reduce((best, cur) => {
+                const curAmt = Number(cur.amount) || 0;
+                const bestAmt = Number(best.amount) || 0;
+                return curAmt > bestAmt ? cur : best;
+            }, soldEntries[0]);
+
+            // Render Dedicated Highest Sold Player Spotlight Banner with Unique Fonts (Cinzel + Russo One)
+            if (highestSection && highestContent && highestSold) {
+                const playerObj = approvedPlayers.find(p => String(p.id) === String(highestSold.pid)) || {};
+                const winTeam = allTeams.find(t => String(t.id) === String(highestSold.teamId));
+                const photoUrl = playerObj.photo || 'https://placehold.co/150x150/16294D/F4B036?text=TOP';
+                const teamLogoHtml = winTeam?.logo
+                    ? `<img src="${winTeam.logo}" class="w-7 h-7 rounded-full bg-white p-0.5 object-contain border border-amber-300 flex-shrink-0">`
+                    : `<span class="w-7 h-7 rounded-full bg-amber-400 text-premium-950 flex items-center justify-center text-xs flex-shrink-0"><i class="fa-solid fa-shield-halved"></i></span>`;
+
+                highestContent.innerHTML = `
+                    <div class="flex items-center gap-3.5 min-w-0">
+                        <div class="relative flex-shrink-0">
+                            <img src="${photoUrl}" alt="${window.escapeHtml(highestSold.playerName || '')}" onerror="this.onerror=null;this.src='https://placehold.co/150x150/16294D/F4B036?text=TOP';" class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl object-cover object-top border-2 border-amber-300 shadow-[0_0_18px_rgba(251,191,36,0.55)]">
+                            <span class="absolute -top-2.5 -left-2.5 w-7 h-7 rounded-full bg-gradient-to-br from-yellow-200 via-amber-400 to-orange-500 text-premium-950 flex items-center justify-center text-xs shadow-lg border border-white/60">
+                                <i class="fa-solid fa-crown"></i>
+                            </span>
+                        </div>
+                        <div class="min-w-0 text-left">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="font-cinzel font-black text-[10px] sm:text-xs uppercase tracking-[0.18em] text-amber-300">
+                                    <i class="fa-solid fa-trophy mr-1"></i> Current Highest Buy
+                                </span>
+                                <span class="bg-amber-400/20 text-amber-200 border border-amber-300/50 text-[10px] font-bold px-2 py-0.5 rounded uppercase">${window.escapeHtml(highestSold.srNo || 'TOP')}</span>
+                            </div>
+                            <h3 class="font-cinzel font-black text-lg sm:text-2xl lg:text-3xl text-white uppercase tracking-wider truncate leading-tight mt-0.5 drop-shadow">
+                                ${window.escapeHtml(highestSold.playerName || '')}
+                            </h3>
+                            <div class="flex items-center gap-2 mt-1">
+                                ${teamLogoHtml}
+                                <span class="font-russo text-xs sm:text-sm text-amber-200 uppercase tracking-wide truncate">${window.escapeHtml(highestSold.teamName || '')}</span>
+                                ${highestSold.skill ? `<span class="hidden sm:inline text-[11px] text-gray-300 font-semibold">• ${window.escapeHtml(highestSold.skill)}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto bg-premium-950/75 border border-amber-400/50 rounded-xl px-4 py-2 flex-shrink-0">
+                        <span class="font-cinzel text-[10px] font-bold uppercase tracking-[0.2em] text-amber-300">Record Bid</span>
+                        <span class="font-russo highest-price-text text-2xl sm:text-4xl tracking-wider leading-none mt-0.5">
+                            ₹${Number(highestSold.amount || 0).toLocaleString('en-IN')}
+                        </span>
+                    </div>
+                `;
+                highestSection.classList.remove('hidden');
+            }
+
+            const itemsHtml = soldEntries.map(info => {
+                const isTopBuy = String(info.pid) === String(highestSold.pid);
+                if (isTopBuy) {
+                    return `
+                        <div class="inline-flex items-center gap-2.5 bg-gradient-to-r from-amber-950 via-yellow-900/80 to-amber-950 border-2 border-amber-300 rounded-xl px-4 py-1.5 flex-shrink-0 shadow-[0_0_16px_rgba(251,191,36,0.45)]">
+                            <span class="bg-gradient-to-r from-yellow-200 to-amber-400 text-premium-950 font-cinzel font-black text-[11px] px-2.5 py-0.5 rounded uppercase flex items-center gap-1">
+                                <i class="fa-solid fa-crown"></i> TOP BUY
+                            </span>
+                            <span class="font-cinzel font-black text-amber-200 text-sm sm:text-base uppercase tracking-wider">${window.escapeHtml(info.playerName || '')}</span>
+                            <span class="text-amber-400 text-xs">&rarr;</span>
+                            <span class="font-russo text-white text-xs sm:text-sm uppercase">${window.escapeHtml(info.teamName || '')}</span>
+                            <span class="font-russo highest-price-text text-base sm:text-lg px-1.5">₹${Number(info.amount || 0).toLocaleString('en-IN')}</span>
+                        </div>
+                    `;
+                }
+                return `
+                    <div class="inline-flex items-center gap-2.5 bg-premium-900 border border-spl-gold/50 rounded-xl px-4 py-1.5 flex-shrink-0 shadow">
+                        <span class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-xs px-2 py-0.5 rounded uppercase">${window.escapeHtml(info.srNo || 'SOLD')}</span>
+                        <span class="font-oswald font-bold text-white text-sm sm:text-base uppercase tracking-wide">${window.escapeHtml(info.playerName || '')}</span>
+                        <span class="text-gray-400 text-xs">&rarr;</span>
+                        <span class="font-oswald font-bold text-blue-300 text-sm sm:text-base uppercase">${window.escapeHtml(info.teamName || '')}</span>
+                        <span class="bg-green-600/25 text-green-300 border border-green-500/50 font-oswald font-extrabold text-sm sm:text-base px-2.5 py-0.5 rounded-lg">₹${Number(info.amount || 0).toLocaleString('en-IN')}</span>
+                    </div>
+                `;
+            }).join('');
 
             // Duplicate items for seamless continuous broadcast ticker scrolling
-            const durationSec = Math.max(18, soldList.length * 4.5);
+            const durationSec = Math.max(18, soldEntries.length * 4.5);
             track.style.animation = `marqueeScroll ${durationSec}s linear infinite`;
             track.innerHTML = itemsHtml + itemsHtml;
         }
