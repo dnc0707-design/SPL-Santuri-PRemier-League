@@ -1728,6 +1728,13 @@ service cloud.firestore {
                             <label class="block text-gray-300 text-sm font-bold mb-2">SR No (If Approved)</label>
                             <input type="text" id="edit-reg-srNo" class="w-full bg-premium-950 border border-premium-700 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold">
                         </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-red-300 text-sm font-bold mb-2"><i class="fa-solid fa-ban mr-1"></i> Auction Participation Status</label>
+                            <select id="edit-reg-withdrawn" class="w-full bg-premium-950 border border-red-500/60 rounded px-4 py-2 text-white focus:outline-none focus:border-spl-gold">
+                                <option value="false">Active in SPL Season 6 Auction</option>
+                                <option value="true">Name Withdrawn (Opted Out of SPL)</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="mt-6 flex justify-end gap-4">
                         <button type="button" onclick="closeAdminEditRegModal()" class="px-6 py-2 bg-premium-700 text-white font-bold rounded hover:bg-premium-600 transition shadow">Cancel</button>
@@ -3082,130 +3089,80 @@ service cloud.firestore {
                 r.phone || '',
                 r.skill || 'Batsman',
                 r.status || 'pending',
-                r.srNo || ''
+                r.srNo || '',
+                Boolean(r.withdrawn)
             );
         };
 
-        window.approveRegistration = function(docId, name, phone) {
-            showConfirmDialog(`Approve player "${name}"? This will assign the next sequential SR Number and open WhatsApp confirmation.`, async () => {
-                try {
-                    let maxNum = 0;
-                    (window.allRegistrations || []).forEach(r => {
-                        if (String(r.status || '').trim().toLowerCase() === 'approved' && r.srNo) {
-                            const match = String(r.srNo).match(/(\d+)/);
-                            if (match) {
-                                const val = parseInt(match[1], 10);
-                                if (val > maxNum) maxNum = val;
-                            }
-                        }
-                    });
-                    const nextSrNum = maxNum + 1;
-                    const newSrNo = "SR-" + String(nextSrNum).padStart(3, '0');
+        window.toggleWithdrawRegistration = function(docId) {
+            const player = (window.allRegistrations || []).find(r => String(r.id) === String(docId));
+            if (!player) {
+                showNotice("Player record not found.", "Error");
+                return;
+            }
+            const nextWithdrawn = !Boolean(player.withdrawn);
+            const actionLabel = nextWithdrawn ? 'Withdraw Name' : 'Restore Player';
+            const confirmMsg = nextWithdrawn
+                ? `Mark "${player.name}" (${player.srNo || 'Player'}) as NAME WITHDRAWN?\n\nA red cross and "NAME WITHDRAWN" stamp will be shown on their player card in the Auction Pool.`
+                : `Restore "${player.name}" (${player.srNo || 'Player'}) back to the active SPL Season 6 Auction Pool?`;
 
+            showConfirmDialog(confirmMsg, async () => {
+                try {
                     const localList = getLocalList('registrations', []);
                     const idx = localList.findIndex(x => String(x.id) === String(docId));
                     if (idx > -1) {
-                        localList[idx].status = 'approved';
-                        localList[idx].srNo = newSrNo;
+                        localList[idx].withdrawn = nextWithdrawn;
                         setLocalList('registrations', localList);
                     }
                     const memIdx = (window.allRegistrations || []).findIndex(x => String(x.id) === String(docId));
                     if (memIdx > -1) {
-                        window.allRegistrations[memIdx].status = 'approved';
-                        window.allRegistrations[memIdx].srNo = newSrNo;
+                        window.allRegistrations[memIdx].withdrawn = nextWithdrawn;
                     }
                     renderRegistrationsList(window.allRegistrations || localList);
 
-                    if (!String(docId).startsWith('LOCAL_') && db) {
-                        const regRef = doc(db, 'artifacts', myAppId, 'public', 'data', 'players', docId);
-                        await updateDoc(regRef, {
-                            status: 'approved',
-                            srNo: newSrNo
-                        });
+                    if (!String(docId).startsWith('LOCAL_')) {
+                        let cloudSaved = false;
+                        if (db) {
+                            try {
+                                await updateDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'players', docId), {
+                                    withdrawn: nextWithdrawn
+                                });
+                                cloudSaved = true;
+                            } catch (sdkErr) {
+                                console.warn('Withdraw SDK update fallback:', sdkErr);
+                            }
+                        }
+                        if (!cloudSaved) {
+                            const restUrl = `https://firestore.googleapis.com/v1/projects/spl-santuri-premier-league/databases/(default)/documents/artifacts/${myAppId}/public/data/players/${encodeURIComponent(docId)}?updateMask.fieldPaths=withdrawn`;
+                            const res = await fetch(restUrl, {
+                                method: 'PATCH',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ fields: { withdrawn: encodeFirestoreRestValue(nextWithdrawn) } })
+                            });
+                            if (!res.ok) throw new Error(`Database update failed (${res.status})`);
+                        }
                     }
 
-                    const cleanPhone = String(phone || '').replace(/\D/g, '').slice(-10);
-                    const msg = `Hello ${encodeURIComponent(name)}, your registration for SPL Season 6 is APPROVED!%0A%0AYour Official SR Number is: *${newSrNo}*%0A%0AWelcome to the Official Auction Pool!%0A- SPL Management (7980230656)`;
-                    const waLink = cleanPhone ? `https://wa.me/91${cleanPhone}?text=${msg}` : '';
-                    
-                    showNotice(`Approved successfully with ${newSrNo}!${waLink ? ' Click OK to send WhatsApp confirmation message.' : ''}`, 'Approved', () => {
-                        if (waLink) window.open(waLink, '_blank');
-                    });
+                    showNotice(
+                        nextWithdrawn
+                            ? `"${player.name}" has been marked as NAME WITHDRAWN from SPL Season 6.`
+                            : `"${player.name}" has been restored to the active SPL Season 6 Auction Pool.`,
+                        nextWithdrawn ? 'Name Withdrawn' : 'Player Restored'
+                    );
                 } catch (err) {
-                    console.error("Approval error:", err);
-                    showNotice("Approval failed: " + err.message, "Error");
+                    showNotice("Failed to update withdrawal status: " + err.message, "Error");
                 }
-            });
+            }, actionLabel);
         };
-
-        window.deleteRegistration = function(id) {
-            showConfirmDialog("Are you sure you want to delete this registration?", async () => {
-                if (String(id).startsWith('LOCAL_')) {
-                    const localList = getLocalList('registrations', []).filter(x => x.id !== id);
-                    setLocalList('registrations', localList);
-                    renderRegistrationsList(localList);
-                    return;
-                }
-                try {
-                    await deleteDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'players', id));
-                    showNotice("Registration deleted successfully.", "Deleted");
-                } catch(e) {
-                    showNotice("Failed to delete: " + e.message, "Error");
-                }
-            });
-        };
-
-        window.exportRegistrationsCSV = function() {
-            if (!window.allRegistrations || window.allRegistrations.length === 0) {
-                showNotice("No player registrations found to export.", "Empty Database");
-                return;
-            }
-            
-            let csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "SR No,Name,Status,Phone,DOB,Panchayat,Village,Skill,Applied Date\n";
-            
-            window.allRegistrations.forEach(r => {
-                const dateApplied = new Date(r.createdAt || Date.now()).toLocaleDateString();
-                const safeName = `"${(r.name || '').replace(/"/g, '""')}"`;
-                const safeVillage = `"${(r.village || '').replace(/"/g, '""')}"`;
-                const safePhone = `="${r.phone || ''}"`; 
-                
+// ... existing code ... -->
                 const row = [
                     r.srNo || 'Pending',
                     safeName,
-                    (r.status || 'pending').toUpperCase(),
+                    r.withdrawn ? 'WITHDRAWN' : (r.status || 'pending').toUpperCase(),
                     safePhone,
                     r.dob || '',
-                    r.panchayat || '',
-                    safeVillage,
-                    r.skill || '',
-                    dateApplied
-                ].join(",");
-                
-                csvContent += row + "\n";
-            });
-            
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "SPL_Player_Registrations.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        };
-
-        // --- ADMIN EDIT REGISTRATION ---
-        window.normalizePanchayatName = function(val) {
-            const raw = String(val || '').trim();
-            if (!raw) return '';
-            const lower = raw.toLowerCase();
-            if (lower === 'kotladi-ramchandrapur' || lower === 'kotaldi-ramchandrapur' || lower === 'ramchandrapur-kotaldi' || lower === 'ramchandrapur-kotladi') {
-                return 'Ramchandrapur-Kotaldi';
-            }
-            return raw;
-        };
-
-        window.openAdminEditRegModal = function(id, name, dob, panchayat, village, phone, skill, status, srNo) {
+// ... existing code ... -->
+        window.openAdminEditRegModal = function(id, name, dob, panchayat, village, phone, skill, status, srNo, withdrawn = false) {
             document.getElementById('edit-reg-id').value = id;
             document.getElementById('edit-reg-name').value = name || '';
             document.getElementById('edit-reg-dob').value = dob || '';
@@ -3215,6 +3172,8 @@ service cloud.firestore {
             document.getElementById('edit-reg-skill').value = skill || 'Batsman';
             document.getElementById('edit-reg-status').value = status || 'pending';
             document.getElementById('edit-reg-srNo').value = srNo || '';
+            const wEl = document.getElementById('edit-reg-withdrawn');
+            if (wEl) wEl.value = withdrawn ? 'true' : 'false';
             document.getElementById('admin-edit-reg-modal').classList.remove('hidden');
         };
 
@@ -3233,112 +3192,160 @@ service cloud.firestore {
                 phone: document.getElementById('edit-reg-phone').value.trim(),
                 skill: document.getElementById('edit-reg-skill').value,
                 status: document.getElementById('edit-reg-status').value,
-                srNo: document.getElementById('edit-reg-srNo').value.trim() || null
+                srNo: document.getElementById('edit-reg-srNo').value.trim() || null,
+                withdrawn: document.getElementById('edit-reg-withdrawn')?.value === 'true'
             };
 
             try {
-                if (!String(id).startsWith('LOCAL_')) {
-                    await updateDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'players', id), updated);
-                } else {
-                    const list = getLocalList('registrations', []);
-                    const idx = list.findIndex(x => x.id === id);
-                    if (idx > -1) {
-                        list[idx] = { ...list[idx], ...updated };
-                        setLocalList('registrations', list);
-                        renderRegistrationsList(list);
-                    }
-                }
-                closeAdminEditRegModal();
-                showNotice("Player registration updated successfully!", "Saved");
-            } catch (err) {
-                showNotice("Error updating registration: " + err.message, "Error");
-            }
+// ... existing code ... -->
+            publicAuctionGrid.innerHTML = filtered.map(r => {
+                const u19 = window.isU19Player(r);
+                const isWithdrawn = Boolean(r.withdrawn);
+                const u19Badge = u19
+                    ? `<span class="bg-gradient-to-r from-orange-500 to-spl-red text-white text-[10px] font-extrabold px-2 py-0.5 rounded uppercase shadow-sm border border-white/20 tracking-wider">U-19</span>`
+                    : '';
+                const withdrawnPill = isWithdrawn
+                    ? `<span class="bg-spl-red text-white text-[10px] font-extrabold px-2 py-0.5 rounded uppercase shadow-sm border border-white/30 tracking-wider"><i class="fa-solid fa-xmark mr-0.5"></i> WITHDRAWN</span>`
+                    : '';
+                const u19DobHtml = (u19 && r.dob)
+                    ? `<p class="text-[11px] text-orange-300 font-semibold mt-0.5"><i class="fa-solid fa-cake-candles mr-1"></i> DOB: ${window.escapeHtml(r.dob)}</p>`
+                    : '';
+                const displayPanchayat = window.normalizePanchayatName(r.panchayat);
+
+                return `
+                <div onclick="openPlayerPosterModal('${r.id}')" class="relative overflow-hidden ${isWithdrawn ? 'bg-red-950/35 border-2 border-spl-red/80' : `bg-premium-800 border ${u19 ? 'border-orange-500/80' : 'border-green-600/50'} hover:border-spl-gold`} rounded-xl p-4 shadow-lg flex items-center justify-between gap-3 cursor-pointer group transition-all duration-200 hover:bg-premium-800/80">
+                    ${isWithdrawn ? `
+                        <div class="pointer-events-none absolute inset-0 z-20 flex items-center justify-center bg-premium-950/35">
+                            <div class="border-[3px] border-spl-red bg-premium-950/90 text-spl-red font-oswald font-extrabold text-sm sm:text-base uppercase tracking-[0.18em] px-3.5 py-1 rounded-lg transform -rotate-12 shadow-[0_0_20px_rgba(225,45,57,0.55)] flex items-center gap-1.5">
+                                <i class="fa-solid fa-xmark text-lg"></i> NAME WITHDRAWN
+                            </div>
+                        </div>
+                    ` : ''}
+                    <div class="flex items-center gap-3 min-w-0 ${isWithdrawn ? 'opacity-70' : ''}">
+                        <div class="relative flex-shrink-0">
+                            <img src="${r.photo || 'https://placehold.co/100x100/1C335E/F4B036?text=SPL'}" alt="${window.escapeHtml(r.name)}" onerror="this.onerror=null;this.src='https://placehold.co/100x100/1C335E/F4B036?text=SPL';" class="w-14 h-14 object-cover rounded-full border-2 ${isWithdrawn ? 'border-spl-red grayscale' : (u19 ? 'border-orange-400' : 'border-green-500')} group-hover:border-spl-gold transition-colors">
+                            ${isWithdrawn ? `<span class="absolute inset-0 rounded-full bg-spl-red/35 flex items-center justify-center text-spl-red text-3xl font-extrabold drop-shadow"><i class="fa-solid fa-xmark"></i></span>` : ''}
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex flex-wrap items-center gap-1.5">
+                                <span class="bg-spl-gold text-premium-950 text-[10px] font-extrabold px-2 py-0.5 rounded uppercase">${window.escapeHtml(r.srNo || 'SR-001')}</span>
+                                ${u19Badge}
+                                ${withdrawnPill}
+                            </div>
+                            <h4 class="font-oswald font-bold ${isWithdrawn ? 'text-gray-300 line-through decoration-spl-red decoration-2' : 'text-white group-hover:text-spl-gold'} text-lg mt-1 break-words transition-colors">${window.escapeHtml(r.name)}</h4>
+                            <p class="text-xs text-spl-gold font-bold mt-0.5"><i class="fa-solid fa-baseball-bat-ball mr-1"></i> ${window.escapeHtml(r.skill || 'Player')}</p>
+                            ${u19DobHtml}
+                            <p class="text-[11px] text-gray-300 break-words mt-0.5"><i class="fa-solid fa-location-dot text-gray-400 mr-1"></i> ${window.escapeHtml(r.village || '')} (${window.escapeHtml(displayPanchayat)})</p>
+                        </div>
+                    </div>
+                    <div class="flex-shrink-0 text-spl-gold/80 group-hover:text-spl-gold text-xs font-bold uppercase flex flex-col items-center gap-1 pl-2">
+                        <i class="fa-solid fa-expand text-base"></i>
+                        <span class="text-[9px] tracking-wider">Poster</span>
+                    </div>
+                </div>
+            `;
+            }).join('');
         };
-
-        window.approvedPoolPlayers = [];
-
-        window.getPlayerBirthYear = function(dobStr) {
-            if (!dobStr) return null;
-            const str = String(dobStr).trim();
-            const yearMatch = str.match(/\b(19\d{2}|20\d{2})\b/);
-            if (yearMatch) return parseInt(yearMatch[1], 10);
-            const parsed = new Date(str);
-            if (!isNaN(parsed.getTime())) return parsed.getFullYear();
-            return null;
-        };
-
-        window.isU19Player = function(player) {
-            const yr = window.getPlayerBirthYear(player?.dob);
-            return yr !== null && yr >= 2008;
-        };
-
-        window.togglePoolFilterDropdown = function(type, e) {
-            if (e) e.stopPropagation();
-            const targetMenu = document.getElementById(`pool-menu-${type}`);
-            if (!targetMenu) return;
-            const willOpen = targetMenu.classList.contains('hidden');
-            ['panchayat', 'village', 'skill', 'dob'].forEach(k => {
-                document.getElementById(`pool-menu-${k}`)?.classList.add('hidden');
-            });
-            if (willOpen) {
-                targetMenu.classList.remove('hidden');
-            }
-        };
-
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.pool-checkbox-dropdown')) {
-                ['panchayat', 'village', 'skill', 'dob'].forEach(k => {
-                    document.getElementById(`pool-menu-${k}`)?.classList.add('hidden');
-                });
-            }
-        });
-
-        function updatePoolFilterLabels(panchayats, villages, skills, dobs) {
-            const pLbl = document.getElementById('pool-label-panchayat');
-            const vLbl = document.getElementById('pool-label-village');
-            const sLbl = document.getElementById('pool-label-skill');
-            const dLbl = document.getElementById('pool-label-dob');
-
-            if (pLbl) pLbl.textContent = panchayats.length === 0 ? 'All Panchayats' : (panchayats.length === 1 ? panchayats[0] : `${panchayats.length} Selected`);
-            if (vLbl) vLbl.textContent = villages.length === 0 ? 'All Villages' : (villages.length === 1 ? villages[0] : `${villages.length} Selected`);
-            if (sLbl) sLbl.textContent = skills.length === 0 ? 'All Skills' : (skills.length === 1 ? skills[0] : `${skills.length} Selected`);
-            if (dLbl) {
-                if (dobs.length === 0) dLbl.textContent = 'All Ages / DOB';
-                else if (dobs.length === 1) dLbl.textContent = dobs[0] === 'U19' ? 'U-19 (2008 & Above)' : 'Normal';
-                else dLbl.textContent = `${dobs.length} Selected`;
-            }
-        }
-
-        function populateAuctionPoolFilterOptions(approved) {
-            const villageMenu = document.getElementById('pool-menu-village');
-
-            if (villageMenu) {
-                const prevChecked = new Set(
-                    Array.from(document.querySelectorAll('input[name="filter-village"]:checked')).map(cb => cb.value)
-                );
-                const villages = Array.from(
-                    new Set(
-                        approved
-                            .map(r => String(r.village || '').trim())
-                            .filter(Boolean)
-                    )
-                ).sort((a, b) => a.localeCompare(b));
-
-                if (villages.length === 0) {
-                    villageMenu.innerHTML = `<p class="text-xs text-gray-400 px-2 py-1">No villages found</p>`;
-                } else {
-                    villageMenu.innerHTML = villages.map(v => {
-                        const safeVal = window.escapeHtml(v);
-                        const checkedAttr = prevChecked.has(v) ? 'checked' : '';
+// ... existing code ... -->
+                    approvedContainer.innerHTML = approved.map(r => {
+                        const safeId = window.escapeHtml(r.id);
+                        const safeName = window.escapeHtml(r.name);
+                        const safeSr = window.escapeHtml(r.srNo || 'SR-001');
+                        const safeSkill = window.escapeHtml(r.skill || 'Player');
+                        const safeVillage = window.escapeHtml(r.village || '');
+                        const safePanchayat = window.escapeHtml(window.normalizePanchayatName(r.panchayat || ''));
+                        const isWithdrawn = Boolean(r.withdrawn);
+                        const u19Badge = window.isU19Player(r)
+                            ? `<span class="bg-gradient-to-r from-orange-500 to-spl-red text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase ml-1">U-19</span>`
+                            : '';
+                        const withdrawnBadge = isWithdrawn
+                            ? `<span class="bg-spl-red text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase ml-1"><i class="fa-solid fa-xmark mr-0.5"></i> WITHDRAWN</span>`
+                            : '';
                         return `
-                            <label class="flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg hover:bg-premium-800 cursor-pointer text-sm text-gray-200">
-                                <input type="checkbox" name="filter-village" value="${safeVal}" ${checkedAttr} onchange="applyAuctionPoolFilters()" class="accent-spl-gold w-4 h-4 rounded">
-                                <span class="truncate">${safeVal}</span>
-                            </label>
-                        `;
-                    }).join('');
+                        <div class="${isWithdrawn ? 'bg-red-950/35 border-2 border-spl-red/80' : 'bg-premium-800 border border-green-600/50'} rounded-xl p-4 shadow-lg flex items-center justify-between gap-3">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <div class="relative flex-shrink-0">
+                                    <img src="${r.photo || 'https://placehold.co/100x100/1C335E/F4B036?text=SPL'}" onerror="this.onerror=null;this.src='https://placehold.co/100x100/1C335E/F4B036?text=SPL';" class="w-12 h-12 object-cover rounded-full border ${isWithdrawn ? 'border-spl-red grayscale' : 'border-green-500'}">
+                                    ${isWithdrawn ? `<span class="absolute inset-0 rounded-full bg-spl-red/40 flex items-center justify-center text-white text-xl font-extrabold"><i class="fa-solid fa-xmark"></i></span>` : ''}
+                                </div>
+                                <div class="min-w-0">
+                                    <span class="bg-spl-gold text-premium-950 text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase">${safeSr}</span>${u19Badge}${withdrawnBadge}
+                                    <h4 class="font-oswald font-bold ${isWithdrawn ? 'text-gray-300 line-through decoration-spl-red' : 'text-white'} text-base mt-0.5 break-words">${safeName}</h4>
+                                    <p class="text-xs text-gray-300 break-words">${safeSkill} • ${safeVillage} (${safePanchayat})</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-1.5 flex-shrink-0">
+                                <button type="button" onclick="toggleWithdrawRegistration('${safeId}')" class="${isWithdrawn ? 'bg-green-600 hover:bg-green-500' : 'bg-amber-600 hover:bg-amber-500'} text-white px-2.5 h-8 rounded text-[11px] font-bold uppercase shadow flex items-center justify-center gap-1 cursor-pointer" title="${isWithdrawn ? 'Restore to Auction' : 'Withdraw Name from Auction'}">
+                                    <i class="fa-solid ${isWithdrawn ? 'fa-rotate-left' : 'fa-user-xmark'}"></i>
+                                    <span class="hidden sm:inline">${isWithdrawn ? 'Restore' : 'Withdraw'}</span>
+                                </button>
+                                <button type="button" onclick="openAdminEditRegById('${safeId}')" class="bg-blue-600 hover:bg-blue-500 text-white w-8 h-8 rounded text-xs shadow flex items-center justify-center cursor-pointer" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                                <button type="button" onclick="deleteRegistration('${safeId}')" class="bg-red-600 hover:bg-red-500 text-white w-8 h-8 rounded text-xs shadow flex items-center justify-center cursor-pointer" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `;}).join('');
                 }
             }
+// ... existing code ... -->
+            const isU19 = window.isU19Player(r);
+            const isWithdrawn = Boolean(r.withdrawn);
+            const u19PosterBadge = isWithdrawn
+                ? `<span class="bg-spl-red text-white font-oswald text-xs font-extrabold uppercase px-3 py-1 rounded-full border border-white/50 shadow-lg tracking-wider"><i class="fa-solid fa-xmark mr-1"></i> NAME WITHDRAWN</span>`
+                : (isU19
+                    ? `<span class="bg-gradient-to-r from-orange-500 to-spl-red text-white font-oswald text-xs font-extrabold uppercase px-3 py-1 rounded-full border border-white/40 shadow-lg tracking-wider">U-19 PLAYER</span>`
+                    : `<span class="bg-premium-950/90 text-spl-gold font-oswald text-xs font-bold uppercase px-3 py-1 rounded-full border border-spl-gold/50 shadow"><i class="fa-solid fa-circle-check mr-1"></i> Verified Player</span>`);
+            const u19PosterDob = (isU19 && r.dob)
+                ? `<p class="text-xs text-orange-300 font-bold uppercase tracking-wider"><i class="fa-solid fa-cake-candles mr-1.5"></i> DOB: ${window.escapeHtml(r.dob)}</p>`
+                : '';
+            const displayPanchayat = window.normalizePanchayatName(r.panchayat);
+
+            const spl6LogoUrl = window.customCardLogo || localStorage.getItem('spl_card_logo_backup') || "https://github.com/dnc0707-design/SPL-Santuri-PRemier-League/blob/main/SPL-6%20logo.jpeg?raw=true";
+            const fallbackSplLogo = "https://raw.githubusercontent.com/dnc0707-design/SPL-Santuri-PRemier-League/main/ChatGPT%20Image%20Sep%205%2C%202026%2C%2003_22_40%20PM.png";
+            const content = document.getElementById('player-poster-card-content');
+            if (!content) return;
+
+            content.innerHTML = `
+                <!-- Poster Header with Large SPL-6 Official Logo -->
+                <div class="bg-gradient-to-r from-premium-950 via-premium-900 to-premium-950 px-4 py-3.5 border-b-2 border-spl-gold flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <img src="${spl6LogoUrl}" alt="SPL-6 Official Logo" class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-white p-1 object-contain border-2 border-spl-gold shadow-[0_0_20px_rgba(244,176,54,0.6)] flex-shrink-0" onerror="if(this.src!=='${fallbackSplLogo}'){this.src='${fallbackSplLogo}';}else{this.onerror=null;this.src='https://placehold.co/100/ffffff/0B1221?text=SPL-6';}">
+                        <div class="text-left leading-tight">
+                            <h4 class="font-oswald text-base sm:text-lg font-bold text-white uppercase tracking-wider">SANTURI <span class="text-spl-gold">PREMIER LEAGUE</span></h4>
+                            <p class="text-[11px] text-spl-gold font-extrabold uppercase tracking-widest mt-0.5">SEASON 6 • MEGA AUCTION</p>
+                            <p class="text-[9px] text-gray-300 font-bold uppercase tracking-wider mt-0.5">Org. Lalgarh Village Club</p>
+                        </div>
+                    </div>
+                    <div class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-lg sm:text-xl px-3.5 py-1.5 rounded-lg shadow-lg tracking-wider flex-shrink-0 border border-white/40">
+                        ${r.srNo || 'SR-001'}
+                    </div>
+                </div>
+
+                <!-- Large Portrait Image with Floating SPL-6 Watermark Badge -->
+                <div class="relative w-full h-80 sm:h-96 bg-premium-900 overflow-hidden border-b-2 ${isWithdrawn ? 'border-spl-red' : 'border-spl-gold'}">
+                    <img src="${r.photo || ''}" alt="${r.name}" class="w-full h-full object-cover object-top ${isWithdrawn ? 'grayscale opacity-60' : ''}">
+                    <img src="${spl6LogoUrl}" alt="SPL-6 Badge" class="absolute top-3 right-3 w-16 h-16 rounded-xl bg-white p-1 object-contain border-2 border-spl-gold shadow-[0_4px_15px_rgba(0,0,0,0.85)] z-10" onerror="if(this.src!=='${fallbackSplLogo}'){this.src='${fallbackSplLogo}';}else{this.onerror=null;this.src='https://placehold.co/100/ffffff/0B1221?text=SPL-6';}">
+                    ${isWithdrawn ? `
+                        <div class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-red-950/45 p-4">
+                            <div class="w-16 h-16 rounded-full bg-spl-red/90 text-white border-4 border-white/80 flex items-center justify-center text-4xl shadow-2xl mb-3">
+                                <i class="fa-solid fa-xmark"></i>
+                            </div>
+                            <div class="border-4 border-spl-red bg-premium-950/95 text-spl-red font-oswald font-extrabold text-2xl sm:text-3xl uppercase tracking-[0.18em] px-5 py-2 rounded-xl transform -rotate-12 shadow-[0_0_30px_rgba(225,45,57,0.75)]">
+                                NAME WITHDRAWN
+                            </div>
+                        </div>
+                    ` : ''}
+                    <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#060B16] via-[#060B16]/70 to-transparent"></div>
+                    <div class="absolute bottom-3 left-4 right-4 flex justify-between items-end z-20">
+                        <span class="bg-spl-red text-white font-oswald font-bold text-sm uppercase px-4 py-1 rounded-full shadow-lg border border-white/30 tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid ${skillIcon} text-xs"></i> ${r.skill || 'Player'}
+                        </span>
+                        ${u19PosterBadge}
+                    </div>
+                </div>
+
+                <!-- Full Player Name & Info -->
+                <div class="p-5 text-center bg-gradient-to-b from-[#060B16] to-premium-950">
+                    <h2 class="font-oswald font-bold ${isWithdrawn ? 'text-gray-400 line-through decoration-spl-red decoration-4' : 'text-white'} text-2xl sm:text-3xl uppercase tracking-wide leading-snug break-words mb-3">${r.name}</h2>
         }
 
         window.applyAuctionPoolFilters = function() {
