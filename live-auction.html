@@ -6,7 +6,7 @@
     <title>SPL Season 6 | Official Live Manual Auction Software</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Oswald, Montserrat, Cinzel & Russo One (Unique Highest Sold Typography) -->
+    <!-- Google Fonts: Oswald, Montserrat, Cinzel & Russo One -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Montserrat:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -122,7 +122,7 @@
             </a>
 
             <div class="flex items-center gap-2 sm:gap-2.5 flex-shrink-0">
-                <!-- Watch Live Stream Quick Jump (Shown for Viewers when Admin adds a YT/FB link) -->
+                <!-- Watch Live Stream Quick Jump (Viewers only) -->
                 <button type="button" id="nav-watch-live-btn" onclick="scrollToLiveCoverage()" class="hidden bg-spl-red hover:bg-red-700 text-white px-3 py-2 rounded-lg text-xs font-bold uppercase transition flex items-center gap-1.5 shadow-lg animate-pulse cursor-pointer" title="Jump to Live Video Coverage">
                     <i class="fa-solid fa-video"></i> <span class="hidden md:inline">Watch Live</span>
                 </button>
@@ -183,9 +183,7 @@
             <div class="absolute -right-6 -top-6 text-amber-400/10 text-8xl pointer-events-none select-none">
                 <i class="fa-solid fa-crown"></i>
             </div>
-            <div id="highest-sold-content" class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-5">
-                <!-- Populated dynamically with the current highest amount sold player -->
-            </div>
+            <div id="highest-sold-content" class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-5"></div>
         </section>
 
         <!-- ============================================================== -->
@@ -206,7 +204,6 @@
 
             <!-- Big Center Stage Player Showcase -->
             <div id="stage-player-display" class="p-3 sm:p-8 lg:p-12 min-h-[260px] sm:min-h-[450px] flex items-center justify-center relative">
-                <!-- Populated Dynamically -->
                 <div class="text-center py-10 space-y-4">
                     <div class="w-24 h-24 rounded-full bg-premium-800 border-2 border-spl-gold/70 flex items-center justify-center mx-auto text-spl-gold text-4xl shadow-2xl">
                         <i class="fa-solid fa-gavel"></i>
@@ -214,17 +211,6 @@
                     <h2 class="font-oswald text-3xl sm:text-5xl font-bold uppercase text-white tracking-wide">SPL Season 6 Mega Auction</h2>
                     <p class="text-sm sm:text-base text-gray-300 max-w-lg mx-auto">Waiting for the Auctioneer Admin to present the next player on the big screen.</p>
                 </div>
-            </div>
-
-            <!-- Dramatic Broadcast SOLD / UNSOLD Stamp Overlay -->
-            <div id="stage-hammer-overlay" class="hidden absolute inset-0 z-30 bg-premium-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
-                <div id="stage-hammer-stamp" class="stamp-animate border-[6px] border-green-400 text-green-400 font-oswald text-6xl sm:text-8xl font-extrabold uppercase px-10 sm:px-14 py-3 sm:py-4 rounded-3xl shadow-[0_0_60px_rgba(74,222,128,0.45)] tracking-widest bg-premium-950/90">
-                    SOLD!
-                </div>
-                <div id="stage-hammer-details" class="mt-6 max-w-2xl w-full fade-slide-up"></div>
-                <button type="button" id="overlay-next-player-btn" onclick="adminNextAvailablePlayer()" class="hidden mt-7 bg-spl-gold hover:bg-spl-goldHover text-premium-950 font-oswald font-bold text-xl uppercase tracking-wider px-8 py-3 rounded-xl shadow-2xl transition cursor-pointer">
-                    <i class="fa-solid fa-forward-step mr-2"></i> Present Next Player
-                </button>
             </div>
         </section>
 
@@ -239,24 +225,42 @@
                     </div>
                     <div>
                         <h3 class="font-oswald text-xl sm:text-2xl font-bold uppercase text-spl-gold leading-tight">Manual Auctioneer Control Desk</h3>
-                        <p class="text-[11px] text-gray-400">Tap any team as franchises call out bids to update the live screen in real time, then hammer SOLD or UNSOLD.</p>
+                        <p class="text-[11px] text-gray-400">Call players by SR No (with confirmation), tap franchises for live bids, and hammer SOLD or UNSOLD.</p>
                     </div>
                 </div>
 
-                <!-- Quick Jump to SR + Round & Base Price -->
-                <div class="flex flex-wrap items-center gap-2 text-xs">
-                    <div class="flex items-center bg-premium-950 border border-premium-600 rounded-lg overflow-hidden">
-                        <input type="text" id="admin-jump-sr" placeholder="Jump SR (e.g. 12)" class="w-32 bg-transparent px-3 py-1.5 text-white font-bold focus:outline-none" onkeydown="if(event.key==='Enter'){event.preventDefault(); adminJumpToSr();}">
-                        <button type="button" onclick="adminJumpToSr()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-1.5 uppercase cursor-pointer">Call</button>
-                    </div>
-                    <select id="admin-round-select" onchange="updateStageRoundOrBase()" class="bg-premium-950 border border-premium-600 rounded-lg px-2.5 py-1.5 text-white font-bold">
+                <!-- Round, Base Price & Balance Alert Board Toggle -->
+                <div class="flex flex-wrap items-center gap-2.5 text-xs">
+                    <button type="button" id="admin-purse-board-btn" onclick="adminTogglePurseBoard()" class="bg-blue-700 hover:bg-blue-600 text-white font-oswald font-bold uppercase text-sm tracking-wider px-4 py-2 rounded-xl border border-blue-400/70 shadow-lg transition flex items-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-wallet"></i> <span>Balance &amp; Purse Board</span>
+                    </button>
+                    <select id="admin-round-select" onchange="updateStageRoundOrBase()" class="bg-premium-950 border border-premium-600 rounded-xl px-3 py-2 text-white font-bold">
                         <option value="1">Round 1 (Main)</option>
                         <option value="2">Round 2 (Unsold +50%)</option>
                     </select>
-                    <div class="flex items-center bg-premium-950 border border-premium-600 rounded-lg px-2.5 py-1">
-                        <span class="text-gray-400 font-bold mr-1">Base ₹</span>
-                        <input type="number" id="admin-base-price" value="200" min="50" step="50" onchange="updateStageRoundOrBase()" class="w-16 bg-transparent text-spl-gold font-bold text-right focus:outline-none">
+                    <div class="flex items-center bg-premium-950 border border-premium-600 rounded-xl px-3 py-1.5">
+                        <span class="text-gray-400 font-bold mr-1.5">Base ₹</span>
+                        <input type="number" id="admin-base-price" value="200" min="50" step="50" onchange="updateStageRoundOrBase()" class="w-16 bg-transparent text-spl-gold font-oswald font-bold text-base text-right focus:outline-none">
                     </div>
+                </div>
+            </div>
+
+            <!-- Enlarged Call Player by SR No Bar -->
+            <div class="bg-premium-950/90 border-2 border-blue-500/60 rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shadow-inner">
+                <div class="flex items-center gap-2.5 flex-shrink-0">
+                    <span class="w-10 h-10 rounded-xl bg-blue-600/25 border border-blue-400/60 text-blue-300 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </span>
+                    <div>
+                        <p class="font-oswald text-sm sm:text-base font-bold uppercase text-white leading-tight">Call Player by SR No</p>
+                        <p class="text-[11px] text-gray-400">Preview &amp; confirm details before going live</p>
+                    </div>
+                </div>
+                <div class="flex flex-grow gap-2.5">
+                    <input type="text" id="admin-jump-sr" placeholder="Enter SR No (e.g. 12 or SR-012)" class="flex-grow bg-premium-900 border-2 border-spl-gold/70 rounded-xl px-4 py-3 font-oswald text-xl sm:text-2xl font-bold text-white placeholder-gray-500 focus:outline-none focus:border-spl-gold" onkeydown="if(event.key==='Enter'){event.preventDefault(); adminJumpToSr();}">
+                    <button type="button" onclick="adminJumpToSr()" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-oswald font-extrabold text-lg sm:text-xl uppercase tracking-wider px-6 sm:px-8 py-3 rounded-xl shadow-lg transition flex items-center gap-2 flex-shrink-0 cursor-pointer">
+                        <i class="fa-solid fa-bullhorn"></i> <span>CALL PLAYER</span>
+                    </button>
                 </div>
             </div>
 
@@ -282,9 +286,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div id="admin-team-selector-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                            <!-- Populated dynamically with clickable team buttons -->
-                        </div>
+                        <div id="admin-team-selector-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5"></div>
                     </div>
 
                     <div class="bg-premium-950/90 border border-premium-700 rounded-xl p-4 space-y-3">
@@ -311,7 +313,7 @@
                     </div>
                 </div>
 
-                <!-- Right 5 Cols: Primary Hammer Actions (Broadcast Live Bid button removed) -->
+                <!-- Right 5 Cols: Primary Hammer Actions -->
                 <div class="lg:col-span-5 flex flex-col gap-3">
                     <button type="button" onclick="adminHammerManualSold()" class="w-full bg-gradient-to-r from-green-600 to-emerald-500 hover:from-green-500 hover:to-emerald-400 text-white font-oswald font-bold text-2xl sm:text-3xl uppercase tracking-wider py-4 px-5 rounded-2xl shadow-[0_0_25px_rgba(22,163,74,0.45)] transition flex items-center justify-center gap-3 cursor-pointer">
                         <i class="fa-solid fa-hammer"></i> <span>HAMMER SOLD!</span>
@@ -380,7 +382,7 @@
                     <h3 class="font-oswald text-2xl font-bold uppercase text-white"><i class="fa-solid fa-ranking-star text-spl-gold mr-2"></i> Franchise Purse &amp; Squad Tracker</h3>
                     <span id="teams-count-badge" class="bg-spl-gold/20 text-spl-gold border border-spl-gold/50 text-xs font-bold uppercase px-2.5 py-0.5 rounded-full">0 Teams</span>
                 </div>
-                <div class="flex items-center gap-3 text-xs font-bold">
+                <div class="flex items-center gap-3 text-xs font-bold flex-wrap">
                     <button type="button" onclick="syncTeamsNow()" class="bg-premium-800 hover:bg-spl-gold text-spl-gold hover:text-premium-950 border border-spl-gold/50 px-3 py-1 rounded-lg transition cursor-pointer">
                         <i class="fa-solid fa-arrows-rotate mr-1"></i> Sync Teams
                     </button>
@@ -390,9 +392,7 @@
                 </div>
             </div>
 
-            <div id="franchise-standings-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- Populated dynamically -->
-            </div>
+            <div id="franchise-standings-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
         </section>
 
         <!-- ============================================================== -->
@@ -408,9 +408,7 @@
                 <input type="text" id="arena-pool-search" oninput="renderArenaPoolGrid()" placeholder="Search Name / SR / Village..." class="w-full sm:w-64 bg-premium-950 border border-premium-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-spl-gold">
             </div>
 
-            <div id="arena-pool-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[540px] overflow-y-auto pr-1">
-                <!-- Populated dynamically -->
-            </div>
+            <div id="arena-pool-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[540px] overflow-y-auto pr-1"></div>
         </section>
 
         <!-- ============================================================== -->
@@ -435,9 +433,7 @@
                 </div>
             </div>
             <div id="live-coverage-player-wrap" class="bg-black w-full">
-                <div class="max-w-4xl mx-auto aspect-video w-full relative" id="live-coverage-embed-container">
-                    <!-- YouTube / Facebook Live iframe injected dynamically -->
-                </div>
+                <div class="max-w-4xl mx-auto aspect-video w-full relative" id="live-coverage-embed-container"></div>
             </div>
         </section>
 
@@ -447,6 +443,63 @@
     <footer class="bg-premium-950 border-t-2 border-spl-gold/60 py-5 mt-8 text-center text-xs text-gray-400">
         <p>&copy; 2026 Santuri Premier League (SPL) • Official Season 6 Manual Mega Auction Broadcast System</p>
     </footer>
+
+    <!-- Broadcast Franchise Balance & Purse Alert Board (Synced to All Screens when Auctioneer toggles it) -->
+    <div id="purse-alert-board-modal" class="hidden fixed inset-0 z-[240] bg-premium-950/95 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+        <div class="bg-gradient-to-b from-premium-900 to-premium-950 border-2 border-spl-gold rounded-3xl max-w-6xl w-full p-4 sm:p-7 shadow-[0_0_60px_rgba(244,176,54,0.35)] my-auto space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b-2 border-spl-gold/50">
+                <div class="flex items-center gap-3">
+                    <span class="w-11 h-11 rounded-2xl bg-spl-gold text-premium-950 flex items-center justify-center text-xl shadow-lg">
+                        <i class="fa-solid fa-wallet"></i>
+                    </span>
+                    <div>
+                        <span class="inline-block bg-spl-red text-white text-[10px] font-extrabold uppercase tracking-widest px-2 py-0.5 rounded">LIVE AUCTION ALERT BOARD</span>
+                        <h3 class="font-oswald text-2xl sm:text-4xl font-extrabold uppercase text-white leading-tight">Franchise Balance &amp; Purse Status</h3>
+                    </div>
+                </div>
+                <button type="button" id="purse-board-close-btn" onclick="adminTogglePurseBoard(false)" class="hidden bg-spl-red hover:bg-red-700 text-white font-oswald font-bold uppercase text-sm tracking-wider px-5 py-2.5 rounded-xl shadow-lg transition cursor-pointer">
+                    <i class="fa-solid fa-xmark mr-1.5"></i> Close Alert Board
+                </button>
+            </div>
+
+            <div class="overflow-x-auto rounded-2xl border border-premium-700">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-premium-950 text-spl-gold font-oswald uppercase text-xs sm:text-sm tracking-wider border-b border-premium-700">
+                            <th class="py-3 px-3 sm:px-4">#</th>
+                            <th class="py-3 px-3 sm:px-4">Franchise Name</th>
+                            <th class="py-3 px-3 sm:px-4 text-center">Squad</th>
+                            <th class="py-3 px-3 sm:px-4 text-right">Actual Spent</th>
+                            <th class="py-3 px-3 sm:px-4 text-right">Purse Left</th>
+                            <th class="py-3 px-3 sm:px-4 text-right text-amber-300">Fine (50% Extra)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="purse-alert-board-tbody" class="divide-y divide-premium-800 text-sm sm:text-base"></tbody>
+                </table>
+            </div>
+
+            <p class="text-[11px] sm:text-xs text-gray-300 text-center bg-premium-950/80 border border-amber-500/40 rounded-xl px-4 py-2">
+                <i class="fa-solid fa-circle-info text-spl-gold mr-1"></i> Rule: After exhausting the ₹8,000 purse before completing 13 players, every additional purchase incurs a <strong class="text-amber-300">50% Extra Charge (Fine)</strong> shown in the last column.
+            </p>
+        </div>
+    </div>
+
+    <!-- Confirm Player Before Presenting Modal (Auctioneer Safety Gate) -->
+    <div id="confirm-present-modal" class="hidden fixed inset-0 z-[270] bg-premium-950/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-premium-900 border-2 border-spl-gold rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-premium-700">
+                <h3 class="font-oswald text-2xl font-bold uppercase text-spl-gold"><i class="fa-solid fa-circle-check mr-2"></i> Confirm Player for Floor</h3>
+                <button type="button" onclick="cancelConfirmPresent()" class="text-gray-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-2xl"></i></button>
+            </div>
+            <div id="confirm-present-body" class="space-y-4"></div>
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <button type="button" onclick="cancelConfirmPresent()" class="bg-premium-700 hover:bg-premium-600 text-white font-oswald font-bold uppercase text-base py-3 rounded-xl transition cursor-pointer">Cancel</button>
+                <button type="button" onclick="confirmPresentPlayerNow()" class="bg-gradient-to-r from-green-600 to-emerald-500 hover:from-green-500 hover:to-emerald-400 text-white font-oswald font-bold uppercase text-base py-3 rounded-xl shadow-lg transition cursor-pointer">
+                    <i class="fa-solid fa-tv mr-1.5"></i> Present Live
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Auctioneer Admin Login Modal -->
     <div id="auctioneer-login-modal" class="hidden fixed inset-0 z-[250] bg-premium-950/90 backdrop-blur-md flex items-center justify-center p-4">
@@ -477,7 +530,7 @@
 
     <!-- Franchise Squad Inspector Modal -->
     <div id="team-squad-modal" class="hidden fixed inset-0 z-[260] bg-premium-950/90 backdrop-blur-md flex items-center justify-center p-4" onclick="closeTeamSquadModal()">
-        <div class="bg-premium-900 border-2 border-spl-gold rounded-2xl max-w-2xl w-full p-5 sm:p-6 shadow-2xl max-h-[85vh] flex flex-col" onclick="event.stopPropagation()">
+        <div class="bg-premium-900 border-2 border-spl-gold rounded-2xl max-w-3xl w-full p-5 sm:p-6 shadow-2xl max-h-[85vh] flex flex-col" onclick="event.stopPropagation()">
             <div class="flex items-center justify-between pb-3 border-b border-premium-700">
                 <div>
                     <h3 id="squad-modal-title" class="font-oswald text-2xl font-bold uppercase text-spl-gold">Franchise Squad</h3>
@@ -509,7 +562,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { initializeFirestore, collection, doc, getDocs, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { initializeFirestore, collection, doc, getDoc, getDocs, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const myAppId = 'spl-santuri-premier-league';
         const ADMIN_SESSION_KEY = 'spl_live_auction_admin_v1';
@@ -523,21 +576,26 @@
         let approvedPlayers = [];
         let isAuctioneerAdmin = false;
         let selectedManualTeamId = null;
+        let pendingPresentPlayerId = null;
         let currentPoolTab = 'AVAILABLE';
         let lastRenderedStreamUrl = '';
         let liveCoverageCollapsed = false;
+        const playerPhotoCache = new Map();
+        const fetchingPhotoIds = new Set();
 
-        // Shared Live Auction State synced across all screens (Projector, Admin Laptop, Spectator Phones)
+        // Shared Live Auction State synced across all screens
         let liveState = {
             currentPlayerId: null,
+            currentPlayerSnapshot: null,
             round: 1,
             basePrice: 200,
             currentBid: 0,
             highestBidderId: null,
             highestBidderName: null,
-            bidHistory: [], // [{ teamId, teamName, amount, time }]
+            bidHistory: [],
             status: 'IDLE', // 'IDLE' | 'BIDDING' | 'SOLD' | 'UNSOLD'
-            soldPlayers: {}, // { [playerId]: { teamId, teamName, amount, round, penalty, srNo, playerName, skill, dob, soldAt } }
+            showPurseBoard: false,
+            soldPlayers: {}, // { [playerId]: { teamId, teamName, amount, fine, penalty, round, srNo, playerName, skill, dob, soldAt } }
             unsoldPlayerIds: [],
             liveStreamUrl: '',
             liveStreamTitle: 'SPL Season 6 Live Auction Coverage',
@@ -689,6 +747,58 @@
             return null;
         }
 
+        function resolvePlayerPhoto(player) {
+            if (!player) return '';
+            const id = String(player.id || '');
+            if (player.photo) {
+                if (id) playerPhotoCache.set(id, player.photo);
+                return player.photo;
+            }
+            if (id && playerPhotoCache.has(id)) return playerPhotoCache.get(id);
+            if (liveState.currentPlayerSnapshot && String(liveState.currentPlayerSnapshot.id) === id && liveState.currentPlayerSnapshot.photo) {
+                playerPhotoCache.set(id, liveState.currentPlayerSnapshot.photo);
+                return liveState.currentPlayerSnapshot.photo;
+            }
+            return '';
+        }
+
+        // Single-document fallback so normal viewers ALWAYS get the active player's real photo
+        async function ensureActivePlayerPhotoLoaded(playerId) {
+            const pid = String(playerId || '');
+            if (!pid || playerPhotoCache.has(pid) || fetchingPhotoIds.has(pid)) return;
+            fetchingPhotoIds.add(pid);
+            try {
+                let photo = '';
+                if (db) {
+                    try {
+                        const snap = await getDoc(doc(db, 'artifacts', myAppId, 'public', 'data', 'players', pid));
+                        if (snap.exists() && snap.data().photo) {
+                            photo = snap.data().photo;
+                        }
+                    } catch (e) {}
+                }
+                if (!photo) {
+                    const url = `https://firestore.googleapis.com/v1/projects/spl-santuri-premier-league/databases/(default)/documents/artifacts/${myAppId}/public/data/players/${encodeURIComponent(pid)}`;
+                    const res = await fetch(url, { cache: 'no-store' });
+                    if (res.ok) {
+                        const json = await res.json();
+                        if (json.fields && json.fields.photo) {
+                            photo = decodeFirestoreRestValue(json.fields.photo) || '';
+                        }
+                    }
+                }
+                if (photo) {
+                    playerPhotoCache.set(pid, photo);
+                    const idx = approvedPlayers.findIndex(p => String(p.id) === pid);
+                    if (idx !== -1) approvedPlayers[idx].photo = photo;
+                    renderHeroStage();
+                }
+            } catch (e) {
+            } finally {
+                fetchingPhotoIds.delete(pid);
+            }
+        }
+
         // --- FIRESTORE DATA LOADERS (MULTI-PAGE PAGINATION FOR ALL 8 FRANCHISES & PLAYERS) ---
         async function loadFranchises() {
             const teamMap = new Map();
@@ -703,7 +813,7 @@
                 }
             } catch (e) {}
 
-            // 1. Multi-page Firestore REST fetch (handles large Base64 logos across pages)
+            // 1. Multi-page Firestore REST fetch
             try {
                 const baseUrl = `https://firestore.googleapis.com/v1/projects/spl-santuri-premier-league/databases/(default)/documents/artifacts/${myAppId}/public/data/teams`;
                 let pageToken = '';
@@ -713,8 +823,7 @@
                     const res = await fetch(url, { cache: 'no-store' });
                     if (!res.ok) break;
                     const json = await res.json();
-                    const docs = json.documents || [];
-                    docs.forEach(docItem => {
+                    (json.documents || []).forEach(docItem => {
                         const id = docItem.name.split('/').pop();
                         const fields = docItem.fields || {};
                         const obj = { id };
@@ -766,6 +875,14 @@
             showNotice(`Synced ${allTeams.length} franchises from database.`, 'Teams Synced');
         };
 
+        function mergePlayerPreservePhoto(map, obj) {
+            const id = String(obj.id);
+            const prev = map.get(id);
+            const photo = obj.photo || (prev && prev.photo) || playerPhotoCache.get(id) || '';
+            if (photo) playerPhotoCache.set(id, photo);
+            map.set(id, { ...prev, ...obj, photo });
+        }
+
         async function loadApprovedPlayers() {
             const playerMap = new Map();
             try {
@@ -775,7 +892,7 @@
                     if (Array.isArray(parsed)) {
                         parsed.forEach(p => {
                             if (!p.isOwnerRegistration && String(p.status || '').trim().toLowerCase() === 'approved') {
-                                playerMap.set(String(p.id), p);
+                                mergePlayerPreservePhoto(playerMap, p);
                             }
                         });
                     }
@@ -796,7 +913,7 @@
                         const obj = { id };
                         for (const k in fields) obj[k] = decodeFirestoreRestValue(fields[k]);
                         if (!obj.isOwnerRegistration && String(obj.status || '').trim().toLowerCase() === 'approved') {
-                            playerMap.set(String(id), obj);
+                            mergePlayerPreservePhoto(playerMap, obj);
                         }
                     });
                     pageToken = json.nextPageToken || '';
@@ -812,7 +929,7 @@
                     snap.forEach(d => {
                         const obj = { id: d.id, ...d.data() };
                         if (!obj.isOwnerRegistration && String(obj.status || '').trim().toLowerCase() === 'approved') {
-                            playerMap.set(String(d.id), obj);
+                            mergePlayerPreservePhoto(playerMap, obj);
                         }
                     });
                 } catch (e) {}
@@ -823,7 +940,7 @@
                         snap.forEach(d => {
                             const obj = { id: d.id, ...d.data() };
                             if (!obj.isOwnerRegistration && String(obj.status || '').trim().toLowerCase() === 'approved') {
-                                liveMap.set(String(d.id), obj);
+                                mergePlayerPreservePhoto(liveMap, obj);
                             }
                         });
                         approvedPlayers = Array.from(liveMap.values()).sort((a, b) => {
@@ -885,8 +1002,13 @@
                 ...incoming,
                 bidHistory: Array.isArray(incoming.bidHistory) ? incoming.bidHistory : [],
                 soldPlayers: (incoming.soldPlayers && typeof incoming.soldPlayers === 'object') ? incoming.soldPlayers : {},
-                unsoldPlayerIds: Array.isArray(incoming.unsoldPlayerIds) ? incoming.unsoldPlayerIds : []
+                unsoldPlayerIds: Array.isArray(incoming.unsoldPlayerIds) ? incoming.unsoldPlayerIds : [],
+                showPurseBoard: Boolean(incoming.showPurseBoard)
             };
+
+            if (liveState.currentPlayerSnapshot && liveState.currentPlayerSnapshot.id && liveState.currentPlayerSnapshot.photo) {
+                playerPhotoCache.set(String(liveState.currentPlayerSnapshot.id), liveState.currentPlayerSnapshot.photo);
+            }
 
             if (liveState.status === 'SOLD' && (prevStatus !== 'SOLD' || prevPlayer !== liveState.currentPlayerId)) {
                 playSoldFanfare();
@@ -922,18 +1044,34 @@
             setInterval(pollStateRest, 2200);
         }
 
-        // --- TEAM STATS & PURSE CALCULATOR ---
+        // --- TEAM STATS, PURSE & 50% EXTRA CHARGE (FINE) CALCULATOR ---
         function getTeamStats(teamId) {
             const team = allTeams.find(t => String(t.id) === String(teamId)) || { id: teamId, name: teamId, purse: 8000 };
             const totalPurse = Number(team.purse || 8000);
-            const boughtEntries = Object.entries(liveState.soldPlayers || {}).filter(([, info]) => String(info.teamId) === String(teamId));
+            const boughtEntries = Object.entries(liveState.soldPlayers || {})
+                .filter(([, info]) => String(info.teamId) === String(teamId))
+                .sort((a, b) => (Number(a[1].soldAt) || 0) - (Number(b[1].soldAt) || 0));
+
             const spent = boughtEntries.reduce((sum, [, info]) => sum + (Number(info.amount) || 0), 0);
+            const totalFine = boughtEntries.reduce((sum, [, info]) => sum + (Number(info.fine ?? info.penalty) || 0), 0);
             const remaining = Math.max(0, totalPurse - spent);
+            const overPurse = Math.max(0, spent - totalPurse);
+
             const u19Count = boughtEntries.filter(([pid, info]) => {
                 const pl = approvedPlayers.find(p => String(p.id) === String(pid)) || info;
                 return isU19Player(pl);
             }).length;
-            return { team, totalPurse, spent, remaining, count: boughtEntries.length, u19Count, boughtEntries };
+
+            return { team, totalPurse, spent, remaining, overPurse, totalFine, count: boughtEntries.length, u19Count, boughtEntries };
+        }
+
+        function computeSaleFine(teamId, soldPrice, round) {
+            const st = getTeamStats(teamId);
+            const overAmount = Math.max(0, soldPrice - st.remaining);
+            const purseExhaustFine = overAmount > 0 ? Math.round(overAmount * 0.5) : 0;
+            const round2Fine = round === 2 ? Math.round(soldPrice * 0.5) : 0;
+            const fine = Math.max(purseExhaustFine, round2Fine);
+            return { fine, overAmount, purseExhaustFine, round2Fine };
         }
 
         // --- ADMIN AUTH ---
@@ -954,7 +1092,7 @@
                 localStorage.setItem(ADMIN_SESSION_KEY, '1');
                 closeAuctioneerLoginModal();
                 renderAll();
-                showNotice('Manual Auctioneer Control Desk unlocked! Tap any franchise as bids come in to update the live screen, then hammer SOLD / UNSOLD.', 'Admin Active');
+                showNotice('Manual Auctioneer Control Desk unlocked! Call players with confirmation, tap franchises for live bids, and hammer SOLD / UNSOLD.', 'Admin Active');
             } else {
                 showNotice('Invalid Admin Username or Password.', 'Access Denied');
             }
@@ -964,6 +1102,124 @@
             isAuctioneerAdmin = false;
             localStorage.removeItem(ADMIN_SESSION_KEY);
             renderAll();
+        };
+
+        // --- BALANCE & PURSE ALERT BOARD TOGGLE ---
+        window.adminTogglePurseBoard = async function(forceState) {
+            if (!isAuctioneerAdmin) return;
+            const nextShow = typeof forceState === 'boolean' ? forceState : !liveState.showPurseBoard;
+            await pushLiveAuctionState({
+                ...liveState,
+                showPurseBoard: nextShow
+            });
+        };
+
+        function renderPurseAlertBoard() {
+            const modal = document.getElementById('purse-alert-board-modal');
+            const tbody = document.getElementById('purse-alert-board-tbody');
+            const closeBtn = document.getElementById('purse-board-close-btn');
+            const adminBtn = document.getElementById('admin-purse-board-btn');
+
+            if (adminBtn) {
+                if (liveState.showPurseBoard) {
+                    adminBtn.className = 'bg-spl-red hover:bg-red-700 text-white font-oswald font-bold uppercase text-sm tracking-wider px-4 py-2 rounded-xl border border-red-300 shadow-lg transition flex items-center gap-2 cursor-pointer animate-pulse';
+                    adminBtn.innerHTML = '<i class="fa-solid fa-eye-slash"></i> <span>Hide Purse Board</span>';
+                } else {
+                    adminBtn.className = 'bg-blue-700 hover:bg-blue-600 text-white font-oswald font-bold uppercase text-sm tracking-wider px-4 py-2 rounded-xl border border-blue-400/70 shadow-lg transition flex items-center gap-2 cursor-pointer';
+                    adminBtn.innerHTML = '<i class="fa-solid fa-wallet"></i> <span>Balance &amp; Purse Board</span>';
+                }
+            }
+
+            if (!liveState.showPurseBoard) {
+                modal?.classList.add('hidden');
+                return;
+            }
+
+            modal?.classList.remove('hidden');
+            closeBtn?.classList.toggle('hidden', !isAuctioneerAdmin);
+
+            if (!tbody) return;
+            if (!allTeams || allTeams.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-gray-400">Loading franchises...</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = allTeams.map((t, idx) => {
+                const st = getTeamStats(t.id);
+                const logoHtml = t.logo
+                    ? `<img src="${t.logo}" class="w-9 h-9 rounded-lg bg-white p-0.5 object-contain border border-premium-600 flex-shrink-0">`
+                    : `<div class="w-9 h-9 rounded-lg bg-premium-800 border border-spl-gold flex items-center justify-center text-spl-gold text-xs flex-shrink-0"><i class="fa-solid fa-shield-halved"></i></div>`;
+
+                return `
+                    <tr class="hover:bg-premium-800/60 transition">
+                        <td class="py-3 px-3 sm:px-4 font-oswald font-bold text-spl-gold">${idx + 1}</td>
+                        <td class="py-3 px-3 sm:px-4">
+                            <div class="flex items-center gap-2.5">
+                                ${logoHtml}
+                                <span class="font-oswald font-bold text-white text-base sm:text-xl uppercase">${window.escapeHtml(t.name)}</span>
+                            </div>
+                        </td>
+                        <td class="py-3 px-3 sm:px-4 text-center">
+                            <span class="font-oswald font-bold text-base sm:text-lg ${st.count >= 13 ? 'text-green-400' : 'text-blue-300'}">${st.count} / 13</span>
+                        </td>
+                        <td class="py-3 px-3 sm:px-4 text-right font-oswald font-bold text-white text-base sm:text-lg">
+                            ₹${st.spent.toLocaleString('en-IN')}
+                        </td>
+                        <td class="py-3 px-3 sm:px-4 text-right font-russo text-lg sm:text-2xl ${st.remaining === 0 ? 'text-red-400' : 'text-green-400'}">
+                            ₹${st.remaining.toLocaleString('en-IN')}
+                        </td>
+                        <td class="py-3 px-3 sm:px-4 text-right font-oswald font-bold text-base sm:text-xl ${st.totalFine > 0 ? 'text-amber-300' : 'text-gray-500'}">
+                            ₹${st.totalFine.toLocaleString('en-IN')}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // --- CONFIRM PLAYER BEFORE PRESENTING MODAL ---
+        window.requestConfirmPresentPlayer = function(playerId) {
+            if (!isAuctioneerAdmin) return;
+            const player = approvedPlayers.find(p => String(p.id) === String(playerId));
+            if (!player) {
+                showNotice('Selected player was not found in the approved pool.', 'Player Not Found');
+                return;
+            }
+            pendingPresentPlayerId = player.id;
+            const u19 = isU19Player(player);
+            const photo = resolvePlayerPhoto(player) || 'https://placehold.co/240x240/16294D/F4B036?text=SPL';
+            const round = parseInt(document.getElementById('admin-round-select')?.value || '1', 10) || 1;
+            const basePrice = Math.max(50, parseInt(document.getElementById('admin-base-price')?.value || '200', 10) || 200);
+
+            const body = document.getElementById('confirm-present-body');
+            if (body) {
+                body.innerHTML = `
+                    <div class="flex flex-col sm:flex-row items-center gap-4 bg-premium-950 border border-premium-700 rounded-2xl p-4">
+                        <img src="${photo}" onerror="this.onerror=null;this.src='https://placehold.co/240x240/16294D/F4B036?text=SPL';" class="w-28 h-28 rounded-2xl object-cover object-top border-2 border-spl-gold flex-shrink-0 shadow-lg">
+                        <div class="text-center sm:text-left min-w-0 space-y-1">
+                            <div class="flex items-center justify-center sm:justify-start gap-2 flex-wrap">
+                                <span class="bg-spl-gold text-premium-950 font-oswald font-extrabold text-sm px-2.5 py-0.5 rounded uppercase">${window.escapeHtml(player.srNo || 'SR')}</span>
+                                ${u19 ? '<span class="bg-spl-red text-white font-bold text-xs px-2 py-0.5 rounded uppercase">U-19</span>' : ''}
+                                <span class="bg-blue-600/30 text-blue-200 border border-blue-400/50 text-xs font-bold px-2 py-0.5 rounded uppercase">${window.escapeHtml(player.skill || 'Player')}</span>
+                            </div>
+                            <h4 class="font-oswald text-2xl font-bold uppercase text-white truncate">${window.escapeHtml(player.name)}</h4>
+                            <p class="text-xs text-gray-300"><i class="fa-solid fa-location-dot text-spl-gold mr-1"></i> ${window.escapeHtml(player.village || 'Santuri')} • ${window.escapeHtml(normalizePanchayat(player.panchayat) || 'Santuri Block')}</p>
+                            <p class="text-xs text-amber-300 font-bold pt-1">Round ${round} • Base Price: ₹${basePrice.toLocaleString('en-IN')}</p>
+                        </div>
+                    </div>
+                `;
+            }
+            document.getElementById('confirm-present-modal')?.classList.remove('hidden');
+        };
+
+        window.cancelConfirmPresent = function() {
+            pendingPresentPlayerId = null;
+            document.getElementById('confirm-present-modal')?.classList.add('hidden');
+        };
+
+        window.confirmPresentPlayerNow = async function() {
+            const pid = pendingPresentPlayerId;
+            cancelConfirmPresent();
+            if (pid) await adminPresentPlayer(pid);
         };
 
         // --- MANUAL LIVE BIDDING & AUCTIONEER CONTROLS ---
@@ -978,10 +1234,7 @@
                 showNotice(`${st.team.name} already has 13/13 players!`, 'Squad Full');
                 return;
             }
-            if (bidAmount > st.remaining) {
-                showNotice(`${st.team.name} only has ₹${st.remaining.toLocaleString('en-IN')} purse left!`, 'Purse Limit Exceeded');
-                return;
-            }
+
             const nowStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const entry = {
                 teamId: st.team.id,
@@ -1019,6 +1272,8 @@
                 if (priceInput) priceInput.value = nextAmt;
                 onManualPriceInput();
                 await recordLiveBidForTeam(teamId, nextAmt);
+            } else {
+                onManualPriceInput();
             }
         };
 
@@ -1043,6 +1298,7 @@
             const nextBid = prev ? prev.amount : (Number(liveState.basePrice) || 200);
             const priceInput = document.getElementById('admin-manual-price');
             if (priceInput) priceInput.value = nextBid;
+            onManualPriceInput();
             await pushLiveAuctionState({
                 ...liveState,
                 currentBid: nextBid,
@@ -1061,7 +1317,8 @@
                 return;
             }
             const st = getTeamStats(selectedManualTeamId);
-            hint.innerHTML = `Selected: <span class="text-white">${window.escapeHtml(st.team.name || st.team.id)}</span> • Purse Left: <span class="text-green-400">₹${st.remaining.toLocaleString('en-IN')}</span> (${st.count}/13)`;
+            const fineTag = st.remaining === 0 ? ' • <span class="text-amber-300">Purse Exhausted (+50% Fine)</span>' : '';
+            hint.innerHTML = `Selected: <span class="text-white">${window.escapeHtml(st.team.name || st.team.id)}</span> • Purse Left: <span class="${st.remaining === 0 ? 'text-red-400' : 'text-green-400'}">₹${st.remaining.toLocaleString('en-IN')}</span> (${st.count}/13)${fineTag}`;
         }
 
         window.adjustManualPrice = async function(delta) {
@@ -1072,7 +1329,6 @@
             input.value = nextVal;
             onManualPriceInput();
 
-            // If 1-Tap Live Bid is ON and a franchise is already selected on stage, reflect the raised price live immediately
             const instantToggle = document.getElementById('admin-instant-bid-toggle');
             if (instantToggle && instantToggle.checked && selectedManualTeamId && liveState.currentPlayerId && liveState.status === 'BIDDING') {
                 await recordLiveBidForTeam(selectedManualTeamId, nextVal);
@@ -1084,13 +1340,25 @@
             if (!preview) return;
             const round = parseInt(document.getElementById('admin-round-select')?.value || '1', 10) || 1;
             const price = Math.max(0, parseInt(document.getElementById('admin-manual-price')?.value || '0', 10) || 0);
-            if (round === 2 && price > 0) {
+            const teamId = selectedManualTeamId || liveState.highestBidderId;
+
+            if (price > 0 && teamId) {
+                const { fine, overAmount, round2Fine } = computeSaleFine(teamId, price, round);
+                if (fine > 0) {
+                    const reason = overAmount > 0
+                        ? `Purse Exhausted (₹${overAmount.toLocaleString('en-IN')} over ₹8,000 limit)`
+                        : (round2Fine > 0 ? 'Round 2 Unsold Rule' : 'Extra Charge');
+                    preview.textContent = `50% Extra Charge (Fine): +₹${fine.toLocaleString('en-IN')} (${reason}) — Actual Sold: ₹${price.toLocaleString('en-IN')}`;
+                    preview.classList.remove('hidden');
+                    return;
+                }
+            } else if (round === 2 && price > 0) {
                 const penalty = Math.round(price * 0.5);
                 preview.textContent = `Round 2 Penalty Active: +₹${penalty.toLocaleString('en-IN')} (50% Organising Committee fee)`;
                 preview.classList.remove('hidden');
-            } else {
-                preview.classList.add('hidden');
+                return;
             }
+            preview.classList.add('hidden');
         };
 
         window.updateStageRoundOrBase = async function() {
@@ -1107,6 +1375,7 @@
 
         window.adminPresentPlayer = async function(playerId) {
             if (!isAuctioneerAdmin) return;
+            const player = approvedPlayers.find(p => String(p.id) === String(playerId));
             const round = parseInt(document.getElementById('admin-round-select')?.value || '1', 10) || 1;
             const basePrice = Math.max(50, parseInt(document.getElementById('admin-base-price')?.value || '200', 10) || 200);
             selectedManualTeamId = null;
@@ -1114,22 +1383,36 @@
             if (priceInput) priceInput.value = basePrice;
             onManualPriceInput();
 
+            const resolvedPhoto = resolvePlayerPhoto(player);
+            const snapshot = player ? {
+                id: player.id,
+                srNo: player.srNo || '',
+                name: player.name || '',
+                skill: player.skill || '',
+                village: player.village || '',
+                panchayat: player.panchayat || '',
+                dob: player.dob || '',
+                photo: (resolvedPhoto && resolvedPhoto.length < 400000) ? resolvedPhoto : ''
+            } : null;
+
             playTone(620, 0.14, 'sine', 0.14);
             await pushLiveAuctionState({
                 ...liveState,
                 currentPlayerId: playerId,
+                currentPlayerSnapshot: snapshot,
                 round,
                 basePrice,
                 currentBid: basePrice,
                 highestBidderId: null,
                 highestBidderName: null,
                 bidHistory: [],
+                showPurseBoard: false,
                 status: 'BIDDING'
             });
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        window.adminJumpToSr = async function() {
+        window.adminJumpToSr = function() {
             if (!isAuctioneerAdmin) return;
             const raw = (document.getElementById('admin-jump-sr')?.value || '').trim();
             if (!raw) return;
@@ -1147,10 +1430,10 @@
                 return;
             }
             document.getElementById('admin-jump-sr').value = '';
-            await adminPresentPlayer(found.id);
+            requestConfirmPresentPlayer(found.id);
         };
 
-        window.adminNextAvailablePlayer = async function() {
+        window.adminNextAvailablePlayer = function() {
             if (!isAuctioneerAdmin) return;
             const round = parseInt(document.getElementById('admin-round-select')?.value || '1', 10) || 1;
             const soldMap = liveState.soldPlayers || {};
@@ -1167,13 +1450,13 @@
                 showNotice(round === 2 ? 'No remaining Unsold players left in Round 2!' : 'All players in Round 1 have been called! Switch to Round 2 for Unsold players.', 'Queue Complete');
                 return;
             }
-            await adminPresentPlayer(candidate.id);
+            requestConfirmPresentPlayer(candidate.id);
         };
 
         window.adminHammerManualSold = async function() {
             if (!isAuctioneerAdmin) return;
             if (!liveState.currentPlayerId) {
-                showNotice('Please present a player on stage first (click "Next SR" or "Present" in the Auction Pool).', 'No Player on Stage');
+                showNotice('Please present a player on stage first (click "Next SR" or "Call Player").', 'No Player on Stage');
                 return;
             }
 
@@ -1194,22 +1477,19 @@
                 showNotice(`${st.team.name} already has 13/13 players!`, 'Squad Full');
                 return;
             }
-            if (soldPrice > st.remaining) {
-                showNotice(`${st.team.name} only has ₹${st.remaining.toLocaleString('en-IN')} purse remaining, cannot pay ₹${soldPrice.toLocaleString('en-IN')}!`, 'Purse Limit Exceeded');
-                return;
-            }
 
-            const player = approvedPlayers.find(p => String(p.id) === String(liveState.currentPlayerId)) || {};
+            const player = approvedPlayers.find(p => String(p.id) === String(liveState.currentPlayerId)) || liveState.currentPlayerSnapshot || {};
             const round = parseInt(document.getElementById('admin-round-select')?.value || '1', 10) || 1;
-            const penalty = round === 2 ? Math.round(soldPrice * 0.5) : 0;
+            const { fine } = computeSaleFine(winningTeamId, soldPrice, round);
 
             const soldPlayers = { ...(liveState.soldPlayers || {}) };
             soldPlayers[liveState.currentPlayerId] = {
                 teamId: st.team.id,
                 teamName: st.team.name || st.team.id,
                 amount: soldPrice,
+                fine: fine,
+                penalty: fine,
                 round: round,
-                penalty: penalty,
                 srNo: player.srNo || '',
                 playerName: player.name || '',
                 skill: player.skill || '',
@@ -1258,6 +1538,7 @@
             await pushLiveAuctionState({
                 ...liveState,
                 currentPlayerId: null,
+                currentPlayerSnapshot: null,
                 status: 'IDLE',
                 currentBid: 0,
                 highestBidderId: null,
@@ -1277,7 +1558,7 @@
                 await pushLiveAuctionState({
                     ...liveState,
                     soldPlayers,
-                    ...(isOnStage ? { status: 'IDLE', currentPlayerId: null, highestBidderId: null, highestBidderName: null, currentBid: 0, bidHistory: [] } : {})
+                    ...(isOnStage ? { status: 'IDLE', currentPlayerId: null, currentPlayerSnapshot: null, highestBidderId: null, highestBidderName: null, currentBid: 0, bidHistory: [] } : {})
                 });
                 closeTeamSquadModal();
                 showNotice(`${info.playerName} has been returned to the Available Pool and purse refunded.`, 'Sale Reverted');
@@ -1291,12 +1572,14 @@
                 await pushLiveAuctionState({
                     ...liveState,
                     currentPlayerId: null,
+                    currentPlayerSnapshot: null,
                     round: 1,
                     basePrice: 200,
                     currentBid: 0,
                     highestBidderId: null,
                     highestBidderName: null,
                     bidHistory: [],
+                    showPurseBoard: false,
                     status: 'IDLE',
                     soldPlayers: {},
                     unsoldPlayerIds: []
@@ -1310,7 +1593,6 @@
             const url = String(rawUrl || '').trim();
             if (!url) return null;
 
-            // YouTube Live / Watch / Shorts / Embed / youtu.be
             const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|live\/|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/i);
             if (ytMatch && ytMatch[1]) {
                 return {
@@ -1320,7 +1602,6 @@
                 };
             }
 
-            // Facebook Live / Videos / fb.watch
             if (/facebook\.com|fb\.watch/i.test(url)) {
                 return {
                     platform: 'Facebook Live',
@@ -1329,7 +1610,6 @@
                 };
             }
 
-            // Generic https iframe fallback
             if (/^https?:\/\//i.test(url)) {
                 return {
                     platform: 'Live Broadcast',
@@ -1360,7 +1640,7 @@
                 liveStreamUrl: urlInput,
                 liveStreamTitle: titleInput
             });
-            showNotice(`${parsed.platform} link published! All viewers can now watch the live coverage right at the bottom of the auction screen.`, 'Live Coverage Active');
+            showNotice(`${parsed.platform} link published! All viewers can now watch the live coverage at the bottom of the auction screen.`, 'Live Coverage Active');
         };
 
         window.adminClearLiveStream = async function() {
@@ -1431,7 +1711,7 @@
                 adminPill.className = 'text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded bg-spl-red text-white border border-white/30 animate-pulse';
             }
 
-            // Hide embedded live video player when logged in as Admin so the Auctioneer console stays clean and easy to operate
+            // Hide embedded live video player when logged in as Admin
             if (isAuctioneerAdmin) {
                 section?.classList.add('hidden');
                 navBtn?.classList.add('hidden');
@@ -1448,7 +1728,6 @@
             if (badgeEl) badgeEl.textContent = parsed.platform;
             if (extLink) extLink.href = parsed.originalUrl;
 
-            // Only rebuild iframe when the stream URL actually changes so video playback never interrupts
             if (container && lastRenderedStreamUrl !== parsed.embedUrl) {
                 lastRenderedStreamUrl = parsed.embedUrl;
                 container.innerHTML = `
@@ -1464,19 +1743,20 @@
             }
         }
 
-        // --- EXPORT CSV ---
+        // --- EXPORT CSV (WITH ACTUAL SOLD & FINE IN LAST COLUMN) ---
         window.exportAuctionResultsCSV = function() {
             const soldEntries = Object.entries(liveState.soldPlayers || {});
             if (soldEntries.length === 0) {
                 showNotice('No players have been sold yet to export.', 'Nothing to Export');
                 return;
             }
-            let csv = 'SR No,Player Name,Skill,Age Group,Winning Franchise,Sold Amount (INR),Round,Round 2 Penalty (INR)\n';
+            let csv = 'SR No,Player Name,Skill,Age Group,Winning Franchise,Round,Actual Sold Amount (INR),Fine / 50% Extra Charge (INR)\n';
             soldEntries.forEach(([pid, info]) => {
                 const pl = approvedPlayers.find(p => String(p.id) === String(pid)) || info;
                 const safeName = `"${String(info.playerName || pl.name || '').replace(/"/g, '""')}"`;
                 const safeTeam = `"${String(info.teamName || info.teamId || '').replace(/"/g, '""')}"`;
-                csv += `${info.srNo || pl.srNo || ''},${safeName},${info.skill || pl.skill || ''},${isU19Player(pl) ? 'U-19' : 'Normal'},${safeTeam},${info.amount || 0},${info.round || 1},${info.penalty || 0}\n`;
+                const fineVal = Number(info.fine ?? info.penalty) || 0;
+                csv += `${info.srNo || pl.srNo || ''},${safeName},${info.skill || pl.skill || ''},${isU19Player(pl) ? 'U-19' : 'Normal'},${safeTeam},${info.round || 1},${info.amount || 0},${fineVal}\n`;
             });
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
@@ -1487,42 +1767,53 @@
             URL.revokeObjectURL(url);
         };
 
-        // --- SQUAD INSPECTOR MODAL ---
+        // --- SQUAD INSPECTOR MODAL (SHOWS ACTUAL SOLD & FINE IN LAST COLUMN) ---
         window.openTeamSquadModal = function(teamId) {
             const st = getTeamStats(teamId);
             document.getElementById('squad-modal-title').textContent = `${st.team.name || st.team.id}`;
-            document.getElementById('squad-modal-subtitle').textContent = `Bought: ${st.count}/13 | Spent: ₹${st.spent.toLocaleString('en-IN')} | Purse Left: ₹${st.remaining.toLocaleString('en-IN')} | U-19: ${st.u19Count}`;
+            document.getElementById('squad-modal-subtitle').textContent = `Squad: ${st.count}/13 | Actual Spent: ₹${st.spent.toLocaleString('en-IN')} | Purse Left: ₹${st.remaining.toLocaleString('en-IN')} | Fine (50%): ₹${st.totalFine.toLocaleString('en-IN')} | U-19: ${st.u19Count}`;
 
             const body = document.getElementById('squad-modal-body');
             if (st.boughtEntries.length === 0) {
                 body.innerHTML = `<p class="text-center text-gray-400 text-sm py-8">No players bought yet by this franchise.</p>`;
             } else {
-                body.innerHTML = st.boughtEntries.map(([pid, info], idx) => {
-                    const pl = approvedPlayers.find(p => String(p.id) === String(pid)) || info;
-                    const revertBtn = isAuctioneerAdmin
-                        ? `<button type="button" onclick="adminRevertSoldPlayer('${window.escapeHtml(pid)}')" class="bg-red-700 hover:bg-red-600 text-white text-[10px] font-bold uppercase px-2.5 py-1 rounded transition cursor-pointer" title="Revert Sale & Refund Purse"><i class="fa-solid fa-rotate-left mr-1"></i> Revert</button>`
-                        : '';
-                    return `
-                        <div class="bg-premium-950 border border-premium-700 rounded-xl p-3 flex items-center justify-between gap-3">
-                            <div class="flex items-center gap-3 min-w-0">
-                                <span class="w-7 h-7 rounded-full bg-spl-gold text-premium-950 font-oswald font-extrabold text-xs flex items-center justify-center flex-shrink-0">${idx + 1}</span>
-                                <div class="min-w-0">
-                                    <div class="flex items-center gap-1.5">
-                                        <span class="text-[10px] font-bold text-spl-gold uppercase">${window.escapeHtml(info.srNo || pl.srNo || '')}</span>
-                                        ${isU19Player(pl) ? '<span class="bg-spl-red text-white text-[9px] font-extrabold px-1.5 rounded uppercase">U-19</span>' : ''}
-                                        ${info.round === 2 ? '<span class="bg-amber-600 text-white text-[9px] font-bold px-1.5 rounded uppercase">R2 (+50%)</span>' : ''}
-                                    </div>
-                                    <p class="font-oswald font-bold text-white text-base truncate">${window.escapeHtml(info.playerName || pl.name || '')}</p>
-                                    <p class="text-[11px] text-gray-400 truncate">${window.escapeHtml(info.skill || pl.skill || '')}</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-2.5 flex-shrink-0">
-                                <span class="font-oswald text-xl font-bold text-green-400">₹${Number(info.amount || 0).toLocaleString('en-IN')}</span>
-                                ${revertBtn}
-                            </div>
-                        </div>
-                    `;
-                }).join('');
+                body.innerHTML = `
+                    <div class="overflow-x-auto rounded-xl border border-premium-700">
+                        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                            <thead>
+                                <tr class="bg-premium-950 text-spl-gold font-oswald uppercase tracking-wider border-b border-premium-700">
+                                    <th class="py-2.5 px-3">#</th>
+                                    <th class="py-2.5 px-3">Player</th>
+                                    <th class="py-2.5 px-3 text-right">Actual Sold</th>
+                                    <th class="py-2.5 px-3 text-right text-amber-300">Fine (50%)</th>
+                                    ${isAuctioneerAdmin ? '<th class="py-2.5 px-3 text-right">Action</th>' : ''}
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-premium-800">
+                                ${st.boughtEntries.map(([pid, info], idx) => {
+                                    const pl = approvedPlayers.find(p => String(p.id) === String(pid)) || info;
+                                    const fineAmt = Number(info.fine ?? info.penalty) || 0;
+                                    return `
+                                        <tr class="bg-premium-950/60 hover:bg-premium-800/40">
+                                            <td class="py-2.5 px-3 font-oswald font-bold text-spl-gold">${idx + 1}</td>
+                                            <td class="py-2.5 px-3">
+                                                <div class="flex items-center gap-1.5 flex-wrap">
+                                                    <span class="text-[10px] font-bold text-spl-gold uppercase">${window.escapeHtml(info.srNo || pl.srNo || '')}</span>
+                                                    ${isU19Player(pl) ? '<span class="bg-spl-red text-white text-[9px] font-extrabold px-1.5 rounded uppercase">U-19</span>' : ''}
+                                                </div>
+                                                <p class="font-oswald font-bold text-white text-sm sm:text-base">${window.escapeHtml(info.playerName || pl.name || '')}</p>
+                                                <p class="text-[11px] text-gray-400">${window.escapeHtml(info.skill || pl.skill || '')}</p>
+                                            </td>
+                                            <td class="py-2.5 px-3 text-right font-oswald font-bold text-green-400 text-base">₹${Number(info.amount || 0).toLocaleString('en-IN')}</td>
+                                            <td class="py-2.5 px-3 text-right font-oswald font-bold ${fineAmt > 0 ? 'text-amber-300' : 'text-gray-500'} text-base">₹${fineAmt.toLocaleString('en-IN')}</td>
+                                            ${isAuctioneerAdmin ? `<td class="py-2.5 px-3 text-right"><button type="button" onclick="adminRevertSoldPlayer('${window.escapeHtml(pid)}')" class="bg-red-700 hover:bg-red-600 text-white text-[10px] font-bold uppercase px-2.5 py-1 rounded transition cursor-pointer"><i class="fa-solid fa-rotate-left mr-1"></i> Revert</button></td>` : ''}
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
             }
             document.getElementById('team-squad-modal').classList.remove('hidden');
         };
@@ -1554,6 +1845,7 @@
             renderSoldMarquee();
             renderHighestSoldSpotlight();
             renderHeroStage();
+            renderPurseAlertBoard();
             renderLiveCoverageSection();
             if (isAuctioneerAdmin) {
                 renderAdminTeamSelector();
@@ -1568,16 +1860,16 @@
             const statusBadge = document.getElementById('stage-status-badge');
             const srBadge = document.getElementById('stage-sr-badge');
             const display = document.getElementById('stage-player-display');
-            const overlay = document.getElementById('stage-hammer-overlay');
-            const stamp = document.getElementById('stage-hammer-stamp');
-            const details = document.getElementById('stage-hammer-details');
-            const overlayNextBtn = document.getElementById('overlay-next-player-btn');
 
             if (roundBadge) {
                 roundBadge.textContent = liveState.round === 2 ? 'ROUND 2 • UNSOLD (+50%)' : 'ROUND 1 • MAIN';
             }
 
-            const player = approvedPlayers.find(p => String(p.id) === String(liveState.currentPlayerId));
+            const foundInPool = approvedPlayers.find(p => String(p.id) === String(liveState.currentPlayerId));
+            const snap = (liveState.currentPlayerSnapshot && String(liveState.currentPlayerSnapshot.id) === String(liveState.currentPlayerId))
+                ? liveState.currentPlayerSnapshot
+                : null;
+            const player = foundInPool ? { ...snap, ...foundInPool } : snap;
 
             if (!player) {
                 if (srBadge) srBadge.textContent = 'READY';
@@ -1585,7 +1877,6 @@
                     statusBadge.textContent = 'STANDBY';
                     statusBadge.className = 'bg-blue-600/25 text-blue-200 border border-blue-400/50 text-xs font-extrabold px-3 py-1 rounded-md uppercase tracking-widest';
                 }
-                overlay?.classList.add('hidden');
                 if (display) {
                     display.innerHTML = `
                         <div class="text-center py-8 sm:py-12 space-y-4 fade-slide-up">
@@ -1594,12 +1885,17 @@
                             </div>
                             <h2 class="font-oswald text-3xl sm:text-5xl font-bold uppercase text-white tracking-wide">SPL Season 6 Mega Auction</h2>
                             <p class="text-sm sm:text-base text-gray-300 max-w-lg mx-auto">
-                                ${isAuctioneerAdmin ? 'Click <strong>Next SR</strong> or pick any player from the Auction Pool below to present them on the big screen.' : 'Waiting for the Auctioneer to call the next player onto the stage.'}
+                                ${isAuctioneerAdmin ? 'Enter an SR No above or click <strong>Next SR</strong> to confirm and present the next player on the big screen.' : 'Waiting for the Auctioneer to call the next player onto the stage.'}
                             </p>
                         </div>
                     `;
                 }
                 return;
+            }
+
+            const playerPhoto = resolvePlayerPhoto(player);
+            if (!playerPhoto && player.id) {
+                ensureActivePlayerPhotoLoaded(player.id);
             }
 
             const u19 = isU19Player(player);
@@ -1663,8 +1959,9 @@
                     ? `<img src="${winTeam.logo}" class="w-11 h-11 sm:w-16 sm:h-16 rounded-xl bg-white p-1 object-contain border-2 border-spl-gold shadow-lg flex-shrink-0">`
                     : `<div class="w-11 h-11 sm:w-16 sm:h-16 rounded-xl bg-premium-800 border-2 border-spl-gold flex items-center justify-center text-spl-gold text-xl sm:text-2xl flex-shrink-0"><i class="fa-solid fa-shield-halved"></i></div>`;
                 const soldRecord = (liveState.soldPlayers || {})[player.id] || {};
-                const penaltyNote = soldRecord.penalty > 0
-                    ? `<p class="text-[11px] sm:text-xs text-amber-300 font-bold uppercase mt-1">+ ₹${Number(soldRecord.penalty).toLocaleString('en-IN')} Round 2 Penalty</p>`
+                const fineAmt = Number(soldRecord.fine ?? soldRecord.penalty) || 0;
+                const fineNote = fineAmt > 0
+                    ? `<p class="text-[11px] sm:text-xs text-amber-300 font-bold uppercase mt-1">+ ₹${fineAmt.toLocaleString('en-IN')} Extra Charge (50% Fine)</p>`
                     : '';
                 priceBoxHtml = `
                     <div class="bg-gradient-to-r from-green-950/95 via-emerald-950/90 to-premium-950 border-2 border-green-400 rounded-xl sm:rounded-2xl p-3 sm:p-5 shadow-[0_0_30px_rgba(74,222,128,0.3)] space-y-3">
@@ -1676,11 +1973,11 @@
                                         <i class="fa-solid fa-hammer"></i> Sold To
                                     </span>
                                     <h3 class="font-oswald text-lg sm:text-3xl font-extrabold text-white uppercase leading-tight truncate mt-0.5">${window.escapeHtml(winTeam.name || liveState.highestBidderName || '')}</h3>
-                                    ${penaltyNote}
+                                    ${fineNote}
                                 </div>
                             </div>
                             <div class="text-right ml-auto">
-                                <p class="text-[9px] sm:text-xs text-green-300 font-bold uppercase tracking-widest">Final Price</p>
+                                <p class="text-[9px] sm:text-xs text-green-300 font-bold uppercase tracking-widest">Actual Sold Price</p>
                                 <p class="font-russo text-3xl sm:text-5xl text-spl-gold leading-none mt-0.5">₹${Number(liveState.currentBid || 0).toLocaleString('en-IN')}</p>
                             </div>
                         </div>
@@ -1748,10 +2045,10 @@
 
             display.innerHTML = `
                 <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-6 lg:gap-8 items-center fade-slide-up">
-                    <!-- Left Portrait (5 cols) - Compact on Mobile, Enlarged on TV / Projector -->
+                    <!-- Left Portrait (5 cols) -->
                     <div class="lg:col-span-5 flex flex-col items-center">
                         <div class="relative w-44 h-44 sm:w-80 sm:h-80 lg:w-[400px] lg:h-[400px] rounded-2xl sm:rounded-3xl overflow-hidden border-4 ${isSold ? 'border-green-400' : (isUnsold ? 'border-spl-red' : (u19 ? 'border-orange-400' : 'border-spl-gold'))} shadow-[0_0_40px_rgba(244,176,54,0.42)] bg-premium-900">
-                            <img src="${player.photo || 'https://placehold.co/500x500/16294D/F4B036?text=SPL'}" alt="${window.escapeHtml(player.name)}" onerror="this.onerror=null;this.src='https://placehold.co/500x500/16294D/F4B036?text=SPL';" class="w-full h-full object-cover object-top ${isUnsold ? 'grayscale opacity-75' : ''}">
+                            <img src="${playerPhoto || 'https://placehold.co/500x500/16294D/F4B036?text=SPL'}" alt="${window.escapeHtml(player.name)}" onerror="this.onerror=null;this.src='https://placehold.co/500x500/16294D/F4B036?text=SPL';" class="w-full h-full object-cover object-top ${isUnsold ? 'grayscale opacity-75' : ''}">
                             ${u19 ? `<div class="absolute top-2 left-2 sm:top-3 sm:left-3 z-20 bg-gradient-to-r from-orange-500 to-spl-red text-white font-oswald font-extrabold text-xs sm:text-base uppercase px-2.5 sm:px-4 py-0.5 sm:py-1.5 rounded-full shadow-xl border border-white/40 tracking-wider"><i class="fa-solid fa-star mr-1"></i> U-19</div>` : ''}
                             ${photoStampHtml}
                         </div>
@@ -1786,9 +2083,6 @@
                     </div>
                 </div>
             `;
-
-            // Keep full-screen overlay hidden so the player's photo with the SOLD/UNSOLD stamp remains visible on the card
-            overlay?.classList.add('hidden');
         }
 
         function renderAdminTeamSelector() {
@@ -1810,7 +2104,7 @@
                             <span class="text-[10px] font-bold flex-shrink-0 ${isFull ? 'text-red-400' : 'text-blue-300'}">${st.count}/13</span>
                         </div>
                         <div class="flex items-center justify-between gap-1">
-                            <p class="text-[10px] text-green-400 font-bold">Left: ₹${st.remaining.toLocaleString('en-IN')}</p>
+                            <p class="text-[10px] font-bold ${st.remaining === 0 ? 'text-amber-300' : 'text-green-400'}">${st.remaining === 0 ? '₹0 (+50%)' : `Left: ₹${st.remaining.toLocaleString('en-IN')}`}</p>
                             ${isHighest ? '<span class="text-[9px] font-extrabold uppercase bg-green-500 text-premium-950 px-1.5 rounded">LEADING</span>' : ''}
                         </div>
                     </button>
@@ -1863,14 +2157,24 @@
                         <div class="space-y-1.5">
                             <div class="flex justify-between text-xs">
                                 <span class="text-gray-400 font-semibold">Purse Left</span>
-                                <span class="font-oswald text-lg font-bold ${st.remaining < 800 ? 'text-red-400' : 'text-green-400'}">₹${st.remaining.toLocaleString('en-IN')}</span>
+                                <span class="font-oswald text-lg font-bold ${st.remaining === 0 ? 'text-red-400' : (st.remaining < 800 ? 'text-amber-300' : 'text-green-400')}">₹${st.remaining.toLocaleString('en-IN')}</span>
                             </div>
                             <div class="w-full h-2 bg-premium-800 rounded-full overflow-hidden">
                                 <div class="h-full bg-gradient-to-r from-spl-gold to-green-400" style="width:${pct}%"></div>
                             </div>
-                            <div class="flex justify-between text-[11px] text-gray-400 pt-1">
-                                <span>Spent: <strong class="text-white">₹${st.spent.toLocaleString('en-IN')}</strong></span>
-                                <span>Squad: <strong class="text-blue-300">${st.count}/13</strong></span>
+                            <div class="grid grid-cols-3 gap-1 text-[10px] pt-1.5 border-t border-premium-800">
+                                <div>
+                                    <span class="text-gray-400 block">Actual Sold</span>
+                                    <strong class="text-white text-xs">₹${st.spent.toLocaleString('en-IN')}</strong>
+                                </div>
+                                <div class="text-center">
+                                    <span class="text-gray-400 block">Squad</span>
+                                    <strong class="text-blue-300 text-xs">${st.count}/13</strong>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-amber-300/80 block">Fine (50%)</span>
+                                    <strong class="${st.totalFine > 0 ? 'text-amber-300' : 'text-gray-500'} text-xs">₹${st.totalFine.toLocaleString('en-IN')}</strong>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1907,7 +2211,7 @@
             const pl = approvedPlayers.find(p => String(p.id) === String(pid)) || info;
             const teamObj = allTeams.find(t => String(t.id) === String(info.teamId)) || { name: info.teamName || info.teamId };
 
-            const playerPhoto = pl.photo || 'https://placehold.co/160x160/16294D/F4B036?text=SPL';
+            const playerPhoto = resolvePlayerPhoto(pl) || 'https://placehold.co/160x160/16294D/F4B036?text=SPL';
             const teamLogoHtml = teamObj.logo
                 ? `<img src="${teamObj.logo}" class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white p-0.5 object-contain border border-amber-300 flex-shrink-0">`
                 : `<span class="w-8 h-8 rounded-lg bg-premium-900 border border-amber-300/70 flex items-center justify-center text-spl-gold text-xs flex-shrink-0"><i class="fa-solid fa-shield-halved"></i></span>`;
@@ -1959,7 +2263,6 @@
             const highest = getHighestSoldEntry();
             const highestPid = highest ? String(highest.pid) : '';
 
-            // Most recently sold players first
             soldEntries.sort((a, b) => (Number(b[1].soldAt) || 0) - (Number(a[1].soldAt) || 0));
 
             const buildItemHtml = ([pid, info]) => {
@@ -1992,7 +2295,6 @@
             };
 
             const itemsHtml = soldEntries.map(buildItemHtml).join('');
-            // Duplicate items so the CSS infinite marquee loops seamlessly
             track.innerHTML = itemsHtml + itemsHtml;
         }
 
@@ -2024,21 +2326,24 @@
                 const soldInfo = soldMap[p.id];
                 const isOnStage = String(liveState.currentPlayerId) === String(p.id);
                 const u19 = isU19Player(p);
+                const thumbPhoto = resolvePlayerPhoto(p) || 'https://placehold.co/80x80/16294D/F4B036?text=SPL';
 
                 let rightAction = '';
                 if (soldInfo) {
                     const teamObj = allTeams.find(t => String(t.id) === String(soldInfo.teamId));
                     const soldTeamFullName = (teamObj && teamObj.name) ? teamObj.name : (soldInfo.teamName || soldInfo.teamId || '');
+                    const fineAmt = Number(soldInfo.fine ?? soldInfo.penalty) || 0;
                     rightAction = `
-                        <div class="text-right flex-shrink-0 max-w-[135px]">
+                        <div class="text-right flex-shrink-0 max-w-[140px]">
                             <span class="bg-green-700/80 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase block truncate" title="${window.escapeHtml(soldTeamFullName)}">${window.escapeHtml(soldTeamFullName)}</span>
                             <span class="font-oswald text-sm font-bold text-spl-gold">₹${Number(soldInfo.amount).toLocaleString('en-IN')}</span>
-                            ${isAuctioneerAdmin ? `<button type="button" onclick="adminRevertSoldPlayer('${safeId}')" class="block ml-auto mt-1 text-[10px] text-red-400 hover:text-red-300 underline cursor-pointer">Revert</button>` : ''}
+                            ${fineAmt > 0 ? `<span class="block text-[9px] font-bold text-amber-300">+₹${fineAmt.toLocaleString('en-IN')} Fine</span>` : ''}
+                            ${isAuctioneerAdmin ? `<button type="button" onclick="adminRevertSoldPlayer('${safeId}')" class="block ml-auto mt-0.5 text-[10px] text-red-400 hover:text-red-300 underline cursor-pointer">Revert</button>` : ''}
                         </div>
                     `;
                 } else if (isAuctioneerAdmin) {
                     rightAction = `
-                        <button type="button" onclick="adminPresentPlayer('${safeId}')" class="${isOnStage ? 'bg-green-600 text-white' : 'bg-spl-gold hover:bg-spl-goldHover text-premium-950'} font-oswald font-bold uppercase text-xs px-3 py-1.5 rounded-lg shadow transition flex-shrink-0 cursor-pointer">
+                        <button type="button" onclick="requestConfirmPresentPlayer('${safeId}')" class="${isOnStage ? 'bg-green-600 text-white' : 'bg-spl-gold hover:bg-spl-goldHover text-premium-950'} font-oswald font-bold uppercase text-xs px-3 py-1.5 rounded-lg shadow transition flex-shrink-0 cursor-pointer">
                             ${isOnStage ? 'On Stage' : 'Present'}
                         </button>
                     `;
@@ -2048,7 +2353,7 @@
                     <div class="bg-premium-950 border ${isOnStage ? 'border-spl-gold shadow-lg' : 'border-premium-700'} rounded-xl p-3 flex items-center justify-between gap-3">
                         <div class="flex items-center gap-2.5 min-w-0">
                             <div class="relative w-11 h-11 rounded-full overflow-hidden border ${soldInfo ? 'border-green-400' : 'border-spl-gold'} flex-shrink-0">
-                                <img src="${p.photo || 'https://placehold.co/80x80/16294D/F4B036?text=SPL'}" onerror="this.onerror=null;this.src='https://placehold.co/80x80/16294D/F4B036?text=SPL';" class="w-full h-full object-cover object-top">
+                                <img src="${thumbPhoto}" onerror="this.onerror=null;this.src='https://placehold.co/80x80/16294D/F4B036?text=SPL';" class="w-full h-full object-cover object-top">
                                 ${soldInfo ? '<span class="absolute inset-x-0 bottom-0 bg-green-600/95 text-white text-[8px] font-extrabold uppercase text-center leading-tight py-0.5 tracking-wider">SOLD</span>' : ''}
                             </div>
                             <div class="min-w-0">
