@@ -801,7 +801,40 @@
                     });
                     pageToken = json.nextPageToken || '';
                 } while (pageToken);
-            } catch (e) {}
+            } catch (e) {
+                console.warn('Players REST fetch warning:', e);
+            }
+
+            if (db) {
+                const playersCol = collection(db, 'artifacts', myAppId, 'public', 'data', 'players');
+                try {
+                    const snap = await getDocs(playersCol);
+                    snap.forEach(d => {
+                        const obj = { id: d.id, ...d.data() };
+                        if (!obj.isOwnerRegistration && String(obj.status || '').trim().toLowerCase() === 'approved') {
+                            playerMap.set(String(d.id), obj);
+                        }
+                    });
+                } catch (e) {}
+
+                onSnapshot(playersCol, (snap) => {
+                    if (snap.size > 0) {
+                        const liveMap = new Map();
+                        snap.forEach(d => {
+                            const obj = { id: d.id, ...d.data() };
+                            if (!obj.isOwnerRegistration && String(obj.status || '').trim().toLowerCase() === 'approved') {
+                                liveMap.set(String(d.id), obj);
+                            }
+                        });
+                        approvedPlayers = Array.from(liveMap.values()).sort((a, b) => {
+                            const nA = parseInt(String(a.srNo || '0').replace(/\D/g, ''), 10) || 0;
+                            const nB = parseInt(String(b.srNo || '0').replace(/\D/g, ''), 10) || 0;
+                            return nA - nB;
+                        });
+                        renderAll();
+                    }
+                }, () => {});
+            }
 
             approvedPlayers = Array.from(playerMap.values()).sort((a, b) => {
                 const nA = parseInt(String(a.srNo || '0').replace(/\D/g, ''), 10) || 0;
@@ -1756,10 +1789,6 @@
 
             // Keep full-screen overlay hidden so the player's photo with the SOLD/UNSOLD stamp remains visible on the card
             overlay?.classList.add('hidden');
-        }
-            } else {
-                overlay?.classList.add('hidden');
-            }
         }
 
         function renderAdminTeamSelector() {
